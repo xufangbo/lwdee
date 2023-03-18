@@ -5,6 +5,7 @@
 #include <sstream>
 
 void StageTask::runTask(Partition *p) {
+  
   PartitionInput *partition = static_cast<PartitionInput *>(p);
 
   // textFile
@@ -34,10 +35,6 @@ void StageTask::runTask(Partition *p) {
   ByteSpan_ref bytes = serializer.serailize(&tuples);
 
   Tuples_ref tuples2 = serializer.deserailize(bytes.get());
-
-  // for (Tuple &t : *tuples2) {
-  //   cout << get<0>(t) << ": " << get<1>(t) << endl;
-  // }
 };
 
 Strings_ref StageTask::textFile(PartitionInput *p) {

@@ -2,8 +2,7 @@
 #include "Task.h"
 
 class ResultTask : public Task {
-private:
-	void runTask(Partition *p) override {
-		cout << "run result task" << endl;
-	};
+ private:
+  void runTask(Partition *p);
+  void reduceByKey();
 };

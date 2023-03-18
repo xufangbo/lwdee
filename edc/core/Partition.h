@@ -1,6 +1,8 @@
 #pragma once
 #include<iostream>
 
+#include "lwdee/DDO.h"
+
 using namespace std;
 
 class Partition {
@@ -15,14 +17,14 @@ public:
 	string fileName;
 };
 
-// class PartitionStage : public Partition {
-// public:
-// 	PartitionStage(int index) :Partition(index) {}
-// 	DDO ddo;
-// };
+class PartitionStage : public Partition {
+public:
+	PartitionStage(int index) :Partition(index) {}
+	DDO ddo;
+};
 
-// class PartitionResult : public Partition {
-// public:
-// 	PartitionResult(int index) :Partition(index) {}
-// 	DDO ddo;
-// };
+class PartitionResult : public Partition {
+public:
+	PartitionResult(int index) :Partition(index) {}
+	DDO ddo;
+};
