@@ -1,0 +1,69 @@
+测试机器：
+processor count : 8
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 142
+model name      : Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz
+stepping        : 12
+cpu MHz         : 2304.007
+cache size      : 8192 KB
+
+测试数据：MNISTDB-t10k-images-idx3-ubyte.txt  
+数据维度：784
+数据点数：10K
+cluster: 10
+
+命令格式： connect  测试数据文件   cluster数量   map数量（即map dco 数量， reduce dco数量为1）
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 1
+iterate count:100
+time = 61.4386secs
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 2
+iterate count:100
+time = 36.6505secs
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 3
+iterate count:100
+time = 29.2214secs
+
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 4
+iterate count:100
+time = 24.3286secs
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 6
+iterate count:100
+time = 20.8974secs
+
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 8
+第一次：
+iterate count:100
+time = 23.8925secs
+第二次：
+iterate count:100
+time = 21.2642secs
+
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 16
+第一次：
+iterate count:100
+time = 21.4068secs
+第二次：
+iterate count:100
+time = 21.1708secs
+
+
+
+./connect  MNISTDB-t10k-images-idx3-ubyte.txt  10 32
+iterate count:99
+time = 21.9338secs
+
