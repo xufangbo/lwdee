@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "tuple": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "string": "cpp",
+        "*.ipp": "cpp",
+        "sstream": "cpp",
+        "regex": "cpp",
+        "functional": "cpp",
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "ostream": "cpp"
+    }
+}

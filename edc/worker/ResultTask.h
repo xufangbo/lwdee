@@ -3,7 +3,7 @@
 
 class ResultTask : public Task {
 private:
-	void runTask() override {
+	void runTask(Partition *p) override {
 		cout << "run result task" << endl;
 	};
 };

@@ -3,4 +3,4 @@
 add_executable (driver "driver.cpp"
 )
 
-target_link_libraries(driver core uhconnect)
+target_link_libraries(driver core uhconnect worker)

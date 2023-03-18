@@ -1,23 +1,31 @@
-﻿#include <vector>
-#include "driver.h"
+﻿#include "driver.h"
+
+#include <vector>
+
+#include "core/DcoFactory.h"
 #include "core/Partition.h"
+
+#include "worker/StageTask.h"
 
 using namespace std;
 
-int main()
-{
-	string fileName = "/usr/home/test/harrypot.txt";
+int main() {
 
-	vector<PartitionInput> partitionInputs;
-	for (int i = 0; i < 4; i++) {
-		PartitionInput partition(i);
-		{
-			partition.fileName = fileName;
-		}
+  string fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
 
-		partitionInputs.push_back(i);
-	}
+  vector<PartitionInput> partitionInputs;
+  for (int i = 0; i < 4; i++) {
+    PartitionInput partition(i,fileName);
 
-	cout << "driver ..." << endl;
-	return 0;
+    partitionInputs.push_back(partition);
+  }
+  
+  for(PartitionInput &p : partitionInputs){
+    StageTask().run(&p);
+  }
+
+//   UhconnDco *dco = DcoFactory::newDco("");
+
+  cout << "driver ..." << endl;
+  return 0;
 }

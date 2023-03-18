@@ -11,7 +11,7 @@ public:
 
 class PartitionInput : public Partition {
 public:
-	PartitionInput(int index):Partition(index) {}
+	PartitionInput(int index,string fileName):Partition(index),fileName(fileName) {}
 	string fileName;
 };
 

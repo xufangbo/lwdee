@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-	StageTask().run();
-	ResultTask().run();
+	// StageTask().run();
+	// ResultTask().run();
 	return 0;
 }
