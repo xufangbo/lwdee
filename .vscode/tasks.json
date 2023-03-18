@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "driver",
+			"command": "${workspaceFolder}/build/edc/driver/driver",
+			"problemMatcher": [],
+			"detail": "CMake template test task"
+		},
+		{
+			"type": "shell",
+			"label": "worker",
+			"command": "${workspaceFolder}/build/edc/worker/worker",
+			"problemMatcher": [],
+			"detail": "CMake template test task"
+		},{
+			"type": "shell",
+			"label": "build",
+			"command": "cmake --build build",
+			"problemMatcher": [],
+			"detail": "CMake template test task"
+		}
+	]
+}
