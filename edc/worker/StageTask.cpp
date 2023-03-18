@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-void StageTask::runTask(Partition *p) {
+ByteSpan_ref StageTask::runTask(Partition *p) {
   
   PartitionInput *partition = static_cast<PartitionInput *>(p);
 
@@ -33,8 +33,8 @@ void StageTask::runTask(Partition *p) {
   // write ddo
   TuplesSerialzer serializer;
   ByteSpan_ref bytes = serializer.serailize(&tuples);
-
-  Tuples_ref tuples2 = serializer.deserailize(bytes.get());
+  // Tuples_ref tuples2 = serializer.deserailize(bytes.get());
+  return bytes;
 };
 
 Strings_ref StageTask::textFile(PartitionInput *p) {

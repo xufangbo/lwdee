@@ -3,6 +3,6 @@
 
 class ResultTask : public Task {
  private:
-  void runTask(Partition *p);
+  ByteSpan_ref runTask(Partition *p);
   void reduceByKey();
 };

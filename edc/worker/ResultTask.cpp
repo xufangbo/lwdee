@@ -1,5 +1,5 @@
 #include "ResultTask.h"
 
-void ResultTask::runTask(Partition *p){
+ByteSpan_ref ResultTask::runTask(Partition *p){
     
 }

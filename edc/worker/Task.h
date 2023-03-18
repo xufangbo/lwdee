@@ -7,8 +7,8 @@ using namespace std;
 
 class Task {
  protected:
-  virtual void runTask(Partition *p) = 0;
+  virtual ByteSpan_ref runTask(Partition *p) = 0;
 
  public:
-  void run(Partition *p) { this->runTask(p); };
+  ByteSpan_ref run(Partition *p) { this->runTask(p); };
 };
