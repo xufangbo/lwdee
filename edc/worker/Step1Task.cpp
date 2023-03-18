@@ -37,17 +37,16 @@ PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
   return *partition;
 };
 
+std::hash<string> str_hash;
+
 void Step1Task::groupByKey(Tuples *tuples) {
   int outSplitNums = this->partition->outSplitNums;
   Map maps[outSplitNums];
   vector<DDO> ddos;
 
-  hash<string> hash;
-
   for (Tuple t : *tuples) {
     string word = get<0>(t);
-    int hv = hash(word);
-    int index = hv % outSplitNums;
+    int index = str_hash(word) % outSplitNums;
 
     maps[index][word]++;
   }

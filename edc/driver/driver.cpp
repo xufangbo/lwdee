@@ -50,7 +50,7 @@ int main() {
   // collect后合并结果
   Tuples list;
   TuplesSerialzer tuplesSerializer;
-  for (int i = 0; i < splitNums1; i++) {
+  for (int i = 0; i < splitNums2; i++) {
     DDO ddo = step2Outpus[i];
     ByteSpan_ref bytes = ddo.read();
     ddo.release();
