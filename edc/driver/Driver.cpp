@@ -1,4 +1,4 @@
-﻿#include "driver.h"
+﻿#include "Driver.h"
 
 #include <algorithm>
 #include <vector>
@@ -7,31 +7,28 @@
 #include "worker/Step1Task.h"
 #include "worker/Step2Task.h"
 
-using namespace std;
-
-void step1();
-void step2();
-void collect();
-
-int main() {
-  string fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
-
-  int splitNums1 = 4;
-  int splitNums2 = 2;
+void Driver::startJob(std::string fileName, int splitNums1, int splitNums2) {
+  // =========================
+  // 构造参数
+  // =========================
 
   PartitionStep1 step1Inputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     step1Inputs[i] = PartitionStep1(i, fileName, splitNums2);
   }
 
+  // =========================
   // step1
+  // =========================
   PartitionStep1 step1Outputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     PartitionStep1 step1Output = Step1Task().run(step1Inputs + i);
     step1Outputs[i] = step1Output;
   }
 
+  // =========================
   // step2
+  // =========================
   PartitionStep2 step2Inputs[splitNums2];
   for (int i = 0; i < splitNums2; i++) {
     step2Inputs[i] = PartitionStep2(i);
@@ -47,7 +44,9 @@ int main() {
     step2Outpus[i] = ddo;
   }
 
-  // collect后合并结果
+  // =========================
+  // collect
+  // =========================
   Tuples list;
   TuplesSerialzer tuplesSerializer;
   for (int i = 0; i < splitNums2; i++) {
@@ -59,9 +58,10 @@ int main() {
     for_each(rc->begin(), rc->end(), [&list](Tuple &t) { list.push_back(t); });
   }
 
+  // =========================
+  // 打印结果
+  // =========================
   for (Tuple &i : list) {
     cout << get<0>(i) << " " << get<1>(i) << endl;
   }
-
-  return 0;
 }

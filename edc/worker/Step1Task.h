@@ -20,7 +20,9 @@ class Step1Task {
 
  private:
   Strings_ref textFile(PartitionStep1 *p);
+  Strings_ref flatMaps(Strings_ref lines);
   Strings_ref flatMap(string line);
+  Tuples_ref maps(Strings_ref words);
   Tuple map(string word);
   void groupByKey(Tuples *tuples);
 };
