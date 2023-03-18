@@ -9,6 +9,7 @@ int TuplesSerialzer::totalSize(Tuples *tuples) {
     size += get<0>(t).size();
     size += 4;
   }
+  return size;
 }
 
 ByteSpan_ref TuplesSerialzer::serailize(Tuples *tuples) {
@@ -18,7 +19,8 @@ ByteSpan_ref TuplesSerialzer::serailize(Tuples *tuples) {
   bytes->putInt32((int)tuples->size());
   for (Tuple &t : *tuples) {
     // word-size
-    bytes->put((short)get<0>(t).size());
+    short size = get<0>(t).size();
+    bytes->put(size);
     // word-value
     bytes->put(get<0>(t));
     // count
@@ -29,17 +31,18 @@ ByteSpan_ref TuplesSerialzer::serailize(Tuples *tuples) {
 }
 
 Tuples_ref TuplesSerialzer::deserailize(ByteSpan *bytes) {
-    
+  bytes->reset();
+
   Tuples_ref tuples = make_shared<Tuples>();
   int count = 0;
   bytes->readInt32(count);
 
-  for (int i = 0; i < 10; i++) {
-    short size;
+  for (int i = 0; i < count; i++) {
+    short size = 0;
     bytes->read(size);
 
     string word(size + 1, '\0');
-    bytes->reads(word.data(), size);
+    bytes->reads((Byte*)word.data(), size);
 
     int wordCount = 0;
     bytes->readInt32(wordCount);

@@ -4,8 +4,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "core/TuplesSerialzer.h"
-
 void StageTask::runTask(Partition *p) {
   PartitionInput *partition = static_cast<PartitionInput *>(p);
 
@@ -25,13 +23,21 @@ void StageTask::runTask(Partition *p) {
 
   // map
   Tuples tuples;
-  for_each(words->begin(), words->end(),
-           [&tuples, this](string &x) { tuples.push_back(this->map(x)); });
+  for (string &word : *words) {
+    tuples.push_back(this->map(word));
+  }
 
   words.reset();
 
   // write ddo
-  ByteSpan_ref bytes = TuplesSerialzer().serailize(&tuples);
+  TuplesSerialzer serializer;
+  ByteSpan_ref bytes = serializer.serailize(&tuples);
+
+  Tuples_ref tuples2 = serializer.deserailize(bytes.get());
+
+  // for (Tuple &t : *tuples2) {
+  //   cout << get<0>(t) << ": " << get<1>(t) << endl;
+  // }
 };
 
 Strings_ref StageTask::textFile(PartitionInput *p) {

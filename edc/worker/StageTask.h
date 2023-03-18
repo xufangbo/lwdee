@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Task.h"
+#include "core/TuplesSerialzer.h"
 
 typedef vector<string> Strings;
 typedef shared_ptr<Strings> Strings_ref;
