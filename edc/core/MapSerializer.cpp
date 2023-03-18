@@ -5,9 +5,9 @@ int MapSerializer::totalSize(Map *map) {
 
   size += 4;  // count;
   for (auto i = map->begin(); i != map->end(); i++) {
-    size += 2;
-    size += i->first.size();
-    size += 4;
+    size += 2;                // word-size
+    size += i->first.size();  // word value
+    size += 4;                // word.cout
   }
   return size;
 }
@@ -24,7 +24,7 @@ ByteSpan_ref MapSerializer::serailize(Map *map) {
     // word-value
     string value = i->first;
     bytes->put(value);
-    // count
+    // word.cout
     bytes->putInt32(i->second);
   }
 

@@ -5,9 +5,9 @@ int TuplesSerialzer::totalSize(Tuples *tuples) {
 
   size += 4;  // count;
   for (Tuple &t : *tuples) {
-    size += 2;
-    size += get<0>(t).size();
-    size += 4;
+    size += 2;                 // size
+    size += get<0>(t).size();  // word value
+    size += 4;                 // word.cout
   }
   return size;
 }
@@ -42,7 +42,7 @@ Tuples_ref TuplesSerialzer::deserailize(ByteSpan *bytes) {
     bytes->read(size);
 
     string word(size + 1, '\0');
-    bytes->reads((Byte*)word.data(), size);
+    bytes->reads((Byte *)word.data(), size);
 
     int wordCount = 0;
     bytes->readInt32(wordCount);
