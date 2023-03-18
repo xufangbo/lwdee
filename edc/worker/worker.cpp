@@ -1,7 +1,4 @@
-﻿// edc.cpp: 定义应用程序的入口点。
-//
-
-#include "worker.h"
+﻿#include "worker.h"
 #include "StageTask.h"
 #include "ResultTask.h"
 

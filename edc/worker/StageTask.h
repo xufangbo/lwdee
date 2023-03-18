@@ -12,7 +12,7 @@ typedef shared_ptr<Strings> Strings_ref;
 
 class StageTask : public Task {
  private:
-  ByteSpan_ref runTask(Partition *p);
+  DDO runTask(Partition *p);
 
   Strings_ref textFile(PartitionInput *p);
   Strings_ref flatMap(string line);

@@ -3,7 +3,7 @@
 add_executable (driver "driver.cpp"
 )
 
-target_link_libraries(driver core uhconnect worker)
+target_link_libraries(driver core lwdee uhconnect worker)
 
 # include_directories(${PROJECT_BINARY_DIR}/inc/libgo)
 # # add the binary tree to the search path for include files

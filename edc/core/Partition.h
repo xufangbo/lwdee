@@ -1,30 +1,28 @@
 #pragma once
-#include<iostream>
+#include <iostream>
 
 #include "lwdee/DDO.h"
 
 using namespace std;
 
 class Partition {
-public:
-	Partition(int index) :index(index) {}
-	int index;
+ public:
+  Partition() {}
+  Partition(int index) : index(index) {}
+  int index;
 };
 
 class PartitionInput : public Partition {
-public:
-	PartitionInput(int index,string fileName):Partition(index),fileName(fileName) {}
-	string fileName;
+ public:
+  PartitionInput() {}
+  PartitionInput(int index, string fileName)
+      : Partition(index), fileName(fileName) {}
+  string fileName;
 };
 
 class PartitionStage : public Partition {
-public:
-	PartitionStage(int index) :Partition(index) {}
-	DDO ddo;
-};
-
-class PartitionResult : public Partition {
-public:
-	PartitionResult(int index) :Partition(index) {}
-	DDO ddo;
+ public:
+  PartitionStage() {}
+  PartitionStage(int index, DDO ddo) : Partition(index), ddo(ddo) {}
+  DDO ddo;
 };

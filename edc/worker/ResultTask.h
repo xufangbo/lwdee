@@ -3,6 +3,6 @@
 
 class ResultTask : public Task {
  private:
-  ByteSpan_ref runTask(Partition *p);
+  DDO runTask(Partition *p);
   void reduceByKey();
 };

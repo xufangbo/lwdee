@@ -6,4 +6,4 @@ StageTask.cpp
 ResultTask.cpp
 )
 
-target_link_libraries(worker core uhconnect)
+target_link_libraries(worker core lwdee uhconnect)

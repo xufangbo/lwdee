@@ -7,8 +7,8 @@ using namespace std;
 
 class Task {
  protected:
-  virtual ByteSpan_ref runTask(Partition *p) = 0;
+  virtual DDO runTask(Partition *p) = 0;
 
  public:
-  ByteSpan_ref run(Partition *p) { this->runTask(p); };
+  DDO run(Partition *p) { this->runTask(p); };
 };
