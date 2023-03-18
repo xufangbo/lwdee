@@ -1,6 +1,4 @@
 ﻿#include "worker.h"
-#include "StageTask.h"
-#include "ResultTask.h"
 
 using namespace std;
 

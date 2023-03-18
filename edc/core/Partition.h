@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 #include "lwdee/DDO.h"
 
@@ -12,17 +13,24 @@ class Partition {
   int index;
 };
 
-class PartitionInput : public Partition {
+class PartitionStep1 : public Partition {
  public:
-  PartitionInput() {}
-  PartitionInput(int index, string fileName)
-      : Partition(index), fileName(fileName) {}
   string fileName;
+  int outSplitNums;
+  vector<DDO> ddos;
+
+ public:
+  PartitionStep1() {}
+  PartitionStep1(int index, string fileName,int outSplitNums)
+      : Partition(index), fileName(fileName),outSplitNums(outSplitNums) {}
 };
 
-class PartitionStage : public Partition {
+class PartitionStep2 : public Partition {
  public:
-  PartitionStage() {}
-  PartitionStage(int index, DDO ddo) : Partition(index), ddo(ddo) {}
-  DDO ddo;
+  vector<DDO> ddos;
+
+ public:
+  PartitionStep2() {}
+  PartitionStep2(int index)
+      : Partition(index){}
 };

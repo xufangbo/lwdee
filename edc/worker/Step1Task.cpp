@@ -1,14 +1,14 @@
-#include "StageTask.h"
+#include "Step1Task.h"
 
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 
+#include "core/MapSerializer.h"
 #include "lwdee/lwdee.h"
 
-DDO StageTask::runTask(Partition *p) {
-  PartitionInput *partition = static_cast<PartitionInput *>(p);
-
+PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
+  this->partition = partition;
   // textFile
   auto lines = this->textFile(partition);
 
@@ -32,15 +32,37 @@ DDO StageTask::runTask(Partition *p) {
   words.reset();
 
   // write ddo
-  TuplesSerialzer serializer;
-  ByteSpan_ref bytes = serializer.serailize(&tuples);
+  this->groupByKey(&tuples);
 
-  DDO ddo = lwdee::createDDO();
-  ddo.write(bytes);
-  return ddo;
+  return *partition;
 };
 
-Strings_ref StageTask::textFile(PartitionInput *p) {
+void Step1Task::groupByKey(Tuples *tuples) {
+  int outSplitNums = this->partition->outSplitNums;
+  Map maps[outSplitNums];
+  vector<DDO> ddos;
+
+  hash<string> hash;
+
+  for (Tuple t : *tuples) {
+    string word = get<0>(t);
+    int hv = hash(word);
+    int index = hv % outSplitNums;
+
+    maps[index][word]++;
+  }
+
+  for (int i = 0; i < outSplitNums; i++) {
+    // write ddo
+    ByteSpan_ref bytes = MapSerializer().serailize(maps + i);
+    DDO ddo = lwdee::createDDO();
+    ddo.write(bytes);
+
+    partition->ddos.push_back(ddo);
+  }
+}
+
+Strings_ref Step1Task::textFile(PartitionStep1 *p) {
   Strings_ref lines = make_shared<Strings>();
 
   fstream f;
@@ -56,7 +78,7 @@ Strings_ref StageTask::textFile(PartitionInput *p) {
   return lines;
 }
 
-Strings_ref StageTask::flatMap(string line) {
+Strings_ref Step1Task::flatMap(string line) {
   Strings_ref words = make_shared<Strings>();
 
   stringstream iss(line);
@@ -67,4 +89,4 @@ Strings_ref StageTask::flatMap(string line) {
   return words;
 }
 
-Tuple StageTask::map(string word) { return make_tuple(word, 1); }
+Tuple Step1Task::map(string word) { return make_tuple(word, 1); }
