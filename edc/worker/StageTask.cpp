@@ -4,8 +4,9 @@
 #include <fstream>
 #include <sstream>
 
+#include "lwdee/lwdee.h"
+
 DDO StageTask::runTask(Partition *p) {
-  
   PartitionInput *partition = static_cast<PartitionInput *>(p);
 
   // textFile
@@ -33,11 +34,9 @@ DDO StageTask::runTask(Partition *p) {
   // write ddo
   TuplesSerialzer serializer;
   ByteSpan_ref bytes = serializer.serailize(&tuples);
-  // Tuples_ref tuples2 = serializer.deserailize(bytes.get());
 
-  DDO ddo;
-  ddo.id = DdoManager::generateId();
-  DdoManager::set(ddo.id, bytes);
+  DDO ddo = lwdee::createDDO();
+  ddo.write(bytes);
   return ddo;
 };
 

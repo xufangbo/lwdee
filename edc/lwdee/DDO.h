@@ -14,6 +14,7 @@ class DDO {
   // DDO(const std::string& vid, DdoDataId ddoId = 0) : ref(vid, ddoId) {}
   void write(ByteSpan_ref datablock);
   ByteSpan_ref read();
+  void release();
 };
 
 class DdoManager {
@@ -25,4 +26,5 @@ class DdoManager {
   static long generateId() { return ++incresement; };
   static void set(long id, ByteSpan_ref blockdata);
   static ByteSpan_ref get(long id);
+  static void remove(long id);
 };
