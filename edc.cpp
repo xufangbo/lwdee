@@ -39,3 +39,12 @@ int edc_driver(void) {
 }
 
 SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcdriver, edc_driver, run edc driver);
+
+int edc_worker(void) {
+
+  std::cout << "edc workder" << std::endl;
+
+  return 0;
+}
+
+SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcworker, edc_worker, run edc worker);
