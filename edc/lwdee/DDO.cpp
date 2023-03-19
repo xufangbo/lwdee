@@ -1,11 +1,33 @@
 #include "DDO.h"
 
-void DDO::write(ByteSpan_ref datablock) { DdoManager::set(id, datablock); }
-ByteSpan_ref DDO::read() {return DdoManager::get(id); }
-void  DDO::release(){DdoManager::remove(id);}
+#include "api/UhconnDdo.h"
 
-std::atomic<long> DdoManager::incresement;
-std::map<long, ByteSpan_ref> DdoManager::ddos = {};
-void DdoManager::set(long id, ByteSpan_ref blockdata) { ddos[id] = blockdata; }
-ByteSpan_ref DdoManager::get(long id) { return ddos[id]; }
-void DdoManager::remove(long id) { ddos.erase(id); }
+void DDO::write(ByteSpan_ref bytesSpan) {
+  UhconnDdo uh_ddo(ddoId);
+
+  DdoBlockData blockdata;
+  blockdata.len = bytesSpan->size;
+  blockdata.data = bytesSpan->buffer;
+
+  uh_ddo.storeBlock(blockdata);
+
+  //   std::cout << "make ddo: " << uh_ddo->itsRef().itsId()
+  //             << " |size:" << blockdata.len
+  //             << " |at:" << uh_ddo->itsRef().itsVoxorId() << std::endl;
+}
+
+ByteSpan_ref DDO::read() {
+  UhconnDdo uh_ddo(ddoId);
+  DdoBlockData blockdata;
+  uh_ddo.loadBlock(blockdata);
+
+  ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata.len);
+  bytes->puts((Byte *)blockdata.data, bytes->size);
+
+  return bytes;
+}
+
+void DDO::release() {
+  UhconnDdo uh_ddo(ddoId);
+  uh_ddo.deleteBlock();
+}

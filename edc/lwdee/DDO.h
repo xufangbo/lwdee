@@ -2,29 +2,34 @@
 
 #include <atomic>
 #include <map>
-// #include "api/UhconnDdoRef.h"
+#include <memory>
+
+#include "api/UhconnDdoRef.h"
 #include "core/ByteSpan.h"
 
+typedef UhconnDdoRef DDOId;
+
 class DDO {
-  // UhconnDdoRef ref;
- public:
-  long id;
 
  public:
-  // DDO(const std::string& vid, DdoDataId ddoId = 0) : ref(vid, ddoId) {}
+  DDOId ddoId;
+
+ public:
+  DDO() {}
+  DDO(DDOId id) : ddoId(id) {}
   void write(ByteSpan_ref datablock);
   ByteSpan_ref read();
   void release();
 };
 
-class DdoManager {
- private:
-  static std::atomic<long> incresement;
-  static std::map<long, ByteSpan_ref> ddos;
+// class DdoManager {
+//  private:
+//   static std::atomic<DDOId> incresement;
+//   static std::map<DDOId, ByteSpan_ref> ddos;
 
- public:
-  static long generateId() { return ++incresement; };
-  static void set(long id, ByteSpan_ref blockdata);
-  static ByteSpan_ref get(long id);
-  static void remove(long id);
-};
+//  public:
+//   static DDOId generateId() { return ++incresement; };
+//   static void set(DDOId id, ByteSpan_ref blockdata);
+//   static ByteSpan_ref get(DDOId id);
+//   static void remove(DDOId id);
+// };
