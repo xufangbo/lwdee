@@ -26,10 +26,17 @@ add_subdirectory(edc)
 list(APPEND EXTRA_LIBS uhconnect)
 list(APPEND EXTRA_LIBS uhshell)
 list(APPEND EXTRA_LIBS kmeans)
-list(APPEND EXTRA_LIBS driver core lwdee worker) #-
+list(APPEND EXTRA_LIBS core lwdee driver worker) #-
 # add the executable
 # 添加可执行文件
-add_executable(Demo demo.cpp demo_test.cpp edc.cpp) #-
+
+SET(SRC_FILES 
+demo.cpp
+demo_test.cpp
+edc.cpp #-
+)
+
+add_executable(Demo ${SRC_FILES}) 
 
 target_link_libraries(Demo PUBLIC ${EXTRA_LIBS})
 

@@ -37,8 +37,8 @@ int edc_driver(void) {
 
   return 0;
 }
-
 SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcdriver, edc_driver, run edc driver);
+
 
 int edc_worker(void) {
 
@@ -46,5 +46,4 @@ int edc_worker(void) {
 
   return 0;
 }
-
 SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcworker, edc_worker, run edc worker);

@@ -10,10 +10,6 @@ void DDO::write(ByteSpan_ref bytesSpan) {
   blockdata.data = bytesSpan->buffer;
 
   uh_ddo.storeBlock(blockdata);
-
-  //   std::cout << "make ddo: " << uh_ddo->itsRef().itsId()
-  //             << " |size:" << blockdata.len
-  //             << " |at:" << uh_ddo->itsRef().itsVoxorId() << std::endl;
 }
 
 ByteSpan_ref DDO::read() {
