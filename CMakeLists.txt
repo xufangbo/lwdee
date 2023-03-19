@@ -23,21 +23,15 @@ add_subdirectory(uhconnect)
 add_subdirectory(uhshell)
 add_subdirectory(kmeans)
 add_subdirectory(edc)
+
+# add the executable
+# 添加可执行文件
+add_executable(Demo demo.cpp demo_test.cpp) 
+
+
 list(APPEND EXTRA_LIBS uhconnect)
 list(APPEND EXTRA_LIBS uhshell)
 list(APPEND EXTRA_LIBS kmeans)
-list(APPEND EXTRA_LIBS core lwdee driver worker) #-
-# add the executable
-# 添加可执行文件
-
-SET(SRC_FILES 
-demo.cpp
-demo_test.cpp
-edc.cpp #-
-)
-
-add_executable(Demo ${SRC_FILES}) 
-
 target_link_libraries(Demo PUBLIC ${EXTRA_LIBS})
 
 include_directories(${PROJECT_BINARY_DIR}/inc/libgo)
@@ -53,3 +47,6 @@ target_link_options(Demo
         PUBLIC "-T${PROJECT_SOURCE_DIR}/Demo.lds"
 )
 target_compile_options(Demo PUBLIC -Wall)
+
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/edc.cmake)
