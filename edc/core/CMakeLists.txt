@@ -1,7 +1,8 @@
 ﻿
 add_library (core 
-"Partition.cpp"
-"ByteSpan.cpp"
-"TuplesSerialzer.cpp"
-"MapSerializer.cpp"
+log.cpp
+Partition.cpp
+ByteSpan.cpp
+TuplesSerialzer.cpp
+MapSerializer.cpp
 )

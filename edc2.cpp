@@ -7,8 +7,9 @@
 #include "UserDcoFactory.h"
 #include "core/UhconnConfig.h"
 #include "core/UhconnWorkNode.h"
+#include "core/log.hpp"
 
-extern int kmeans_run(int argc, char *argv[]);
+void init_logger();
 
 void showVer(void) {
     std::cout << " Version " 
@@ -20,6 +21,8 @@ SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC),
 showVer, showVer, show the version);
 
 int main(int argc, char *argv[]) {
+
+    init_logger();
 
     // 初始化 WorkNode工作环境
     std::string ConfigFile = "../test/node_conf.json";
@@ -45,7 +48,25 @@ int main(int argc, char *argv[]) {
         std::cout<<"load config failed!!"<<endl;
     }
 
-    // shell_run();
+    shell_run();
+}
+
+void init_logger() {
+
+  // LogOption option{false, log_trace, "../log", "edc", true, 10};
+  LogOption option;
+  option.initalized = false;
+  option.level = log_trace;
+  strcpy(option.path,"../log");
+  strcpy(option.name,"../edc");
+  option.is_color = true;
+  option.days = 10;
+
+  if (logger_initialize(option) != 0) {
+    printf("log initialize error\n");
+  } else {
+    logger_info("-- app starting ... ");
+  }
 }
 
 #endif

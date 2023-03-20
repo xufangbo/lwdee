@@ -50,11 +50,34 @@
             ]
         },
         {
-            "name": "edc.worker",
+            "name": "node1",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/edc/worker/worker",
-            "args": [],
+            "program": "${workspaceFolder}/build/edc2",
+            "args": ["~/git/lwdee//test/node_conf.json","node1","2"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },{
+            "name": "node2",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/edc2",
+            "args": ["~/git/lwdee//test/node_conf.json","node2","2"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

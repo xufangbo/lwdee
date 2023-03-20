@@ -4,6 +4,6 @@
 
 class lwdee {
   public:
-   static DCO createDCO(std::string name);
-   static DDO createDDO();
+   static DCO create_dco(std::string name, std::string functionName);
+   static DDO create_ddo();
 };

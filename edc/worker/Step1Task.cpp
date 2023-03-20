@@ -95,7 +95,7 @@ void Step1Task::groupByKey(Tuples *tuples) {
   for (int i = 0; i < outSplitNums; i++) {
     // write ddo
     ByteSpan_ref bytes = MapSerializer().serailize(maps + i);
-    DDO ddo = lwdee::createDDO();
+    DDO ddo = lwdee::create_ddo();
     ddo.write(bytes);
 
     partition->ddos.push_back(ddo);

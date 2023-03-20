@@ -26,7 +26,7 @@ DDO Step2Task::run(PartitionStep2 *partition) {
   // write ddo
   ByteSpan_ref bytesOutput = MapSerializer().serailize(&mapOutputs);
 
-  DDO ddoOutput = lwdee::createDDO();
+  DDO ddoOutput = lwdee::create_ddo();
   ddoOutput.write(bytesOutput);
   return ddoOutput;
 }

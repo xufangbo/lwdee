@@ -1,5 +1,8 @@
+include_directories(./edc)
+
 SET(SRC_FILES 
 edc2.cpp
+edc.cpp
 )
 add_executable(edc2 ${SRC_FILES}) 
 
@@ -7,7 +10,7 @@ add_executable(edc2 ${SRC_FILES})
 list(APPEND EXTRA_LIBS uhconnect)
 list(APPEND EXTRA_LIBS uhshell)
 list(APPEND EXTRA_LIBS kmeans)
-list(APPEND EXTRA_LIBS core lwdee driver worker) #-
+list(APPEND EXTRA_LIBS core lwdee driver worker) 
 target_link_libraries(edc2 PUBLIC ${EXTRA_LIBS})
 
 include_directories(${PROJECT_BINARY_DIR}/inc/libgo)
