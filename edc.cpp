@@ -1,4 +1,3 @@
-#include <libgo.h>
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -13,7 +12,6 @@
 #include "core/UhconnSimpleAddr.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
-#include "shell_cpp.h"
 
 #include "core/log.hpp"
 #include "edc/driver/Driver.h"
@@ -41,7 +39,6 @@ int edc_driver(void) {
 
   return 0;
 }
-SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0) | SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcdriver, edc_driver, run edc driver);
 
 int edctest(void) {
   auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
@@ -70,7 +67,6 @@ int edctest(void) {
 
   return 0;
 }
-SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0) | SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edctest, edctest, run edc test);
 
 int simple_main(void) {
   std::cout << "simple test start!" << std::endl;
@@ -98,4 +94,3 @@ int simple_main(void) {
   std::cout << "simple test completed!" << std::endl;
   return 0;
 }
-SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0) | SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), simplrun, simple_main, run test);

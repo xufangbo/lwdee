@@ -1,5 +1,3 @@
-#ifndef RUN_DEMO 
-
 #include "uhshell.h"
 #include <iostream>
 #include "DemoConfig.h"
@@ -7,38 +5,44 @@
 #include "UserDcoFactory.h"
 #include "core/UhconnConfig.h"
 #include "core/UhconnWorkNode.h"
+
 #include "core/log.hpp"
+#include "edc/driver/Driver.h"
+#include "lwdee/lwdee.h"
+#include "edc.h"
 
 void init_logger();
-
-// void showVer(void) {
-//     std::cout << " Version " 
-//         << Demo_VERSION_MAJOR << "."
-//         << Demo_VERSION_MINOR << "."
-//         << Demo_VERSION_PATCH << std::endl;
-// }
-// SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), 
-// showVer, showVer, show the version);
+void init(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
+  init(argc, argv);
+
+  // edc_driver();
+  if (UhconnVoxorFactory::getInstance().getLocalWorkNode()->itId() == 2) {
+    logger_debug("this is node2");
+    simple_main();
+  }
+
+  while(true){
+      usleep(1000000);
+  }
+}
+
+void init(int argc, char *argv[]) {
 
     init_logger();
 
     // 初始化 WorkNode工作环境
-    std::string ConfigFile = "../test/node_conf.json";
-    std::string NodeName = "node1";
+    std::string configFile = "../test/node_conf.json";
+    std::string nodeName = "node1";
     int nd_amt = 2;
-    if( argc >= 4 ) {
-        ConfigFile = argv[1];
-        NodeName = argv[2]; 
-        nd_amt = atoi(argv[3]); 
+    if( argc >= 2 ) {
+        nodeName = argv[1];
     }
     else {
-        std::cout << "usage:"
-            << "Demo <cfgfile> <ndname> <ndamount>" 
-            << std::endl;
+        std::cout << "usage:"  << "app demo <ndname>"  << std::endl;
     }
-    if(UhconnConfig::getInstance().loadConf(ConfigFile,NodeName) == 0){
+    if(UhconnConfig::getInstance().loadConf(configFile,nodeName) == 0){
         UhconnConfig::getInstance().setNodeAmount(nd_amt);
         UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new UserDcoFactory(),UhconnConfig::getInstance().getNodeId()); 
         UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
@@ -47,8 +51,6 @@ int main(int argc, char *argv[]) {
     else {
         std::cout<<"load config failed!!"<<endl;
     }
-
-    shell_run();
 }
 
 void init_logger() {
@@ -68,5 +70,3 @@ void init_logger() {
     logger_info("-- app starting ... ");
   }
 }
-
-#endif
