@@ -54,7 +54,6 @@ int edc_driver(void) {
 SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0) | SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), edcdriver, edc_driver, run edc driver);
 
 int edctest(void) {
-
   auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
 
   DDO input = lwdee::create_ddo();
@@ -66,7 +65,12 @@ int edctest(void) {
   DCO dco = lwdee::create_dco("UserDco", "f1");
   dco.async(input);
 
+  // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
+  // UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"), input.uh_ddo.get());
+
   DDO output = dco.wait();
+  // UhconnDdo* ddo = UhconnApi::wait(ddoref);
+  //  DDO output(ddoref,ddo);
 
   ByteSpan_ref bytes2 = output.read();
   std::string str(bytes2->size + 1, '\0');
