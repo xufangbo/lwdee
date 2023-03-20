@@ -1,13 +1,3 @@
-/**
- * @file simple_run.cpp
- * @author your name (shiqingpeng@domain.com)
- * @brief  对UhomeConnect组件接口的基本调用演示
- * @version 0.1
- * @date 2022-08-05
- *
- * @copyright Copyright (c) 2022
- *
- */
 #include <libgo.h>
 #include <chrono>
 #include <iostream>

@@ -73,7 +73,7 @@ static FILE *fp = NULL;
 static time_t day = 0; // 天数据，每天一个日志文件
 static char fileName[FILE_LENGTH];
 
-pthread_t tid;
+// pthread_t tid;
 pthread_mutex_t mut;
 
 static void wirte_console(LogLevel &level, char *message);

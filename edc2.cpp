@@ -11,14 +11,14 @@
 
 void init_logger();
 
-void showVer(void) {
-    std::cout << " Version " 
-        << Demo_VERSION_MAJOR << "."
-        << Demo_VERSION_MINOR << "."
-        << Demo_VERSION_PATCH << std::endl;
-}
-SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), 
-showVer, showVer, show the version);
+// void showVer(void) {
+//     std::cout << " Version " 
+//         << Demo_VERSION_MAJOR << "."
+//         << Demo_VERSION_MINOR << "."
+//         << Demo_VERSION_PATCH << std::endl;
+// }
+// SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), 
+// showVer, showVer, show the version);
 
 int main(int argc, char *argv[]) {
 
