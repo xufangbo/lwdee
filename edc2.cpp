@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         std::cout<<"load config failed!!"<<endl;
     }
 
-    // shell_run();
+    shell_run();
 }
 
 void init_logger() {

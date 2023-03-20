@@ -19,6 +19,7 @@ void DDO::write(ByteSpan_ref bytesSpan) {
   }
 
   DdoBlockData blockdata;
+  blockdata.type = 22; // ?
   blockdata.len = bytesSpan->size;
   blockdata.data = bytesSpan->buffer;
 
