@@ -28,7 +28,7 @@ int UhconnConfig::loadConf(std::string file, std::string name){
   ss << file_stream.rdbuf();
   std::string jsonTxt(ss.str());
 
-  std::cout << "config file:"<<jsonTxt; 
+  // std::cout << "config file:"<<jsonTxt; 
   auto obj = boost::json::parse(jsonTxt);
   try{
       allConf =obj.as_object();

@@ -15,12 +15,19 @@ void init_logger();
 void init(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
+  
   init(argc, argv);
 
   // edc_driver();
-  if (UhconnVoxorFactory::getInstance().getLocalWorkNode()->itId() == 2) {
-    logger_debug("this is node2");
-    simple_main();
+  auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+  if(localNode==nullptr){
+    logger_error("localNode is null");
+    exit(1);
+  }
+  if (localNode->itId() == 2) {
+    for (int i = 0; i < 10;i++){
+      simple_main();
+    }
   }
 
   while(true){
@@ -33,7 +40,7 @@ void init(int argc, char *argv[]) {
     init_logger();
 
     // 初始化 WorkNode工作环境
-    std::string configFile = "../test/node_conf.json";
+    std::string configFile = "/home/kevin/git/lwdee/test/node_conf.json";
     std::string nodeName = "node1";
     int nd_amt = 2;
     if( argc >= 2 ) {
