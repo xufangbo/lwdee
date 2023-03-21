@@ -9,15 +9,17 @@ typedef char Byte;
 class ByteSpan {
  private:
   int pos = 0;
+  bool ownerd = true;
 
  public:
   int size;
   Byte* buffer = nullptr;
 
-  ByteSpan(int size) : size(size), buffer(new Byte[size]) {}
+  ByteSpan(int size)
+      : size(size), buffer(new Byte[size]) {}
 
   ~ByteSpan() {
-    if (buffer != nullptr) {
+    if (ownerd && buffer != nullptr) {
       delete[] buffer;
       buffer = nullptr;
     }
@@ -77,6 +79,10 @@ class ByteSpan {
     out << "  ";
 
     return out.str();
+  }
+
+  void releaseOwner() {
+    ownerd = false;
   }
 };
 typedef std::shared_ptr<ByteSpan> ByteSpan_ref;

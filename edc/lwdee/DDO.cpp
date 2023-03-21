@@ -1,6 +1,6 @@
 #include "DDO.h"
 
-#include "api/UhconnDdo.h"
+#include "core/UhconnSimpleDB.h"
 #include "core/log.hpp"
 
 DDO::DDO(DDOId id)
@@ -8,27 +8,21 @@ DDO::DDO(DDOId id)
   // logger_trace("create ddo :{nodeId:%d,voxorId:%s,ddoId:%ld}", id.itsWorkNodeId(), id.itsVoxorId().c_str(), id.itsId());
 }
 
-DDO::DDO(DDOId id, UhconnDdo* uh_ddo)
-    : DDO(id) {
-  this->uh_ddo.reset(uh_ddo);
-}
-
 void DDO::write(ByteSpan_ref bytesSpan) {
-  if (uh_ddo == nullptr) {
-    uh_ddo.reset(new UhconnDdo(ddoId));
-  }
 
   DdoBlockData blockdata;
-  blockdata.type = 22; // ?
+  blockdata.type = 22;  // ?
   blockdata.len = bytesSpan->size;
   blockdata.data = bytesSpan->buffer;
+  
+  bytesSpan->releaseOwner();
 
-  uh_ddo->storeBlock(blockdata);
+  UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), blockdata);
 }
 
 ByteSpan_ref DDO::read() {
   DdoBlockData blockdata;
-  uh_ddo->loadBlock(blockdata);
+  UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(),blockdata);
 
   ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata.len);
   bytes->puts((Byte*)blockdata.data, bytes->size);
@@ -38,6 +32,8 @@ ByteSpan_ref DDO::read() {
 }
 
 void DDO::release() {
-  uh_ddo->deleteBlock();
-  uh_ddo.reset();
+  // uh_ddo->deleteBlock();
+  // uh_ddo.reset();
+
+   UhconnSimpleDB::getInstance().deleteBlock(ddoId.itsId());
 }

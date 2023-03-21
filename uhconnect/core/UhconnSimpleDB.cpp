@@ -160,11 +160,12 @@ bool UhconnSimpleDB::delFromPrepArray(DdoDataId id){
 int UhconnSimpleDB::deleteBlock(DdoDataId id){
     DDO_LOCK;
     std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.find(id);
-    DDO_UNLOCK;
+    // DDO_UNLOCK;
     if(it == localDdo.end()) {
+        DDO_UNLOCK;
         return -1;
     }
-    DDO_LOCK;
+    // DDO_LOCK;
     if(it->second.data) {//if(!it->second.isCopyConstruct){
         free(it->second.data);
         it->second.data = nullptr;

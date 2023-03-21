@@ -33,7 +33,7 @@ std::string KmeansMain::start(std::string a) {
 
     // //生成初始质心ddo
     UhconnDdoRef df_cluster(this->itsAddr());
-    UhconnDdo clusterDdo(df_cluster);
+    // UhconnDdo clusterDdo(df_cluster);
     DdoBlockData* clusterBlock = UhconnSimpleDB::getInstance().createBlock(df_cluster.itsId(), cluster_n*dim*sizeof(float));
     MpiProcess::initClusterCenter((float*)clusterBlock->data, cluster_n, dim);
     std::cout << "origCluster: " << df_cluster.itsId() << std::endl;
