@@ -5,7 +5,6 @@
 
 DDO::DDO(DDOId id)
     : ddoId(id) {
-  // logger_trace("create ddo :{nodeId:%d,voxorId:%s,ddoId:%ld}", id.itsWorkNodeId(), id.itsVoxorId().c_str(), id.itsId());
 }
 
 void DDO::write(ByteSpan_ref bytesSpan) {
