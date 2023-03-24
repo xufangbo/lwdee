@@ -14,35 +14,9 @@
 #include "core/UhconnWorkNode.h"
 
 #include "core/log.hpp"
-#include "edc/driver/Driver.h"
+// #include "edc/driver/Driver.h"
 #include "lwdee/lwdee.h"
 
-int simple_main(void) {
-  std::cout << "simple test start!" << std::endl;
-  // 创建用户DCO
-  UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
-
-  UhconnDdoRef df(UhconnVoxorFactory::getInstance().getLocalWorkNode()->itsDeamon().itsAddr());
-  UhconnDdo para(df);
-
-  DdoBlockData test_data;
-  test_data.type = 22;
-  test_data.len = 10;
-  test_data.data = new char[10];
-  memcpy(test_data.data, "test data", 10);
-  para.storeBlock(test_data);
-  delete[] (char*)test_data.data;
-  
-  UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"), &para);
-
-  UhconnDdo* ddo = UhconnApi::wait(ddoref);
-
-  DdoBlockData result;
-  ddo->loadBlock(result);
-  std::cout << "result len:" << result.len << "type:" << result.type << std::endl;
-  std::cout << "simple test completed!" << std::endl;
-  return 0;
-}
 
 int edc_driver(void) {
   std::cout << "edc driver" << std::endl;

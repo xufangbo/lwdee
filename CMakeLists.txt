@@ -49,4 +49,5 @@ target_link_options(Demo
 target_compile_options(Demo PUBLIC -Wall)
 
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/edc.cmake)
+# include(${CMAKE_CURRENT_SOURCE_DIR}/edc.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/terasort.cmake)

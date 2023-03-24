@@ -7,8 +7,8 @@
 #include "uhshell.h"
 
 #include "core/log.hpp"
-#include "edc.h"
-#include "edc/driver/Driver.h"
+#include "terasort.h"
+// #include "edc/driver/Driver.h"
 #include "lwdee/lwdee.h"
 
 void init_logger();

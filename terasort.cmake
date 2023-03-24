@@ -1,8 +1,8 @@
-include_directories(./edc)
+include_directories(./terasort)
 
 SET(SRC_FILES 
 app.cpp
-edc/edc.cpp
+terasort/terasort.cpp
 )
 add_executable(app ${SRC_FILES}) 
 
