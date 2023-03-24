@@ -9,6 +9,7 @@ aux_source_directory(. DIR)
 
 add_subdirectory(core)
 add_subdirectory(lwdee)
+add_subdirectory(driver)
 add_subdirectory(map)
 add_subdirectory(reduce)
 # add_subdirectory(worker)

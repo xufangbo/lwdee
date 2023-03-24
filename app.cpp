@@ -10,6 +10,7 @@
 #include "terasort.h"
 #include "lwdee/lwdee.h"
 #include "terasort/TerasortDCOFactory.h"
+#include "driver/Driver.h"
 
 void init_logger();
 void init(int argc, char* argv[]);
@@ -17,23 +18,25 @@ void init(int argc, char* argv[]);
 int main(int argc, char* argv[]) {
   init(argc, argv);
 
-  // edc_driver();
-  auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-  if (localNode == nullptr) {
-    logger_error("localNode is null");
-    exit(1);
-  }
-  if (localNode->itId() == 2) {
-    for (int i = 0; i < 10; i++) {
-      // simple_main();
-      edctest();
-      edc_driver();
-    }
-  }
+  Driver driver;
+  driver.startJob("/home/kevin/git/lwdee/terasort/data-input.dat",4,4);
 
-  while (true) {
-    usleep(1000000);
-  }
+//   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+//   if (localNode == nullptr) {
+//     logger_error("localNode is null");
+//     exit(1);
+//   }
+//   if (localNode->itId() == 2) {
+//     for (int i = 0; i < 10; i++) {
+//       // simple_main();
+//       edctest();
+//       edc_driver();
+//     }
+//   }
+
+//   while (true) {
+//     usleep(1000000);
+//   }
 }
 
 void init(int argc, char* argv[]) {
