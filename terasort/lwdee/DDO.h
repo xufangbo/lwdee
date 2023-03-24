@@ -22,4 +22,5 @@ class DDO {
   void write(ByteSpan_ref datablock);
   ByteSpan_ref read();
   void release();
+  void releaseGlobal();
 };

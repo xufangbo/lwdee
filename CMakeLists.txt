@@ -22,7 +22,6 @@ configure_file(DemoConfig.h.in DemoConfig.h)
 add_subdirectory(uhconnect)
 add_subdirectory(uhshell)
 add_subdirectory(kmeans)
-add_subdirectory(edc)
 
 # add the executable
 # 添加可执行文件

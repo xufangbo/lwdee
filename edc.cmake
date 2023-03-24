@@ -1,5 +1,7 @@
 include_directories(./edc)
 
+add_subdirectory(edc)
+
 SET(SRC_FILES 
 app.cpp
 edc/edc.cpp

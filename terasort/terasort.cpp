@@ -52,7 +52,7 @@ int edctest(void) {
   bytes->puts((Byte*)fileName, bytes->size);
   input.write(bytes);
 
-  DCO dco = lwdee::create_dco("UserDco", "f1");
+  DCO dco = lwdee::create_dco("MapDCO", "f1");
   dco.async(input);
 
   // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));

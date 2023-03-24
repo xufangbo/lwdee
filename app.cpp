@@ -8,8 +8,8 @@
 
 #include "core/log.hpp"
 #include "terasort.h"
-// #include "edc/driver/Driver.h"
 #include "lwdee/lwdee.h"
+#include "terasort/TerasortDCOFactory.h"
 
 void init_logger();
 void init(int argc, char* argv[]);
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
   if (localNode->itId() == 2) {
     for (int i = 0; i < 10; i++) {
       // simple_main();
-      // edctest();
+      edctest();
       edc_driver();
     }
   }
@@ -46,12 +46,11 @@ void init(int argc, char* argv[]) {
   if (argc >= 2) {
     nodeName = argv[1];
   } else {
-    std::cout << "usage:"
-              << "app demo <ndname>" << std::endl;
+    std::cout << "usage: app demo <ndname>" << std::endl;
   }
   if (UhconnConfig::getInstance().loadConf(configFile, nodeName) == 0) {
     UhconnConfig::getInstance().setNodeAmount(nd_amt);
-    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new UserDcoFactory(), UhconnConfig::getInstance().getNodeId());
+    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
     UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
     workNode->itsRouter().setupRouteInfoFromConf();
   } else {

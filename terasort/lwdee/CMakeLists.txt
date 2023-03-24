@@ -4,3 +4,5 @@ add_library (lwdee
 "DCO.cpp"
 "lwdee.cpp"
 )
+
+target_link_libraries(lwdee uhconnect)
