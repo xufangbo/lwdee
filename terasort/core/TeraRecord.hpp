@@ -23,7 +23,7 @@ typedef struct {
     uint64_t l;
     memcpy(&l, (void*)key, 8);
     return l;
-  }
+  }  
 } TeraRecord;
 
 typedef std::vector<TeraRecord> TeraRecords;

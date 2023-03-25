@@ -18,21 +18,19 @@ void Driver::startJob(std::string fileName, int datum, int splitNums1,
   vector<SampleSplit> sampleSplits(splitNums2);
   uint64_t pre = 0;
   for (int i = 0; i < splitNums2; i++) {
+    SampleSplit& split = sampleSplits[i];
+    split.min = pre;
+    split.max = conf.first.left8() + seprator * (i + 1);
 
-    sampleSplits[i].min = pre;
-    sampleSplits[i].max = conf.first.left8() + seprator * (i + 1);
+    pre = split.max;
 
-    pre = sampleSplits[i].max;
-
-    logger_trace("subsplit %d : %ld - %ld", i, sampleSplits[i].min,
-                 sampleSplits[i].max);
+    logger_trace("subsplit %d : %ld - %ld", i, split.min, split.max);
   }
   sampleSplits[splitNums2 - 1].max = 0;
 
   // =========================
   // 构造参数
   // =========================
-
   PartitionStep1 step1Inputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     step1Inputs[i] = PartitionStep1(i, fileName, sampleSplits);
@@ -137,52 +135,3 @@ MinAndMax Driver::samples(std::string fileName, int datum) {
 
   return pair;
 }
-
-// MinAndMax Driver::samples(std::string fileName, int datum) {
-//   fstream f;
-//   f.open(fileName, ios_base::in | ios_base::binary);
-
-//   if (!f.is_open()) {
-//     logger_error("can't open file : %s", fileName.c_str());
-//   }
-
-//   f.seekg(0, ios_base::end);
-//   uint64_t totalSize = f.tellg();
-//   uint64_t len = totalSize / 100;
-
-//   logger_warn("total size : %ld,len:%ld", totalSize, len);
-
-//   char key[11];
-//   memset(key, '\0', 10);
-
-//   f.seekg(0, ios_base::beg);
-//   f.read(key, 10);
-//   f.seekg(90L, ios_base::cur);
-
-//   Bytes10 min(key);
-//   Bytes10 max(key);
-
-//   int count = 0;
-//   for (int i = 0; !f.eof(); i += datum) {
-//     f.read(key, 10);
-//     f.seekg(100L * datum, ios_base::cur);
-//     f.seekg(90L, ios_base::cur);
-
-//     if (min > key) {
-//       min = key;
-//     } else if (max < key) {
-//       max = key;
-//     }
-
-//     count++;
-
-//     printf("%s,%ld\n", key, (uint64_t)f.tellg());
-//   }
-
-//   f.close();
-
-//   auto pair = std::make_pair(min, max);
-//   logger_debug("count: %d, min: %s:max: %s",count,
-//   pair.first.to_string().c_str(), pair.second.to_string().c_str()); return
-//   pair;
-// }

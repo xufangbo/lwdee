@@ -15,15 +15,13 @@ PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
   auto trs = this->textFile();
 
   // write ddo
-  this->groupByKey(trs.get());
-  trs.reset();
+  this->generateSubSplit(trs);
+  delete trs;
 
   return *partition;
 };
 
-TeraRecords_ref Step1Task::textFile() {
-  TeraRecords_ref trs = std::make_shared<TeraRecords>();
-
+TeraRecords *Step1Task::textFile() {
   FILE *f = fopen(partition->fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", partition->fileName.c_str());
@@ -36,13 +34,14 @@ TeraRecords_ref Step1Task::textFile() {
   long start = splitCount * partition->index;
   long end = start + splitCount > len ? len : start + splitCount;
 
-  fseek(f, start, SEEK_SET);
-  for (int i = start; i < end; i++) {
-    TeraRecord tr;
-    fread(tr.key, 1, 10, f);
-    fread(tr.value, 1, 90, f);
+  auto trs = new TeraRecords(end - start, TeraRecord());
 
-    trs->push_back(tr);
+  fseek(f, start, SEEK_SET);
+  TeraRecord *tr = trs->data();
+  for (int i = start; i < end; i++) {
+    fread(tr->key, 1, 10, f);
+    fread(tr->value, 1, 90, f);
+    tr++;
 
     // logger_trace("%d - %ld", partition->index, tr.index());
   }
@@ -51,7 +50,7 @@ TeraRecords_ref Step1Task::textFile() {
   return trs;
 }
 
-void Step1Task::groupByKey(TeraRecords *trs) {
+void Step1Task::generateSubSplit(TeraRecords *trs) {
   auto sampleSplits = partition->sampleSplits;
 
   // 先计算长度
@@ -64,7 +63,8 @@ void Step1Task::groupByKey(TeraRecords *trs) {
 
   ByteSpan_ref subPartitions[sampleSplits.size()];
   for (int i = 0; i < sampleSplits.size(); i++) {
-    logger_debug("partition %d - sub split %d - %d",partition->index, i, counters[i]);
+    logger_debug("partition %d - sub split %d - %d", partition->index, i,
+                 counters[i]);
     subPartitions[i] = std::make_shared<ByteSpan>(counters[i] * 100);
   }
 

@@ -20,7 +20,7 @@ class Step1Task {
   PartitionStep1 run(PartitionStep1 *p);
 
  private:
-  TeraRecords_ref textFile();
-  void groupByKey(TeraRecords *trs);
+  TeraRecords* textFile();
+  void generateSubSplit(TeraRecords *trs);
   int classify(TeraRecord &tr);
 };
