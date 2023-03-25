@@ -1,16 +1,16 @@
 #include <iostream>
+
 #include "DemoConfig.h"
 #include "UserDcoFactory.h"
 #include "core/UhconnConfig.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
-#include "uhshell.h"
-
 #include "core/log.hpp"
-#include "terasort.h"
-#include "lwdee/lwdee.h"
-#include "terasort/TerasortDCOFactory.h"
 #include "driver/Driver.h"
+#include "lwdee/lwdee.h"
+#include "terasort.h"
+#include "terasort/TerasortDCOFactory.h"
+#include "uhshell.h"
 
 void init_logger();
 void init(int argc, char* argv[]);
@@ -18,25 +18,18 @@ void init(int argc, char* argv[]);
 int main(int argc, char* argv[]) {
   init(argc, argv);
 
-  Driver driver;
-  driver.startJob("/home/kevin/git/lwdee/terasort/data-input.dat",4,4);
+  auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+  if (localNode == nullptr) {
+    logger_error("localNode is null");
+    exit(1);
+  }
+  if (localNode->itId() == 2) {
+    Driver().startJob("/home/kevin/git/lwdee/terasort/data-input.dat", 3, 4, 4);
+  }
 
-//   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-//   if (localNode == nullptr) {
-//     logger_error("localNode is null");
-//     exit(1);
-//   }
-//   if (localNode->itId() == 2) {
-//     for (int i = 0; i < 10; i++) {
-//       // simple_main();
-//       edctest();
-//       edc_driver();
-//     }
-//   }
-
-//   while (true) {
-//     usleep(1000000);
-//   }
+  while (true) {
+    usleep(1000000);
+  }
 }
 
 void init(int argc, char* argv[]) {
@@ -53,11 +46,13 @@ void init(int argc, char* argv[]) {
   }
   if (UhconnConfig::getInstance().loadConf(configFile, nodeName) == 0) {
     UhconnConfig::getInstance().setNodeAmount(nd_amt);
-    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
-    UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(
+        new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
+    UhconnWorkNode* workNode =
+        UhconnVoxorFactory::getInstance().getLocalWorkNode();
     workNode->itsRouter().setupRouteInfoFromConf();
   } else {
-    std::cout << "load config failed!!" << endl;
+    logger_error("load config failed!!");
   }
 }
 

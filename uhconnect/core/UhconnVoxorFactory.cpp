@@ -20,7 +20,7 @@ void UhconnVoxorFactory::setupLocalWorkEnvironment(DcoFactory* df, int sn) {
     if( sn == 0 ) {
         sn = ++Work_Node_Cnt;
     }
-    std::cout<<"create work node id:"<<sn<<std::endl;
+    // std::cout<<"create work node id:"<<sn<<std::endl;
     Local_Worknode = new UhconnWorkNode(sn);
     Local_Worknode->setSysDco(new UhconnSysDco());
     local_factory = df;

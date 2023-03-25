@@ -13,16 +13,22 @@ class Partition {
   int index;
 };
 
+class SampleSplit {
+ public:
+  uint64_t min;
+  uint64_t max;
+};
+
 class PartitionStep1 : public Partition {
  public:
   string fileName;
-  int outSplitNums;
+  vector<SampleSplit> sampleSplits;
   vector<DDO> ddos;
 
  public:
   PartitionStep1() {}
-  PartitionStep1(int index, string fileName,int outSplitNums)
-      : Partition(index), fileName(fileName),outSplitNums(outSplitNums) {}
+  PartitionStep1(int index, string fileName, vector<SampleSplit> sampleSplits)
+      : Partition(index), fileName(fileName), sampleSplits(sampleSplits) {}
 };
 
 class PartitionStep2 : public Partition {
@@ -31,6 +37,5 @@ class PartitionStep2 : public Partition {
 
  public:
   PartitionStep2() {}
-  PartitionStep2(int index)
-      : Partition(index){}
+  PartitionStep2(int index) : Partition(index) {}
 };

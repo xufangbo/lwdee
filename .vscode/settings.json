@@ -85,5 +85,10 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp"
-    }
+    },
+    "diffEditor.wordWrap": "off",
+    "editor.wordWrapColumn": 1000,
+    "editor.wrappingIndent": "none",
+    "html.format.wrapLineLength": 0,
+    "C_Cpp.clang_format_fallbackStyle": "{ IndentWidth: 4 }"
 }

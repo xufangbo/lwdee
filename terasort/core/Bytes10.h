@@ -8,17 +8,11 @@ class Bytes10 {
   char values[10];
 
  public:
-  Bytes10(const char* chars) {
-    memcpy(values, (void*)chars, 10);
-  }
+  Bytes10(const char* chars) { memcpy(values, (void*)chars, 10); }
 
-  void operator=(const char* chars) {
-    memcpy(values, (void*)chars, 10);
-  }
+  void operator=(const char* chars) { memcpy(values, (void*)chars, 10); }
 
-  char* bytes() {
-    return this->values;
-  }
+  char* bytes() { return this->values; }
 
   bool operator>(const char* chars) {
     return compare(this->bytes(), chars) > 0L;
@@ -26,6 +20,24 @@ class Bytes10 {
 
   bool operator<(const char* chars) {
     return compare(this->bytes(), chars) < 0L;
+  }
+
+  uint16_t left2() {
+    uint16_t s;
+    memcpy(&s, (void*)values, 2);
+    return s;
+  }
+
+  uint64_t left8() {
+    uint64_t l;
+    memcpy(&l, (void*)values, 8);
+    return l;
+  }
+
+  uint32_t right4() {
+    uint32_t i;
+    memcpy(&i, (void*)values + 8, 4);
+    return i;
   }
 
   /**
@@ -53,17 +65,7 @@ class Bytes10 {
   }
 
   std::string to_string() {
-    // std::string str1(11, '\0');
-    // memcpy((void*)str1.data(), (void*)this->values, 10);
-    // return str1;
-
-    uint64_t l;
-    memcpy(&l, (void*)values, 8);
-
-    uint32_t i;
-    memcpy(&i, (void*)values + 8, 4);
-
-    std::string str = std::string("") + std::to_string(l) + "-" + std::to_string(i);
-    return str;
+    return std::string("") + std::to_string(left8()) + "-" +
+           std::to_string(right4());
   }
 };

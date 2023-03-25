@@ -57,8 +57,8 @@ int UhconnConfig::loadConf(std::string file, std::string name){
 
   std::stringstream cs;
   cs << boost::json::serialize(jconf) << std::endl;
-  std::cout << name << " conf:"<<cs.str()<<std::endl;
-  std::cout << "node amount:"<<confNodeAmount<<std::endl;
+  // std::cout << name << " conf:"<<cs.str()<<std::endl;
+  // std::cout << "node amount:"<<confNodeAmount<<std::endl;
   return 0;
 }
 
@@ -132,6 +132,6 @@ int UhconnConfig::getNodeAmount(void){
 
 int UhconnConfig::setNodeAmount(int amount){
   nodeAmount = amount;
-  std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
+  // std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
   return 0;
 }

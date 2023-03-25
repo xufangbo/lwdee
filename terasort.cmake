@@ -22,6 +22,7 @@ list(APPEND EXTRA_LIBS lwdee)
 list(APPEND EXTRA_LIBS map) 
 list(APPEND EXTRA_LIBS reduce) 
 list(APPEND EXTRA_LIBS driver) 
+list(APPEND EXTRA_LIBS worker) 
 target_link_libraries(app PUBLIC ${EXTRA_LIBS})
 
 target_link_options(app PUBLIC "-T${PROJECT_SOURCE_DIR}/app.lds" )
