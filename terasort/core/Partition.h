@@ -23,7 +23,7 @@ class PartitionStep1 : public Partition {
  public:
   string fileName;
   vector<SampleSplit> sampleSplits;
-  vector<DDO> ddos;
+  DDO outputDDO;
 
  public:
   PartitionStep1() {}
