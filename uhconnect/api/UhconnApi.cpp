@@ -24,15 +24,6 @@ UhconnDcoRef UhconnApi::create(std::string className, std::string classConstruct
 }
 
 
-
-// UhconnDdo* UhconnApi::wait(UhconnFutureId& ddo_id) {
-
-//     UhconnWorkNode* localNode = getLocalWorkNode();
-//     return localNode->itsDeamon().wait(ddo_id);
-
-// }
-
-
 const UhconnDdoRef UhconnApi::async(UhconnDcoRef& dco, std::string funcName, std::string funcPara) {
    
 

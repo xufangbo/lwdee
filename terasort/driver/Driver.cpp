@@ -6,6 +6,8 @@
 
 #include "core/Partition.h"
 #include "core/log.hpp"
+#include "lwdee/DDO.h"
+#include "lwdee/lwdee.h"
 #include "map/Step1Task.h"
 // #include "reduce/Step2Task.h"
 
@@ -34,7 +36,6 @@ void Driver::map() {
   // =========================
   // 构造参数
   // =========================
-
   PartitionStep1 step1Inputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     step1Inputs[i] = PartitionStep1(i, fileName, sampleSplits);
@@ -43,10 +44,18 @@ void Driver::map() {
   // =========================
   // 调用map dco
   // =========================
-  PartitionStep1 step1Outputs[splitNums1];
+  DDO ddos[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
-    PartitionStep1 step1Output = Step1Task().run(step1Inputs + i);
-    step1Outputs[i] = step1Output;
+    DCO dco = lwdee::create_dco(0, "MapDCO");
+
+    PartitionStep1 input(i, fileName, sampleSplits);
+    auto bytes = input.serialize();
+    std::string args(bytes->size + 1, '\0');
+    memcpy((void*)args.data(), bytes->buffer, bytes->size);
+
+    DDO ddo = dco.async("map", args);
+
+    ddos[i].ddoId = ddo.ddoId;
   }
 }
 

@@ -6,9 +6,15 @@
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
 
-DCO lwdee::create_dco(std::string name, std::string functionName) {
+DCO lwdee::create_dco(std::string name) {
   UhconnDcoRef uh_dco = UhconnApi::create(name);
-  DCO dco(uh_dco, functionName);
+  DCO dco(uh_dco);
+  return dco;
+}
+
+DCO lwdee::create_dco(int nodeId,std::string name) {
+  UhconnDcoRef uh_dco = UhconnApi::create(name);
+  DCO dco(uh_dco);
   return dco;
 }
 

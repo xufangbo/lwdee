@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
   if (localNode->itId() == 2) {
-    Driver().startJob("/home/kevin/git/lwdee/terasort/data-input.dat", 3, 4, 4);
+    Driver().startJob("/home/kevin/git/lwdee/terasort/data-input.dat", 3, 3, 3);
   }
 
   while (true) {
@@ -38,7 +38,7 @@ void init(int argc, char* argv[]) {
   // 初始化 WorkNode工作环境
   std::string configFile = "/home/kevin/git/lwdee/test/node_conf.json";
   std::string nodeName = "node1";
-  int nd_amt = 2;
+  int nd_amt = 3;
   if (argc >= 2) {
     nodeName = argv[1];
   } else {

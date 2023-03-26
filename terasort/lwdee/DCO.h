@@ -7,13 +7,11 @@
 
 class DCO {
  private:
-  std::string function;
   UhconnDcoRef uh_dco;
-  UhconnDdoRef ddo_ref;
 
  public:
-  DCO(UhconnDcoRef dco, std::string function)
-      : uh_dco(dco), function(function){};
-  void async(DDO input);
-  DDO wait();
+  DCO(UhconnDcoRef dco) : uh_dco(dco){};
+  DDOId async(std::string function, DDO input);
+  DDOId async(std::string function, std::string args);
+  DDO wait(DDOId ddoId);
 };

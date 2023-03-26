@@ -25,6 +25,7 @@ public:
 
     std::string& itsAddr(void);
     UhconnDcoRef create(std::string className);
+    UhconnDcoRef create(int nodeId,std::string className);
     UhconnDcoRef create(std::string className, std::string classConstructor);
     const UhconnDdoRef async(UhconnDcoRef& dco, std::string funcName, std::string funcPara);
     UhconnDdoRef async(UhconnDcoRef& dco, std::string reqFuncName, UhconnDdo* reqPara);

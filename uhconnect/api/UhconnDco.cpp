@@ -64,13 +64,19 @@ co_chan<UhconnMessage> UhconnDco::getMsgQ(void) {
 }
 
 UhconnDcoRef UhconnDco::create(std::string className) {
-    //构建create消息
     UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
     int destNode = localNode->itsScheduler().getDestWorkNode();
-    UhconnMessage msg(localNode->itsAddr(), destNode, MSG_CMD_CREATE, MSG_TYPE_REQ);
+    UhconnDcoRef dco = this->create(destNode, className);
+    return dco;
+}
+
+UhconnDcoRef UhconnDco::create(int nodeId,std::string className) {
+    //构建create消息
+    UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+    UhconnMessage msg(localNode->itsAddr(), nodeId, MSG_CMD_CREATE, MSG_TYPE_REQ);
     msg.setMethodName("create");
     msg.setMethodPara(className);
-    UhconnSimpleAddr addr(destNode, 0);
+    UhconnSimpleAddr addr(nodeId, 0);
     // std::cout << "voxor addr: " << addr.itsValue() << std::endl;
     msg.setDestVoxor(addr.itsValue());
     msg.setSrcVoxor(itsAddr());

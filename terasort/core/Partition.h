@@ -29,6 +29,51 @@ class PartitionStep1 : public Partition {
   PartitionStep1() {}
   PartitionStep1(int index, string fileName, vector<SampleSplit> sampleSplits)
       : Partition(index), fileName(fileName), sampleSplits(sampleSplits) {}
+
+  int totoalSize() {
+    int size = 0;
+    size += 4;                // index
+    size += 4;                // fileName count
+    size += fileName.size();  // fileName size
+    size += 4;                // sub split count
+
+    for (SampleSplit &item : sampleSplits) {
+      size += 8;  // min
+      size += 8;  // max
+    }
+  }
+
+  ByteSpan_ref serialize() {
+    ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
+    bytes->putInt32(this->index);
+    bytes->putInt32(this->fileName.size());
+    bytes->puts((Byte *)this->fileName.data(), fileName.size());
+
+    bytes->putInt32(sampleSplits.size());
+    for (SampleSplit &item : sampleSplits) {
+      bytes->puts((Byte *)&item.min, sizeof(item.min));
+      bytes->puts((Byte *)&item.max, sizeof(item.max));
+    }
+  };
+  void deserialize(ByteSpan *bytes) {
+    bytes->readInt32(this->index);
+
+    int fileNameSize = 0;
+    bytes->readInt32(fileNameSize);
+    this->fileName = std::string(fileNameSize + 1, '\0');
+    bytes->reads((Byte *)fileName.data(), fileNameSize);
+
+    int itemsCount = 0;
+    bytes->readInt32(itemsCount);
+
+    for (int i = 0; i < itemsCount; i++) {
+      SampleSplit item;
+      bytes->reads((Byte *)item.min, sizeof(item.min));
+      bytes->reads((Byte *)item.max, sizeof(item.max));
+
+      this->sampleSplits.push_back(item);
+    }
+  }
 };
 
 /**
@@ -61,7 +106,8 @@ typedef struct {
       bytes->puts((Byte *)item.voxorId.data(), item.voxorId.size());
       bytes->puts((Byte *)&item.dataId, sizeof(item.dataId));
     }
-  };
+  }
+
   void deserialize(ByteSpan *bytes) {
     int itemsCount = 0;
     bytes->readInt32(itemsCount);
@@ -75,8 +121,10 @@ typedef struct {
       bytes->reads((Byte *)item.voxorId.data(), voxorSize);
 
       bytes->reads((Byte *)&item.dataId, sizeof(item.dataId));
+
+      this->items.push_back(item);
     }
-  };
+  }
 
 } Step1ResultDDO;
 
