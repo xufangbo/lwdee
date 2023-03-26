@@ -137,8 +137,10 @@ void Driver::mapToReduce() {
     auto ddo = dco.wait(ddoId);
     auto bytes = ddo.read();
 
+    logger_debug("get map return ddo(%ld),len:%d, %s",ddo.ddoId.itsId(), bytes->size, bytes->toHex().c_str());
+
     Step1ResultDDO setp1Output;
-    setp1Output.deserialize(bytes.get());
+    setp1Output.fromJson(bytes->buffer);
   }
 }
 

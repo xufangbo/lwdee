@@ -99,7 +99,8 @@ class PartitionStep1 : public Partition {
     char *jsonText = cJSON_Print(root);
 
     return jsonText;
-  };
+  }
+
   void fromJson(std::string json) {
     cJSON *node = cJSON_Parse(json.c_str());
     index = cJSON_GetObjectItem(node, "index")->valueint;
@@ -131,50 +132,54 @@ typedef struct {
   DdoDataId dataId;
 } Step1ResultDDOItem;
 
-typedef struct {
+class Step1ResultDDO{
+  public:
   std::vector<Step1ResultDDOItem> items;
 
-  int totoalSize() {
-    int size = 0;
-    size += 4;  // items count
-    for (Step1ResultDDOItem &item : items) {
-      size += 4;  // voxorId size
-      size += item.voxorId.size();
-      size += sizeof(item.dataId);
-    }
-    return size;
-  }
+  // int totoalSize() {
+  //   int size = 0;
+  //   size += 4;  // items count
+  //   for (Step1ResultDDOItem &item : items) {
+  //     size += 4;  // voxorId size
+  //     size += item.voxorId.size();
+  //     size += sizeof(item.dataId);
+  //   }
+  //   return size;
+  // };
 
-  ByteSpan_ref serialize() {
-    ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
-    bytes->putInt32(items.size());
-    for (Step1ResultDDOItem &item : items) {
-      bytes->putInt32(item.voxorId.size());
-      bytes->puts((Byte *)item.voxorId.data(), item.voxorId.size());
-      bytes->puts((Byte *)&item.dataId, sizeof(item.dataId));
-    }
-    return bytes;
-  }
+  // ByteSpan_ref serialize() {
+  //   ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
+  //   bytes->putInt32(items.size());
+  //   for (Step1ResultDDOItem &item : items) {
+  //     bytes->putInt32(item.voxorId.size());
+  //     bytes->puts((Byte *)item.voxorId.data(), item.voxorId.size());
+  //     bytes->puts((Byte *)&item.dataId, sizeof(item.dataId));
+  //   }
+  //   return bytes;
+  // }
 
-  void deserialize(ByteSpan *bytes) {
-    int itemsCount = 0;
-    bytes->readInt32(itemsCount);
+  // void deserialize(ByteSpan *bytes) {
+  //   int itemsCount = 0;
+  //   bytes->readInt32(itemsCount);
 
-    for (int i = 0; i < itemsCount; i++) {
-      Step1ResultDDOItem item;
-      int voxorSize = 0;
-      bytes->readInt32(voxorSize);
+  //   for (int i = 0; i < itemsCount; i++) {
+  //     Step1ResultDDOItem item;
+  //     int voxorSize = 0;
+  //     bytes->readInt32(voxorSize);
 
-      item.voxorId = std::string(voxorSize + 1, '\0');
-      bytes->reads((Byte *)item.voxorId.data(), voxorSize);
+  //     item.voxorId = std::string(voxorSize + 1, '\0');
+  //     bytes->reads((Byte *)item.voxorId.data(), voxorSize);
 
-      bytes->reads((Byte *)&item.dataId, sizeof(item.dataId));
+  //     bytes->reads((Byte *)&item.dataId, sizeof(item.dataId));
 
-      this->items.push_back(item);
-    }
-  }
+  //     this->items.push_back(item);
+  //   }
+  // };
 
-} Step1ResultDDO;
+  std::string toJson();
+  void fromJson(std::string json);
+
+};
 
 class PartitionStep2 : public Partition {
  public:

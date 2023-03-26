@@ -91,7 +91,15 @@ void Step1Task::generateSubSplit(TeraRecords *trs) {
   }
 
   partition->outputDDO = lwdee::create_ddo();
-  partition->outputDDO.write(step1ResultDDO.serialize());
+  auto bytes = step1ResultDDO.toJson();
+  logger_debug("map return ddo(%ld),len:%d, %s", partition->outputDDO.ddoId.itsId(),bytes.size(), bytes.c_str());
+  partition->outputDDO.write(bytes);
+
+  // auto xx = partition->outputDDO.read();
+  // logger_debug("map return ddo and read(%d): %s",xx->size,(char*)xx->buffer);
+
+  auto local_block = UhconnSimpleDB::getInstance().getBlockFromLocal(partition->outputDDO.ddoId.itsId());
+  logger_debug("map return ddo and read(),len:%d, %s",partition->outputDDO.ddoId.itsId(),local_block->len,(char*)local_block->data);
 }
 
 int Step1Task::classify(TeraRecord &tr) {

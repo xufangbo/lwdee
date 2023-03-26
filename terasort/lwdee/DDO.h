@@ -32,6 +32,7 @@ class DDO {
 
  public:
   void write(ByteSpan_ref datablock);
+  void write(std::string &str);
   ByteSpan_ref read();
   void release();
   void releaseGlobal();

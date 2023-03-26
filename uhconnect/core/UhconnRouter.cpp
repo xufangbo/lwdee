@@ -56,6 +56,7 @@ int dataRxHandler(void* p1, void* p2, int fd, int len){
         DdoBlockData block;
         if(cmd.compare("pullDdoData")==0){
             int ret = UhconnSimpleDB::getInstance().loadBlockFromLocal(did,block);
+            cout << "==== pullDdoData 1,size: " << block.len << ", content: " << block.data << endl;
             uint32_t total_bytes = 0;
             unsigned char p[8] = {0}; 
             if(ret < 0){
@@ -156,6 +157,7 @@ int dataRxHandler2(void* p1, void* p2, int fd, int len){
         DdoBlockData *block;
         if(cmd.compare("pullDdoData")==0){
             block = UhconnSimpleDB::getInstance().getBlockFromLocal(did);
+            cout << "==== pullDdoData 2,size: " << block->len << ", content: " << block->data << endl;
             uint32_t total_bytes = 0;
             unsigned char p[8] = {0}; 
             if(block == nullptr){
