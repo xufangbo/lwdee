@@ -54,6 +54,7 @@ int test_dco(int nodeId) {
 
   DCO dco = lwdee::create_dco(nodeId, "MapDCO");
   auto ddoId = dco.async("f1", input);
+  // auto ddoId = dco.async("f1", "hello");
 
   // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
   // UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"),

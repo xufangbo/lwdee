@@ -2,6 +2,7 @@
 
 #include "core/UhconnSimpleDB.h"
 #include "core/log.hpp"
+#include "core/Exception.hpp"
 
 DDO::DDO(DDOId id) : ddoId(id) {}
 
@@ -17,11 +18,15 @@ void DDO::write(ByteSpan_ref bytesSpan) {
 }
 
 ByteSpan_ref DDO::read() {
-  DdoBlockData blockdata;
-  UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
+  // DdoBlockData blockdata;
+  // UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
+  DdoBlockData *blockdata = UhconnSimpleDB::getInstance().getBlock(ddoId.itsId());
+  if(blockdata == nullptr){
+    throw LwdeeException("failed read ddo", ZONE);
+  }
 
-  ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata.len);
-  bytes->puts((Byte*)blockdata.data, bytes->size);
+  ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata->len);
+  bytes->puts((Byte*)blockdata->data, bytes->size);
   bytes->reset();
 
   // bytes->buffer = (Byte*)blockdata.data;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+#include "core/cjson.hpp"
 #include "lwdee/DDO.h"
 
 using namespace std;
@@ -41,6 +42,8 @@ class PartitionStep1 : public Partition {
       size += 8;  // min
       size += 8;  // max
     }
+
+    return size;
   }
 
   ByteSpan_ref serialize() {
@@ -54,6 +57,7 @@ class PartitionStep1 : public Partition {
       bytes->puts((Byte *)&item.min, sizeof(item.min));
       bytes->puts((Byte *)&item.max, sizeof(item.max));
     }
+    return bytes;
   };
   void deserialize(ByteSpan *bytes) {
     bytes->readInt32(this->index);
@@ -72,6 +76,48 @@ class PartitionStep1 : public Partition {
       bytes->reads((Byte *)item.max, sizeof(item.max));
 
       this->sampleSplits.push_back(item);
+    }
+  }
+
+  std::string toJson() {
+    cJSON *root = cJSON_CreateObject();
+
+    cJSON_AddNumberToObject(root, "index", index);
+    cJSON_AddStringToObject(root, "fileName", fileName.c_str());
+
+    cJSON *nodes = cJSON_CreateArray();
+    cJSON_AddItemToObject(root, "sampleSplits", nodes);
+
+    for (SampleSplit &item : sampleSplits) {
+      cJSON *split = cJSON_CreateObject();
+      cJSON_AddStringToObject(split, "min", std::to_string(item.min).c_str());
+      cJSON_AddStringToObject(split, "max", std::to_string(item.max).c_str());
+
+      cJSON_AddItemToArray(nodes, split);
+    }
+
+    char *jsonText = cJSON_Print(root);
+
+    return jsonText;
+  };
+  void fromJson(std::string json) {
+    cJSON *node = cJSON_Parse(json.c_str());
+    index = cJSON_GetObjectItem(node, "index")->valueint;
+    fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
+
+    cJSON *subNodes = cJSON_GetObjectItem(node, "sampleSplits");
+    cJSON *child = subNodes->child;
+    while (child != NULL) {
+      SampleSplit split;
+      char *min = cJSON_GetObjectItem(child, "min")->valuestring;
+      split.min = strtoull(min, NULL, 0);
+
+      char *max = cJSON_GetObjectItem(child, "max")->valuestring;
+      split.max = strtoull(max, NULL, 0);
+
+      sampleSplits.push_back(split);
+
+      child = child->next;
     }
   }
 };
@@ -96,6 +142,7 @@ typedef struct {
       size += item.voxorId.size();
       size += sizeof(item.dataId);
     }
+    return size;
   }
 
   ByteSpan_ref serialize() {
@@ -106,6 +153,7 @@ typedef struct {
       bytes->puts((Byte *)item.voxorId.data(), item.voxorId.size());
       bytes->puts((Byte *)&item.dataId, sizeof(item.dataId));
     }
+    return bytes;
   }
 
   void deserialize(ByteSpan *bytes) {

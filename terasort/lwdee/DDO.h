@@ -3,6 +3,7 @@
 #include <atomic>
 #include <map>
 #include <memory>
+#include <sstream>
 
 #include "api/UhconnDdo.h"
 #include "api/UhconnDdoRef.h"
@@ -16,6 +17,17 @@ class DDO {
 
  public:
   DDO() {}
+  DDO(std::string str) {
+    std::string vid;
+    DdoDataId did;
+
+    std::istringstream ss(str);
+    ss >> did >> vid;
+
+    DDOId tmp(vid, did);
+
+    ddoId = tmp;
+  }
   DDO(DDOId id);
 
  public:

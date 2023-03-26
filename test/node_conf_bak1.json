@@ -25,8 +25,8 @@
         "node3":{
             "nodeId": 3,
             "ip":"127.0.0.1",
-            "dataPort":12888,
-            "msgPort":12889,
+            "dataPort":12998,
+            "msgPort":12999,
             "routeInfo":[
                 {"nid":1,"ip":"127.0.0.1","dport":12777,"mport":12778},
                 {"nid":2,"ip":"127.0.0.1","dport":12888,"mport":12889},

@@ -15,8 +15,13 @@ class ByteSpan {
   int size;
   Byte* buffer = nullptr;
 
-  ByteSpan(int size)
-      : size(size), buffer(new Byte[size]) {}
+  ByteSpan(int size) : size(size), buffer(new Byte[size]) {}
+
+  ByteSpan(std::string input) {
+    this->size = input.size();
+    this->buffer = new Byte[size];
+    this->puts((Byte*)input.data(), size);
+  }
 
   ~ByteSpan() {
     if (ownerd && buffer != nullptr) {
@@ -81,8 +86,6 @@ class ByteSpan {
     return out.str();
   }
 
-  void releaseOwner() {
-    ownerd = false;
-  }
+  void releaseOwner() { ownerd = false; }
 };
 typedef std::shared_ptr<ByteSpan> ByteSpan_ref;

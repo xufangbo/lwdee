@@ -2,36 +2,36 @@
     "node1":{
          "nodeId": 1,
          "ip":"127.0.0.1",
-         "dataPort":13777,
-         "msgPort":13778,
+         "dataPort":15777,
+         "msgPort":15778,
          "routeInfo":[
-             {"nid":1,"ip":"127.0.0.1","dport":13777,"mport":13778},
-             {"nid":2,"ip":"127.0.0.1","dport":13888,"mport":13889},
-             {"nid":3,"ip":"127.0.0.1","dport":13998,"mport":13999}
+             {"nid":1,"ip":"127.0.0.1","dport":15777,"mport":15778},
+             {"nid":2,"ip":"127.0.0.1","dport":15888,"mport":15889},
+             {"nid":3,"ip":"127.0.0.1","dport":15998,"mport":15999}
          ]
      },
  
      "node2":{
          "nodeId": 2,
          "ip":"127.0.0.1",
-         "dataPort":13888,
-         "msgPort":13889,
+         "dataPort":15888,
+         "msgPort":15889,
          "routeInfo":[
-             {"nid":1,"ip":"127.0.0.1","dport":13777,"mport":13778},
-             {"nid":2,"ip":"127.0.0.1","dport":13888,"mport":13889},
-             {"nid":3,"ip":"127.0.0.1","dport":13998,"mport":13999}
+             {"nid":1,"ip":"127.0.0.1","dport":15777,"mport":15778},
+             {"nid":2,"ip":"127.0.0.1","dport":15888,"mport":15889},
+             {"nid":3,"ip":"127.0.0.1","dport":15998,"mport":15999}
          ]
          },
  
          "node3":{
              "nodeId": 3,
              "ip":"127.0.0.1",
-             "dataPort":13998,
-             "msgPort":13999,
+             "dataPort":15998,
+             "msgPort":15999,
              "routeInfo":[
-                 {"nid":1,"ip":"127.0.0.1","dport":13777,"mport":13778},
-                 {"nid":2,"ip":"127.0.0.1","dport":13888,"mport":13889},
-                 {"nid":3,"ip":"127.0.0.1","dport":13998,"mport":13999}
+                 {"nid":1,"ip":"127.0.0.1","dport":15777,"mport":15778},
+                 {"nid":2,"ip":"127.0.0.1","dport":15888,"mport":15889},
+                 {"nid":3,"ip":"127.0.0.1","dport":15998,"mport":15999}
              ]
              },        
      

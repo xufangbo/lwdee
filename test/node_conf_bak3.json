@@ -1,0 +1,39 @@
+{
+   "node1":{
+        "nodeId": 1,
+        "ip":"127.0.0.1",
+        "dataPort":14777,
+        "msgPort":14778,
+        "routeInfo":[
+            {"nid":1,"ip":"127.0.0.1","dport":14777,"mport":14778},
+            {"nid":2,"ip":"127.0.0.1","dport":14888,"mport":14889},
+            {"nid":3,"ip":"127.0.0.1","dport":14998,"mport":14999}
+        ]
+    },
+
+    "node2":{
+        "nodeId": 2,
+        "ip":"127.0.0.1",
+        "dataPort":14888,
+        "msgPort":14889,
+        "routeInfo":[
+            {"nid":1,"ip":"127.0.0.1","dport":14777,"mport":14778},
+            {"nid":2,"ip":"127.0.0.1","dport":14888,"mport":14889},
+            {"nid":3,"ip":"127.0.0.1","dport":14998,"mport":14999}
+        ]
+        },
+
+        "node3":{
+            "nodeId": 3,
+            "ip":"127.0.0.1",
+            "dataPort":14998,
+            "msgPort":14999,
+            "routeInfo":[
+                {"nid":1,"ip":"127.0.0.1","dport":14777,"mport":14778},
+                {"nid":2,"ip":"127.0.0.1","dport":14888,"mport":14889},
+                {"nid":3,"ip":"127.0.0.1","dport":14998,"mport":14999}
+            ]
+            },        
+    
+    "node_amount":2
+}

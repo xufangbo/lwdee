@@ -33,7 +33,7 @@ void UhconnWorkNode::start(void) {
 int UhconnWorkNode::inputMessage(UhconnMessage& in_msg) {
     //std::cout <<"inputMessage"<<std::endl;
     if( !isForMe(in_msg) ) {
-        std::cout <<"wrongly delivered msg!!"<<std::endl;
+        std::cout <<"wrongly delivered msg!! message is to "<< in_msg.getDestNodeId() <<std::endl;
         return -1;
     }
     #ifdef DEBUGINFO

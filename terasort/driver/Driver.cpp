@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 
+#include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/log.hpp"
 #include "lwdee/DDO.h"
@@ -18,12 +19,17 @@ void Driver::startJob(std::string fileName, int datum, int splitNums1,
   this->splitNums1 = splitNums1;
   this->splitNums2 = splitNums2;
 
-  auto conf = this->samples(fileName);
-  this->map();
-  this->mapToReduce();
-  this->reduce();
+  try {
+    auto conf = this->samples(fileName);
+    this->split(conf);
+    this->map();
+    this->mapToReduce();
+    this->reduce();
 
-  logger_info("finished");
+    logger_info("finished");
+  } catch (Exception &ex) {
+    logger_error("execute job error,%s", ex.getMessage().c_str());
+  }
 }
 
 MinAndMax Driver::samples(std::string fileName) {
@@ -110,14 +116,14 @@ void Driver::map() {
   // =========================
 
   for (int i = 0; i < splitNums1; i++) {
-    DCO dco = lwdee::create_dco(i, "MapDCO");
+    DCO dco = lwdee::create_dco(i + 1, "MapDCO");
 
     PartitionStep1 input(i + 1, fileName, sampleSplits);
-    auto bytes = input.serialize();
-    std::string args(bytes->size + 1, '\0');
-    memcpy((void *)args.data(), bytes->buffer, bytes->size);
+    auto json = input.toJson();
 
-    DDOId ddoId = dco.async("map", args);
+    // logger_debug("invoke map.map , index: %d,args: %s",i,json.c_str());
+
+    DDOId ddoId = dco.async("map", json);
 
     invokers.push_back(std::make_pair(dco, ddoId));
   }
