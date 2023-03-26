@@ -24,7 +24,12 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
   if (localNode->itId() == 2) {
-    Driver().startJob("/home/kevin/git/lwdee/terasort/data-input.dat", 3, 3, 3);
+    // Driver().startJob("/home/kevin/git/lwdee/terasort/data-input.dat", 3, 3,
+    // 3);
+    
+    test_dco(1);
+    test_dco(2);
+    test_dco(3);
   }
 
   while (true) {

@@ -18,6 +18,11 @@ UhconnDcoRef UhconnApi::create(std::string className) {
     return localNode->itsDeamon().create(className);
 }
 
+UhconnDcoRef UhconnApi::create(int nodeId,std::string className) {
+    UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+    return localNode->itsDeamon().create(nodeId,className);
+}
+
 UhconnDcoRef UhconnApi::create(std::string className, std::string classConstructor) {
     UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
     return localNode->itsDeamon().create(className, classConstructor);

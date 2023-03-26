@@ -11,6 +11,70 @@
 #include "map/Step1Task.h"
 // #include "reduce/Step2Task.h"
 
+void Driver::startJob(std::string fileName, int datum, int splitNums1,
+                      int splitNums2) {
+  this->fileName = fileName;
+  this->datum = datum;
+  this->splitNums1 = splitNums1;
+  this->splitNums2 = splitNums2;
+
+  auto conf = this->samples(fileName);
+  this->map();
+  this->mapToReduce();
+  this->reduce();
+
+  logger_info("finished");
+}
+
+MinAndMax Driver::samples(std::string fileName) {
+  // fstream f;
+  // f.open(fileName, ios_base::in | ios_base::binary);
+
+  FILE *f = fopen(fileName.c_str(), "rb");
+  if (f == NULL) {
+    logger_error("can't open file : %s", fileName.c_str());
+  }
+
+  fseek(f, 0, SEEK_END);
+  long totalSize = ftell(f);
+  long len = totalSize / 100;
+
+  char key[11];
+  memset(key, '\0', 10);
+
+  fseek(f, 0, SEEK_SET);
+  fread(key, 1, 10, f);
+  fseek(f, 90L, SEEK_CUR);
+
+  Bytes10 min(key);
+  Bytes10 max(key);
+
+  int count = 0;
+  for (int i = 0; i < len - 1; i += datum) {
+    fread(key, 1, 10, f);
+    fseek(f, 100L * (datum - 1) + 90L, SEEK_CUR);
+
+    if (min > key) {
+      min = key;
+    } else if (max < key) {
+      max = key;
+    }
+
+    count++;
+
+    // printf("%s,%ld\n", key, ftell(f));
+  }
+
+  fclose(f);
+
+  auto pair = std::make_pair(min, max);
+  logger_debug("total size : %ld,len:%ld", totalSize, len);
+  logger_debug("count: %d, min: %s:max: %s", count,
+               pair.first.to_string().c_str(), pair.second.to_string().c_str());
+
+  return pair;
+}
+
 void Driver::split(MinAndMax conf) {
   // =========================
   // 构造参数
@@ -44,18 +108,31 @@ void Driver::map() {
   // =========================
   // 调用map dco
   // =========================
-  DDO ddos[splitNums1];
-  for (int i = 0; i < splitNums1; i++) {
-    DCO dco = lwdee::create_dco(0, "MapDCO");
 
-    PartitionStep1 input(i, fileName, sampleSplits);
+  for (int i = 0; i < splitNums1; i++) {
+    DCO dco = lwdee::create_dco(i, "MapDCO");
+
+    PartitionStep1 input(i + 1, fileName, sampleSplits);
     auto bytes = input.serialize();
     std::string args(bytes->size + 1, '\0');
-    memcpy((void*)args.data(), bytes->buffer, bytes->size);
+    memcpy((void *)args.data(), bytes->buffer, bytes->size);
 
-    DDO ddo = dco.async("map", args);
+    DDOId ddoId = dco.async("map", args);
 
-    ddos[i].ddoId = ddo.ddoId;
+    invokers.push_back(std::make_pair(dco, ddoId));
+  }
+}
+
+void Driver::mapToReduce() {
+  for (auto &kv : invokers) {
+    DCO dco = kv.first;
+    DDOId ddoId = kv.second;
+
+    auto ddo = dco.wait(ddoId);
+    auto bytes = ddo.read();
+
+    Step1ResultDDO setp1Output;
+    setp1Output.deserialize(bytes.get());
   }
 }
 
@@ -100,65 +177,4 @@ void Driver::reduce() {
   //   for (Tuple &i : list) {
   //     cout << get<0>(i) << " " << get<1>(i) << endl;
   //   }
-}
-
-void Driver::startJob(std::string fileName, int datum, int splitNums1,
-                      int splitNums2) {
-  this->fileName = fileName;
-  this->datum = datum;
-  this->splitNums1 = splitNums1;
-  this->splitNums2 = splitNums2;
-
-  auto conf = this->samples(fileName);
-  this->map();
-  this->reduce();
-}
-
-MinAndMax Driver::samples(std::string fileName) {
-  // fstream f;
-  // f.open(fileName, ios_base::in | ios_base::binary);
-
-  FILE* f = fopen(fileName.c_str(), "rb");
-  if (f == NULL) {
-    logger_error("can't open file : %s", fileName.c_str());
-  }
-
-  fseek(f, 0, SEEK_END);
-  long totalSize = ftell(f);
-  long len = totalSize / 100;
-
-  char key[11];
-  memset(key, '\0', 10);
-
-  fseek(f, 0, SEEK_SET);
-  fread(key, 1, 10, f);
-  fseek(f, 90L, SEEK_CUR);
-
-  Bytes10 min(key);
-  Bytes10 max(key);
-
-  int count = 0;
-  for (int i = 0; i < len - 1; i += datum) {
-    fread(key, 1, 10, f);
-    fseek(f, 100L * (datum - 1) + 90L, SEEK_CUR);
-
-    if (min > key) {
-      min = key;
-    } else if (max < key) {
-      max = key;
-    }
-
-    count++;
-
-    // printf("%s,%ld\n", key, ftell(f));
-  }
-
-  fclose(f);
-
-  auto pair = std::make_pair(min, max);
-  logger_debug("total size : %ld,len:%ld", totalSize, len);
-  logger_debug("count: %d, min: %s:max: %s", count,
-               pair.first.to_string().c_str(), pair.second.to_string().c_str());
-
-  return pair;
 }

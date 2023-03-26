@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+
 #include "Benchmark.h"
 #include "UserDco.h"
 #include "UserDcoFactory.h"
@@ -12,13 +13,11 @@
 #include "core/UhconnSimpleAddr.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
-
 #include "core/log.hpp"
 // #include "edc/driver/Driver.h"
 #include "lwdee/lwdee.h"
 
-
-int edc_driver(void) {
+int test_ddo(void) {
   std::cout << "edc driver" << std::endl;
 
   auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
@@ -41,32 +40,36 @@ int edc_driver(void) {
   return 0;
 }
 
-int edctest(void) {
-  // std::cout << "edc test start!" << std::endl;
+int test_dco(int nodeId) {
 
-  // auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
+  logger_info("< test dco %d",nodeId);
 
-  // DDO input = lwdee::create_ddo();
+  auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
 
-  // auto bytes = std::make_shared<ByteSpan>(strlen(fileName));
-  // bytes->puts((Byte*)fileName, bytes->size);
-  // input.write(bytes);
+  DDO input = lwdee::create_ddo();
 
-  // DCO dco = lwdee::create_dco("MapDCO", "f1");
-  // dco.async(input);
+  auto bytes = std::make_shared<ByteSpan>(strlen(fileName));
+  bytes->puts((Byte*)fileName, bytes->size);
+  input.write(bytes);
 
-  // // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
-  // // UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"), input.uh_ddo.get());
+  DCO dco = lwdee::create_dco(nodeId, "MapDCO");
+  auto ddoId = dco.async("f1", input);
 
-  // DDO output = dco.wait();
-  // // UhconnDdo* ddo = UhconnApi::wait(ddoref);
-  // //  DDO output(ddoref,ddo);
+  // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
+  // UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"),
+  // input.uh_ddo.get());
 
-  // ByteSpan_ref bytes2 = output.read();
-  // std::string str(bytes2->size + 1, '\0');
-  // bytes2->reads((Byte*)str.data(), bytes2->size);
+  DDO output = dco.wait(ddoId);
+  // UhconnDdo* ddo = UhconnApi::wait(ddoref);
+  //  DDO output(ddoref,ddo);
 
-  // logger_trace("load blockdata : (%d)%s", str.size(), str.c_str());
+  ByteSpan_ref bytes2 = output.read();
+  std::string str(bytes2->size + 1, '\0');
+  bytes2->reads((Byte*)str.data(), bytes2->size);
+
+  logger_trace("load blockdata : (%d)%s", str.size(), str.c_str());
+
+  logger_info("> test dco %d",nodeId);
 
   return 0;
 }

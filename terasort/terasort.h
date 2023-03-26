@@ -1,4 +1,4 @@
 #pragma once
 
-int edc_driver(void);
-int edctest(void);
+int test_ddo(void);
+int test_dco(int nodeId);

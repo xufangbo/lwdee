@@ -13,7 +13,7 @@ DCO lwdee::create_dco(std::string name) {
 }
 
 DCO lwdee::create_dco(int nodeId,std::string name) {
-  UhconnDcoRef uh_dco = UhconnApi::create(name);
+  UhconnDcoRef uh_dco = UhconnApi::create(nodeId,name);
   DCO dco(uh_dco);
   return dco;
 }

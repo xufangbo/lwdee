@@ -16,6 +16,7 @@ public:
     ~UhconnApi();
 
     static UhconnDcoRef create(std::string className);
+    static UhconnDcoRef create(int nodeId,std::string className);
     static UhconnDcoRef create(std::string className, std::string classConstructor);
 
     static const UhconnDdoRef async(UhconnDcoRef& dco, std::string funcName, std::string funcPara);
