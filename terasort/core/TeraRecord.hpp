@@ -27,4 +27,4 @@ typedef struct {
 } TeraRecord;
 
 typedef std::vector<TeraRecord> TeraRecords;
-typedef std::shared_ptr<std::vector<TeraRecord>> TeraRecords_ref;
+// typedef std::shared_ptr<std::vector<TeraRecord>> TeraRecords_ref;

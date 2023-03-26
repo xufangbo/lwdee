@@ -6,45 +6,51 @@
 
 #include "core/Partition.h"
 #include "core/log.hpp"
-#include "worker/Step1Task.h"
-// #include "worker/Step2Task.h"
+#include "map/Step1Task.h"
+// #include "reduce/Step2Task.h"
 
-void Driver::startJob(std::string fileName, int datum, int splitNums1,
-                      int splitNums2) {
-  auto conf = this->samples(fileName, datum);
-
+void Driver::split(MinAndMax conf) {
+  // =========================
+  // 构造参数
+  // =========================
   auto seprator = (conf.second.left8() - conf.first.left8()) / splitNums2;
 
-  vector<SampleSplit> sampleSplits(splitNums2);
   uint64_t pre = 0;
   for (int i = 0; i < splitNums2; i++) {
-    SampleSplit& split = sampleSplits[i];
+    SampleSplit split;
     split.min = pre;
     split.max = conf.first.left8() + seprator * (i + 1);
 
     pre = split.max;
 
+    sampleSplits.push_back(split);
+
     logger_trace("subsplit %d : %ld - %ld", i, split.min, split.max);
   }
   sampleSplits[splitNums2 - 1].max = 0;
+}
 
+void Driver::map() {
   // =========================
   // 构造参数
   // =========================
+
   PartitionStep1 step1Inputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     step1Inputs[i] = PartitionStep1(i, fileName, sampleSplits);
   }
 
   // =========================
-  // step1
+  // 调用map dco
   // =========================
   PartitionStep1 step1Outputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
     PartitionStep1 step1Output = Step1Task().run(step1Inputs + i);
     step1Outputs[i] = step1Output;
   }
+}
 
+void Driver::reduce() {
   //   // =========================
   //   // step2
   //   // =========================
@@ -87,7 +93,19 @@ void Driver::startJob(std::string fileName, int datum, int splitNums1,
   //   }
 }
 
-MinAndMax Driver::samples(std::string fileName, int datum) {
+void Driver::startJob(std::string fileName, int datum, int splitNums1,
+                      int splitNums2) {
+  this->fileName = fileName;
+  this->datum = datum;
+  this->splitNums1 = splitNums1;
+  this->splitNums2 = splitNums2;
+
+  auto conf = this->samples(fileName);
+  this->map();
+  this->reduce();
+}
+
+MinAndMax Driver::samples(std::string fileName) {
   // fstream f;
   // f.open(fileName, ios_base::in | ios_base::binary);
 

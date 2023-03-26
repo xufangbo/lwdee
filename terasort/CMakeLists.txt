@@ -12,7 +12,6 @@ add_subdirectory(lwdee)
 add_subdirectory(driver)
 add_subdirectory(map)
 add_subdirectory(reduce)
-add_subdirectory(worker)
 
 # target_link_libraries(uhconnect
 #         PUBLIC libgo static_hook uhshell

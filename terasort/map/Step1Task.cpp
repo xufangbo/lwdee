@@ -7,6 +7,7 @@
 #include "core/MapSerializer.h"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
+#include "map/MapDCO.h"
 
 PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
   this->partition = partition;
@@ -76,13 +77,21 @@ void Step1Task::generateSubSplit(TeraRecords *trs) {
     bytes->puts(tr.value, 90);
   }
 
-  vector<DDO> ddos;
+  Step1ResultDDO step1ResultDDO;
   for (int i = 0; i < sampleSplits.size(); i++) {
-    DDO ddo = lwdee::create_ddo();
-    ddo.write(subPartitions[i]);
+    DDO ddoSubSplit = lwdee::create_ddo();
+    ddoSubSplit.write(subPartitions[i]);
 
-    partition->ddos.push_back(ddo);
+    MapDCO::ddos.push_back(ddoSubSplit);
+
+    Step1ResultDDOItem item;
+    item.voxorId = ddoSubSplit.ddoId.itsVoxorId();
+    item.dataId = ddoSubSplit.ddoId.itsId();
+    step1ResultDDO.items.push_back(item);
   }
+
+  partition->outputDDO = lwdee::create_ddo();
+  partition->outputDDO.write(step1ResultDDO.serialize());
 }
 
 int Step1Task::classify(TeraRecord &tr) {
