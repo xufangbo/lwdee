@@ -63,7 +63,7 @@ void Step2Task::read() {
       ptr += 90;
       tri++;
 
-      logger_trace("%ld %s", tr.index(), tr.line().c_str());
+      logger_trace("%s %s", tr.index().c_str(), tr.line().c_str());
     }
 
     subsplit.reset();
@@ -90,7 +90,7 @@ void Step2Task::sort() {
 
 void Step2Task::save() {
   FILE* f = fopen(fileName().c_str(), "w");
-  if (f < 0) {
+  if (f == NULL) {
     throw Exception("can't open file " + input->outputFile, ZONE);
   }
 

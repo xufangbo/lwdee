@@ -37,19 +37,21 @@ TeraRecords* Step1Task::textFile() {
   long start = splitCount * partition->index;
   long end = (start + splitCount) > len ? len : start + splitCount;
 
-  logger_debug("%d - read range, %ld - %ld", partition->index, start, end);
+  logger_debug("%d - read range, %ld - %ld", partition->index, start, end - 1);
 
   auto trs = new TeraRecords(end - start, TeraRecord());
 
-  fseek(f, start, SEEK_SET);
+  fseek(f, start * 100, SEEK_SET);
   TeraRecord* tr = trs->data();
   for (int i = start; i < end; i++) {
     fread(tr->key, 1, 10, f);
     fread(tr->value, 1, 90, f);
-    tr++;
 
-    logger_trace("%ld %s", tr->index(), tr->line().c_str());
+    logger_trace("%s %s", tr->index().c_str(), tr->line().c_str());
+
+    tr++;
   }
+
   fclose(f);
 
   return trs;
@@ -68,7 +70,8 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
 
   ByteSpan_ref subPartitions[sampleSplits.size()];
   for (int i = 0; i < sampleSplits.size(); i++) {
-    logger_debug("partition %d - sub split %d - %d", partition->index, i, counters[i]);
+    logger_debug("partition %d - sub split %d - %d", partition->index, i,
+                 counters[i]);
     subPartitions[i] = std::make_shared<ByteSpan>(counters[i] * 100);
   }
 
@@ -91,17 +94,6 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
     item.dataId = ddoSubSplit.ddoId.itsId();
     output.items.push_back(item);
   }
-
-  // partition->outputDDO = lwdee::create_ddo();
-  // auto bytes = output.toJson();
-  // logger_debug("map return ddo(%ld),len:%d, %s", partition->outputDDO.ddoId.itsId(),bytes.size(), bytes.c_str());
-  // partition->outputDDO.write(bytes);
-
-  // auto xx = partition->outputDDO.read();
-  // logger_debug("map return ddo and read(%d): %s",xx->size,(char*)xx->buffer);
-
-  // auto local_block = UhconnSimpleDB::getInstance().getBlockFromLocal(partition->outputDDO.ddoId.itsId());
-  // logger_debug("map return ddo and read(%ld),len:%d, %s",partition->outputDDO.ddoId.itsId(),local_block->len,(char*)local_block->data);
 }
 
 int Step1Task::classify(TeraRecord& tr) {

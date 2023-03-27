@@ -11,7 +11,7 @@ std::string ReduceDCO::reduce(std::string a) {
 
     Step2Task().run(&input);
 
-    logger_trace(a.c_str());
+    // logger_trace(a.c_str());
 
     return "success";
   } catch (Exception& ex) {
