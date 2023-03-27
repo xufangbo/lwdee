@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 /**
  * 生成配置文件
  */
@@ -10,8 +12,13 @@
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 },
 // ];
 
-let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
+let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 2 }];
 
+let fileName = "/home/kevin/git/lwdee/test/node_conf.json";
+let json = fs.readFileSync(fileName);
+let db = JSON.parse(json);
+
+let port = db.port > 200 ? 100 : db.port + 1;
 
 let index = 0;
 let routerInfos = [];
@@ -21,11 +28,11 @@ for (var ni in workers) {
         index++;
 
         let portTail = (i + 1).toString().padStart(2, "0");
-        routerInfos.push({ "nid": index, "ip": worker.ip, "dport": parseInt("120" + portTail), "mport": parseInt("130" + portTail) });
+        routerInfos.push({ "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
     }
 }
 
-let conf = { "node_amount": index };
+let conf = { "node_amount": index, "port": port };
 for (var ri in routerInfos) {
     let routerInfo = routerInfos[ri];
     conf["node" + routerInfo.nid] = {
@@ -37,4 +44,6 @@ for (var ri in routerInfos) {
     };
 }
 
-console.log(conf);
+json = JSON.stringify(conf, null, "  ");
+
+fs.writeFileSync(fileName, json);
