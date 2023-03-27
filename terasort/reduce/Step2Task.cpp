@@ -63,7 +63,7 @@ void Step2Task::read() {
       ptr += 90;
       tri++;
 
-      logger_trace("%ld", tr.index());
+      logger_trace("%ld %s", tr.index(), tr.line().c_str());
     }
 
     subsplit.reset();

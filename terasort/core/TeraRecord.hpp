@@ -30,6 +30,13 @@ typedef struct {
     memcpy(&l, (void*)key, 8);
     return l;
   }
+
+  std::string line() {
+    std::string line(101, '\0');
+    memcpy((void*)line.data(), key, 10);
+    memcpy((void*)line.data() + 10, value, 100);
+    return line;
+  }
 } TeraRecord;
 
 typedef std::vector<TeraRecord> TeraRecords;

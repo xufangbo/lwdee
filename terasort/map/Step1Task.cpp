@@ -48,7 +48,7 @@ TeraRecords* Step1Task::textFile() {
     fread(tr->value, 1, 90, f);
     tr++;
 
-    logger_trace("%ld", tr->index());
+    logger_trace("%ld %s", tr->index(), tr->line().c_str());
   }
   fclose(f);
 
