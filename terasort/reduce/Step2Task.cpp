@@ -96,6 +96,10 @@ void Step2Task::save() {
 
   for (int i = 0; i < size; i++) {
     TeraRecord& tr = trs[i];
+    
+    auto id = std::to_string(tr.left8()) + " ";
+    fwrite(id.c_str(), id.size(), 1, f);
+
     fwrite(tr.key, 10, 1, f);
     fwrite(tr.value, 90, 1, f);
   }

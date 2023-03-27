@@ -1,43 +1,43 @@
 {
   "node_amount": 2,
-  "port": 124,
+  "port": 125,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 12401,
-    "msgPort": 12501,
+    "dataPort": 12501,
+    "msgPort": 12601,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 12401,
-        "mport": 12501
+        "dport": 12501,
+        "mport": 12601
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 12402,
-        "mport": 12502
+        "dport": 12502,
+        "mport": 12602
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 12402,
-    "msgPort": 12502,
+    "dataPort": 12502,
+    "msgPort": 12602,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 12401,
-        "mport": 12501
+        "dport": 12501,
+        "mport": 12601
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 12402,
-        "mport": 12502
+        "dport": 12502,
+        "mport": 12602
       }
     ]
   }
