@@ -15,9 +15,9 @@ const fs = require('fs');
 let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 2 }];
 
 let fileName = "/home/kevin/git/lwdee/test/node_conf.json";
+
 let json = fs.readFileSync(fileName);
 let db = JSON.parse(json);
-
 let port = db.port > 200 ? 100 : db.port + 1;
 
 let index = 0;
