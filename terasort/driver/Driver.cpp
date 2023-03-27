@@ -12,14 +12,15 @@
 #include "map/Step1Task.h"
 // #include "reduce/Step2Task.h"
 
-void Driver::startJob(std::string fileName, int datum, int splitNums1, int splitNums2) {
-  this->fileName = fileName;
+void Driver::startJob(std::string inputFile, std::string outputFile, int datum, int splitNums1, int splitNums2) {
+  this->inputFile = inputFile;
+  this->outputFile = outputFile;
   this->datum = datum;
   this->splitNums1 = splitNums1;
   this->splitNums2 = splitNums2;
 
   try {
-    auto conf = this->samples(fileName);
+    auto conf = this->samples(inputFile);
     this->split(conf);
     this->map();
     this->mapToReduce();
@@ -74,8 +75,7 @@ MinAndMax Driver::samples(std::string fileName) {
 
   auto pair = std::make_pair(min, max);
   logger_debug("total size : %ld,len:%ld", totalSize, len);
-  logger_debug("count: %d, min: %s:max: %s", count,
-               pair.first.to_string().c_str(), pair.second.to_string().c_str());
+  logger_debug("count: %d, min: %s:max: %s", count, pair.first.to_string().c_str(), pair.second.to_string().c_str());
 
   return pair;
 }
@@ -107,7 +107,7 @@ void Driver::map() {
   // =========================
   PartitionStep1 step1Inputs[splitNums1];
   for (int i = 0; i < splitNums1; i++) {
-    step1Inputs[i] = PartitionStep1(i, fileName, sampleSplits);
+    step1Inputs[i] = PartitionStep1(i, inputFile, sampleSplits);
   }
 
   // =========================
@@ -117,71 +117,71 @@ void Driver::map() {
   for (int i = 0; i < splitNums1; i++) {
     DCO dco = lwdee::create_dco(i + 1, "MapDCO");
 
-    PartitionStep1 input(i + 1, fileName, sampleSplits);
+    PartitionStep1 input(i + 1, inputFile, sampleSplits);
     auto json = input.toJson();
 
     // logger_debug("invoke map.map , index: %d,args: %s",i,json.c_str());
 
     DDOId ddoId = dco.async("map", json);
 
-    invokers.push_back(std::make_pair(dco, ddoId));
+    step1Invokers.push_back(std::make_pair(dco, ddoId));
   }
 }
 
 void Driver::mapToReduce() {
-  for (auto& kv : invokers) {
+  std::vector<Step1Output> step1Outputs;
+  for (auto& kv : step1Invokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
     auto ddo = dco.wait(ddoId);
     auto bytes = ddo.read();
 
-    logger_debug("get map return ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+    logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
     Step1Output setp1Output;
     setp1Output.fromJson(bytes.get());
+
+    ddo.releaseGlobal();
+
+    step1Outputs.push_back(setp1Output);
+  }
+
+  for (int i = 0; i < splitNums2; i++) {
+    PartitionStep2 step2Input(i, outputFile);
+    for (Step1Output& step1Output : step1Outputs) {
+      step2Input.subSplitDDOs.push_back(step1Output.items[i]);
+    }
+
+    step2Inputs.push_back(step2Input);
   }
 }
 
 void Driver::reduce() {
-  //   // =========================
-  //   // step2
-  //   // =========================
-  //   PartitionStep2 step2Inputs[splitNums2];
-  //   for (int i = 0; i < splitNums2; i++) {
-  //     step2Inputs[i] = PartitionStep2(i);
+  
+  for (int i = 0; i < step2Inputs.size(); i++) {
+    PartitionStep2& step2Input = step2Inputs[i];
 
-  //     for (int j = 0; j < splitNums1; j++) {
-  //       step2Inputs[i].ddos.push_back(step1Inputs[j].ddos[i]);
-  //     }
-  //   }
+    DCO dco = lwdee::create_dco(i + 1, "ReduceDCO");
+    auto json = step2Input.toJson();
+    
+    DDOId ddoId = dco.async("reduce", json);
 
-  //   DDO step2Outpus[splitNums2];
-  //   for (int i = 0; i < splitNums2; i++) {
-  //     DDO ddo = Step2Task().run(step2Inputs + i);
-  //     step2Outpus[i] = ddo;
-  //   }
+    step2Invokers.push_back(std::make_pair(dco, ddoId));
+  }
 
-  //   // =========================
-  //   // collect
-  //   // =========================
-  //   Tuples list;
-  //   TuplesSerialzer tuplesSerializer;
-  //   for (int i = 0; i < splitNums2; i++) {
-  //     DDO ddo = step2Outpus[i];
-  //     ByteSpan_ref bytes = ddo.read();
+  for (auto& kv : step2Invokers) {
+    DCO dco = kv.first;
+    DDOId ddoId = kv.second;
 
-  //     ddo.release();
-  //     Tuples_ref rc = tuplesSerializer.deserailize(bytes.get());
+    auto ddo = dco.wait(ddoId);
+    auto bytes = ddo.read();
 
-  //     for_each(rc->begin(), rc->end(), [&list](Tuple &t) { list.push_back(t);
-  //     });
-  //   }
+    logger_debug("get step 2 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
-  //   // =========================
-  //   // 打印结果
-  //   // =========================
-  //   for (Tuple &i : list) {
-  //     cout << get<0>(i) << " " << get<1>(i) << endl;
-  //   }
+    // Step1Output setp1Output;
+    // setp1Output.fromJson(bytes.get());
+
+    ddo.releaseGlobal();
+  }
 }

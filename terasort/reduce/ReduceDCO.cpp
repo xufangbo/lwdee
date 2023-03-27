@@ -1,22 +1,21 @@
 #include "ReduceDCO.h"
-#include <iostream>
+#include "Step2Task.h"
+#include "core/Partition.h"
+#include "core/log.hpp"
 
-std::string  ReduceDCO::f1(std::string a) {
-    std::cout << "call f1(" << a << ")"<< std::endl; 
-    return a;
-}
-std::string  ReduceDCO::f2(std::string a) {
-    std::cout << "call f2(" << a << ")" << std::endl; 
-    return a;
-}
-ReduceDCO::ReduceDCO()
-{
-    getFunctionTable()["f1"] = (PTR)&ReduceDCO::f1;
-    getFunctionTable()["f2"] = (PTR)&ReduceDCO::f2;
-}
-ReduceDCO::~ReduceDCO()
-{
+std::string ReduceDCO::reduce(std::string a) {
+  PartitionStep2 input;
+  input.fromJson(&a);
 
+  Step2Task().run(&input);
+
+  logger_trace(a.c_str());
+
+  return "success";
 }
 
-
+ReduceDCO::ReduceDCO() {
+  getFunctionTable()["reduce"] = (PTR)&ReduceDCO::reduce;
+}
+ReduceDCO::~ReduceDCO() {
+}

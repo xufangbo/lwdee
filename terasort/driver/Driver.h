@@ -11,15 +11,18 @@ typedef std::pair<Bytes10, Bytes10> MinAndMax;
 
 class Driver {
  private:
-  std::string fileName;                   // 数据源文件
+  std::string inputFile;                   // 数据源文件
+  std::string outputFile;                   // 数据源文件
   int datum;                              // 采样基准
   int splitNums1;                         // map 计算分区数
   int splitNums2;                         // reduce计算分区数
   std::vector<SampleSplit> sampleSplits;  // 样本分割
-  std::vector<pair<DCO, DDOId>> invokers;
+  std::vector<pair<DCO, DDOId>> step1Invokers;
+  std::vector<pair<DCO, DDOId>> step2Invokers;
+  std::vector<PartitionStep2> step2Inputs;
 
  public:
-  void startJob(std::string fileName, int datum, int splitNum1, int splitNum2);
+  void startJob(std::string inputFile, std::string outputFile,int datum, int splitNum1, int splitNum2);
 
  private:
   /**

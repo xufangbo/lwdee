@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 #include <vector>
-
-#include "core/cjson.hpp"
 #include "lwdee/DDO.h"
 
 using namespace std;
@@ -32,96 +30,56 @@ class PartitionStep1 : public Partition {
   PartitionStep1(int index, string fileName, vector<SampleSplit> sampleSplits)
       : Partition(index), fileName(fileName), sampleSplits(sampleSplits) {}
 
-  int totoalSize() {
-    int size = 0;
-    size += 4;                // index
-    size += 4;                // fileName count
-    size += fileName.size();  // fileName size
-    size += 4;                // sub split count
+  // int totoalSize() {
+  //   int size = 0;
+  //   size += 4;                // index
+  //   size += 4;                // fileName count
+  //   size += fileName.size();  // fileName size
+  //   size += 4;                // sub split count
 
-    for (SampleSplit& item : sampleSplits) {
-      size += 8;  // min
-      size += 8;  // max
-    }
+  //   for (SampleSplit& item : sampleSplits) {
+  //     size += 8;  // min
+  //     size += 8;  // max
+  //   }
 
-    return size;
-  }
+  //   return size;
+  // }
 
-  ByteSpan_ref serialize() {
-    ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
-    bytes->putInt32(this->index);
-    bytes->putInt32(this->fileName.size());
-    bytes->puts((Byte*)this->fileName.data(), fileName.size());
+  // ByteSpan_ref serialize() {
+  //   ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
+  //   bytes->putInt32(this->index);
+  //   bytes->putInt32(this->fileName.size());
+  //   bytes->puts((Byte*)this->fileName.data(), fileName.size());
 
-    bytes->putInt32(sampleSplits.size());
-    for (SampleSplit& item : sampleSplits) {
-      bytes->puts((Byte*)&item.min, sizeof(item.min));
-      bytes->puts((Byte*)&item.max, sizeof(item.max));
-    }
-    return bytes;
-  };
-  void deserialize(ByteSpan* bytes) {
-    bytes->readInt32(this->index);
+  //   bytes->putInt32(sampleSplits.size());
+  //   for (SampleSplit& item : sampleSplits) {
+  //     bytes->puts((Byte*)&item.min, sizeof(item.min));
+  //     bytes->puts((Byte*)&item.max, sizeof(item.max));
+  //   }
+  //   return bytes;
+  // };
+  // void deserialize(ByteSpan* bytes) {
+  //   bytes->readInt32(this->index);
 
-    int fileNameSize = 0;
-    bytes->readInt32(fileNameSize);
-    this->fileName = std::string(fileNameSize + 1, '\0');
-    bytes->reads((Byte*)fileName.data(), fileNameSize);
+  //   int fileNameSize = 0;
+  //   bytes->readInt32(fileNameSize);
+  //   this->fileName = std::string(fileNameSize + 1, '\0');
+  //   bytes->reads((Byte*)fileName.data(), fileNameSize);
 
-    int itemsCount = 0;
-    bytes->readInt32(itemsCount);
+  //   int itemsCount = 0;
+  //   bytes->readInt32(itemsCount);
 
-    for (int i = 0; i < itemsCount; i++) {
-      SampleSplit item;
-      bytes->reads((Byte*)item.min, sizeof(item.min));
-      bytes->reads((Byte*)item.max, sizeof(item.max));
+  //   for (int i = 0; i < itemsCount; i++) {
+  //     SampleSplit item;
+  //     bytes->reads((Byte*)item.min, sizeof(item.min));
+  //     bytes->reads((Byte*)item.max, sizeof(item.max));
 
-      this->sampleSplits.push_back(item);
-    }
-  }
+  //     this->sampleSplits.push_back(item);
+  //   }
+  // }
 
-  std::string toJson() {
-    cJSON* root = cJSON_CreateObject();
-
-    cJSON_AddNumberToObject(root, "index", index);
-    cJSON_AddStringToObject(root, "fileName", fileName.c_str());
-
-    cJSON* nodes = cJSON_CreateArray();
-    cJSON_AddItemToObject(root, "sampleSplits", nodes);
-
-    for (SampleSplit& item : sampleSplits) {
-      cJSON* split = cJSON_CreateObject();
-      cJSON_AddStringToObject(split, "min", std::to_string(item.min).c_str());
-      cJSON_AddStringToObject(split, "max", std::to_string(item.max).c_str());
-
-      cJSON_AddItemToArray(nodes, split);
-    }
-
-    char* jsonText = cJSON_Print(root);
-
-    return jsonText;
-  }
-
-  void fromJson(std::string json) {
-    cJSON* node = cJSON_Parse(json.c_str());
-    index = cJSON_GetObjectItem(node, "index")->valueint;
-    fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
-
-    cJSON* subNodes = cJSON_GetObjectItem(node, "sampleSplits");
-    cJSON* child = subNodes->child;
-    while (child != NULL) {
-      SampleSplit split;
-      char* min = cJSON_GetObjectItem(child, "min")->valuestring;
-      split.min = strtoull(min, NULL, 0);
-
-      char* max = cJSON_GetObjectItem(child, "max")->valuestring;
-      split.max = strtoull(max, NULL, 0);
-
-      sampleSplits.push_back(split);
-
-      child = child->next;
-    }
-  }
+  std::string toJson();
+  void fromJson(std::string* json);
 };
 
 /**
@@ -131,16 +89,16 @@ class PartitionStep1 : public Partition {
 typedef struct {
   std::string voxorId;
   DdoDataId dataId;
-} Step1OutputItem;
+} SubSplitDDO;
 
 class Step1Output {
  public:
-  std::vector<Step1OutputItem> items;
+  std::vector<SubSplitDDO> items;
 
   // int totoalSize() {
   //   int size = 0;
   //   size += 4;  // items count
-  //   for (Step1OutputItem &item : items) {
+  //   for (SubSplitDDO &item : items) {
   //     size += 4;  // voxorId size
   //     size += item.voxorId.size();
   //     size += sizeof(item.dataId);
@@ -151,7 +109,7 @@ class Step1Output {
   // ByteSpan_ref serialize() {
   //   ByteSpan_ref bytes = std::make_shared<ByteSpan>(this->totoalSize());
   //   bytes->putInt32(items.size());
-  //   for (Step1OutputItem &item : items) {
+  //   for (SubSplitDDO &item : items) {
   //     bytes->putInt32(item.voxorId.size());
   //     bytes->puts((Byte *)item.voxorId.data(), item.voxorId.size());
   //     bytes->puts((Byte *)&item.dataId, sizeof(item.dataId));
@@ -164,7 +122,7 @@ class Step1Output {
   //   bytes->readInt32(itemsCount);
 
   //   for (int i = 0; i < itemsCount; i++) {
-  //     Step1OutputItem item;
+  //     SubSplitDDO item;
   //     int voxorSize = 0;
   //     bytes->readInt32(voxorSize);
 
@@ -183,10 +141,22 @@ class Step1Output {
 
 class PartitionStep2 : public Partition {
  public:
-  vector<DDO> ddos;
+  string outputFile;
+  vector<SubSplitDDO> subSplitDDOs;
 
  public:
   PartitionStep2() {}
-  PartitionStep2(int index)
-      : Partition(index) {}
+  PartitionStep2(int index, string outputFile)
+      : Partition(index), outputFile(outputFile) {}
+
+  std::string toJson();
+  void fromJson(std::string* json);
+};
+
+class Step2Output {
+ public:
+  bool succeed;
+
+  std::string toJson();
+  void fromJson(std::string* json);
 };

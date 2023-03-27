@@ -18,6 +18,8 @@ class DDO {
 
  public:
   DDO() {}
+  DDO(const std::string& vid, DdoDataId did = 0)
+      : ddoId(vid, did) {}
   DDO(std::string str) {
     std::string vid;
     DdoDataId did;

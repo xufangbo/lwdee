@@ -10,11 +10,7 @@
 std::vector<DDO> MapDCO::ddos;
 
 std::string MapDCO::f1(std::string a) {
-  // logger_debug("invokded f1 , args : %s", a.c_str());
-
-  DDO ddo(a);
-  logger_debug("invokded f1 , ddo voxor : %s,ddo id: %ld",
-               ddo.ddoId.itsVoxorId().c_str(), ddo.ddoId.itsId());
+  logger_debug("invokded f1 , args : %s", a.c_str());
   return a;
 }
 
@@ -22,7 +18,7 @@ std::string MapDCO::map(std::string a) {
   logger_debug("< invokded map %s", a.c_str());
 
   PartitionStep1 input;
-  input.fromJson(a);
+  input.fromJson(&a);
 
   auto output = Step1Task().run(&input);
 

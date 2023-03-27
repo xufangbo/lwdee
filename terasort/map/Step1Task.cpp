@@ -83,7 +83,7 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
 
     MapDCO::ddos.push_back(ddoSubSplit);
 
-    Step1OutputItem item;
+    SubSplitDDO item;
     item.voxorId = ddoSubSplit.ddoId.itsVoxorId();
     item.dataId = ddoSubSplit.ddoId.itsId();
     output.items.push_back(item);
