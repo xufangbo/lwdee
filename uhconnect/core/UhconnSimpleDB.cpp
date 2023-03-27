@@ -158,7 +158,7 @@ bool UhconnSimpleDB::delFromPrepArray(DdoDataId id){
 }
 
 int UhconnSimpleDB::deleteBlock(DdoDataId id){
-    cout << "delete block " << endl;
+    // cout << "delete block " << endl;
     DDO_LOCK;
     std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.find(id);
     // DDO_UNLOCK;

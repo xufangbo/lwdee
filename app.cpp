@@ -26,7 +26,8 @@ int main(int argc, char* argv[]) {
   if (localNode->itId() == 2) {
     auto inputFile = "/home/kevin/git/lwdee/terasort/data-input.dat";
     auto outputFile = "/home/kevin/git/lwdee/terasort/data-output.dat";
-    Driver().startJob(inputFile, outputFile, 3, 3, 3);
+    // Driver().startJob(inputFile, outputFile, 3, 3, 3);
+    Driver().startJob(inputFile, outputFile, 3, 2, 2);
 
     // test_dco(1);
     // test_dco(2);

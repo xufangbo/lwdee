@@ -103,21 +103,13 @@ void Driver::split(MinAndMax conf) {
 
 void Driver::map() {
   // =========================
-  // 构造参数
-  // =========================
-  PartitionStep1 step1Inputs[splitNums1];
-  for (int i = 0; i < splitNums1; i++) {
-    step1Inputs[i] = PartitionStep1(i, inputFile, sampleSplits);
-  }
-
-  // =========================
   // 调用map dco
   // =========================
 
   for (int i = 0; i < splitNums1; i++) {
     DCO dco = lwdee::create_dco(i + 1, "MapDCO");
 
-    PartitionStep1 input(i + 1, inputFile, sampleSplits);
+    PartitionStep1 input(i, inputFile, sampleSplits);
     auto json = input.toJson();
 
     // logger_debug("invoke map.map , index: %d,args: %s",i,json.c_str());
@@ -158,13 +150,12 @@ void Driver::mapToReduce() {
 }
 
 void Driver::reduce() {
-  
   for (int i = 0; i < step2Inputs.size(); i++) {
     PartitionStep2& step2Input = step2Inputs[i];
 
     DCO dco = lwdee::create_dco(i + 1, "ReduceDCO");
     auto json = step2Input.toJson();
-    
+
     DDOId ddoId = dco.async("reduce", json);
 
     step2Invokers.push_back(std::make_pair(dco, ddoId));

@@ -24,7 +24,7 @@ std::string UhconnDco::wait_ddo(std::string ddo_id) {
     int post;
     ss >> ddoId >> nodeId >> post;
     logInfo("receive sb check ddo data:%llu", ddoId);
-    std::cout <<"wait_ddo id:nodeid:push = "<<ddoId<<":"<<nodeId<<":"<<post<<std::endl;
+    // std::cout <<"wait_ddo id:nodeid:push = "<<ddoId<<":"<<nodeId<<":"<<post<<std::endl;
     DdoBlockData data;
     while(true) {
         //int ret = UhconnSimpleDB::getInstance().loadBlockFromLocal(ddoId,data);

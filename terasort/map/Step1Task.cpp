@@ -14,10 +14,12 @@ Step1Output Step1Task::run(PartitionStep1* partition) {
 
   // textFile
   auto trs = this->textFile();
+  logger_info("textFile");
 
   // write ddo
   this->generateSubSplit(trs);
   delete trs;
+  logger_info("generateSubSplit");
 
   return output;
 };
@@ -33,7 +35,9 @@ TeraRecords* Step1Task::textFile() {
   long splitCount = len / partition->sampleSplits.size();
 
   long start = splitCount * partition->index;
-  long end = start + splitCount > len ? len : start + splitCount;
+  long end = (start + splitCount) > len ? len : start + splitCount;
+
+  logger_debug("%d - read range, %ld - %ld", partition->index, start, end);
 
   auto trs = new TeraRecords(end - start, TeraRecord());
 
@@ -44,7 +48,7 @@ TeraRecords* Step1Task::textFile() {
     fread(tr->value, 1, 90, f);
     tr++;
 
-    // logger_trace("%d - %ld", partition->index, tr.index());
+    logger_trace("%ld", tr->index());
   }
   fclose(f);
 
@@ -64,8 +68,7 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
 
   ByteSpan_ref subPartitions[sampleSplits.size()];
   for (int i = 0; i < sampleSplits.size(); i++) {
-    logger_debug("partition %d - sub split %d - %d", partition->index, i,
-                 counters[i]);
+    logger_debug("partition %d - sub split %d - %d", partition->index, i, counters[i]);
     subPartitions[i] = std::make_shared<ByteSpan>(counters[i] * 100);
   }
 

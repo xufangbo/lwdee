@@ -7,9 +7,15 @@ typedef struct {
   char key[10];
   char value[90];
 
+  // TeraRecord() {};
+  // TeraRecord(char* ptr) {
+  //   memcpy(key, ptr, 10);
+  //   memcpy(value, ptr + 10, 90);
+  // }
+
   long index() {
     long l;
-    memcpy(&l, value + 4, 8);
+    memcpy(&l, value + 2, 8);
     return l;
   }
 
@@ -23,7 +29,7 @@ typedef struct {
     uint64_t l;
     memcpy(&l, (void*)key, 8);
     return l;
-  }  
+  }
 } TeraRecord;
 
 typedef std::vector<TeraRecord> TeraRecords;

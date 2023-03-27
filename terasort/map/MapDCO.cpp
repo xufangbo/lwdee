@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Step1Task.h"
+#include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/log.hpp"
 
@@ -15,16 +16,24 @@ std::string MapDCO::f1(std::string a) {
 }
 
 std::string MapDCO::map(std::string a) {
-  logger_debug("< invokded map %s", a.c_str());
+  try {
+    logger_debug("< invokded map %s", a.c_str());
 
-  PartitionStep1 input;
-  input.fromJson(&a);
+    PartitionStep1 input;
+    input.fromJson(&a);
 
-  auto output = Step1Task().run(&input);
+    auto output = Step1Task().run(&input);
 
-  logger_debug("> invokded map ,index : %d, ddoId: %ld, fileName: %s", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str());
+    logger_debug("> invokded map ,index : %d, ddoId: %ld, fileName: %s", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str());
 
-  return output.toJson();
+    return output.toJson();
+  } catch (Exception& ex) {
+    logger_error("step2 failed,%s", ex.getMessage().c_str());
+    return "failed";
+  } catch (std::exception& ex) {
+    logger_error("step2 failed,%s", ex.what());
+    return "failed";
+  }
 }
 
 std::string MapDCO::ddo(std::string voxorId, DdoDataId ddoId) {
