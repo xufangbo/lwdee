@@ -12,8 +12,7 @@
 #include "map/Step1Task.h"
 // #include "reduce/Step2Task.h"
 
-void Driver::startJob(std::string fileName, int datum, int splitNums1,
-                      int splitNums2) {
+void Driver::startJob(std::string fileName, int datum, int splitNums1, int splitNums2) {
   this->fileName = fileName;
   this->datum = datum;
   this->splitNums1 = splitNums1;
@@ -27,7 +26,7 @@ void Driver::startJob(std::string fileName, int datum, int splitNums1,
     this->reduce();
 
     logger_info("finished");
-  } catch (Exception &ex) {
+  } catch (Exception& ex) {
     logger_error("execute job error,%s", ex.getMessage().c_str());
   }
 }
@@ -36,7 +35,7 @@ MinAndMax Driver::samples(std::string fileName) {
   // fstream f;
   // f.open(fileName, ios_base::in | ios_base::binary);
 
-  FILE *f = fopen(fileName.c_str(), "rb");
+  FILE* f = fopen(fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", fileName.c_str());
   }
@@ -130,17 +129,17 @@ void Driver::map() {
 }
 
 void Driver::mapToReduce() {
-  for (auto &kv : invokers) {
+  for (auto& kv : invokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
     auto ddo = dco.wait(ddoId);
     auto bytes = ddo.read();
 
-    logger_debug("get map return ddo(%ld),len:%d, %s",ddo.ddoId.itsId(), bytes->size, bytes->toHex().c_str());
+    logger_debug("get map return ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
-    Step1ResultDDO setp1Output;
-    setp1Output.fromJson(bytes->buffer);
+    Step1Output setp1Output;
+    setp1Output.fromJson(bytes.get());
   }
 }
 

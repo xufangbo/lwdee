@@ -9,7 +9,7 @@
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
-PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
+Step1Output Step1Task::run(PartitionStep1* partition) {
   this->partition = partition;
 
   // textFile
@@ -19,11 +19,11 @@ PartitionStep1 Step1Task::run(PartitionStep1 *partition) {
   this->generateSubSplit(trs);
   delete trs;
 
-  return *partition;
+  return output;
 };
 
-TeraRecords *Step1Task::textFile() {
-  FILE *f = fopen(partition->fileName.c_str(), "rb");
+TeraRecords* Step1Task::textFile() {
+  FILE* f = fopen(partition->fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", partition->fileName.c_str());
   }
@@ -38,7 +38,7 @@ TeraRecords *Step1Task::textFile() {
   auto trs = new TeraRecords(end - start, TeraRecord());
 
   fseek(f, start, SEEK_SET);
-  TeraRecord *tr = trs->data();
+  TeraRecord* tr = trs->data();
   for (int i = start; i < end; i++) {
     fread(tr->key, 1, 10, f);
     fread(tr->value, 1, 90, f);
@@ -51,13 +51,13 @@ TeraRecords *Step1Task::textFile() {
   return trs;
 }
 
-void Step1Task::generateSubSplit(TeraRecords *trs) {
+void Step1Task::generateSubSplit(TeraRecords* trs) {
   auto sampleSplits = partition->sampleSplits;
 
   // 先计算长度
   int counters[sampleSplits.size()];
   memset(&counters, 0, sampleSplits.size() * 4);
-  for (TeraRecord &tr : *trs) {
+  for (TeraRecord& tr : *trs) {
     int splitIndex = classify(tr);
     counters[splitIndex]++;
   }
@@ -69,7 +69,7 @@ void Step1Task::generateSubSplit(TeraRecords *trs) {
     subPartitions[i] = std::make_shared<ByteSpan>(counters[i] * 100);
   }
 
-  for (TeraRecord &tr : *trs) {
+  for (TeraRecord& tr : *trs) {
     int splitIndex = classify(tr);
     auto bytes = subPartitions[splitIndex];
 
@@ -77,37 +77,36 @@ void Step1Task::generateSubSplit(TeraRecords *trs) {
     bytes->puts(tr.value, 90);
   }
 
-  Step1ResultDDO step1ResultDDO;
   for (int i = 0; i < sampleSplits.size(); i++) {
     DDO ddoSubSplit = lwdee::create_ddo();
     ddoSubSplit.write(subPartitions[i]);
 
     MapDCO::ddos.push_back(ddoSubSplit);
 
-    Step1ResultDDOItem item;
+    Step1OutputItem item;
     item.voxorId = ddoSubSplit.ddoId.itsVoxorId();
     item.dataId = ddoSubSplit.ddoId.itsId();
-    step1ResultDDO.items.push_back(item);
+    output.items.push_back(item);
   }
 
-  partition->outputDDO = lwdee::create_ddo();
-  auto bytes = step1ResultDDO.toJson();
-  logger_debug("map return ddo(%ld),len:%d, %s", partition->outputDDO.ddoId.itsId(),bytes.size(), bytes.c_str());
-  partition->outputDDO.write(bytes);
+  // partition->outputDDO = lwdee::create_ddo();
+  // auto bytes = output.toJson();
+  // logger_debug("map return ddo(%ld),len:%d, %s", partition->outputDDO.ddoId.itsId(),bytes.size(), bytes.c_str());
+  // partition->outputDDO.write(bytes);
 
   // auto xx = partition->outputDDO.read();
   // logger_debug("map return ddo and read(%d): %s",xx->size,(char*)xx->buffer);
 
-  auto local_block = UhconnSimpleDB::getInstance().getBlockFromLocal(partition->outputDDO.ddoId.itsId());
-  logger_debug("map return ddo and read(),len:%d, %s",partition->outputDDO.ddoId.itsId(),local_block->len,(char*)local_block->data);
+  // auto local_block = UhconnSimpleDB::getInstance().getBlockFromLocal(partition->outputDDO.ddoId.itsId());
+  // logger_debug("map return ddo and read(%ld),len:%d, %s",partition->outputDDO.ddoId.itsId(),local_block->len,(char*)local_block->data);
 }
 
-int Step1Task::classify(TeraRecord &tr) {
+int Step1Task::classify(TeraRecord& tr) {
   int size = partition->sampleSplits.size();
   uint64_t value = tr.left8();
 
   for (int i = 0; i < size; i++) {
-    SampleSplit &split = partition->sampleSplits[i];
+    SampleSplit& split = partition->sampleSplits[i];
     if (split.min <= 0 && value < split.max) {
       return i;
     } else if (value >= split.min && split.max <= 0) {

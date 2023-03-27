@@ -15,9 +15,10 @@ typedef shared_ptr<Strings> Strings_ref;
 class Step1Task {
  private:
   PartitionStep1 *partition;
+  Step1Output output;
 
  public:
-  PartitionStep1 run(PartitionStep1 *p);
+  Step1Output run(PartitionStep1 *p);
 
  private:
   TeraRecords* textFile();

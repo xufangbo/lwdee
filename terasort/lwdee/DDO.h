@@ -10,6 +10,7 @@
 #include "core/ByteSpan.h"
 
 typedef UhconnDdoRef DDOId;
+typedef std::shared_ptr<std::string> string_ref;
 
 class DDO {
  public:
@@ -32,8 +33,9 @@ class DDO {
 
  public:
   void write(ByteSpan_ref datablock);
-  void write(std::string &str);
-  ByteSpan_ref read();
+  void write(std::string& str);
+  // ByteSpan_ref read();
+  string_ref read();
   void release();
   void releaseGlobal();
 };

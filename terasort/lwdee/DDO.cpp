@@ -4,7 +4,8 @@
 #include "core/UhconnSimpleDB.h"
 #include "core/log.hpp"
 
-DDO::DDO(DDOId id) : ddoId(id) {}
+DDO::DDO(DDOId id)
+    : ddoId(id) {}
 
 void DDO::write(ByteSpan_ref bytesSpan) {
   DdoBlockData blockdata;
@@ -17,9 +18,9 @@ void DDO::write(ByteSpan_ref bytesSpan) {
   UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), blockdata);
 }
 
-void DDO::write(std::string &str) {
+void DDO::write(std::string& str) {
   DdoBlockData blockdata;
-  
+
   blockdata.len = str.size();
   blockdata.data = new char[str.size()];
 
@@ -28,23 +29,32 @@ void DDO::write(std::string &str) {
   UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), blockdata);
 }
 
-ByteSpan_ref DDO::read() {
+// ByteSpan_ref DDO::read() {
+//   DdoBlockData *blockdata = UhconnSimpleDB::getInstance().getBlock(
+//       ddoId.itsId(), ddoId.itsWorkNodeId());
+//   if (blockdata == nullptr) {
+//     throw LwdeeException("failed read ddo", ZONE);
+//   }
+
+//   ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata->len);
+//   bytes->puts((Byte *)blockdata->data, bytes->size);
+//   bytes->reset();
+
+//   return bytes;
+// }
+
+string_ref DDO::read() {
   // DdoBlockData blockdata;
   // UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
-  DdoBlockData *blockdata = UhconnSimpleDB::getInstance().getBlock(
-      ddoId.itsId(), ddoId.itsWorkNodeId());
+  DdoBlockData* blockdata = UhconnSimpleDB::getInstance().getBlock(ddoId.itsId(), ddoId.itsWorkNodeId());
   if (blockdata == nullptr) {
     throw LwdeeException("failed read ddo", ZONE);
   }
 
-  ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata->len);
-  bytes->puts((Byte *)blockdata->data, bytes->size);
-  bytes->reset();
+  string_ref output = std::make_shared<std::string>(blockdata->len, '\0');
+  memcpy((void*)output->data(), blockdata->data, blockdata->len);
 
-  // bytes->buffer = (Byte*)blockdata.data;
-  // bytes->size = blockdata.len;
-
-  return bytes;
+  return output;
 }
 
 void DDO::release() {

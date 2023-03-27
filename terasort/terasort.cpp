@@ -29,11 +29,9 @@ int test_ddo(void) {
   bytes->puts((Byte*)fileName, bytes->size);
   ddo.write(bytes);
 
-  auto bytes2 = ddo.read();
-  std::string str(bytes2->size + 1, '\0');
-  bytes2->reads((Byte*)str.data(), bytes2->size);
+  auto output = ddo.read();
 
-  logger_trace("load blocdata : (%d)%s", str.size(), str.c_str());
+  logger_trace("load blocdata : (%d)%s", output->size(), output->c_str());
 
   ddo.release();
 
@@ -41,8 +39,7 @@ int test_ddo(void) {
 }
 
 int test_dco(int nodeId) {
-
-  logger_info("< test dco %d",nodeId);
+  logger_info("< test dco %d", nodeId);
 
   auto fileName = "/home/kevin/git/lwdee/edc/harry-potter.txt";
 
@@ -54,23 +51,18 @@ int test_dco(int nodeId) {
 
   DCO dco = lwdee::create_dco(nodeId, "MapDCO");
   auto ddoId = dco.async("f1", input);
-  // auto ddoId = dco.async("f1", "hello");
-
-  // UhconnDcoRef dcoA = UhconnApi::create(std::string("UserDco"));
-  // UhconnDdoRef ddoref = UhconnApi::async(dcoA, std::string("f1"),
-  // input.uh_ddo.get());
 
   DDO output = dco.wait(ddoId);
-  // UhconnDdo* ddo = UhconnApi::wait(ddoref);
-  //  DDO output(ddoref,ddo);
 
-  ByteSpan_ref bytes2 = output.read();
-  std::string str(bytes2->size + 1, '\0');
-  bytes2->reads((Byte*)str.data(), bytes2->size);
+  // ByteSpan_ref bytes2 = output.read();
+  // std::string str(bytes2->size + 1, '\0');
+  // bytes2->reads((Byte*)str.data(), bytes2->size);
+  // logger_trace("load blockdata : (%d)%s", str.size(), str.c_str());
 
-  logger_trace("load blockdata : (%d)%s", str.size(), str.c_str());
+  auto str = output.read();
+  logger_trace("load blockdata : (%d)%s", str->size(), str->c_str());
 
-  logger_info("> test dco %d",nodeId);
+  logger_info("> test dco %d", nodeId);
 
   return 0;
 }
