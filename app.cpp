@@ -24,11 +24,11 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
   if (localNode->itId() == 1) {
-    auto inputFile = "/home/kevin/git/lwdee/terasort/data-input.dat";
-    auto outputFile = "/home/kevin/git/lwdee/terasort/data-output.dat";
+    
+    auto inputFile = UhconnConfig::getInstance().getInputFile();
+    auto outputFile = UhconnConfig::getInstance().getOutputFile();
 
-    // auto inputFile = UhconnConfig::getInstance().getString("inputFile");
-    // auto outputFile = UhconnConfig::getInstance().getString("outputFile");
+    logger_debug("%s %s", inputFile.c_str(), outputFile.c_str());
 
     int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
     Driver().startJob(inputFile, outputFile, 3, nodeAmount, nodeAmount);
@@ -46,20 +46,32 @@ int main(int argc, char* argv[]) {
 void init(int argc, char* argv[]) {
   init_logger();
 
-  // 初始化 WorkNode工作环境
-  std::string configFile = "/home/kevin/git/lwdee/test/node_conf.json";
   std::string nodeName = "node1";
   if (argc >= 2) {
     nodeName = argv[1];
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
+
+  std::string configFile = "./node_conf.json";
+  FILE* fp = fopen(configFile.c_str(), "r");
+  if (fp != NULL) {
+    fclose(fp);
+  } else {
+    configFile = "../test/node_conf.json";
+    fp = fopen(configFile.c_str(), "r");
+    if (fp != NULL) {
+      fclose(fp);
+    } else {
+      configFile = "/home/kevin/git/lwdee/test/node_conf.json";
+    }
+  }
+
   if (UhconnConfig::getInstance().loadConf(configFile, nodeName) == 0) {
     // int nodeAmount = UhconnConfig::getInstance().getInt("node_amount");
     // UhconnConfig::getInstance().setNodeAmount(nodeAmount);
     UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
-    UhconnWorkNode* workNode =
-        UhconnVoxorFactory::getInstance().getLocalWorkNode();
+    UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
     workNode->itsRouter().setupRouteInfoFromConf();
   } else {
     logger_error("load config failed!!");

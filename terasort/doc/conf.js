@@ -32,7 +32,13 @@ for (var ni in workers) {
     }
 }
 
-let conf = { "node_amount": index, "port": port };
+let conf = {
+    "node_amount": index,
+    "port": port,
+    "inputFile": "/home/kevin/git/lwdee/terasort/data-input.dat",
+    "outputFile": "/home/kevin/git/lwdee/terasort/data-output.dat",
+};
+
 for (var ri in routerInfos) {
     let routerInfo = routerInfos[ri];
     conf["node" + routerInfo.nid] = {
