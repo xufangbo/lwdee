@@ -1,0 +1,28 @@
+# ssh root@k8s-master "rm -rf /home/data/terasort/app"
+ssh root@k8s-node01 "rm -rf /home/data/terasort"
+ssh root@k8s-node02 "rm -rf /home/data/terasort"
+ssh root@k8s-node03 "rm -rf /home/data/terasort"
+ssh root@k8s-node04 "rm -rf /home/data/terasort"
+ssh root@k8s-node05 "rm -rf /home/data/terasort"
+
+ssh root@k8s-master "mkdir -p /home/data"
+ssh root@k8s-node01 "mkdir -p /home/data"
+ssh root@k8s-node02 "mkdir -p /home/data"
+ssh root@k8s-node03 "mkdir -p /home/data"
+ssh root@k8s-node04 "mkdir -p /home/data"
+ssh root@k8s-node05 "mkdir -p /home/data"
+
+ssh root@k8s-master "mkdir -p /home/data/terasort"
+ssh root@k8s-node01 "mkdir -p /home/data/terasort"
+ssh root@k8s-node02 "mkdir -p /home/data/terasort"
+ssh root@k8s-node03 "mkdir -p /home/data/terasort"
+ssh root@k8s-node04 "mkdir -p /home/data/terasort"
+ssh root@k8s-node05 "mkdir -p /home/data/terasort"
+
+ssh root@k8s-master "mkdir -p /home/data/terasort/app"
+ssh root@k8s-node01 "mkdir -p /home/data/terasort/app"
+ssh root@k8s-node02 "mkdir -p /home/data/terasort/app"
+ssh root@k8s-node03 "mkdir -p /home/data/terasort/app"
+ssh root@k8s-node04 "mkdir -p /home/data/terasort/app"
+ssh root@k8s-node05 "mkdir -p /home/data/terasort/app"
+
