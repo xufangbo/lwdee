@@ -5,6 +5,7 @@
 #include "core/log.hpp"
 
 std::string ReduceDCO::reduce(std::string a) {
+  logger_trace("---------------------------------");
   try {
     PartitionStep2 input;
     input.fromJson(&a);

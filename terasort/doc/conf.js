@@ -12,13 +12,13 @@ const fs = require('fs');
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 },
 // ];
 
-let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 2 }];
+let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 
 let fileName = "/home/kevin/git/lwdee/test/node_conf.json";
 
 let json = fs.readFileSync(fileName);
 let db = JSON.parse(json);
-let port = db.port > 200 ? 100 : db.port + 1;
+let port = db.port > 200 ? 100 : db.port + 2;
 
 let index = 0;
 let routerInfos = [];

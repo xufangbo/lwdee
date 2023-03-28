@@ -36,7 +36,7 @@ TeraRecords* Step1Task::textFile() {
   long start = splitCount * partition->index;
   long end = (start + splitCount) > len ? len : start + splitCount;
 
-  logger_debug("%d - read range, %ld - %ld", partition->index, start, end - 1);
+  logger_debug("%d - read range, %ld - %ld,计 %ld 条", partition->index, start, end - 1, end - start);
 
   auto trs = new TeraRecords(end - start, TeraRecord());
 
@@ -46,7 +46,7 @@ TeraRecords* Step1Task::textFile() {
     fread(tr->key, 1, 10, f);
     fread(tr->value, 1, 90, f);
 
-    logger_trace("%s %s", tr->index().c_str(), tr->line().c_str());
+    // logger_trace("%s %s", tr->index().c_str(), tr->line().c_str());
 
     tr++;
   }
@@ -67,13 +67,14 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
     counters[splitIndex]++;
   }
 
+  // 创建子分区的ByteSpan
   ByteSpan_ref subPartitions[sampleSplits.size()];
   for (int i = 0; i < sampleSplits.size(); i++) {
-    logger_debug("partition %d - sub split %d - %d", partition->index, i,
-                 counters[i]);
+    logger_debug("partition %d - sub split %d - %d", partition->index, i, counters[i]);
     subPartitions[i] = std::make_shared<ByteSpan>(counters[i] * 100);
   }
 
+  // 遍历TeraRecord，并添加到对应的子分区中去
   for (TeraRecord& tr : *trs) {
     int splitIndex = classify(tr);
     auto bytes = subPartitions[splitIndex];
@@ -82,6 +83,7 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
     bytes->puts(tr.value, 90);
   }
 
+  // 保存子分区到DDO
   for (int i = 0; i < sampleSplits.size(); i++) {
     DDO ddoSubSplit = lwdee::create_ddo();
     ddoSubSplit.write(subPartitions[i]);

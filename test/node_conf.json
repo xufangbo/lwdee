@@ -1,43 +1,81 @@
 {
-  "node_amount": 2,
-  "port": 125,
+  "node_amount": 3,
+  "port": 151,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 12501,
-    "msgPort": 12601,
+    "dataPort": 15101,
+    "msgPort": 15201,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 12501,
-        "mport": 12601
+        "dport": 15101,
+        "mport": 15201
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 12502,
-        "mport": 12602
+        "dport": 15102,
+        "mport": 15202
+      },
+      {
+        "nid": 3,
+        "ip": "127.0.0.1",
+        "dport": 15103,
+        "mport": 15203
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 12502,
-    "msgPort": 12602,
+    "dataPort": 15102,
+    "msgPort": 15202,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 12501,
-        "mport": 12601
+        "dport": 15101,
+        "mport": 15201
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 12502,
-        "mport": 12602
+        "dport": 15102,
+        "mport": 15202
+      },
+      {
+        "nid": 3,
+        "ip": "127.0.0.1",
+        "dport": 15103,
+        "mport": 15203
+      }
+    ]
+  },
+  "node3": {
+    "nodeId": 3,
+    "ip": "127.0.0.1",
+    "dataPort": 15103,
+    "msgPort": 15203,
+    "routeInfo": [
+      {
+        "nid": 1,
+        "ip": "127.0.0.1",
+        "dport": 15101,
+        "mport": 15201
+      },
+      {
+        "nid": 2,
+        "ip": "127.0.0.1",
+        "dport": 15102,
+        "mport": 15202
+      },
+      {
+        "nid": 3,
+        "ip": "127.0.0.1",
+        "dport": 15103,
+        "mport": 15203
       }
     ]
   }

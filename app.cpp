@@ -23,11 +23,15 @@ int main(int argc, char* argv[]) {
     logger_error("localNode is null");
     exit(1);
   }
-  if (localNode->itId() == 2) {
+  if (localNode->itId() == 1) {
     auto inputFile = "/home/kevin/git/lwdee/terasort/data-input.dat";
     auto outputFile = "/home/kevin/git/lwdee/terasort/data-output.dat";
-    // Driver().startJob(inputFile, outputFile, 3, 3, 3);
-    Driver().startJob(inputFile, outputFile, 3, 2, 2);
+
+    // auto inputFile = UhconnConfig::getInstance().getString("inputFile");
+    // auto outputFile = UhconnConfig::getInstance().getString("outputFile");
+
+    int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
+    Driver().startJob(inputFile, outputFile, 3, nodeAmount, nodeAmount);
 
     // test_dco(1);
     // test_dco(2);
@@ -45,16 +49,15 @@ void init(int argc, char* argv[]) {
   // 初始化 WorkNode工作环境
   std::string configFile = "/home/kevin/git/lwdee/test/node_conf.json";
   std::string nodeName = "node1";
-  int nd_amt = 3;
   if (argc >= 2) {
     nodeName = argv[1];
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
   if (UhconnConfig::getInstance().loadConf(configFile, nodeName) == 0) {
-    UhconnConfig::getInstance().setNodeAmount(nd_amt);
-    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(
-        new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
+    // int nodeAmount = UhconnConfig::getInstance().getInt("node_amount");
+    // UhconnConfig::getInstance().setNodeAmount(nodeAmount);
+    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new TerasortDCOFactory(), UhconnConfig::getInstance().getNodeId());
     UhconnWorkNode* workNode =
         UhconnVoxorFactory::getInstance().getLocalWorkNode();
     workNode->itsRouter().setupRouteInfoFromConf();

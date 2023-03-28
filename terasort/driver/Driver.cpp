@@ -20,11 +20,13 @@ void Driver::startJob(std::string inputFile, std::string outputFile, int datum, 
   this->splitNums2 = splitNums2;
 
   try {
+    this->startWatch();
     auto conf = this->samples(inputFile);
     this->split(conf);
     this->map();
     this->mapToReduce();
     this->reduce();
+    this->stopWath();
 
     logger_info("finished");
   } catch (Exception& ex) {
@@ -93,12 +95,14 @@ void Driver::split(MinAndMax conf) {
     split.max = conf.first.left8() + seprator * (i + 1);
 
     pre = split.max;
+    if (i + 1 == splitNums2) {
+      split.max = 0;
+    }
 
     sampleSplits.push_back(split);
 
     logger_trace("subsplit %d : %ld - %ld", i, split.min, split.max);
   }
-  sampleSplits[splitNums2 - 1].max = 0;
 }
 
 void Driver::map() {
@@ -175,4 +179,22 @@ void Driver::reduce() {
 
     ddo.releaseGlobal();
   }
+}
+
+void Driver::startWatch() {
+  // time(&startTs);
+
+  gettimeofday(&startTs, NULL);
+}
+
+void Driver::stopWath() {
+  // time_t t;
+  // time(&t);
+
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+
+  auto eclipse = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - (startTs.tv_sec * 1000 + startTs.tv_usec / 1000);
+
+  logger_info("eclipse %lf ms", eclipse * 1.0 / 1000);
 }

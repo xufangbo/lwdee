@@ -17,7 +17,8 @@ std::string MapDCO::f1(std::string a) {
 
 std::string MapDCO::map(std::string a) {
   try {
-    logger_debug("< invokded map %s", a.c_str());
+    logger_debug("< invokded map ");
+    // logger_debug("< invokded map %s", a.c_str());
 
     PartitionStep1 input;
     input.fromJson(&a);
