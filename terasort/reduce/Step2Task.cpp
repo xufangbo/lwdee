@@ -70,22 +70,23 @@ void Step2Task::read() {
   }
 }
 
-int cmpfunc(const void* a, const void* b) {
-  TeraRecord* left = (TeraRecord*)a;
-  TeraRecord* right = (TeraRecord*)b;
+int teraCompare(const void* a, const void* b) {
+  return memcmp(((TeraRecord*)a)->key, ((TeraRecord*)b)->key, 10);
+  // TeraRecord* left = (TeraRecord*)a;
+  // TeraRecord* right = (TeraRecord*)b;
 
-  auto l = left->left8();
-  auto r = right->left8();
+  // auto l = left->left8();
+  // auto r = right->left8();
 
-  if (l > r) {
-    return 1;
-  } else {
-    return l < r ? -1 : 0;
-  }
+  // if (l > r) {
+  //   return 1;
+  // } else {
+  //   return l < r ? -1 : 0;
+  // }
 }
 
 void Step2Task::sort() {
-  qsort(trs, size, sizeof(TeraRecord), cmpfunc);
+  qsort(trs, size, sizeof(TeraRecord), teraCompare);
 }
 
 void Step2Task::save() {
