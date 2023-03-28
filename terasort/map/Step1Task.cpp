@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "core/MapSerializer.h"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
