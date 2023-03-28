@@ -1,0 +1,30 @@
+root/13579QETUO!
+
+terasort的测试样例：10.180.98.130：/home/data/terasort/part-r-00999
+
+ssh root@k8s-node01 "mkdir -p /home/data/terasort"
+ssh root@k8s-node02 "mkdir -p /home/data/terasort"
+ssh root@k8s-node03 "mkdir -p /home/data/terasort"
+ssh root@k8s-node04 "mkdir -p /home/data/terasort"
+ssh root@k8s-node05 "mkdir -p /home/data/terasort"
+
+scp data-input.dat root@k8s-node01:/home/data/terasort
+scp data-input.dat root@k8s-node02:/home/data/terasort
+scp data-input.dat root@k8s-node03:/home/data/terasort
+scp data-input.dat root@k8s-node04:/home/data/terasort
+scp data-input.dat root@k8s-node05:/home/data/terasort
+
+
+scp /home/kevin/git/lwdee/build/app root@k8s-master:/home/data/terasort
+scp /home/kevin/git/lwdee/build/app root@k8s-node01:/home/data/terasort
+scp /home/kevin/git/lwdee/build/app root@k8s-node02:/home/data/terasort
+scp /home/kevin/git/lwdee/build/app root@k8s-node03:/home/data/terasort
+scp /home/kevin/git/lwdee/build/app root@k8s-node04:/home/data/terasort
+scp /home/kevin/git/lwdee/build/app root@k8s-node05:/home/data/terasort
+
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-master:/home/data/terasort
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node01:/home/data/terasort
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node02:/home/data/terasort
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node03:/home/data/terasort
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node04:/home/data/terasort
+scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node05:/home/data/terasort

@@ -1,83 +1,83 @@
 {
   "node_amount": 3,
-  "port": 161,
+  "port": 163,
   "inputFile": "/home/kevin/git/lwdee/terasort/data-input.dat",
   "outputFile": "/home/kevin/git/lwdee/terasort/data-output.dat",
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 16101,
-    "msgPort": 16201,
+    "dataPort": 16301,
+    "msgPort": 16401,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 16101,
-        "mport": 16201
+        "dport": 16301,
+        "mport": 16401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 16102,
-        "mport": 16202
+        "dport": 16302,
+        "mport": 16402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 16103,
-        "mport": 16203
+        "dport": 16303,
+        "mport": 16403
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 16102,
-    "msgPort": 16202,
+    "dataPort": 16302,
+    "msgPort": 16402,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 16101,
-        "mport": 16201
+        "dport": 16301,
+        "mport": 16401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 16102,
-        "mport": 16202
+        "dport": 16302,
+        "mport": 16402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 16103,
-        "mport": 16203
+        "dport": 16303,
+        "mport": 16403
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 16103,
-    "msgPort": 16203,
+    "dataPort": 16303,
+    "msgPort": 16403,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 16101,
-        "mport": 16201
+        "dport": 16301,
+        "mport": 16401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 16102,
-        "mport": 16202
+        "dport": 16302,
+        "mport": 16402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 16103,
-        "mport": 16203
+        "dport": 16303,
+        "mport": 16403
       }
     ]
   }
