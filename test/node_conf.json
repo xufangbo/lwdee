@@ -1,81 +1,81 @@
 {
   "node_amount": 3,
-  "port": 151,
+  "port": 153,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 15101,
-    "msgPort": 15201,
+    "dataPort": 15301,
+    "msgPort": 15401,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 15101,
-        "mport": 15201
+        "dport": 15301,
+        "mport": 15401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 15102,
-        "mport": 15202
+        "dport": 15302,
+        "mport": 15402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 15103,
-        "mport": 15203
+        "dport": 15303,
+        "mport": 15403
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 15102,
-    "msgPort": 15202,
+    "dataPort": 15302,
+    "msgPort": 15402,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 15101,
-        "mport": 15201
+        "dport": 15301,
+        "mport": 15401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 15102,
-        "mport": 15202
+        "dport": 15302,
+        "mport": 15402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 15103,
-        "mport": 15203
+        "dport": 15303,
+        "mport": 15403
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 15103,
-    "msgPort": 15203,
+    "dataPort": 15303,
+    "msgPort": 15403,
     "routeInfo": [
       {
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 15101,
-        "mport": 15201
+        "dport": 15301,
+        "mport": 15401
       },
       {
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 15102,
-        "mport": 15202
+        "dport": 15302,
+        "mport": 15402
       },
       {
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 15103,
-        "mport": 15203
+        "dport": 15303,
+        "mport": 15403
       }
     ]
   }

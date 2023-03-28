@@ -196,5 +196,5 @@ void Driver::stopWath() {
 
   auto eclipse = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - (startTs.tv_sec * 1000 + startTs.tv_usec / 1000);
 
-  logger_info("eclipse %lf ms", eclipse * 1.0 / 1000);
+  logger_info("eclipse %lf s", eclipse * 1.0 / 1000);
 }
