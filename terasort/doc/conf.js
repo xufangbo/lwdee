@@ -36,8 +36,8 @@ for (var ni in workers) {
 let conf = {
     "node_amount": index,
     "port": port,
-    "inputFile": "/home/kevin/git/lwdee/terasort/data-input.dat",
-    "outputFile": "/home/kevin/git/lwdee/terasort/data-output.dat",
+    "inputFile": "/home/terasort/data/data-input.dat",
+    "outputFile": "/home/terasort/data/data-output.dat",
 };
 
 for (var ri in routerInfos) {
@@ -66,5 +66,20 @@ for (var ri in routerInfos) {
         console.log(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    console.log(`docker stop terasort${router.nid} & docker rm terasort${router.nid} & docker run --name terasort${router.nid} -p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} -e nodename=node${router.nid} -v /home/kevin/git/lwdee/log:/home/terasort/log -d terasort`);
+    console.log(`docker stop terasort${router.nid} & docker rm terasort${router.nid} `);
 }
+
+console.log();
+
+for (var ri in routerInfos) {
+    let router = routerInfos[ri];
+    if (router.worker != preWorker) {
+        console.log(`######    ${router.worker}     #######`);
+        preWorker = router.worker;
+    }
+    console.log(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} ` +
+        `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
+        `-v /home/kevin/git/lwdee/log:/home/terasort/log -v /home/kevin/git/lwdee/data:/home/terasort/data ` +
+        `-d terasort`);
+}
+

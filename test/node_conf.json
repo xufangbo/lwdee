@@ -1,8 +1,8 @@
 {
   "node_amount": 3,
   "port": 200,
-  "inputFile": "/home/kevin/git/lwdee/terasort/data-input.dat",
-  "outputFile": "/home/kevin/git/lwdee/terasort/data-output.dat",
+  "inputFile": "/home/terasort/data/data-input.dat",
+  "outputFile": "/home/terasort/data/data-output.dat",
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",

@@ -105,12 +105,13 @@ void Driver::split(MinAndMax conf) {
 void Driver::map() {
 
   for (int i = 0; i < splitNums1; i++) {
+
+    logger_debug("invoke dco.map, node: %d",(i+1));
+
     DCO dco = lwdee::create_dco(i + 1, "MapDCO");
 
     PartitionStep1 input(i, inputFile, sampleSplits);
     auto json = input.toJson();
-
-    // logger_debug("invoke map.map , index: %d,args: %s",i,json.c_str());
 
     DDOId ddoId = dco.async("map", json);
 
