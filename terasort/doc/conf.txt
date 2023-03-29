@@ -8,3 +8,12 @@ scp data-input.dat root@k8s-node03:/home/data/terasort/
 scp data-input.dat root@k8s-node04:/home/data/terasort/
 scp data-input.dat root@k8s-node05:/home/data/terasort/
 
+登录任一台服务器后，输入 tmux a -t 0 就可进入分屏界面
+
+
+wget https://cmake.org/files/v3.22/cmake-3.22.1.tar.gz
+tar -xzvf cmake-3.22.1.tar.gz
+cd cmake-3.22.1
+./configure
+sudo gmake install -DCMAKE_USE_OPENSSL=OFF
+cmake --version

@@ -13,7 +13,6 @@
 # scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node05:/home/data/terasort/app/
 
 
-
 cd /home/kevin/git
 rm -rf lwdee.tar.gz
 tar -zcvf lwdee.tar.gz lwdee
