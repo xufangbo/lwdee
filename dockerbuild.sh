@@ -1,10 +1,4 @@
 app=terasort
-# go build -o $app --ldflags "-extldflags -static"
-
-# mkdir -p ./lib/std
-# cp -f /usr/lib/x86_64-linux-gnu/libstdc++.so* ./lib/std
-# cp -f /usr/lib/x86_64-linux-gnu/libc.so* ./lib/std
-
 
 docker stop $app
 docker rm $app

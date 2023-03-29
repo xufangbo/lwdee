@@ -66,7 +66,18 @@ for (var ri in routerInfos) {
         console.log(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    console.log(`docker stop terasort${router.nid} & docker rm terasort${router.nid} `);
+    console.log(`docker stop terasort${router.nid}`);
+}
+
+console.log();
+
+for (var ri in routerInfos) {
+    let router = routerInfos[ri];
+    if (router.worker != preWorker) {
+        console.log(`######    ${router.worker}     #######`);
+        preWorker = router.worker;
+    }
+    console.log(`docker rm terasort${router.nid} `);
 }
 
 console.log();

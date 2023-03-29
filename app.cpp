@@ -64,7 +64,7 @@ void init(int argc, char* argv[]) {
   if (fp != NULL) {
     fclose(fp);
   } else {
-    configFile = "../config/conf.json";
+    configFile = "./config/conf.json";
     fp = fopen(configFile.c_str(), "r");
     if (fp != NULL) {
       fclose(fp);
