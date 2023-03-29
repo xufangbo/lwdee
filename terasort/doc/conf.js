@@ -18,7 +18,8 @@ let fileName = "/home/kevin/git/lwdee/test/node_conf.json";
 
 let json = fs.readFileSync(fileName);
 let db = JSON.parse(json);
-let port = db.port > 200 ? 100 : db.port + 2;
+// let port = db.port > 200 ? 100 : db.port + 2;
+let port = 200;
 
 let index = 0;
 let routerInfos = [];
@@ -28,7 +29,7 @@ for (var ni in workers) {
         index++;
 
         let portTail = (i + 1).toString().padStart(2, "0");
-        routerInfos.push({ "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
+        routerInfos.push({"worker":worker.name, "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
     }
 }
 
@@ -53,3 +54,17 @@ for (var ri in routerInfos) {
 json = JSON.stringify(conf, null, "  ");
 
 fs.writeFileSync(fileName, json);
+
+//===============================
+
+// docker run --name $app -p 16501:16501 -e nodename=node3 -v /home/kevin/git/lwdee/log1:/home/log -d $app 
+
+let preWorker;
+for (var ri in routerInfos) {
+    let router = routerInfos[ri];
+    if (router.worker != preWorker) {
+        console.log(`######    ${router.worker}     #######`);
+        preWorker = router.worker;
+    }
+    console.log(`docker stop terasort${router.nid} & docker rm terasort${router.nid} & docker run --name terasort${router.nid} -p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} -e nodename=node${router.nid} -v /home/kevin/git/lwdee/log:/home/terasort/log -d terasort`);
+}

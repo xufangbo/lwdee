@@ -168,17 +168,20 @@ void wirte_console(LogLevel& level, char* message) {
 
 void write_file(LogLevel& level, char* message) {
   if (!log_option.initalized) {
+    printf("log is not initilaized\n");
     return;
   }
   generate_file();
 
-  // int ret = fopen(&fp, fileName, "a+");
   fp = fopen(fileName, "a+");
   if (fp == NULL) {
     char* err_msg = strerror(errno);
     printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
     return;
   }
+  // else{
+  //   printf("write file %s\n",fileName);
+  // }
 
   fprintf(fp, "%s\n", message);
   fflush(fp);
@@ -287,6 +290,7 @@ static void* rm_history_job(void* arg) {
 
 /* 日志初始化 */
 int logger_initialize(LogOption option) {
+
   pthread_mutex_init(&mut, NULL);
 
   // 初始化日志选项
@@ -299,6 +303,9 @@ int logger_initialize(LogOption option) {
 
   // 启动日志监控线程
   pthread_create(&p, NULL, rm_history_job, NULL);
+
+  log_option.initalized = true;
+  //  printf("option.initalized = true \n");
 
   return 0;  // fp == NULL ? -1 : 0;
 }

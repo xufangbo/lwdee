@@ -11,8 +11,9 @@
 #include "terasort.h"
 #include "terasort/TerasortDCOFactory.h"
 #include "uhshell.h"
+#include <stdlib.h>
 
-void init_logger();
+void init_logger(std::string nodeName);
 void init(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
@@ -44,14 +45,19 @@ int main(int argc, char* argv[]) {
 }
 
 void init(int argc, char* argv[]) {
-  init_logger();
-
+  
   std::string nodeName = "node1";
   if (argc >= 2) {
     nodeName = argv[1];
+    if(nodeName == "${nodename}"){
+      nodeName = getenv("nodename");
+      logger_info("this is %s",nodeName.c_str());
+    }
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
+
+  init_logger(nodeName);
 
   std::string configFile = "./node_conf.json";
   FILE* fp = fopen(configFile.c_str(), "r");
@@ -78,13 +84,13 @@ void init(int argc, char* argv[]) {
   }
 }
 
-void init_logger() {
+void init_logger(std::string nodeName) {
   // LogOption option{false, log_trace, "../log", "edc", true, 10};
   LogOption option;
   option.initalized = false;
   option.level = log_trace;
   strcpy(option.path, "../log");
-  strcpy(option.name, "../edc");
+  strcpy(option.name, nodeName.c_str());
   option.is_color = true;
   option.days = 10;
 
@@ -93,4 +99,8 @@ void init_logger() {
   } else {
     logger_info("-- app starting ... ");
   }
+
+  // for (int i = 0; i < 10000;i++){
+  //   logger_info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx %d",i);
+  // }
 }

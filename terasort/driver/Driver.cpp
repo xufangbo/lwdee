@@ -13,6 +13,7 @@
 // #include "reduce/Step2Task.h"
 
 void Driver::startJob(std::string inputFile, std::string outputFile, int datum, int splitNums1, int splitNums2) {
+  
   this->inputFile = inputFile;
   this->outputFile = outputFile;
   this->datum = datum;
@@ -35,8 +36,6 @@ void Driver::startJob(std::string inputFile, std::string outputFile, int datum, 
 }
 
 MinAndMax Driver::samples(std::string fileName) {
-  // fstream f;
-  // f.open(fileName, ios_base::in | ios_base::binary);
 
   FILE* f = fopen(fileName.c_str(), "rb");
   if (f == NULL) {
@@ -83,9 +82,7 @@ MinAndMax Driver::samples(std::string fileName) {
 }
 
 void Driver::split(MinAndMax conf) {
-  // =========================
-  // 构造参数
-  // =========================
+  
   auto seprator = (conf.second.left8() - conf.first.left8()) / splitNums2;
 
   uint64_t pre = 0;
@@ -106,9 +103,6 @@ void Driver::split(MinAndMax conf) {
 }
 
 void Driver::map() {
-  // =========================
-  // 调用map dco
-  // =========================
 
   for (int i = 0; i < splitNums1; i++) {
     DCO dco = lwdee::create_dco(i + 1, "MapDCO");
@@ -125,6 +119,7 @@ void Driver::map() {
 }
 
 void Driver::mapToReduce() {
+  
   std::vector<Step1Output> step1Outputs;
   for (auto& kv : step1Invokers) {
     DCO dco = kv.first;
