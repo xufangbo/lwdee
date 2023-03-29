@@ -240,7 +240,7 @@ static void rm_history_task() {
     char* fileName = entry->d_name;
     int index = string_indexOf(fileName, '-');
     if (index < 0) {
-      logger_error("can't parse date time from file %s", fileName);
+      // logger_error("can't parse date time from file %s", fileName);
       continue;
     }
     fileName += index;

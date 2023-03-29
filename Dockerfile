@@ -13,9 +13,9 @@ ARG nodename
 ENV nodename=$nodename
 
 # COPY中不能使用这种路径：./build/app
-COPY ./lib/boost/libboost_json.so.1.79.0 /usr/lib
+# COPY ./lib/boost/libboost_json.so.1.79.0 /usr/lib
 COPY ./build/app .
-COPY ./test/node_conf.json .
+# COPY ./test/node_conf.json .
 
 # RUN apt-get update
 # RUN apt install -y ca-certificates

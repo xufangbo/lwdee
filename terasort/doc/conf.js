@@ -12,12 +12,12 @@ const fs = require('fs');
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 },
 // ];
 
-let workers = [{ "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
+let workers = [{ "name": "localhost", "ip": "172.17.0.1", "cpucores": 3 }];
 
-let fileName = "/home/kevin/git/lwdee/test/node_conf.json";
+let fileName = "/home/kevin/git/lwdee/config/conf.json";
 
-let json = fs.readFileSync(fileName);
-let db = JSON.parse(json);
+// let json = fs.readFileSync(fileName);
+// let db = JSON.parse(json);
 // let port = db.port > 200 ? 100 : db.port + 2;
 let port = 200;
 
@@ -79,7 +79,9 @@ for (var ri in routerInfos) {
     }
     console.log(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} ` +
         `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
-        `-v /home/kevin/git/lwdee/log:/home/terasort/log -v /home/kevin/git/lwdee/data:/home/terasort/data ` +
+        `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
+        `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
+        `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
         `-d terasort`);
 }
 

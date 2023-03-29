@@ -59,17 +59,17 @@ void init(int argc, char* argv[]) {
 
   init_logger(nodeName);
 
-  std::string configFile = "./node_conf.json";
+  std::string configFile = "./conf.json";
   FILE* fp = fopen(configFile.c_str(), "r");
   if (fp != NULL) {
     fclose(fp);
   } else {
-    configFile = "../test/node_conf.json";
+    configFile = "../config/conf.json";
     fp = fopen(configFile.c_str(), "r");
     if (fp != NULL) {
       fclose(fp);
     } else {
-      configFile = "/home/kevin/git/lwdee/test/node_conf.json";
+      configFile = "/home/kevin/git/lwdee/config/conf.json";
     }
   }
 
