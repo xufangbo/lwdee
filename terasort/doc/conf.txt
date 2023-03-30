@@ -1,3 +1,11 @@
+10.180.98.130 k8s-master
+10.180.98.131 k8s-node01
+10.180.98.132 k8s-node02
+10.180.98.133 k8s-node03
+10.180.98.134 k8s-node04
+10.180.98.135 k8s-node05
+10.180.98.136 k8s-node06
+
 root/13579QETUO!
 
 terasort的测试样例：10.180.98.130：/home/data/terasort/part-r-00999
