@@ -31,3 +31,5 @@ spark submit
 ----------------------------
 /home/apps/wordcount/ 有个提交的测试脚本有cluster的地址和配置信息哈
 130 上
+
+所有的机器的这个文件：/home/data/datasets/allpart/all-part-records-00000

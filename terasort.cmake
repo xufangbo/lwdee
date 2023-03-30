@@ -20,6 +20,7 @@ add_executable(app ${SRC_FILES})
 
 list(APPEND EXTRA_LIBS uhconnect)
 list(APPEND EXTRA_LIBS core) 
+list(APPEND EXTRA_LIBS matrix) 
 list(APPEND EXTRA_LIBS lwdee) 
 list(APPEND EXTRA_LIBS map) 
 list(APPEND EXTRA_LIBS reduce) 

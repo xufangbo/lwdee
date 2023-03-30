@@ -12,11 +12,11 @@ const fs = require('fs');
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 }
 // ];
 
-let workers = [
-    { "name": "k8s-master", "ip": "10.180.98.130", "cpucores": 1 },
-    { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 2 }];
+// let workers = [
+//     { "name": "k8s-master", "ip": "10.180.98.130", "cpucores": 1 },
+//     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 2 }];
 
-// let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
+let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
 
@@ -108,7 +108,7 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.4`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.5`);
 }
 deployScripts.push("");
 

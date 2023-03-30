@@ -2,30 +2,31 @@
 
 // #include "DemoConfig.h"
 // #include "UserDcoFactory.h"
+#include <stdlib.h>
 #include "core/UhconnConfig.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
 #include "core/log.hpp"
 #include "driver/Driver.h"
 #include "lwdee/lwdee.h"
+#include "matrix/LinuxMatrix.h"
 #include "terasort.h"
 #include "terasort/TerasortDCOFactory.h"
 #include "uhshell.h"
-#include <stdlib.h>
 
 void init_logger(std::string nodeName);
 void init(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
   init(argc, argv);
+  LinuxMatrix::start();
 
   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
   if (localNode == nullptr) {
     logger_error("localNode is null");
     exit(1);
   }
-  if (localNode->itId() == 1) {    
-
+  if (localNode->itId() == 1) {
     int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
     Driver().startJob();
 
@@ -40,13 +41,12 @@ int main(int argc, char* argv[]) {
 }
 
 void init(int argc, char* argv[]) {
-  
   std::string nodeName = "node1";
   if (argc >= 2) {
     nodeName = argv[1];
-    if(nodeName == "${nodename}"){
+    if (nodeName == "${nodename}") {
       nodeName = getenv("nodename");
-      logger_info("this is %s",nodeName.c_str());
+      logger_info("this is %s", nodeName.c_str());
     }
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
