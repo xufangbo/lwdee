@@ -36,8 +36,8 @@ for (var ni in workers) {
 let conf = {
     "node_amount": index,
     "port": port,
-    "inputFile": "/home/terasort/data/data-input.dat",
-    "outputFile": "/home/terasort/data/data-output.dat",
+    "inputFile": "/home/kevin/git/lwdee/data/data-input.dat",
+    "outputFile": "/home/kevin/git/lwdee/data/data-output.dat",
 };
 
 for (var ri in routerInfos) {
@@ -93,6 +93,6 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d terasort`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0`);
 }
 

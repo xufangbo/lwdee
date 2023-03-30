@@ -1,36 +1,12 @@
-# scp /home/kevin/git/lwdee/build/app root@k8s-master:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/build/app root@k8s-node01:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/build/app root@k8s-node02:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/build/app root@k8s-node03:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/build/app root@k8s-node04:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/build/app root@k8s-node05:/home/data/terasort/app/
+######    localhost     #######
+docker stop terasort1
+docker stop terasort2
+docker stop terasort3
 
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-master:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node01:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node02:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node03:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node04:/home/data/terasort/app/
-# scp /home/kevin/git/lwdee/test/node_conf.json root@k8s-node05:/home/data/terasort/app/
+docker rm terasort1 
+docker rm terasort2 
+docker rm terasort3 
 
-
-cd /home/kevin/git
-rm -rf lwdee.tar.gz
-tar -zcvf lwdee.tar.gz lwdee
-
-ssh root@k8s-master "rm -rf /home/data/terasort/lwdee*"
-ssh root@k8s-node01 "rm -rf /home/data/terasort/lwdee*"
-ssh root@k8s-node02 "rm -rf /home/data/terasort/lwdee*"
-ssh root@k8s-node03 "rm -rf /home/data/terasort/lwdee*"
-ssh root@k8s-node04 "rm -rf /home/data/terasort/lwdee*"
-ssh root@k8s-node05 "rm -rf /home/data/terasort/lwdee*"
-
-scp /home/kevin/git/lwdee.tar.gz root@k8s-master:/home/data/terasort/
-scp /home/kevin/git/lwdee.tar.gz root@k8s-node01:/home/data/terasort/
-scp /home/kevin/git/lwdee.tar.gz root@k8s-node02:/home/data/terasort/
-scp /home/kevin/git/lwdee.tar.gz root@k8s-node03:/home/data/terasort/
-scp /home/kevin/git/lwdee.tar.gz root@k8s-node04:/home/data/terasort/
-scp /home/kevin/git/lwdee.tar.gz root@k8s-node05:/home/data/terasort/
-
-
-unzip lwdee.tar.gz
-cd /home/data/terasort/lwdee/build
+docker run --name terasort1  -e nodename=node1 -p 20001:20001 -p 20101:20101 -v /home/kevin/git/lwdee/log:/home/terasort/log -v /home/kevin/git/lwdee/data:/home/terasort/data -v /home/kevin/git/lwdee/config:/home/terasort/config -d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0
+docker run --name terasort2  -e nodename=node2 -p 20002:20002 -p 20102:20102 -v /home/kevin/git/lwdee/log:/home/terasort/log -v /home/kevin/git/lwdee/data:/home/terasort/data -v /home/kevin/git/lwdee/config:/home/terasort/config -d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0
+docker run --name terasort3  -e nodename=node3 -p 20003:20003 -p 20103:20103 -v /home/kevin/git/lwdee/log:/home/terasort/log -v /home/kevin/git/lwdee/data:/home/terasort/data -v /home/kevin/git/lwdee/config:/home/terasort/config -d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0
