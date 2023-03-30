@@ -41,6 +41,7 @@ void TerasortConfig::readConfig() {
   _instance.datum = cJSON_GetObjectItem(node, "datum")->valueint;
   _instance.splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
   _instance.splitNums2 = cJSON_GetObjectItem(node, "splitNums2")->valueint;
+  _instance.is_matrix = cJSON_GetObjectItem(node, "is_matrix")->valueint;
 
   logger_debug("%s %s %d %d %d", inputFile.c_str(), outputFile.c_str(), _instance.datum, _instance.splitNums1, _instance.splitNums2);
 }

@@ -13,13 +13,13 @@
 #include "terasort.h"
 #include "terasort/TerasortDCOFactory.h"
 #include "uhshell.h"
+#include "driver/TerasortConfig.hpp"
 
 void init_logger(std::string nodeName);
 void init(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
-  init(argc, argv);
-  LinuxMatrix::start();
+  init(argc, argv);  
 
   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
   if (localNode == nullptr) {
@@ -52,7 +52,9 @@ void init(int argc, char* argv[]) {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
 
+  TerasortConfig::instance()->readConfig();
   init_logger(nodeName);
+  LinuxMatrix::start();
 
   std::string configFile = "./conf.json";
   FILE* fp = fopen(configFile.c_str(), "r");

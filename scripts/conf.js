@@ -3,17 +3,17 @@ const fs = require('fs');
 /**
  * 生成配置文件
  */
-let workers = [
-    { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 15 },
-    { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 15 },
-    { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 14 },
-    { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 14 },
-    { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 14 }
-];
+// let workers = [
+//     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 15 },
+//     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 15 },
+//     { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 14 },
+//     { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 14 },
+//     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 14 }
+// ];
 
-//  let workers = [
-//      { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 6 },
-//      { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
+ let workers = [
+     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 6 },
+     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
 
 // let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 

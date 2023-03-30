@@ -7,6 +7,7 @@
 #include <thread>
 #include "core/log.hpp"
 #include "cpu.h"
+#include "driver/TerasortConfig.hpp"
 
 bool LinuxMatrix::is_running = false;
 
@@ -23,6 +24,9 @@ void matrix() {
 }
 
 void LinuxMatrix::start() {
+  if(!TerasortConfig::instance()->is_matrix){
+    return;
+  }
   if (is_running) {
     return;
   }

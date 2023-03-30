@@ -14,7 +14,6 @@
 #include "map/Step1Task.h"
 
 void Driver::startJob() {
-  TerasortConfig::instance()->readConfig();
 
   this->inputFile = TerasortConfig::instance()->inputFile;
   this->outputFile = TerasortConfig::instance()->outputFile;
@@ -40,7 +39,7 @@ void Driver::startJob() {
 }
 
 MinAndMax Driver::samples(std::string fileName) {
-  logger_debug("< samples");
+  logger_info("< samples");
   Stopwatch sw;
 
   FILE* f = fopen(fileName.c_str(), "rb");
@@ -84,7 +83,7 @@ MinAndMax Driver::samples(std::string fileName) {
   logger_debug("total size : %ld,terarecord count:%ld", totalSize, len);
   logger_debug("count: %d, min: %s:max: %s", count, pair.first.to_string().c_str(), pair.second.to_string().c_str());
 
-  logger_debug("> samples,eclipse %lf", sw.stop());
+  logger_info("> samples,eclipse %lf", sw.stop());
 
   return pair;
 }
@@ -110,7 +109,7 @@ void Driver::split(MinAndMax conf) {
 }
 
 void Driver::map() {
-  logger_debug("< map");
+  logger_info("< map");
   Stopwatch sw;
 
   for (int i = 0; i < splitNums1; i++) {
@@ -126,11 +125,11 @@ void Driver::map() {
     step1Invokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  logger_debug("> map,eclipse %lf", sw.stop());
+  logger_info("> map,eclipse %lf", sw.stop());
 }
 
 void Driver::mapToReduce() {
-  logger_debug("< mapToReduce");
+  logger_info("< mapToReduce");
   Stopwatch sw;
 
   std::vector<Step1Output> step1Outputs;
@@ -164,11 +163,11 @@ void Driver::mapToReduce() {
     step2Inputs.push_back(step2Input);
   }
 
-  logger_debug("> mapToReduce,eclipse %lf", sw.stop());
+  logger_info("> mapToReduce,eclipse %lf", sw.stop());
 }
 
 void Driver::reduce() {
-  logger_debug("< reduce");
+  logger_info("< reduce");
   Stopwatch sw;
 
   for (int i = 0; i < step2Inputs.size(); i++) {
@@ -201,5 +200,5 @@ void Driver::reduce() {
     }
   }
 
-  logger_debug("> reduce,eclipse %lf", sw.stop());
+  logger_info("> reduce,eclipse %lf", sw.stop());
 }

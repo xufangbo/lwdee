@@ -1,5 +1,6 @@
 {
     "port": 400,
+    "is_matrix": 0,
     "inputFile": "/home/terasort/data/data-input.dat",
     "outputFile": "/home/terasort/data/data-output.dat",
     "datum": 6,
