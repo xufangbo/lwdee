@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "DemoConfig.h"
-#include "UserDcoFactory.h"
+// #include "UserDcoFactory.h"
 #include "core/UhconnConfig.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
