@@ -36,8 +36,8 @@ for (var ni in workers) {
 let conf = {
     "node_amount": index,
     "port": port,
-    "inputFile": "/home/kevin/git/lwdee/data/data-input.dat",
-    "outputFile": "/home/kevin/git/lwdee/data/data-output.dat",
+    "inputFile": "/home/terasort/data/data-input.dat",
+    "outputFile": "/home/terasort/data/data-output.dat",
 };
 
 for (var ri in routerInfos) {
