@@ -8,7 +8,7 @@ class Step2Task {
  private:
   PartitionStep2* input;
   Step2Output output;
-  int size = 0;
+  unsigned long size = 0;
   char* content = nullptr;
   TeraRecord* trs = nullptr;
 

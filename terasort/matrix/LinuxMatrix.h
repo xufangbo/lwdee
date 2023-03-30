@@ -4,15 +4,26 @@ typedef struct {
   /**
    * 总内存M
    */
-  unsigned long totalram;
+  unsigned long total;
   /**
    * 已使用内存M
    */
-  unsigned long usedram;
+  unsigned long used;
   /**
    * 未使用内存M
    */
-  unsigned long freeram;
+  unsigned long free;
+
+  /**
+   * IO缓存
+   */
+  unsigned long bufferr;  
+
+  /**
+   * @brief 可用内存
+   *  free + bufferd
+   */
+  unsigned long available;
 } RamInfo;
 
 class LinuxMatrix {

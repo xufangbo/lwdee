@@ -20,7 +20,7 @@ void LinuxMatrix::start() {
       auto cpu = LinuxMatrix::cpu_usage();
       auto ram = LinuxMatrix::ram_info();
 
-      logger_trace("cpu rate : %lf%%, ram total: %ld M, used: %ld M, free: %ld M", cpu, ram.totalram, ram.usedram, ram.freeram);
+      logger_trace("cpu rate : %lf%%, ram total: %ld M, available: %ld M, used: %ld M free: %ld M", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
       // printf("cpu rate : %lf /%,ram total: %ld M, used: %ld M, free: %ld M\n", cpu, ram.totalram, ram.usedram, ram.freeram);
 
       sleep(1);
@@ -40,9 +40,10 @@ RamInfo LinuxMatrix::ram_info() {
 
   struct sysinfo s_info;
   if (sysinfo(&s_info) == 0) {
-    ram.totalram = s_info.totalram / 1024 / 1024;
-    ram.freeram = s_info.freeram / 1024 / 1024;
-    ram.usedram = (s_info.totalram - s_info.freeram) / 1024 / 1024;
+    ram.total = s_info.totalram / 1024 / 1024;
+    ram.bufferr = s_info.bufferram / 1024 / 1024;
+    ram.free = s_info.freeram / 1024 / 1024;
+    ram.available = ram.bufferr + ram.free;
   } else {
     logger_trace("can't get ram");
   }

@@ -31,9 +31,8 @@ Step2Output Step2Task::run(PartitionStep2* partition) {
 void Step2Task::read() {
   string_ref subsplits[input->subSplitDDOs.size()];
 
-  int totalSize = 0;
+  unsigned long totalSize = 0;
   for (int i = 0; i < input->subSplitDDOs.size(); i++) {
-    
     SubSplitDDO& x = input->subSplitDDOs[i];
     DDO ddo(x.voxorId, x.dataId);
     auto str = ddo.read();
@@ -41,20 +40,21 @@ void Step2Task::read() {
     subsplits[i] = str;
     totalSize += str->size();
 
-    logger_debug("read ddo %d , %d条", i + 1, str->size() / 100);
+    logger_debug("read node %d ddo, record count: %ld条", i + 1, str->size() / 100);
 
     ddo.releaseGlobal();
   }
 
   this->size = totalSize / 100;
-  logger_debug("read 合计%d条", size);
+  logger_debug("read 所有分区DDO记录 合计%ld条", size);
 
+  logger_debug("开始生成TeraRecord记录，应该是%ld条", size);
   trs = new TeraRecord[size];
   int tri = 0;
 
   int ddoIndex = 0;
   for (auto subsplit : subsplits) {
-    logger_debug("%d - split %d,%d条", input->index, ddoIndex,subsplit->size() / 100);
+    logger_debug("%d - split %d,%ld条", input->index, ddoIndex, subsplit->size() / 100);
     ddoIndex++;
 
     char* ptr = (char*)subsplit->data();
@@ -100,7 +100,7 @@ void Step2Task::save() {
 
   for (int i = 0; i < size; i++) {
     TeraRecord& tr = trs[i];
-    
+
     // auto id = std::to_string(tr.left8()) + " ";
     // fwrite(id.c_str(), id.size(), 1, f);
 
