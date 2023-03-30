@@ -24,15 +24,10 @@ int main(int argc, char* argv[]) {
     logger_error("localNode is null");
     exit(1);
   }
-  if (localNode->itId() == 1) {
-    
-    auto inputFile = UhconnConfig::getInstance().getInputFile();
-    auto outputFile = UhconnConfig::getInstance().getOutputFile();
-
-    logger_debug("%s %s", inputFile.c_str(), outputFile.c_str());
+  if (localNode->itId() == 1) {    
 
     int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
-    Driver().startJob(inputFile, outputFile, 3, nodeAmount, nodeAmount);
+    Driver().startJob();
 
     // test_dco(1);
     // test_dco(2);

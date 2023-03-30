@@ -52,16 +52,6 @@ int UhconnConfig::loadConf(std::string file, std::string name) {
     return -4;
   }
 
-  if (allConf.contains("inputFile")) {
-    auto c = allConf.at("inputFile");
-    inputFile = c.as_string().c_str();
-  }
-
-  if (allConf.contains("outputFile")) {
-    auto c = allConf.at("outputFile");
-    outputFile = c.as_string().c_str();
-  }
-
   std::stringstream cs;
   cs << boost::json::serialize(jconf) << std::endl;
   // std::cout << name << " conf:"<<cs.str()<<std::endl;
@@ -141,12 +131,4 @@ int UhconnConfig::setNodeAmount(int amount) {
   nodeAmount = amount;
   // std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
   return 0;
-}
-
-std::string UhconnConfig::getInputFile() {
-  return inputFile;
-}
-
-std::string UhconnConfig::getOutputFile() {
-  return outputFile;
 }

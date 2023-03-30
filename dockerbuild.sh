@@ -11,7 +11,7 @@ docker build -t $app .
 # # 阿里与云个人镜像：公网
 # docker login --username=xufa****@***.com registry.cn-beijing.aliyuncs.com
 
-# docker tag terasort registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.2
-# docker push registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.2
+# docker tag terasort registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.3
+# docker push registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.3
 
-# docker pull registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.2
+# docker pull registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.3

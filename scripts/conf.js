@@ -12,7 +12,11 @@ const fs = require('fs');
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 }
 // ];
 
-let workers = [{ "name": "localhost", "ip": "172.17.0.1", "cpucores": 3 }];
+// let workers = [
+//     { "name": "k8s-master", "ip": "10.180.98.130", "cpucores": 1 },
+//     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 2 }];
+
+let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
 
@@ -29,22 +33,21 @@ for (var ni in workers) {
         index++;
 
         let portTail = (i + 1).toString().padStart(2, "0");
-        routerInfos.push({"worker":worker.name, "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
+        routerInfos.push({ "worker": worker.name, "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
     }
 }
 
 let conf = {
     "node_amount": index,
-    "port": port,
-    "inputFile": "/home/terasort/data/data-input.dat",
-    "outputFile": "/home/terasort/data/data-output.dat",
+    "port": port
 };
 
 for (var ri in routerInfos) {
     let routerInfo = routerInfos[ri];
     conf["node" + routerInfo.nid] = {
         "nodeId": routerInfo.nid,
-        "ip": routerInfo.ip,
+        // "ip": routerInfo.ip,
+        "ip": "127.0.0.1",
         "dataPort": routerInfo.dport,
         "msgPort": routerInfo.mport,
         "routeInfo": routerInfos
@@ -89,14 +92,25 @@ for (var ri in routerInfos) {
         deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    deployScripts.push(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} ` +
+    deployScripts.push(`docker start terasort${router.nid} `);
+}
+
+deployScripts.push("");
+
+for (var ri in routerInfos) {
+    let router = routerInfos[ri];
+    if (router.worker != preWorker) {
+        deployScripts.push(`######    ${router.worker}     #######`);
+        preWorker = router.worker;
+    }
+    deployScripts.push(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} --net=host ` +
         `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.2`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.3`);
 }
-
+deployScripts.push("");
 
 fileName = "/home/kevin/git/lwdee/scripts/docker.sh";
 fs.writeFileSync(fileName, deployScripts.join("\r\n"));

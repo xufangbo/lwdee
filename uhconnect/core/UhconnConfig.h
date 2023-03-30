@@ -17,8 +17,6 @@ class UhconnConfig {
   int getDataPort();
   std::string getIpAddr();
   int getNodeAmount(void);
-  string getInputFile();
-  string getOutputFile();
   int setNodeAmount(int amount);
   int getRouteInfo(std::map<int, NodeInfo>& map_info);
   static UhconnConfig& getInstance(void) {
@@ -33,8 +31,6 @@ class UhconnConfig {
   int confNodeAmount;
   int nodeAmount;
   bool isConfigured;
-  std::string inputFile;
-  std::string outputFile;
 };
 
 #endif

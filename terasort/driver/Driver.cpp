@@ -7,18 +7,20 @@
 #include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/log.hpp"
+#include "driver/TerasortConfig.hpp"
 #include "lwdee/DDO.h"
 #include "lwdee/lwdee.h"
 #include "map/Step1Task.h"
-// #include "reduce/Step2Task.h"
 
-void Driver::startJob(std::string inputFile, std::string outputFile, int datum, int splitNums1, int splitNums2) {
+void Driver::startJob() {
+  TerasortConfig::instance()->readConfig();
+
+  this->inputFile = TerasortConfig::instance()->inputFile;
+  this->outputFile = TerasortConfig::instance()->outputFile;
+  this->datum = TerasortConfig::instance()->datum;
+  this->splitNums1 = TerasortConfig::instance()->splitNums1;
+  this->splitNums2 = TerasortConfig::instance()->splitNums2;
   
-  this->inputFile = inputFile;
-  this->outputFile = outputFile;
-  this->datum = datum;
-  this->splitNums1 = splitNums1;
-  this->splitNums2 = splitNums2;
 
   try {
     this->startWatch();
@@ -36,7 +38,6 @@ void Driver::startJob(std::string inputFile, std::string outputFile, int datum, 
 }
 
 MinAndMax Driver::samples(std::string fileName) {
-
   FILE* f = fopen(fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", fileName.c_str());
@@ -82,7 +83,6 @@ MinAndMax Driver::samples(std::string fileName) {
 }
 
 void Driver::split(MinAndMax conf) {
-  
   auto seprator = (conf.second.left8() - conf.first.left8()) / splitNums2;
 
   uint64_t pre = 0;
@@ -103,10 +103,8 @@ void Driver::split(MinAndMax conf) {
 }
 
 void Driver::map() {
-
   for (int i = 0; i < splitNums1; i++) {
-
-    logger_debug("invoke dco.map, node: %d",(i+1));
+    logger_debug("invoke dco.map, node: %d", (i + 1));
 
     DCO dco = lwdee::create_dco(i + 1, "MapDCO");
 
@@ -120,7 +118,6 @@ void Driver::map() {
 }
 
 void Driver::mapToReduce() {
-  
   std::vector<Step1Output> step1Outputs;
   for (auto& kv : step1Invokers) {
     DCO dco = kv.first;

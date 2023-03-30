@@ -23,7 +23,7 @@ class Driver {
   std::vector<PartitionStep2> step2Inputs;
 
  public:
-  void startJob(std::string inputFile, std::string outputFile, int datum, int splitNum1, int splitNum2);
+  void startJob();
 
  private:
   /**
