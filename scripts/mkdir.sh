@@ -47,3 +47,5 @@ ssh root@k8s-node02 "mkdir -p /home/kevin/git/lwdee/log"
 ssh root@k8s-node03 "mkdir -p /home/kevin/git/lwdee/log"
 ssh root@k8s-node04 "mkdir -p /home/kevin/git/lwdee/log"
 ssh root@k8s-node05 "mkdir -p /home/kevin/git/lwdee/log"
+
+
