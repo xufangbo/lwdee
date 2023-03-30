@@ -2,7 +2,7 @@
     "port": 400,
     "inputFile": "/home/terasort/data/data-input.dat",
     "outputFile": "/home/terasort/data/data-output.dat",
-    "datum": 3,
-    "splitNums1": 12,
-    "splitNums2": 12
+    "datum": 11,
+    "splitNums1": 72,
+    "splitNums2": 72
 }

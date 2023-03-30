@@ -3,18 +3,17 @@ const fs = require('fs');
 /**
  * 生成配置文件
  */
-// let workers = [
-//     { "name": "k8s-master", "ip": "10.180.98.130", "cpucores": 8 },
-//     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 24 },
-//     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 24 },
-//     { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 24 },
-//     { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 24 },
-//     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 24 }
-// ];
+let workers = [
+    { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 15 },
+    { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 15 },
+    { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 14 },
+    { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 14 },
+    { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 14 }
+];
 
- let workers = [
-     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 6 },
-     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
+//  let workers = [
+//      { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 6 },
+//      { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
 
 // let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 
@@ -23,7 +22,7 @@ let fileName = "/home/kevin/git/lwdee/config/conf.json";
 // let json = fs.readFileSync(fileName);
 // let db = JSON.parse(json);
 // let port = db.port > 200 ? 100 : db.port + 2;
-let port = 300;
+let port = 200;
 
 let index = 0;
 let routerInfos = [];
@@ -100,6 +99,7 @@ deployScripts.push("");
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
+        deployScripts.push("");
         deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
@@ -108,7 +108,7 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.5`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.8`);
 }
 deployScripts.push("");
 

@@ -35,14 +35,19 @@ void Step2Task::read() {
   for (int i = 0; i < input->subSplitDDOs.size(); i++) {
     SubSplitDDO& x = input->subSplitDDOs[i];
     DDO ddo(x.voxorId, x.dataId);
-    auto str = ddo.read();
 
-    subsplits[i] = str;
-    totalSize += str->size();
+    try {
+      auto str = ddo.read();
 
-    logger_debug("read node %d ddo, record count: %ld条", i + 1, str->size() / 100);
+      subsplits[i] = str;
+      totalSize += str->size();
 
-    ddo.releaseGlobal();
+      logger_debug("read node %d ddo, record count: %ld条", i + 1, str->size() / 100);
+
+      ddo.releaseGlobal();
+    } catch (Exception& ex) {
+      ex.trace(ZONE);
+    }
   }
 
   this->size = totalSize / 100;

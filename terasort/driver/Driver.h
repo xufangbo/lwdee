@@ -6,7 +6,7 @@
 #include "core/Bytes10.h"
 #include "core/Partition.h"
 #include "lwdee/DCO.h"
- #include <sys/time.h>
+
 
 typedef std::pair<Bytes10, Bytes10> MinAndMax;
 
@@ -47,9 +47,4 @@ class Driver {
    * 执行reduce计算
    * */
   void reduce();
-
- private:
-  struct timeval startTs;
-  void startWatch();
-  void stopWath();
 };

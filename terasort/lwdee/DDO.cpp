@@ -48,7 +48,8 @@ string_ref DDO::read() {
   // UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
   DdoBlockData* blockdata = UhconnSimpleDB::getInstance().getBlock(ddoId.itsId(), ddoId.itsWorkNodeId());
   if (blockdata == nullptr) {
-    throw LwdeeException("failed read ddo", ZONE);
+    auto message = std::string("failed read ddo(node")+ std::to_string(ddoId.itsWorkNodeId())+")";
+    throw LwdeeException(message, ZONE);
   }
 
   string_ref output = std::make_shared<std::string>(blockdata->len, '\0');

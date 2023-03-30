@@ -6,6 +6,7 @@
 
 #include "core/Exception.hpp"
 #include "core/Partition.h"
+#include "core/Stopwatch.h"
 #include "core/log.hpp"
 #include "driver/TerasortConfig.hpp"
 #include "lwdee/DDO.h"
@@ -20,16 +21,17 @@ void Driver::startJob() {
   this->datum = TerasortConfig::instance()->datum;
   this->splitNums1 = TerasortConfig::instance()->splitNums1;
   this->splitNums2 = TerasortConfig::instance()->splitNums2;
-  
 
   try {
-    this->startWatch();
+    Stopwatch sw;
+
     auto conf = this->samples(inputFile);
     this->split(conf);
     this->map();
     this->mapToReduce();
     this->reduce();
-    this->stopWath();
+
+    logger_info("finish job,eclipse %lf s", sw.stop());
 
     logger_info("finished");
   } catch (Exception& ex) {
@@ -38,6 +40,9 @@ void Driver::startJob() {
 }
 
 MinAndMax Driver::samples(std::string fileName) {
+  logger_debug("< samples");
+  Stopwatch sw;
+
   FILE* f = fopen(fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", fileName.c_str());
@@ -76,8 +81,10 @@ MinAndMax Driver::samples(std::string fileName) {
   fclose(f);
 
   auto pair = std::make_pair(min, max);
-  logger_debug("total size : %ld,len:%ld", totalSize, len);
+  logger_debug("total size : %ld,terarecord count:%ld", totalSize, len);
   logger_debug("count: %d, min: %s:max: %s", count, pair.first.to_string().c_str(), pair.second.to_string().c_str());
+
+  logger_debug("> samples,eclipse %lf", sw.stop());
 
   return pair;
 }
@@ -98,11 +105,14 @@ void Driver::split(MinAndMax conf) {
 
     sampleSplits.push_back(split);
 
-    logger_trace("subsplit %d : %ld - %ld", i, split.min, split.max);
+    logger_trace("subsplit %d : %llu - %llu", i, split.min, split.max);
   }
 }
 
 void Driver::map() {
+  logger_debug("< map");
+  Stopwatch sw;
+
   for (int i = 0; i < splitNums1; i++) {
     logger_debug("invoke dco.map, node: %d", (i + 1));
 
@@ -115,25 +125,34 @@ void Driver::map() {
 
     step1Invokers.push_back(std::make_pair(dco, ddoId));
   }
+
+  logger_debug("> map,eclipse %lf", sw.stop());
 }
 
 void Driver::mapToReduce() {
+  logger_debug("< mapToReduce");
+  Stopwatch sw;
+
   std::vector<Step1Output> step1Outputs;
   for (auto& kv : step1Invokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
-    auto ddo = dco.wait(ddoId);
-    auto bytes = ddo.read();
+    try {
+      auto ddo = dco.wait(ddoId);
+      auto bytes = ddo.read();
 
-    // logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      // logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
-    Step1Output setp1Output;
-    setp1Output.fromJson(bytes.get());
+      Step1Output setp1Output;
+      setp1Output.fromJson(bytes.get());
 
-    ddo.releaseGlobal();
+      ddo.releaseGlobal();
 
-    step1Outputs.push_back(setp1Output);
+      step1Outputs.push_back(setp1Output);
+    } catch (Exception& ex) {
+      ex.trace(ZONE);
+    }
   }
 
   for (int i = 0; i < splitNums2; i++) {
@@ -144,9 +163,14 @@ void Driver::mapToReduce() {
 
     step2Inputs.push_back(step2Input);
   }
+
+  logger_debug("> mapToReduce,eclipse %lf", sw.stop());
 }
 
 void Driver::reduce() {
+  logger_debug("< reduce");
+  Stopwatch sw;
+
   for (int i = 0; i < step2Inputs.size(); i++) {
     PartitionStep2& step2Input = step2Inputs[i];
 
@@ -162,32 +186,20 @@ void Driver::reduce() {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
-    auto ddo = dco.wait(ddoId);
-    auto bytes = ddo.read();
+    try {
+      auto ddo = dco.wait(ddoId);
+      auto bytes = ddo.read();
 
-    logger_debug("get step 2 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      logger_debug("get step 2 ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
 
-    // Step1Output setp1Output;
-    // setp1Output.fromJson(bytes.get());
+      // Step1Output setp1Output;
+      // setp1Output.fromJson(bytes.get());
 
-    ddo.releaseGlobal();
+      ddo.releaseGlobal();
+    } catch (Exception& ex) {
+      ex.trace(ZONE);
+    }
   }
-}
 
-void Driver::startWatch() {
-  // time(&startTs);
-
-  gettimeofday(&startTs, NULL);
-}
-
-void Driver::stopWath() {
-  // time_t t;
-  // time(&t);
-
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-
-  auto eclipse = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - (startTs.tv_sec * 1000 + startTs.tv_usec / 1000);
-
-  logger_info("eclipse %lf s", eclipse * 1.0 / 1000);
+  logger_debug("> reduce,eclipse %lf", sw.stop());
 }

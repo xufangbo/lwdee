@@ -10,23 +10,24 @@
 
 bool LinuxMatrix::is_running = false;
 
+void matrix() {
+  while (true) {
+    auto cpu = LinuxMatrix::cpu_usage();
+    auto ram = LinuxMatrix::ram_info();
+
+    logger_trace("cpu: %.2f%%,ram total: %ldM,available: %ldM,used: %ldM,free: %ldM", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
+    // printf("cpu rate : %lf /%,ram total: %ld M, used: %ld M, free: %ld M\n", cpu, ram.totalram, ram.usedram, ram.freeram);
+
+    sleep(1);
+  }
+}
+
 void LinuxMatrix::start() {
   if (is_running) {
     return;
   }
-
-  auto process = []() {
-    while (true) {
-      auto cpu = LinuxMatrix::cpu_usage();
-      auto ram = LinuxMatrix::ram_info();
-
-      logger_trace("cpu rate : %lf%%, ram total: %ld M, available: %ld M, used: %ld M free: %ld M", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
-      // printf("cpu rate : %lf /%,ram total: %ld M, used: %ld M, free: %ld M\n", cpu, ram.totalram, ram.usedram, ram.freeram);
-
-      sleep(1);
-    }
-  };
-  auto t1 = new std::thread(process);
+  // auto process = []() {};
+  auto t1 = new std::thread(matrix);
 
   is_running = true;
 }
