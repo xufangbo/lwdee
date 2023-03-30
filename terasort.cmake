@@ -1,12 +1,14 @@
 
 include_directories(./terasort)
+include_directories(./uhconnect)
 # include_directories(.)
 # include_directories(../uhconnect)
 # include_directories(../inc/libgo)
 # include_directories(.../inc/boost)
 # include_directories(../inc )
 
-# add_subdirectory(uhconnect)
+add_subdirectory(uhconnect)
+add_subdirectory(uhshell) # lwdee/uhconnect/api/UhconnDco.cpp:8:10: fatal error: log.h: No such file or directory
 add_subdirectory(terasort)
 
 SET(SRC_FILES 
