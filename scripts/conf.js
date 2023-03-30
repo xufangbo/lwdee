@@ -94,9 +94,9 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.2`);
 }
 
 
-fileName = "/home/kevin/git/lwdee/terasort/doc/docker.sh";
+fileName = "/home/kevin/git/lwdee/scripts/docker.sh";
 fs.writeFileSync(fileName, deployScripts.join("\r\n"));
