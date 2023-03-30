@@ -1,5 +1,5 @@
 {
-  "node_amount": 3,
+  "node_amount": 12,
   "port": 300,
   "node1": {
     "nodeId": 1,
@@ -8,25 +8,88 @@
     "msgPort": 30101,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30002,
         "mport": 30102
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30003,
         "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
       }
     ]
   },
@@ -37,25 +100,88 @@
     "msgPort": 30102,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30002,
         "mport": 30102
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30003,
         "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
       }
     ]
   },
@@ -66,25 +192,916 @@
     "msgPort": 30103,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30002,
         "mport": 30102
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.131",
         "dport": 30003,
         "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node4": {
+    "nodeId": 4,
+    "ip": "127.0.0.1",
+    "dataPort": 30004,
+    "msgPort": 30104,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node5": {
+    "nodeId": 5,
+    "ip": "127.0.0.1",
+    "dataPort": 30005,
+    "msgPort": 30105,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node6": {
+    "nodeId": 6,
+    "ip": "127.0.0.1",
+    "dataPort": 30006,
+    "msgPort": 30106,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node7": {
+    "nodeId": 7,
+    "ip": "127.0.0.1",
+    "dataPort": 30001,
+    "msgPort": 30101,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node8": {
+    "nodeId": 8,
+    "ip": "127.0.0.1",
+    "dataPort": 30002,
+    "msgPort": 30102,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node9": {
+    "nodeId": 9,
+    "ip": "127.0.0.1",
+    "dataPort": 30003,
+    "msgPort": 30103,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node10": {
+    "nodeId": 10,
+    "ip": "127.0.0.1",
+    "dataPort": 30004,
+    "msgPort": 30104,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node11": {
+    "nodeId": 11,
+    "ip": "127.0.0.1",
+    "dataPort": 30005,
+    "msgPort": 30105,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
+      }
+    ]
+  },
+  "node12": {
+    "nodeId": 12,
+    "ip": "127.0.0.1",
+    "dataPort": 30006,
+    "msgPort": 30106,
+    "routeInfo": [
+      {
+        "worker": "k8s-node01",
+        "nid": 1,
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 3,
+        "ip": "10.180.98.131",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 4,
+        "ip": "10.180.98.131",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 5,
+        "ip": "10.180.98.131",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 6,
+        "ip": "10.180.98.131",
+        "dport": 30006,
+        "mport": 30106
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 7,
+        "ip": "10.180.98.132",
+        "dport": 30001,
+        "mport": 30101
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 8,
+        "ip": "10.180.98.132",
+        "dport": 30002,
+        "mport": 30102
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 9,
+        "ip": "10.180.98.132",
+        "dport": 30003,
+        "mport": 30103
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 10,
+        "ip": "10.180.98.132",
+        "dport": 30004,
+        "mport": 30104
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 11,
+        "ip": "10.180.98.132",
+        "dport": 30005,
+        "mport": 30105
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 12,
+        "ip": "10.180.98.132",
+        "dport": 30006,
+        "mport": 30106
       }
     ]
   }
