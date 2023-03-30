@@ -59,36 +59,37 @@ fs.writeFileSync(fileName, json);
 
 // docker run --name $app -p 16501:16501 -e nodename=node3 -v /home/kevin/git/lwdee/log1:/home/log -d $app 
 
+let deployScripts = [];
 let preWorker;
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
-        console.log(`######    ${router.worker}     #######`);
+        deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    console.log(`docker stop terasort${router.nid}`);
+    deployScripts.push(`docker stop terasort${router.nid}`);
 }
 
-console.log();
+deployScripts.push("");
 
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
-        console.log(`######    ${router.worker}     #######`);
+        deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    console.log(`docker rm terasort${router.nid} `);
+    deployScripts.push(`docker rm terasort${router.nid} `);
 }
 
-console.log();
+deployScripts.push("");
 
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
-        console.log(`######    ${router.worker}     #######`);
+        deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
-    console.log(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} ` +
+    deployScripts.push(`docker run --name terasort${router.nid}  -e nodename=node${router.nid} ` +
         `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
@@ -96,3 +97,6 @@ for (var ri in routerInfos) {
         `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.0`);
 }
 
+
+fileName = "/home/kevin/git/lwdee/terasort/doc/docker.sh";
+fs.writeFileSync(fileName, deployScripts.join("\r\n"));
