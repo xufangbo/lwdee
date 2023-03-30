@@ -8,83 +8,83 @@
     "msgPort": 30101,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.130",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 30002,
-        "mport": 30102
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 30003,
-        "mport": 30103
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 30002,
-    "msgPort": 30102,
+    "dataPort": 30001,
+    "msgPort": 30101,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.130",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 30002,
-        "mport": 30102
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 30003,
-        "mport": 30103
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 30003,
-    "msgPort": 30103,
+    "dataPort": 30002,
+    "msgPort": 30102,
     "routeInfo": [
       {
-        "worker": "localhost",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
+        "ip": "10.180.98.130",
         "dport": 30001,
         "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 30002,
-        "mport": 30102
+        "ip": "10.180.98.131",
+        "dport": 30001,
+        "mport": 30101
       },
       {
-        "worker": "localhost",
+        "worker": "k8s-node01",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 30003,
-        "mport": 30103
+        "ip": "10.180.98.131",
+        "dport": 30002,
+        "mport": 30102
       }
     ]
   }
