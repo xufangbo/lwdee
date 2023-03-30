@@ -23,7 +23,7 @@ let fileName = "/home/kevin/git/lwdee/config/conf.json";
 // let json = fs.readFileSync(fileName);
 // let db = JSON.parse(json);
 // let port = db.port > 200 ? 100 : db.port + 2;
-let port = 200;
+let port = 300;
 
 let index = 0;
 let routerInfos = [];
