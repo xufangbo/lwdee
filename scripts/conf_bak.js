@@ -3,41 +3,41 @@ const fs = require('fs');
 /**
  * 生成配置文件
  */
-// let workers = [
-//     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 15 },
-//     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 15 },
-//     { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 15 },
-//     { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 14 },
-//     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 14 }
-// ];
-
 let workers = [
-    { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 7 },
-    { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
+    { "name": "k8s-node01", "ip": "10.180.98.131" },
+    { "name": "k8s-node01", "ip": "10.180.98.131" },
+    { "name": "k8s-node02", "ip": "10.180.98.132" },
+    { "name": "k8s-node03", "ip": "10.180.98.133" },
+    { "name": "k8s-node04", "ip": "10.180.98.134" },
+    { "name": "k8s-node05", "ip": "10.180.98.135" }
+];
 
-// let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
+// let workers = [
+//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-node02", "ip": "10.180.98.132" }];
+
+// let workers = [
+//     { "name": "localhost", "ip": "127.0.0.1" },
+//     { "name": "localhost", "ip": "127.0.0.1" },
+//     { "name": "localhost", "ip": "127.0.0.1" }
+// ];
 
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
 
 // let json = fs.readFileSync(fileName);
 // let db = JSON.parse(json);
 // let port = db.port > 200 ? 100 : db.port + 2;
-let port = 300;
+let port = 210;
 
-let index = 0;
-let routerInfos = [];
-for (var ni in workers) {
-    let worker = workers[ni];
-    for (var i = 0; i < worker.cpucores; i++) {
-        index++;
-
-        let portTail = (i + 1).toString().padStart(2, "0");
-        routerInfos.push({ "worker": worker.name, "nid": index, "ip": worker.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) });
-    }
-}
+let routerInfos = workers.map(x => {
+    let i = workers.indexOf(x);
+    let portTail = (i + 1).toString();
+    return { "worker": x.name, "nid": i + 1, "ip": x.ip, "dport": parseInt(port + portTail), "mport": parseInt((port + 1) + portTail) };
+});
 
 let conf = {
-    "node_amount": index,
+    "node_amount": workers.length,
     "port": port
 };
 
@@ -66,18 +66,14 @@ let preWorker;
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
-        deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
     deployScripts.push(`docker stop terasort${router.nid}`);
 }
-
 deployScripts.push("");
-
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
     if (router.worker != preWorker) {
-        deployScripts.push(`######    ${router.worker}     #######`);
         preWorker = router.worker;
     }
     deployScripts.push(`docker rm terasort${router.nid} `);
@@ -85,16 +81,14 @@ for (var ri in routerInfos) {
 
 deployScripts.push("");
 
-for (var ri in routerInfos) {
-    let router = routerInfos[ri];
-    if (router.worker != preWorker) {
-        deployScripts.push(`######    ${router.worker}     #######`);
-        preWorker = router.worker;
-    }
-    deployScripts.push(`docker start terasort${router.nid} `);
-}
-
-deployScripts.push("");
+// for (var ri in routerInfos) {
+//     let router = routerInfos[ri];
+//     if (router.worker != preWorker) {
+//         preWorker = router.worker;
+//     }
+//     deployScripts.push(`docker start terasort${router.nid} `);
+// }
+// deployScripts.push("");
 
 for (var ri in routerInfos) {
     let router = routerInfos[ri];
@@ -108,7 +102,7 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.10`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.12`);
     if (ri == 0) {
         deployScripts.push("");
     }

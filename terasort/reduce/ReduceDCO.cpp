@@ -7,12 +7,14 @@
 std::string ReduceDCO::reduce(std::string a) {
   logger_trace("---------------------------------");
   try {
+    logger_info("< accept reduce ");
     PartitionStep2 input;
     input.fromJson(&a);
 
     Step2Task().run(&input);
 
     // logger_trace(a.c_str());
+    logger_info("> accept reduct ,partition : %d", input.index);
 
     return "success";
   } catch (Exception& ex) {

@@ -1,6 +1,27 @@
 #include "Partition.h"
 #include "core/cjson.hpp"
 
+std::string PartitionStep0::toJson() {
+  cJSON* root = cJSON_CreateObject();
+
+  cJSON_AddNumberToObject(root, "index", index);
+  cJSON_AddNumberToObject(root, "splitNums1", splitNums1);
+  cJSON_AddNumberToObject(root, "datum", datum);
+  cJSON_AddStringToObject(root, "fileName", fileName.c_str());
+
+  char* jsonText = cJSON_Print(root);
+
+  return jsonText;
+}
+
+void PartitionStep0::fromJson(std::string* json) {
+  cJSON* node = cJSON_Parse(json->c_str());
+  index = cJSON_GetObjectItem(node, "index")->valueint;
+  splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
+  datum = cJSON_GetObjectItem(node, "datum")->valueint;
+  fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
+}
+
 std::string PartitionStep1::toJson() {
   cJSON* root = cJSON_CreateObject();
 
@@ -125,7 +146,6 @@ void PartitionStep2::fromJson(std::string* json) {
   }
 }
 
-
 std::string Step2Output::toJson() {
   cJSON* root = cJSON_CreateObject();
 
@@ -151,7 +171,7 @@ std::string Step2Output::toJson() {
 
 void Step2Output::fromJson(std::string* json) {
   cJSON* node = cJSON_Parse(json->c_str());
-  
+
   // index = cJSON_GetObjectItem(node, "index")->valueint;
   // outputFile = cJSON_GetObjectItem(node, "fileName")->valuestring;
 

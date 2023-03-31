@@ -14,7 +14,6 @@
 #include "map/Step1Task.h"
 
 void Driver::startJob() {
-
   this->inputFile = TerasortConfig::instance()->inputFile;
   this->outputFile = TerasortConfig::instance()->outputFile;
   this->datum = TerasortConfig::instance()->datum;
@@ -38,64 +37,72 @@ void Driver::startJob() {
   }
 }
 
-MinAndMax Driver::samples(std::string fileName) {
+std::pair<uint64_t, uint64_t> Driver::samples(std::string fileName) {
   logger_info("< samples");
   Stopwatch sw;
 
-  FILE* f = fopen(fileName.c_str(), "rb");
-  if (f == NULL) {
-    logger_error("can't open file : %s", fileName.c_str());
+  // 执行分布式调用
+  std::vector<pair<DCO, DDOId>> step0Invokers;
+  for (int i = 0; i < splitNums1; i++) {
+    logger_debug("invoke dco.sample, split: %d", (i + 1));
+
+    DCO dco = lwdee::create_dco("SampleDCO");
+    // DCO dco = lwdee::create_dco(i + 2, "SampleDCO");
+
+    PartitionStep0 input(i, inputFile, splitNums1, datum);
+    auto json = input.toJson();
+
+    DDOId ddoId = dco.async("sample", json);
+
+    step0Invokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  fseek(f, 0, SEEK_END);
-  long totalSize = ftell(f);
-  long len = totalSize / 100;
+  // 获取调用结果DDO
 
-  char key[11];
-  memset(key, '\0', 10);
+  std::vector<uint64_t> mins;
+  std::vector<uint64_t> maxs;
+  for (auto& kv : step0Invokers) {
+    DCO dco = kv.first;
+    DDOId ddoId = kv.second;
 
-  fseek(f, 0, SEEK_SET);
-  fread(key, 1, 10, f);
-  fseek(f, 90L, SEEK_CUR);
+    try {
+      auto ddo = dco.wait(ddoId);
+      auto bytes = ddo.read();
 
-  Bytes10 min(key);
-  Bytes10 max(key);
+      int index = bytes->find('-');
+      auto min = bytes->substr(0, index);
+      auto max = bytes->substr(index + 1, bytes->size() - index - 1);
 
-  int count = 0;
-  for (int i = 0; i < len - 1; i += datum) {
-    fread(key, 1, 10, f);
-    fseek(f, 100L * (datum - 1) + 90L, SEEK_CUR);
+      // logger_debug("sample rc : %s,min: %s,max: %s", bytes->c_str(), min.c_str(), max.c_str());
 
-    if (min > key) {
-      min = key;
-    } else if (max < key) {
-      max = key;
+      ddo.releaseGlobal();
+
+      mins.push_back(strtoull(min.c_str(), NULL, 0));
+      maxs.push_back(strtoull(max.c_str(), NULL, 0));
+
+    } catch (Exception& ex) {
+      ex.trace(ZONE);
     }
-
-    count++;
-
-    // printf("%s,%ld\n", key, ftell(f));
   }
 
-  fclose(f);
+  uint64_t min = *std::min_element(mins.begin(), mins.end());
+  uint64_t max = *std::max_element(maxs.begin(), maxs.end());
 
   auto pair = std::make_pair(min, max);
-  logger_debug("total size : %ld,terarecord count:%ld", totalSize, len);
-  logger_debug("count: %d, min: %s:max: %s", count, pair.first.to_string().c_str(), pair.second.to_string().c_str());
 
-  logger_info("> samples,eclipse %lf", sw.stop());
+  logger_info("> samples,%llu-%llu,eclipse %lf", min, max, sw.stop());
 
   return pair;
 }
 
-void Driver::split(MinAndMax conf) {
-  auto seprator = (conf.second.left8() - conf.first.left8()) / splitNums2;
+void Driver::split(std::pair<uint64_t, uint64_t> conf) {
+  auto seprator = (conf.second - conf.first) / splitNums2;
 
   uint64_t pre = 0;
   for (int i = 0; i < splitNums2; i++) {
     SampleSplit split;
     split.min = pre;
-    split.max = conf.first.left8() + seprator * (i + 1);
+    split.max = conf.first + seprator * (i + 1);
 
     pre = split.max;
     if (i + 1 == splitNums2) {
@@ -113,9 +120,10 @@ void Driver::map() {
   Stopwatch sw;
 
   for (int i = 0; i < splitNums1; i++) {
-    logger_debug("invoke dco.map, node: %d", (i + 1));
+    logger_debug("invoke dco.map, split: %d", (i + 1));
 
-    DCO dco = lwdee::create_dco(i + 2, "MapDCO");
+    DCO dco = lwdee::create_dco("MapDCO");
+    // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
 
     PartitionStep1 input(i, inputFile, sampleSplits);
     auto json = input.toJson();
@@ -171,9 +179,12 @@ void Driver::reduce() {
   Stopwatch sw;
 
   for (int i = 0; i < step2Inputs.size(); i++) {
+    logger_debug("invoke dco.reduce, split: %d", (i + 1));
+
     PartitionStep2& step2Input = step2Inputs[i];
 
-    DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");
+    DCO dco = lwdee::create_dco("ReduceDCO");
+    // DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");
     auto json = step2Input.toJson();
 
     DDOId ddoId = dco.async("reduce", json);

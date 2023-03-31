@@ -60,7 +60,7 @@ TeraRecords* Step1Task::textFile() {
 
   fclose(f);
 
-  logger_info("> textFile,eclipse %lf", sw.stop());
+  logger_info("> textFile,partition: %d,eclipse %lf", partition->index, sw.stop());
 
   return trs;
 }
@@ -108,7 +108,7 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
     output.items.push_back(item);
   }
 
-  logger_info("> generateSubSplit,eclipse %lf", sw.stop());
+  logger_info("> generateSubSplit,partition: %d,eclipse %lf", partition->index, sw.stop());
 }
 
 int Step1Task::classify(TeraRecord& tr) {

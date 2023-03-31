@@ -17,7 +17,7 @@ std::string MapDCO::f1(std::string a) {
 
 std::string MapDCO::map(std::string a) {
   try {
-    logger_info("< invokded map ");
+    logger_info("< accept map ");
     // logger_info("< invokded map %s", a.c_str());
 
     PartitionStep1 input;
@@ -25,7 +25,7 @@ std::string MapDCO::map(std::string a) {
 
     auto output = Step1Task().run(&input);
 
-    logger_info("> invokded map ,index : %d, ddoId: %ld, fileName: %s", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str());
+    logger_info("> accept map ,partition : %d, ddoId: %ld, fileName: %s", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str());
 
     return output.toJson();
   } catch (Exception& ex) {

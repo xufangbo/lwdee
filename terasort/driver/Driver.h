@@ -7,9 +7,6 @@
 #include "core/Partition.h"
 #include "lwdee/DCO.h"
 
-
-typedef std::pair<Bytes10, Bytes10> MinAndMax;
-
 class Driver {
  private:
   std::string inputFile;                  // 数据源文件
@@ -29,12 +26,12 @@ class Driver {
   /**
    * 采样得到最大值最小值
    * */
-  MinAndMax samples(std::string fileName);
+  std::pair<uint64_t,uint64_t> samples(std::string fileName);
 
   /**
    * 基于样本最大值最小值进行区间分割
    * */
-  void split(MinAndMax conf);
+  void split(std::pair<uint64_t,uint64_t> conf);
 
   /**
    * 执行map计算
