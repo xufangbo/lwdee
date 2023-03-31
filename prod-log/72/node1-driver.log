@@ -1,0 +1,595 @@
+2023-03-31 15:25:27,450 [info ] [139947027905728] /home/kevin/git/lwdee/app.cpp:49 init : this is node1
+[0mlog is not initilaized
+2023-03-31 15:25:27,450 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/TerasortConfig.cpp:45 readConfig : /home/terasort/data/data-input.dat /home/terasort/data/data-output.dat 99999 72 72
+[0mlog is not initilaized
+log path: ../log 
+[1;32m2023-03-31 15:25:27,451 [info ] [139947027905728] /home/kevin/git/lwdee/app.cpp:97 init_logger : -- app starting ... 
+[0m[1;32m2023-03-31 15:25:28,453 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:18 startJob : > job
+[0m[0;37m2023-03-31 15:25:28,453 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:46 print : CPU(2.76%-2.76%: 0.00%),RAM(69228M-69228M: 0M), cpu:0.00%,ram total:0M,avai:0M,used:0M,free:0M 
+[0m[1;32m2023-03-31 15:25:28,453 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:46 samples : < samples
+[0m[0;36m2023-03-31 15:25:28,453 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 1
+[0m[0;37m2023-03-31 15:25:28,454 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,456 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 2
+[0m[0;37m2023-03-31 15:25:28,457 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,460 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 3
+[0m[0;37m2023-03-31 15:25:28,460 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,464 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 4
+[0m[0;37m2023-03-31 15:25:28,464 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,468 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 5
+[0m[0;37m2023-03-31 15:25:28,468 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,472 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 6
+[0m[0;37m2023-03-31 15:25:28,472 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,474 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 7
+[0m[0;37m2023-03-31 15:25:28,474 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,479 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 8
+[0m[0;37m2023-03-31 15:25:28,479 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,483 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 9
+[0m[0;37m2023-03-31 15:25:28,483 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,487 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 10
+[0m[0;37m2023-03-31 15:25:28,487 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,490 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 11
+[0m[0;37m2023-03-31 15:25:28,490 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,494 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 12
+[0m[0;37m2023-03-31 15:25:28,494 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,497 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 13
+[0m[0;37m2023-03-31 15:25:28,497 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,502 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 14
+[0m[0;37m2023-03-31 15:25:28,502 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,505 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 15
+[0m[0;37m2023-03-31 15:25:28,506 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,510 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 16
+[0m[0;37m2023-03-31 15:25:28,510 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,513 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 17
+[0m[0;37m2023-03-31 15:25:28,513 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,517 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 18
+[0m[0;37m2023-03-31 15:25:28,517 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,521 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 19
+[0m[0;37m2023-03-31 15:25:28,521 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,525 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 20
+[0m[0;37m2023-03-31 15:25:28,526 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,538 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 21
+[0m[0;37m2023-03-31 15:25:28,538 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,542 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 22
+[0m[0;37m2023-03-31 15:25:28,542 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,547 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 23
+[0m[0;37m2023-03-31 15:25:28,547 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,550 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 24
+[0m[0;37m2023-03-31 15:25:28,550 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,555 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 25
+[0m[0;37m2023-03-31 15:25:28,555 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,558 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 26
+[0m[0;37m2023-03-31 15:25:28,559 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,561 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 27
+[0m[0;37m2023-03-31 15:25:28,561 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,565 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 28
+[0m[0;37m2023-03-31 15:25:28,566 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,569 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 29
+[0m[0;37m2023-03-31 15:25:28,569 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,572 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 30
+[0m[0;37m2023-03-31 15:25:28,573 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,577 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 31
+[0m[0;37m2023-03-31 15:25:28,577 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,580 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 32
+[0m[0;37m2023-03-31 15:25:28,580 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,583 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 33
+[0m[0;37m2023-03-31 15:25:28,583 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,587 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 34
+[0m[0;37m2023-03-31 15:25:28,587 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,591 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 35
+[0m[0;37m2023-03-31 15:25:28,592 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,596 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 36
+[0m[0;37m2023-03-31 15:25:28,596 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,599 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 37
+[0m[0;37m2023-03-31 15:25:28,599 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,602 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 38
+[0m[0;37m2023-03-31 15:25:28,602 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,606 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 39
+[0m[0;37m2023-03-31 15:25:28,606 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,610 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 40
+[0m[0;37m2023-03-31 15:25:28,610 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,614 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 41
+[0m[0;37m2023-03-31 15:25:28,614 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,626 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 42
+[0m[0;37m2023-03-31 15:25:28,626 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,628 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 43
+[0m[0;37m2023-03-31 15:25:28,629 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,632 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 44
+[0m[0;37m2023-03-31 15:25:28,633 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,636 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 45
+[0m[0;37m2023-03-31 15:25:28,636 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,640 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 46
+[0m[0;37m2023-03-31 15:25:28,640 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,643 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 47
+[0m[0;37m2023-03-31 15:25:28,643 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,647 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 48
+[0m[0;37m2023-03-31 15:25:28,648 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,651 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 49
+[0m[0;37m2023-03-31 15:25:28,652 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,656 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 50
+[0m[0;37m2023-03-31 15:25:28,656 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,658 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 51
+[0m[0;37m2023-03-31 15:25:28,658 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,662 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 52
+[0m[0;37m2023-03-31 15:25:28,662 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,665 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 53
+[0m[0;37m2023-03-31 15:25:28,665 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,668 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 54
+[0m[0;37m2023-03-31 15:25:28,669 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,672 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 55
+[0m[0;37m2023-03-31 15:25:28,672 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,677 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 56
+[0m[0;37m2023-03-31 15:25:28,677 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,680 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 57
+[0m[0;37m2023-03-31 15:25:28,680 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,684 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 58
+[0m[0;37m2023-03-31 15:25:28,684 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,688 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 59
+[0m[0;37m2023-03-31 15:25:28,688 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,692 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 60
+[0m[0;37m2023-03-31 15:25:28,692 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,696 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 61
+[0m[0;37m2023-03-31 15:25:28,696 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,700 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 62
+[0m[0;37m2023-03-31 15:25:28,700 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,703 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 63
+[0m[0;37m2023-03-31 15:25:28,703 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,707 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 64
+[0m[0;37m2023-03-31 15:25:28,707 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,711 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 65
+[0m[0;37m2023-03-31 15:25:28,711 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,715 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 66
+[0m[0;37m2023-03-31 15:25:28,715 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,718 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 67
+[0m[0;37m2023-03-31 15:25:28,718 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,722 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 68
+[0m[0;37m2023-03-31 15:25:28,722 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,726 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 69
+[0m[0;37m2023-03-31 15:25:28,726 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,730 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 70
+[0m[0;37m2023-03-31 15:25:28,730 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,734 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 71
+[0m[0;37m2023-03-31 15:25:28,734 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 SampleDCO
+[0m[0;36m2023-03-31 15:25:28,738 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:52 samples : invoke dco.sample, split: 72
+[0m[0;37m2023-03-31 15:25:28,738 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 SampleDCO
+[0m[1;32m2023-03-31 15:25:32,023 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:98 samples : > samples,545183548442058-18443816961634607346,eclipse 3.570000
+[0m[0;37m2023-03-31 15:25:32,023 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 0 : 0 - 256701736021861020
+[0m[0;37m2023-03-31 15:25:32,023 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 1 : 256701736021861020 - 512858288495279982
+[0m[0;37m2023-03-31 15:25:32,023 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 2 : 512858288495279982 - 769014840968698944
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 3 : 769014840968698944 - 1025171393442117906
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 4 : 1025171393442117906 - 1281327945915536868
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 5 : 1281327945915536868 - 1537484498388955830
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 6 : 1537484498388955830 - 1793641050862374792
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 7 : 1793641050862374792 - 2049797603335793754
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 8 : 2049797603335793754 - 2305954155809212716
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 9 : 2305954155809212716 - 2562110708282631678
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 10 : 2562110708282631678 - 2818267260756050640
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 11 : 2818267260756050640 - 3074423813229469602
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 12 : 3074423813229469602 - 3330580365702888564
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 13 : 3330580365702888564 - 3586736918176307526
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 14 : 3586736918176307526 - 3842893470649726488
+[0m[0;37m2023-03-31 15:25:32,024 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 15 : 3842893470649726488 - 4099050023123145450
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 16 : 4099050023123145450 - 4355206575596564412
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 17 : 4355206575596564412 - 4611363128069983374
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 18 : 4611363128069983374 - 4867519680543402336
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 19 : 4867519680543402336 - 5123676233016821298
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 20 : 5123676233016821298 - 5379832785490240260
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 21 : 5379832785490240260 - 5635989337963659222
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 22 : 5635989337963659222 - 5892145890437078184
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 23 : 5892145890437078184 - 6148302442910497146
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 24 : 6148302442910497146 - 6404458995383916108
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 25 : 6404458995383916108 - 6660615547857335070
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 26 : 6660615547857335070 - 6916772100330754032
+[0m[0;37m2023-03-31 15:25:32,025 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 27 : 6916772100330754032 - 7172928652804172994
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 28 : 7172928652804172994 - 7429085205277591956
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 29 : 7429085205277591956 - 7685241757751010918
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 30 : 7685241757751010918 - 7941398310224429880
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 31 : 7941398310224429880 - 8197554862697848842
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 32 : 8197554862697848842 - 8453711415171267804
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 33 : 8453711415171267804 - 8709867967644686766
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 34 : 8709867967644686766 - 8966024520118105728
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 35 : 8966024520118105728 - 9222181072591524690
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 36 : 9222181072591524690 - 9478337625064943652
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 37 : 9478337625064943652 - 9734494177538362614
+[0m[0;37m2023-03-31 15:25:32,026 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 38 : 9734494177538362614 - 9990650730011781576
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 39 : 9990650730011781576 - 10246807282485200538
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 40 : 10246807282485200538 - 10502963834958619500
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 41 : 10502963834958619500 - 10759120387432038462
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 42 : 10759120387432038462 - 11015276939905457424
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 43 : 11015276939905457424 - 11271433492378876386
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 44 : 11271433492378876386 - 11527590044852295348
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 45 : 11527590044852295348 - 11783746597325714310
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 46 : 11783746597325714310 - 12039903149799133272
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 47 : 12039903149799133272 - 12296059702272552234
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 48 : 12296059702272552234 - 12552216254745971196
+[0m[0;37m2023-03-31 15:25:32,027 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 49 : 12552216254745971196 - 12808372807219390158
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 50 : 12808372807219390158 - 13064529359692809120
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 51 : 13064529359692809120 - 13320685912166228082
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 52 : 13320685912166228082 - 13576842464639647044
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 53 : 13576842464639647044 - 13832999017113066006
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 54 : 13832999017113066006 - 14089155569586484968
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 55 : 14089155569586484968 - 14345312122059903930
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 56 : 14345312122059903930 - 14601468674533322892
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 57 : 14601468674533322892 - 14857625227006741854
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 58 : 14857625227006741854 - 15113781779480160816
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 59 : 15113781779480160816 - 15369938331953579778
+[0m[0;37m2023-03-31 15:25:32,028 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 60 : 15369938331953579778 - 15626094884426998740
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 61 : 15626094884426998740 - 15882251436900417702
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 62 : 15882251436900417702 - 16138407989373836664
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 63 : 16138407989373836664 - 16394564541847255626
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 64 : 16394564541847255626 - 16650721094320674588
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 65 : 16650721094320674588 - 16906877646794093550
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 66 : 16906877646794093550 - 17163034199267512512
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 67 : 17163034199267512512 - 17419190751740931474
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 68 : 17419190751740931474 - 17675347304214350436
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 69 : 17675347304214350436 - 17931503856687769398
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 70 : 17931503856687769398 - 18187660409161188360
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:119 split : subsplit 71 : 18187660409161188360 - 0
+[0m[1;32m2023-03-31 15:25:32,029 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:124 map : < map
+[0m[0;36m2023-03-31 15:25:32,029 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 1
+[0m[0;37m2023-03-31 15:25:32,029 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,033 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 2
+[0m[0;37m2023-03-31 15:25:32,033 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,036 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 3
+[0m[0;37m2023-03-31 15:25:32,036 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,039 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 4
+[0m[0;37m2023-03-31 15:25:32,039 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,042 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 5
+[0m[0;37m2023-03-31 15:25:32,042 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,045 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 6
+[0m[0;37m2023-03-31 15:25:32,045 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,048 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 7
+[0m[0;37m2023-03-31 15:25:32,048 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,051 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 8
+[0m[0;37m2023-03-31 15:25:32,051 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,055 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 9
+[0m[0;37m2023-03-31 15:25:32,055 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,057 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 10
+[0m[0;37m2023-03-31 15:25:32,057 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,061 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 11
+[0m[0;37m2023-03-31 15:25:32,062 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,065 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 12
+[0m[0;37m2023-03-31 15:25:32,065 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,068 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 13
+[0m[0;37m2023-03-31 15:25:32,069 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,072 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 14
+[0m[0;37m2023-03-31 15:25:32,072 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,075 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 15
+[0m[0;37m2023-03-31 15:25:32,075 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,079 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 16
+[0m[0;37m2023-03-31 15:25:32,079 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-21 15:25:32,083 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 17
+[0m[0;37m2023-03-31 15:25:32,083 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,086 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 18
+[0m[0;37m2023-03-31 15:25:32,086 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,091 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 19
+[0m[0;37m2023-03-31 15:25:32,091 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,094 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 20
+[0m[0;37m2023-03-31 15:25:32,094 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,099 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 21
+[0m[0;37m2023-03-31 15:25:32,099 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,103 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 22
+[0m[0;37m2023-03-31 15:25:32,103 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,106 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 23
+[0m[0;37m2023-03-31 15:25:32,106 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,111 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 24
+[0m[0;37m2023-03-31 15:25:32,111 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,115 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 25
+[0m[0;37m2023-03-31 15:25:32,115 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,119 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 26
+[0m[0;37m2023-03-31 15:25:32,119 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,124 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 27
+[0m[0;37m2023-03-31 15:25:32,124 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,128 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 28
+[0m[0;37m2023-03-31 15:25:32,128 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,132 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 29
+[0m[0;37m2023-03-31 15:25:32,134 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,137 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 30
+[0m[0;37m2023-03-31 15:25:32,137 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,141 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 31
+[0m[0;37m2023-03-31 15:25:32,141 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,145 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 32
+[0m[0;37m2023-03-31 15:25:32,145 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,149 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 33
+[0m[0;37m2023-03-31 15:25:32,149 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,155 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 34
+[0m[0;37m2023-03-31 15:25:32,155 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,158 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 35
+[0m[0;37m2023-03-31 15:25:32,159 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,162 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 36
+[0m[0;37m2023-03-31 15:25:32,162 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,166 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 37
+[0m[0;37m2023-03-31 15:25:32,166 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,170 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 38
+[0m[0;37m2023-03-31 15:25:32,170 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,175 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 39
+[0m[0;37m2023-03-31 15:25:32,175 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,178 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 40
+[0m[0;37m2023-03-31 15:25:32,178 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,183 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 41
+[0m[0;37m2023-03-31 15:25:32,183 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,186 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 42
+[0m[0;37m2023-03-31 15:25:32,186 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,190 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 43
+[0m[0;37m2023-03-31 15:25:32,191 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,196 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 44
+[0m[0;37m2023-03-31 15:25:32,196 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,200 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 45
+[0m[0;37m2023-03-31 15:25:32,200 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,203 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 46
+[0m[0;37m2023-03-31 15:25:32,203 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,207 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 47
+[0m[0;37m2023-03-31 15:25:32,207 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,211 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 48
+[0m[0;37m2023-03-31 15:25:32,211 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,215 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 49
+[0m[0;37m2023-03-31 15:25:32,216 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,219 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 50
+[0m[0;37m2023-03-31 15:25:32,220 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,224 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 51
+[0m[0;37m2023-03-31 15:25:32,224 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,230 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 52
+[0m[0;37m2023-03-31 15:25:32,230 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,236 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 53
+[0m[0;37m2023-03-31 15:25:32,236 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,240 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 54
+[0m[0;37m2023-03-31 15:25:32,240 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,244 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 55
+[0m[0;37m2023-03-31 15:25:32,244 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,250 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 56
+[0m[0;37m2023-03-31 15:25:32,250 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,256 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 57
+[0m[0;37m2023-03-31 15:25:32,257 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,263 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 58
+[0m[0;37m2023-03-31 15:25:32,263 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,267 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 59
+[0m[0;37m2023-03-31 15:25:32,267 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,271 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 60
+[0m[0;37m2023-03-31 15:25:32,271 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,276 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 61
+[0m[0;37m2023-03-31 15:25:32,276 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,281 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 62
+[0m[0;37m2023-03-31 15:25:32,281 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,285 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 63
+[0m[0;37m2023-03-31 15:25:32,285 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,289 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 64
+[0m[0;37m2023-03-31 15:25:32,289 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,295 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 65
+[0m[0;37m2023-03-31 15:25:32,295 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,299 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 66
+[0m[0;37m2023-03-31 15:25:32,300 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,304 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 67
+[0m[0;37m2023-03-31 15:25:32,304 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[0;36m2023-03-31 15:25:32,308 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 68
+[0m[0;37m2023-03-31 15:25:32,309 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 MapDCO
+[0m[0;36m2023-03-31 15:25:32,317 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 69
+[0m[0;37m2023-03-31 15:25:32,317 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 MapDCO
+[0m[0;36m2023-03-31 15:25:32,321 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 70
+[0m[0;37m2023-03-31 15:25:32,321 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 MapDCO
+[0m[0;36m2023-03-31 15:25:32,328 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 71
+[0m[0;37m2023-03-31 15:25:32,328 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 MapDCO
+[0m[0;36m2023-03-31 15:25:32,332 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : invoke dco.map, split: 72
+[0m[0;37m2023-03-31 15:25:32,335 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 MapDCO
+[0m[1;32m2023-03-31 15:25:32,339 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:141 map : > map,eclipse 0.310000
+[0m[1;32m2023-03-31 15:25:32,339 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:145 mapToReduce : < mapToReduce
+[0m[1;32m2023-03-31 15:29:44,637 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:179 mapToReduce : > mapToReduce,eclipse 252.298000
+[0m[1;32m2023-03-31 15:29:44,638 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:183 reduce : < reduce
+[0m[0;36m2023-03-31 15:29:44,638 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 1
+[0m[0;37m2023-03-31 15:29:44,638 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,641 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 2
+[0m[0;37m2023-03-31 15:29:44,641 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,643 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 3
+[0m[0;37m2023-03-31 15:29:44,643 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,646 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 4
+[0m[0;37m2023-03-31 15:29:44,646 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,650 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 5
+[0m[0;37m2023-03-31 15:29:44,650 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,652 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 6
+[0m[0;37m2023-03-31 15:29:44,653 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,655 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 7
+[0m[0;37m2023-03-31 15:29:44,655 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,657 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 8
+[0m[0;37m2023-03-31 15:29:44,657 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,660 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 9
+[0m[0;37m2023-03-31 15:29:44,660 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,666 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 10
+[0m[0;37m2023-03-31 15:29:44,666 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,669 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 11
+[0m[0;37m2023-03-31 15:29:44,670 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,672 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 12
+[0m[0;37m2023-03-31 15:29:44,672 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,675 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 13
+[0m[0;37m2023-03-31 15:29:44,675 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,678 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 14
+[0m[0;37m2023-03-31 15:29:44,678 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,690 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 15
+[0m[0;37m2023-03-31 15:29:44,690 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,692 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 16
+[0m[0;37m2023-03-31 15:29:44,693 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,695 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 17
+[0m[0;37m2023-03-31 15:29:44,695 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,697 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 18
+[0m[0;37m2023-03-31 15:29:44,697 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,700 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 19
+[0m[0;37m2023-03-31 15:29:44,700 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,715 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 20
+[0m[0;37m2023-03-31 15:29:44,715 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,718 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 21
+[0m[0;37m2023-03-31 15:29:44,718 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,721 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 22
+[0m[0;37m2023-03-31 15:29:44,721 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,724 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 23
+[0m[0;37m2023-03-31 15:29:44,724 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,727 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 24
+[0m[0;37m2023-03-31 15:29:44,727 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,744 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 25
+[0m[0;37m2023-03-31 15:29:44,744 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,747 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 26
+[0m[0;37m2023-03-31 15:29:44,747 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,749 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 27
+[0m[0;37m2023-03-31 15:29:44,749 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,752 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 28
+[0m[0;37m2023-03-31 15:29:44,752 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,755 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 29
+[0m[0;37m2023-03-31 15:29:44,755 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,771 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 30
+[0m[0;37m2023-03-31 15:29:44,771 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,774 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 31
+[0m[0;37m2023-03-31 15:29:44,774 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,776 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 32
+[0m[0;37m2023-03-31 15:29:44,776 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,779 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 33
+[0m[0;37m2023-03-31 15:29:44,779 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,782 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 34
+[0m[0;37m2023-03-31 15:29:44,782 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,804 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 35
+[0m[0;37m2023-03-31 15:29:44,804 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,807 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 36
+[0m[0;37m2023-03-31 15:29:44,807 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,809 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 37
+[0m[0;37m2023-03-31 15:29:44,810 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,812 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 38
+[0m[0;37m2023-03-31 15:29:44,812 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,815 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 39
+[0m[0;37m2023-03-31 15:29:44,815 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,832 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 40
+[0m[0;37m2023-03-31 15:29:44,832 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,834 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 41
+[0m[0;37m2023-03-31 15:29:44,834 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,837 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 42
+[0m[0;37m2023-03-31 15:29:44,837 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,839 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 43
+[0m[0;37m2023-03-31 15:29:44,839 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,843 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 44
+[0m[0;37m2023-03-31 15:29:44,843 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,861 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 45
+[0m[0;37m2023-03-31 15:29:44,861 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,864 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 46
+[0m[0;37m2023-03-31 15:29:44,864 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,867 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 47
+[0m[0;37m2023-03-31 15:29:44,867 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,869 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 48
+[0m[0;37m2023-03-31 15:29:44,869 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,872 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 49
+[0m[0;37m2023-03-31 15:29:44,872 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,895 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 50
+[0m[0;37m2023-03-31 15:29:44,896 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,899 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 51
+[0m[0;37m2023-03-31 15:29:44,899 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,902 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 52
+[0m[0;37m2023-03-31 15:29:44,902 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,904 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 53
+[0m[0;37m2023-03-31 15:29:44,905 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,907 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 54
+[0m[0;37m2023-03-31 15:29:44,908 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,936 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 55
+[0m[0;37m2023-03-31 15:29:44,936 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,940 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 56
+[0m[0;37m2023-03-31 15:29:44,940 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,942 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 57
+[0m[0;37m2023-03-31 15:29:44,942 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,945 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 58
+[0m[0;37m2023-03-31 15:29:44,945 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,948 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 59
+[0m[0;37m2023-03-31 15:29:44,948 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,971 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 60
+[0m[0;37m2023-03-31 15:29:44,971 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,974 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 61
+[0m[0;37m2023-03-31 15:29:44,974 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,976 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 62
+[0m[0;37m2023-03-31 15:29:44,977 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,979 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 63
+[0m[0;37m2023-03-31 15:29:44,979 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:44,983 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 64
+[0m[0;37m2023-03-31 15:29:44,983 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,002 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 65
+[0m[0;37m2023-03-31 15:29:45,002 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,006 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 66
+[0m[0;37m2023-03-31 15:29:45,007 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,009 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 67
+[0m[0;37m2023-03-31 15:29:45,010 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,013 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 68
+[0m[0;37m2023-03-31 15:29:45,013 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node3 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,016 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 69
+[0m[0;37m2023-03-31 15:29:45,016 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node4 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,038 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 70
+[0m[0;37m2023-03-31 15:29:45,038 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node5 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,042 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 71
+[0m[0;37m2023-03-31 15:29:45,042 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node6 ReduceDCO
+[0m[0;36m2023-03-31 15:29:45,045 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:187 reduce : invoke dco.reduce, split: 72
+[0m[0;37m2023-03-31 15:29:45,045 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/lwdee/lwdee.cpp:20 create_dco : create dco node2 ReduceDCO
+[0m[0;36m2023-03-31 15:34:05,462 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:25,886 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:25,892 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:25,897 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:25,902 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:25,908 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:34,997 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,001 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,006 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,010 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,014 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,017 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,021 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,025 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,029 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,033 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,036 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,040 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,044 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,048 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,052 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,055 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,059 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,062 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,066 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,069 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,073 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,077 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,080 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,084 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,088 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,091 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,096 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,099 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,103 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,107 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,109 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,114 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,117 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,121 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,125 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,128 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,132 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,136 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,139 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,143 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,145 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,149 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,153 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,157 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,160 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,163 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,167 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,171 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,174 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,179 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,182 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,186 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,189 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,193 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,197 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,199 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,203 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,207 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,211 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,214 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,217 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[0;36m2023-03-31 15:34:35,221 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node3),success
+[0m[0;36m2023-03-31 15:34:35,224 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node4),success
+[0m[0;36m2023-03-31 15:34:35,228 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node5),success
+[0m[0;36m2023-03-31 15:34:35,232 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node6),success
+[0m[0;36m2023-03-31 15:34:35,235 [debug] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:208 reduce : get step 2 ddo(node2),success
+[0m[1;32m2023-03-31 15:34:35,236 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:219 reduce : > reduce,eclipse 290.598000
+[0m[0;37m2023-03-31 15:34:35,236 [trace] [139947027905728] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:46 print : CPU(1.73%-70.84%: 69.11%),RAM(69228M-96174M: 26946M), cpu:26.34%,ram total:96476M,avai:12315M,used:84161M,free:12315M 
+[0m[1;32m2023-03-31 15:34:35,236 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:37 startJob : < job,eclipse 546.783000 s
+[0m[1;32m2023-03-31 15:34:35,236 [info ] [139947027905728] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:39 startJob : finished

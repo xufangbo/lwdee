@@ -1,4 +1,4 @@
-dir=48
+dir=72
 
 
 ssh root@k8s-node01 "rm -rf node1-driver.log && docker logs terasort1 > node1-driver.log"
