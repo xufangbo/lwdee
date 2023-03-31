@@ -3,6 +3,7 @@
 #include <map>
 
 #include "core/Exception.hpp"
+#include "core/Stopwatch.h"
 #include "core/TeraRecord.hpp"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
@@ -10,25 +11,26 @@
 Step2Output Step2Task::run(PartitionStep2* partition) {
   this->input = partition;
 
-  logger_info("< run");
+  logger_info("< reduce task run");
+  Stopwatch sw;
 
   // std::vector<TeraRecord*>* trs = new std::vector<TeraRecord*>();
 
   this->read();
-  logger_info("read");
 
   this->sort();
-  logger_info("sort");
 
   this->save();
-  logger_info("save");
 
-  logger_info("> run,output count: %d, %s", size, this->fileName().c_str());
+  logger_info("> reduce task run,output count: %d,eclipse %lf, %s", size, sw.stop(), this->fileName().c_str());
 
   return this->output;
 }
 
 void Step2Task::read() {
+  logger_info("< read");
+  Stopwatch sw;
+
   string_ref subsplits[input->subSplitDDOs.size()];
 
   unsigned long totalSize = 0;
@@ -76,6 +78,7 @@ void Step2Task::read() {
 
     subsplit.reset();
   }
+  logger_info("> read,eclipse %lf", sw.stop());
 }
 
 int teraCompare(const void* a, const void* b) {
@@ -94,10 +97,18 @@ int teraCompare(const void* a, const void* b) {
 }
 
 void Step2Task::sort() {
+  logger_info("< sort");
+  Stopwatch sw;
+
   qsort(trs, size, sizeof(TeraRecord), teraCompare);
+
+  logger_info("> sort,eclipse %lf", sw.stop());
 }
 
 void Step2Task::save() {
+  logger_info("< save");
+  Stopwatch sw;
+
   FILE* f = fopen(fileName().c_str(), "w");
   if (f == NULL) {
     throw Exception("can't open file " + input->outputFile, ZONE);
@@ -114,4 +125,6 @@ void Step2Task::save() {
   }
 
   fclose(f);
+
+  logger_info("> save,eclipse %lf", sw.stop());
 }

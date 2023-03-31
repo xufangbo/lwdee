@@ -3,7 +3,7 @@
     "is_matrix": 0,
     "inputFile": "/home/terasort/data/data-input.dat",
     "outputFile": "/home/terasort/data/data-output.dat",
-    "datum": 6,
+    "datum": 11111,
     "splitNums1": 12,
     "splitNums2": 12
 }

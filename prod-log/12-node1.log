@@ -1,0 +1,93 @@
+# docker logs terasort1
+2023-03-30 22:54:22,799 [info ] [139729989766336] /home/kevin/git/lwdee/app.cpp:49 init : this is node1
+log is not initilaized
+2023-03-30 22:54:22,800 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/TerasortConfig.cpp:46 readConfig : /home/terasort/data/data-input.dat /home/terasort/data/data-output.dat 11111 12 12
+log is not initilaized
+log path: ../log
+2023-03-30 22:54:22,800 [info ] [139729989766336] /home/kevin/git/lwdee/app.cpp:97 init_logger : -- app starting ...
+2023-03-30 22:54:22,803 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:42 samples : < samples
+2023-03-30 23:00:51,724 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:83 samples : total size : 99999993600,terarecord count:999999936
+2023-03-30 23:00:51,725 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:84 samples : count: 90001, min: 239423055595920-22480:max: 18446735459334395112-44137
+2023-03-30 23:00:51,725 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:86 samples : > samples,eclipse 388.922000
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 0 : 0 - 1537447426078829186
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 1 : 1537447426078829186 - 3074655429102062452
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 2 : 3074655429102062452 - 4611863432125295718
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 3 : 4611863432125295718 - 6149071435148528984
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 4 : 6149071435148528984 - 7686279438171762250
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 5 : 7686279438171762250 - 9223487441194995516
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 6 : 9223487441194995516 - 10760695444218228782
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 7 : 10760695444218228782 - 12297903447241462048
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 8 : 12297903447241462048 - 13835111450264695314
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 9 : 13835111450264695314 - 15372319453287928580
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 10 : 15372319453287928580 - 16909527456311161846
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 11 : 16909527456311161846 - 0
+2023-03-30 23:00:51,726 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:112 map : < map
+2023-03-30 23:00:51,726 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 1
+2023-03-30 23:00:51,729 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 2
+2023-03-30 23:00:51,731 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 3
+2023-03-30 23:00:51,734 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 4
+2023-03-30 23:00:51,737 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 5
+2023-03-30 23:00:51,740 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 6
+2023-03-30 23:00:51,742 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 7
+2023-03-30 23:00:51,746 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 8
+2023-03-30 23:00:51,750 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 9
+2023-03-30 23:00:51,755 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 10
+2023-03-30 23:00:51,757 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 11
+2023-03-30 23:00:51,761 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 12
+2023-03-30 23:00:51,764 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : > map,eclipse 0.038000
+2023-03-30 23:00:51,765 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:132 mapToReduce : < mapToReduce
+[root@k8s-node01 ~]# docker logs terasort1
+2023-03-30 22:54:22,799 [info ] [139729989766336] /home/kevin/git/lwdee/app.cpp:49 init : this is node1
+log is not initilaized
+2023-03-30 22:54:22,800 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/TerasortConfig.cpp:46 readConfig : /home/terasort/data/data-input.dat /home/terasort/data/data-output.dat 11111 12 12
+log is not initilaized
+log path: ../log
+2023-03-30 22:54:22,800 [info ] [139729989766336] /home/kevin/git/lwdee/app.cpp:97 init_logger : -- app starting ...
+2023-03-30 22:54:22,803 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:42 samples : < samples
+2023-03-30 23:00:51,724 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:83 samples : total size : 99999993600,terarecord count:999999936
+2023-03-30 23:00:51,725 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:84 samples : count: 90001, min: 239423055595920-22480:max: 18446735459334395112-44137
+2023-03-30 23:00:51,725 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:86 samples : > samples,eclipse 388.922000
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 0 : 0 - 1537447426078829186
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 1 : 1537447426078829186 - 3074655429102062452
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 2 : 3074655429102062452 - 4611863432125295718
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 3 : 4611863432125295718 - 6149071435148528984
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 4 : 6149071435148528984 - 7686279438171762250
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 5 : 7686279438171762250 - 9223487441194995516
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 6 : 9223487441194995516 - 10760695444218228782
+2023-03-30 23:00:51,725 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 7 : 10760695444218228782 - 12297903447241462048
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 8 : 12297903447241462048 - 13835111450264695314
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 9 : 13835111450264695314 - 15372319453287928580
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 10 : 15372319453287928580 - 16909527456311161846
+2023-03-30 23:00:51,726 [trace] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:107 split : subsplit 11 : 16909527456311161846 - 0
+2023-03-30 23:00:51,726 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:112 map : < map
+2023-03-30 23:00:51,726 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 1
+2023-03-30 23:00:51,729 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 2
+2023-03-30 23:00:51,731 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 3
+2023-03-30 23:00:51,734 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 4
+2023-03-30 23:00:51,737 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 5
+2023-03-30 23:00:51,740 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 6
+2023-03-30 23:00:51,742 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 7
+2023-03-30 23:00:51,746 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 8
+2023-03-30 23:00:51,750 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 9
+2023-03-30 23:00:51,755 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 10
+2023-03-30 23:00:51,757 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 11
+2023-03-30 23:00:51,761 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:116 map : invoke dco.map, node: 12
+2023-03-30 23:00:51,764 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:128 map : > map,eclipse 0.038000
+2023-03-30 23:00:51,765 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:132 mapToReduce : < mapToReduce
+2023-03-30 23:07:21,107 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:166 mapToReduce : > mapToReduce,eclipse 389.342000
+2023-03-30 23:07:21,107 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:170 reduce : < reduce
+2023-03-30 23:14:45,831 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node2),success
+2023-03-30 23:15:31,642 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node3),success
+2023-03-30 23:15:31,647 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node4),success
+2023-03-30 23:15:31,653 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node5),success
+2023-03-30 23:15:31,657 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node6),success
+2023-03-30 23:15:31,663 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node7),success
+2023-03-30 23:15:31,669 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node8),success
+2023-03-30 23:15:31,676 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node9),success
+2023-03-30 23:15:31,693 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node10),success
+2023-03-30 23:15:31,700 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node11),success
+2023-03-30 23:15:31,707 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node12),success
+2023-03-30 23:15:31,714 [debug] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:192 reduce : get step 2 ddo(node13),success
+2023-03-30 23:15:31,718 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:203 reduce : > reduce,eclipse 490.611000
+2023-03-30 23:15:31,718 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:33 startJob : finish job,eclipse 1268.915000 s
+2023-03-30 23:15:31,718 [info ] [139729989766336] /home/kevin/git/lwdee/terasort/driver/Driver.cpp:35 startJob : finished

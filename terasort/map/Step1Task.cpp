@@ -4,26 +4,33 @@
 #include <fstream>
 #include <sstream>
 
+#include "core/Stopwatch.h"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
 Step1Output Step1Task::run(PartitionStep1* partition) {
+  logger_info("< map task run");
+  Stopwatch sw;
+
   this->partition = partition;
 
   // textFile
   auto trs = this->textFile();
-  logger_info("textFile");
 
   // write ddo
   this->generateSubSplit(trs);
   delete trs;
-  logger_info("generateSubSplit");
+
+  logger_info("> map task run,eclipse %lf", sw.stop());
 
   return output;
 };
 
 TeraRecords* Step1Task::textFile() {
+  logger_info("< textFile");
+  Stopwatch sw;
+
   FILE* f = fopen(partition->fileName.c_str(), "rb");
   if (f == NULL) {
     logger_error("can't open file : %s", partition->fileName.c_str());
@@ -53,10 +60,15 @@ TeraRecords* Step1Task::textFile() {
 
   fclose(f);
 
+  logger_info("> textFile,eclipse %lf", sw.stop());
+
   return trs;
 }
 
 void Step1Task::generateSubSplit(TeraRecords* trs) {
+  logger_info("< generateSubSplit");
+  Stopwatch sw;
+
   auto sampleSplits = partition->sampleSplits;
 
   // 先计算长度
@@ -95,6 +107,8 @@ void Step1Task::generateSubSplit(TeraRecords* trs) {
     item.dataId = ddoSubSplit.ddoId.itsId();
     output.items.push_back(item);
   }
+
+  logger_info("> generateSubSplit,eclipse %lf", sw.stop());
 }
 
 int Step1Task::classify(TeraRecord& tr) {

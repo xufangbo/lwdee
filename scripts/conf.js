@@ -6,14 +6,14 @@ const fs = require('fs');
 // let workers = [
 //     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 15 },
 //     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 15 },
-//     { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 14 },
+//     { "name": "k8s-node03", "ip": "10.180.98.133", "cpucores": 15 },
 //     { "name": "k8s-node04", "ip": "10.180.98.134", "cpucores": 14 },
 //     { "name": "k8s-node05", "ip": "10.180.98.135", "cpucores": 14 }
 // ];
 
- let workers = [
-     { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 6 },
-     { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
+let workers = [
+    { "name": "k8s-node01", "ip": "10.180.98.131", "cpucores": 7 },
+    { "name": "k8s-node02", "ip": "10.180.98.132", "cpucores": 6 }];
 
 // let workers = [    { "name": "localhost", "ip": "127.0.0.1", "cpucores": 3 }];
 
@@ -108,7 +108,10 @@ for (var ri in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.8`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.10`);
+    if (ri == 0) {
+        deployScripts.push("");
+    }
 }
 deployScripts.push("");
 

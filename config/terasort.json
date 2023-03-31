@@ -1,9 +1,9 @@
 {
     "port": 400,
     "is_matrix": 0,
-    "inputFile": "/home/kevin/git/lwdee/data/data-input.dat",
-    "outputFile": "/home/kevin/git/lwdee/data/data-output.dat",
-    "datum": 3,
-    "splitNums1": 3,
-    "splitNums2": 3
+    "inputFile": "/home/terasort/data/data-input.dat",
+    "outputFile": "/home/terasort/data/data-output.dat",
+    "datum": 11111,
+    "splitNums1": 12,
+    "splitNums2": 12
 }
