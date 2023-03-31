@@ -4,11 +4,13 @@
 #include "core/Partition.h"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
+#include "core/Stopwatch.h"
 
 std::string ReduceDCO::reduce(std::string a) {
   logger_trace("---------------------------------");
   try {
     logger_info("< accept reduce ");
+    Stopwatch sw;
     LinuxMatrix::print();
     PartitionStep2 input;
     input.fromJson(&a);
@@ -17,7 +19,7 @@ std::string ReduceDCO::reduce(std::string a) {
 
     // logger_trace(a.c_str());
     LinuxMatrix::print();
-    logger_info("> accept reduct ,partition : %d", input.index);
+    logger_info("> accept reduct ,partition : %d,eclipse %lf", input.index, sw.stop());
 
     return "success";
   } catch (Exception& ex) {

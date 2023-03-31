@@ -6,6 +6,7 @@
 #include "Step1Task.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
+#include "core/Stopwatch.h"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
 
@@ -19,6 +20,7 @@ std::string MapDCO::f1(std::string a) {
 std::string MapDCO::map(std::string a) {
   try {
     logger_info("< accept map ");
+    Stopwatch sw;
     LinuxMatrix::print();
     // logger_info("< invokded map %s", a.c_str());
 
@@ -27,12 +29,12 @@ std::string MapDCO::map(std::string a) {
 
     auto output = Step1Task().run(&input);
 
-LinuxMatrix::print();
-    logger_info("> accept map ,partition : %d, ddoId: %ld, fileName: %s", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str());
+    LinuxMatrix::print();
+    logger_info("> accept map ,partition : %d, ddoId: %ld, fileName: %s,eclipse %lf", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str(), sw.stop());
 
     return output.toJson();
   } catch (Exception& ex) {
-    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(),ex.getStackTrace().c_str());
+    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
     logger_error("step2 failed,%s", ex.what());

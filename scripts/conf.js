@@ -71,6 +71,8 @@ for (var i in routerInfos) {
 }
 
 deployScripts.push("");
+deployScripts.push("");
+deployScripts.push("");
 
 // for (var ri in routerInfos) {
 //     let router = routerInfos[ri];
@@ -89,7 +91,7 @@ for (var i in routerInfos) {
         `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
         `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
         `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.17"`);
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.18"`);
 
     if (i == 0) {
         deployScripts.push("");

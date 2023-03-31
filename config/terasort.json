@@ -3,6 +3,6 @@
     "inputFile": "/home/terasort/data/data-input.dat",
     "outputFile": "/home/terasort/data/data-output.dat",
     "datum": 99999,
-    "splitNums1": 24,
-    "splitNums2": 24
+    "splitNums1": 48,
+    "splitNums2": 48
 }
