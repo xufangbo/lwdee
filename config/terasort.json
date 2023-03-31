@@ -1,9 +1,8 @@
 {
     "port": 400,
-    "is_matrix": 1,
     "inputFile": "/home/terasort/data/data-input.dat",
     "outputFile": "/home/terasort/data/data-output.dat",
     "datum": 99999,
-    "splitNums1": 12,
-    "splitNums2": 12
+    "splitNums1": 24,
+    "splitNums2": 24
 }

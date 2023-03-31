@@ -34,6 +34,9 @@ class LinuxMatrix {
   static unsigned long ram_bottom;
   static unsigned long ram_top;
 
+  static double cpu;
+  static RamInfo ram;
+
  private:
   static void running();
 

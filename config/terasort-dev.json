@@ -1,6 +1,5 @@
 {
     "port": 400,
-    "is_matrix": 0,
     "inputFile": "/home/kevin/git/lwdee/data/data-input.dat",
     "outputFile": "/home/kevin/git/lwdee/data/data-output.dat",
     "datum": 3,

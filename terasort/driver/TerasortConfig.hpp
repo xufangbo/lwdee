@@ -13,7 +13,6 @@ class TerasortConfig {
   int datum = 0;
   int splitNums1 = 0;
   int splitNums2 = 0;
-  int is_matrix = 0;
 
  public:
   void readConfig();

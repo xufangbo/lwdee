@@ -1,0 +1,164 @@
+2023-03-31 13:14:07,538 [info ] [139813650177216] /home/kevin/git/lwdee/app.cpp:49 init : this is node3
+[0mlog is not initilaized
+2023-03-31 13:14:07,539 [debug] [139813650177216] /home/kevin/git/lwdee/terasort/driver/TerasortConfig.cpp:45 readConfig : /home/terasort/data/data-input.dat /home/terasort/data/data-output.dat 99999 12 12
+[0mlog is not initilaized
+log path: ../log 
+[1;32m2023-03-31 13:14:07,539 [info ] [139813650177216] /home/kevin/git/lwdee/app.cpp:97 init_logger : -- app starting ... 
+[0m[0;36m2023-03-31 13:14:31,751 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco SampleDCO
+[0m[1;32m2023-03-31 13:14:31,753 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:16 sample : < accept sample 
+[0m[1;33m2023-03-31 13:14:31,753 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 2.60% : 1.39% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:31,753 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:13 run : < samples task run
+[0m[1;32m2023-03-31 13:14:31,753 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:28 samples : < samples
+[0m[0;36m2023-03-31 13:14:31,754 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:43 samples : 1 - read range, 83333328 - 166666655,计 83333328 条
+[0m[0;36m2023-03-31 13:14:31,766 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco SampleDCO
+[0m[1;32m2023-03-31 13:14:31,768 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:16 sample : < accept sample 
+[0m[1;33m2023-03-31 13:14:31,768 [warn ] [139813620774464] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 2.60% : 1.39% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:31,768 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:13 run : < samples task run
+[0m[1;32m2023-03-31 13:14:31,768 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:28 samples : < samples
+[0m[0;36m2023-03-31 13:14:31,768 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:43 samples : 6 - read range, 499999968 - 583333295,计 83333328 条
+[0m[0;36m2023-03-31 13:14:31,782 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco SampleDCO
+[0m[1;32m2023-03-31 13:14:31,785 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:16 sample : < accept sample 
+[0m[1;33m2023-03-31 13:14:31,785 [warn ] [139813612381760] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 2.60% : 1.39% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:31,785 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:13 run : < samples task run
+[0m[1;32m2023-03-31 13:14:31,785 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:28 samples : < samples
+[0m[0;36m2023-03-31 13:14:31,785 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:43 samples : 11 - read range, 916666608 - 999999935,计 83333328 条
+[0m[1;32m2023-03-31 13:14:45,051 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:73 samples : > samples,partition: 6,eclipse 13.283000
+[0m[1;32m2023-03-31 13:14:45,051 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:21 run : > samples task run,partition: 6,eclipse 13.283000
+[0m[1;33m2023-03-31 13:14:45,051 [warn ] [139813620774464] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:45,051 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:26 sample : > accept sample ,partition : 6, ddoId: 0, fileName: /home/terasort/data/data-input.dat
+[0m[1;32m2023-03-31 13:14:45,986 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:73 samples : > samples,partition: 1,eclipse 14.232000
+[0m[1;32m2023-03-31 13:14:45,986 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:21 run : > samples task run,partition: 1,eclipse 14.233000
+[0m[1;33m2023-03-31 13:14:45,986 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:45,986 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:26 sample : > accept sample ,partition : 1, ddoId: 0, fileName: /home/terasort/data/data-input.dat
+[0m[1;32m2023-03-31 13:14:46,044 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:73 samples : > samples,partition: 11,eclipse 14.259000
+[0m[1;32m2023-03-31 13:14:46,044 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/Step0Task.cpp:21 run : > samples task run,partition: 11,eclipse 14.259000
+[0m[1;33m2023-03-31 13:14:46,044 [warn ] [139813612381760] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:46,045 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/sample/SampleDCO.cpp:26 sample : > accept sample ,partition : 11, ddoId: 0, fileName: /home/terasort/data/data-input.dat
+[0m[0;36m2023-03-31 13:14:46,066 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco MapDCO
+[0m[1;32m2023-03-31 13:14:46,068 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/MapDCO.cpp:21 map : < accept map 
+[0m[1;33m2023-03-31 13:14:46,069 [warn ] [139813620774464] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:46,069 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:13 run : < map task run
+[0m[1;32m2023-03-31 13:14:46,069 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:31 textFile : < textFile
+[0m[0;36m2023-03-31 13:14:46,069 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:46 textFile : 4 - read range, 333333312 - 416666639,计 83333328 条
+[0m[0;36m2023-03-31 13:14:46,085 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco MapDCO
+[0m[1;32m2023-03-31 13:14:46,087 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/MapDCO.cpp:21 map : < accept map 
+[0m[1;33m2023-03-31 13:14:46,087 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 78934M : 13M)
+[0m[1;32m2023-03-31 13:14:46,088 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:13 run : < map task run
+[0m[1;32m2023-03-31 13:14:46,088 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:31 textFile : < textFile
+[0m[0;36m2023-03-31 13:14:46,088 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:46 textFile : 9 - read range, 749999952 - 833333279,计 83333328 条
+[0m[1;32m2023-03-31 13:15:15,019 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:63 textFile : > textFile,partition: 9,eclipse 28.931000
+[0m[1;32m2023-03-31 13:15:15,019 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:69 generateSubSplit : < generateSubSplit
+[0m[1;32m2023-03-31 13:15:16,755 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:63 textFile : > textFile,partition: 4,eclipse 30.686000
+[0m[1;32m2023-03-31 13:15:16,755 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:69 generateSubSplit : < generateSubSplit
+[0m[0;36m2023-03-31 13:15:38,748 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 0 - 6944086
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 1 - 6941630
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 2 - 6940525
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 3 - 6941170
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 4 - 6942672
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 5 - 6941310
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 6 - 6946621
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 7 - 6943488
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 8 - 6945085
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 9 - 6939542
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 10 - 6944849
+[0m[0;36m2023-03-31 13:15:38,749 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 9 - sub split 11 - 6962350
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 0 - 6944204
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 1 - 6944102
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 2 - 6942666
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 3 - 6942240
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 4 - 6943377
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 5 - 6940628
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 6 - 6943459
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 7 - 6944392
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 8 - 6940326
+[0m[0;36m2023-03-31 13:15:40,692 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 9 - 6943395
+[0m[0;36m2023-03-31 13:15:40,693 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 10 - 6943768
+[0m[0;36m2023-03-31 13:15:40,693 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:85 generateSubSplit : partition 4 - sub split 11 - 6960771
+[0m[1;32m2023-03-31 13:17:45,320 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:111 generateSubSplit : > generateSubSplit,partition: 9,eclipse 150.301000
+[0m[1;32m2023-03-31 13:17:46,312 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:25 run : > map task run,eclipse 180.224000
+[0m[1;33m2023-03-31 13:17:46,312 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 96172M : 17251M)
+[0m[1;32m2023-03-31 13:17:46,312 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/map/MapDCO.cpp:31 map : > accept map ,partition : 9, ddoId: 0, fileName: /home/terasort/data/data-input.dat
+[0m[1;32m2023-03-31 13:17:49,576 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:111 generateSubSplit : > generateSubSplit,partition: 4,eclipse 152.821000
+[0m[1;32m2023-03-31 13:17:50,703 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/Step1Task.cpp:25 run : > map task run,eclipse 184.634000
+[0m[1;33m2023-03-31 13:17:50,703 [warn ] [139813620774464] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.21% - 18.79% : 17.58% ),RAM ( 78921M - 96172M : 17251M)
+[0m[1;32m2023-03-31 13:17:50,703 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/map/MapDCO.cpp:31 map : > accept map ,partition : 4, ddoId: 0, fileName: /home/terasort/data/data-input.dat
+[0m[0;36m2023-03-31 13:22:59,988 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco ReduceDCO
+[0m[0;37m2023-03-31 13:22:59,991 [trace] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:9 reduce : ---------------------------------
+[0m[1;32m2023-03-31 13:22:59,998 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:11 reduce : < accept reduce 
+[0m[1;33m2023-03-31 13:22:59,998 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.09% - 18.79% : 17.70% ),RAM ( 78921M - 96172M : 17251M)
+[0m[1;32m2023-03-31 13:22:59,998 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:14 run : < reduce task run
+[0m[1;32m2023-03-31 13:22:59,999 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:31 read : < read
+[0m[0;36m2023-03-31 13:23:00,005 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/TerasortDCOFactory.cpp:14 newDco : create dco ReduceDCO
+[0m[0;37m2023-03-31 13:23:00,007 [trace] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:9 reduce : ---------------------------------
+[0m[1;32m2023-03-31 13:23:00,007 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:11 reduce : < accept reduce 
+[0m[1;33m2023-03-31 13:23:00,008 [warn ] [139813620774464] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.09% - 18.79% : 17.70% ),RAM ( 78921M - 96172M : 17251M)
+[0m[1;32m2023-03-31 13:23:00,008 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:14 run : < reduce task run
+[0m[1;32m2023-03-31 13:23:00,008 [info ] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:31 read : < read
+[0m[0;36m2023-03-31 13:23:28,044 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 1 ddo, record count: 6944251条
+[0m[0;36m2023-03-31 13:23:55,448 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 1 ddo, record count: 6941337条
+[0m[0;36m2023-03-31 13:24:09,566 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 2 ddo, record count: 6949302条
+[0m[0;36m2023-03-31 13:24:36,455 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 2 ddo, record count: 6940383条
+[0m[0;36m2023-03-31 13:24:46,802 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 3 ddo, record count: 6942720条
+[0m[0;36m2023-03-31 13:25:09,138 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 3 ddo, record count: 6943936条
+[0m[0;36m2023-03-31 13:25:21,597 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 4 ddo, record count: 6940758条
+[0m[0;36m2023-03-31 13:25:45,536 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 4 ddo, record count: 6942179条
+[0m[0;36m2023-03-31 13:25:46,449 [debug] [139813399295552] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 5 ddo, record count: 6942666条
+[0m[0;36m2023-03-31 13:25:47,613 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 5 ddo, record count: 6944392条
+[0m[0;36m2023-03-31 13:25:58,891 [debug] [139813399295552] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 6 ddo, record count: 6943410条
+[0m[0;36m2023-03-31 13:26:16,774 [debug] [139813399295552] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 6 ddo, record count: 6942857条
+[0m[0;36m2023-03-31 13:26:31,871 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 7 ddo, record count: 6939174条
+[0m[0;36m2023-03-31 13:26:58,327 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 7 ddo, record count: 6943979条
+[0m[0;36m2023-03-31 13:27:05,026 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 8 ddo, record count: 6940707条
+[0m[0;36m2023-03-31 13:27:18,085 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 8 ddo, record count: 6945362条
+[0m[0;36m2023-03-31 13:27:24,612 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 9 ddo, record count: 6948668条
+[0m[0;36m2023-03-31 13:27:31,769 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 9 ddo, record count: 6941248条
+[0m[0;36m2023-03-31 13:27:32,337 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 10 ddo, record count: 6940525条
+[0m[0;36m2023-03-31 13:27:33,510 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 10 ddo, record count: 6943488条
+[0m[0;36m2023-03-31 13:27:48,419 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 11 ddo, record count: 6946437条
+[0m[0;36m2023-03-31 13:28:00,482 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 11 ddo, record count: 6945685条
+[0m[0;36m2023-03-31 13:28:14,644 [debug] [139813620774464] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 12 ddo, record count: 6941173条
+[0m[0;36m2023-03-31 13:28:20,382 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:56 read : read 所有分区DDO记录 合计83319791条
+[0m[0;36m2023-03-31 13:28:20,383 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:58 read : 开始生成TeraRecord记录，应该是83319791条
+[0m[0;36m2023-03-31 13:28:20,383 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 0,6944251条
+[0m[0;36m2023-03-31 13:28:21,339 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:47 read : read node 12 ddo, record count: 6941799条
+[0m[0;36m2023-03-31 13:28:21,448 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:56 read : read 所有分区DDO记录 合计83316645条
+[0m[0;36m2023-03-31 13:28:21,448 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:58 read : 开始生成TeraRecord记录，应该是83316645条
+[0m[0;36m2023-03-31 13:28:21,448 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 0,6941337条
+[0m[0;36m2023-03-31 13:28:21,670 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 1,6949302条
+[0m[0;36m2023-03-31 13:28:22,496 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 1,6940383条
+[0m[0;36m2023-03-31 13:28:22,768 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 2,6942720条
+[0m[0;36m2023-03-31 13:28:23,602 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 2,6943936条
+[0m[0;36m2023-03-31 13:28:24,357 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 3,6940758条
+[0m[0;36m2023-03-31 13:28:24,872 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 3,6942179条
+[0m[0;36m2023-03-31 13:28:25,474 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 4,6942666条
+[0m[0;36m2023-03-31 13:28:26,072 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 4,6944392条
+[0m[0;36m2023-03-31 13:28:26,760 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 5,6943410条
+[0m[0;36m2023-03-31 13:28:27,171 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 5,6942857条
+[0m[0;36m2023-03-31 13:28:27,892 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 6,6939174条
+[0m[0;36m2023-03-31 13:28:28,323 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 6,6943979条
+[0m[0;36m2023-03-31 13:28:29,008 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 7,6940707条
+[0m[0;36m2023-03-31 13:28:29,449 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 7,6945362条
+[0m[0;36m2023-03-31 13:28:30,208 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 8,6948668条
+[0m[0;36m2023-03-31 13:28:30,759 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 8,6941248条
+[0m[0;36m2023-03-31 13:28:31,481 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 9,6940525条
+[0m[0;36m2023-03-31 13:28:32,024 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 9,6943488条
+[0m[0;36m2023-03-31 13:28:32,904 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 10,6946437条
+[0m[0;36m2023-03-31 13:28:33,274 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 10,6945685条
+[0m[0;36m2023-03-31 13:28:34,344 [debug] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 2 - split 11,6941173条
+[0m[0;36m2023-03-31 13:28:34,472 [debug] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:64 read : 7 - split 11,6941799条
+[0m[1;32m2023-03-31 13:28:35,605 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:81 read : > read,partition: 2,eclipse 335.606000
+[0m[1;32m2023-03-31 13:28:36,870 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:100 sort : < sort
+[0m[1;32m2023-03-31 13:28:36,892 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:81 read : > read,partition: 7,eclipse 336.884000
+[0m[1;32m2023-03-31 13:28:38,625 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:100 sort : < sort
+[0m[1;32m2023-03-31 13:31:22,479 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:105 sort : > sort,partition: 7,eclipse 163.854000
+[0m[1;32m2023-03-31 13:31:22,479 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:109 save : < save
+[0m[1;32m2023-03-31 13:31:33,377 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:105 sort : > sort,partition: 2,eclipse 176.507000
+[0m[1;32m2023-03-31 13:31:33,377 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:109 save : < save
+[0m[1;32m2023-03-31 13:31:47,688 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:129 save : > save,partition: 7,eclipse 25.209000
+[0m[1;32m2023-03-31 13:31:47,688 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:25 run : > reduce task run,partition: 7,output count: 83316645,eclipse 527.680000, /home/terasort/data/data-output-08.dat
+[0m[1;33m2023-03-31 13:31:48,917 [warn ] [139813629167168] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.09% - 18.79% : 17.70% ),RAM ( 68121M - 96172M : 28051M)
+[0m[1;32m2023-03-31 13:31:48,917 [info ] [139813629167168] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:20 reduce : > accept reduct ,partition : 7
+[0m[1;32m2023-03-31 13:32:20,135 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:129 save : > save,partition: 2,eclipse 46.758000
+[0m[1;32m2023-03-31 13:32:20,136 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/Step2Task.cpp:25 run : > reduce task run,partition: 2,output count: 83319791,eclipse 560.137000, /home/terasort/data/data-output-03.dat
+[0m[1;33m2023-03-31 13:32:21,520 [warn ] [139813612381760] /home/kevin/git/lwdee/terasort/matrix/LinuxMatrix.cpp:41 print : CPU ( 1.09% - 18.79% : 17.70% ),RAM ( 65993M - 96172M : 30179M)
+[0m[1;32m2023-03-31 13:32:21,520 [info ] [139813612381760] /home/kevin/git/lwdee/terasort/reduce/ReduceDCO.cpp:20 reduce : > accept reduct ,partition : 2
