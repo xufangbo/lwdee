@@ -10,27 +10,48 @@
 #include "driver/TerasortConfig.hpp"
 
 bool LinuxMatrix::is_running = false;
+double LinuxMatrix::cpu_bottom = 0;
+double LinuxMatrix::cpu_top = 0;
+unsigned long LinuxMatrix::ram_bottom = 0;
+unsigned long LinuxMatrix::ram_top = 0;
 
 void matrix() {
   while (true) {
     auto cpu = LinuxMatrix::cpu_usage();
     auto ram = LinuxMatrix::ram_info();
 
-    logger_trace("cpu: %.2f%%,ram total: %ldM,available: %ldM,used: %ldM,free: %ldM", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
-    // printf("cpu rate : %lf /%,ram total: %ld M, used: %ld M, free: %ld M\n", cpu, ram.totalram, ram.usedram, ram.freeram);
+    LinuxMatrix::collect(cpu, ram);
 
-    sleep(1);
+    // logger_trace("cpu: %.2f%%,ram total: %ldM,available: %ldM,used: %ldM,free: %ldM", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
+
+    // sleep(1);
+    usleep(1000000 / 10);
   }
 }
 
+void LinuxMatrix::collect(double cpu, RamInfo& ram) {
+  cpu_bottom = cpu_bottom > cpu ? cpu : cpu_bottom;
+  cpu_top = cpu_top > cpu ? cpu_top : cpu;
+
+  ram_bottom = ram_bottom > ram.used ? ram.used : ram_bottom;
+  ram_top = ram_top > ram.used ? ram_top : ram.used;
+}
+
+void LinuxMatrix::print() {
+  logger_warn("cpu( %.2f%% - %.2f%% : %.2f%% ),ram( %ldM - %ldM : %ldM)", cpu_bottom, cpu_top, cpu_top - cpu_bottom, ram_bottom, ram_top, ram_top - ram_bottom);
+}
+
 void LinuxMatrix::start() {
-  if(!TerasortConfig::instance()->is_matrix){
+  if (!TerasortConfig::instance()->is_matrix) {
     return;
   }
   if (is_running) {
     return;
   }
-  // auto process = []() {};
+
+  cpu_bottom = cpu_top = cpu_usage();
+  ram_bottom = ram_top = ram_info().used;
+
   auto t1 = new std::thread(matrix);
 
   is_running = true;

@@ -17,7 +17,7 @@ typedef struct {
   /**
    * IO缓存
    */
-  unsigned long bufferr;  
+  unsigned long bufferr;
 
   /**
    * @brief 可用内存
@@ -28,11 +28,19 @@ typedef struct {
 
 class LinuxMatrix {
  private:
-  static void running();
   static bool is_running;
+  static double cpu_bottom;
+  static double cpu_top;
+  static unsigned long ram_bottom;
+  static unsigned long ram_top;
+
+ private:
+  static void running();
 
  public:
+  static void collect(double cpu, RamInfo& ram);
   static double cpu_usage();
   static RamInfo ram_info();
   static void start();
+  static void print();
 };

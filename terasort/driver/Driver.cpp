@@ -12,8 +12,12 @@
 #include "lwdee/DDO.h"
 #include "lwdee/lwdee.h"
 #include "map/Step1Task.h"
+#include "matrix/LinuxMatrix.h"
 
 void Driver::startJob() {
+  logger_info("> job");
+  LinuxMatrix::print();
+
   this->inputFile = TerasortConfig::instance()->inputFile;
   this->outputFile = TerasortConfig::instance()->outputFile;
   this->datum = TerasortConfig::instance()->datum;
@@ -29,7 +33,8 @@ void Driver::startJob() {
     this->mapToReduce();
     this->reduce();
 
-    logger_info("finish job,eclipse %lf s", sw.stop());
+LinuxMatrix::print();
+    logger_info("< job,eclipse %lf s", sw.stop());
 
     logger_info("finished");
   } catch (Exception& ex) {
