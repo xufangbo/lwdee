@@ -18,6 +18,7 @@ int use_ccb = true;
 
 int64_t start_offset = RdKafka::Topic::OFFSET_STORED;
 
+static void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata);
 void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic);
 void msg_consume(RdKafka::Message* message, void* opaque);
 
@@ -176,8 +177,6 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
       run = 0;
   }
 }
-
-static void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata);
 
 void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic) {
   class RdKafka::Metadata* metadata;
