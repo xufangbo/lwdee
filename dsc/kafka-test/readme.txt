@@ -1,3 +1,7 @@
+ubuntu可以通过sudo apt-get intall librdkafka++-dev来安装不过版本是1.3的比较老，可以使用下面的地址下载编译后安装
+https://github.com/confluentinc/librdkafka/releases
+安装完之后复制so文件到项目中会有引用个错误，所以需要使用下面的脚本复制到/usr/local/lib下
+
 sudo mkdir -p /usr/local/lib/rdkafka
 sudo cp -rf ./* /usr/local/lib/rdkafka
 ls /usr/local/lib/rdkafka

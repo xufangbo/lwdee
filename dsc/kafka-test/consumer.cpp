@@ -4,7 +4,10 @@
 #include <csignal>
 #include <iostream>
 
+// https://blog.csdn.net/ArtAndLife/article/details/119307135
+
 std::string brokers = "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092";
+std::string groupName = "test-group";
 std::string topicName = "test";
 int32_t partition = 0;  // RdKafka::Topic::PARTITION_UA;
 std::string errstr;
@@ -13,7 +16,7 @@ static volatile sig_atomic_t run = 1;
 static bool exit_eof = false;
 int use_ccb = true;
 
-int64_t start_offset = RdKafka::Topic::OFFSET_BEGINNING;
+int64_t start_offset = RdKafka::Topic::OFFSET_STORED;
 
 void msg_consume(RdKafka::Message* message, void* opaque);
 
@@ -56,18 +59,16 @@ int main() {
    * Create configuration objects
    */
   RdKafka::Conf* conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
-  RdKafka::Conf* tconf = RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC);
 
-   conf->set("metadata.broker.list", brokers, errstr);
+  // conf->set("metadata.broker.list", brokers, errstr);
+  conf->set("bootstrap.servers", brokers, errstr);
+  conf->set("group.id", groupName, errstr);  // 设置消费组名：group.id（string类型）
+
+  conf->set("max.partition.fetch.bytes", "1024000", errstr);  // 消费消息的最大大小
+  conf->set("enable.partition.eof", "true", errstr);          // 当消费者到达分区结尾，发送 RD_KAFKA_RESP_ERR__PARTITION_EOF 事件，默认值 true
 
   ExampleEventCb ex_event_cb;
   conf->set("event_cb", &ex_event_cb, errstr);
-
-  /*
-   * Consumer mode
-   */
-
-  conf->set("enable.partition.eof", "true", errstr);
 
   /*
    * Create consumer using accumulated global configuration.
@@ -78,11 +79,11 @@ int main() {
     exit(1);
   }
 
-  std::cout << "% Created consumer " << consumer->name() << std::endl;
-
   /*
    * Create topic handle.
    */
+  RdKafka::Conf* tconf = RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC);
+
   RdKafka::Topic* topic = RdKafka::Topic::create(consumer, topicName, tconf, errstr);
   if (!topic) {
     std::cerr << "Failed to create topic: " << errstr << std::endl;
@@ -94,8 +95,7 @@ int main() {
    */
   RdKafka::ErrorCode resp = consumer->start(topic, partition, start_offset);
   if (resp != RdKafka::ERR_NO_ERROR) {
-    std::cerr << "Failed to start consumer: " << RdKafka::err2str(resp)
-              << std::endl;
+    std::cerr << "Failed to start consumer: " << RdKafka::err2str(resp) << std::endl;
     exit(1);
   }
 
@@ -135,7 +135,7 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
 
     case RdKafka::ERR_NO_ERROR:
       /* Real message */
-      std::cout << "Read msg at offset " << message->offset() << std::endl;
+      std::cout << "Read msg at offset " << message->offset() << ": ";
       if (message->key()) {
         std::cout << "Key: " << *message->key() << std::endl;
       }
