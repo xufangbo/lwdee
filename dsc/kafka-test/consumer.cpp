@@ -1,105 +1,175 @@
-#include "consumer.hpp"
+#include <librdkafka/rdkafkacpp.h>
+#include <time.h>
+#include <unistd.h>
+#include <csignal>
+#include <iostream>
 
-KafkaConsumer::KafkaConsumer(const std::string& brokers, const std::string& groupId, const std::vector<std::string>& topics, int partition) {
-  m_brokers = brokers;
-  m_groupId = groupId;
-  m_topicVector = topics;
-  m_partition = partition;
+std::string brokers = "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092";
+std::string topicName = "test";
+int32_t partition = 0;  // RdKafka::Topic::PARTITION_UA;
+std::string errstr;
 
-  // 创建Conf实例：
-  m_config = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
-  if (m_config == nullptr) {
-    std::cout << "Create Rdkafka Global Conf Failed." << std::endl;
+static volatile sig_atomic_t run = 1;
+static bool exit_eof = false;
+int use_ccb = true;
+
+int64_t start_offset = RdKafka::Topic::OFFSET_BEGINNING;
+
+void msg_consume(RdKafka::Message* message, void* opaque);
+
+class ExampleConsumeCb : public RdKafka::ConsumeCb {
+ public:
+  void consume_cb(RdKafka::Message& msg, void* opaque) {
+    msg_consume(&msg, opaque);
   }
+};
 
-  m_topicConfig = RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC);
-  if (m_topicConfig == nullptr) {
-    std::cout << "Create Rdkafka Topic Conf Failed." << std::endl;
+class ExampleEventCb : public RdKafka::EventCb {
+ public:
+  void event_cb(RdKafka::Event& event) {
+    switch (event.type()) {
+      case RdKafka::Event::EVENT_ERROR:
+        if (event.fatal()) {
+          std::cerr << "FATAL ";
+          run = 0;
+        }
+        std::cerr << "ERROR (" << RdKafka::err2str(event.err()) << "): " << event.str() << std::endl;
+        break;
+
+      case RdKafka::Event::EVENT_STATS:
+        std::cerr << "\"STATS\": " << event.str() << std::endl;
+        break;
+
+      case RdKafka::Event::EVENT_LOG:
+        fprintf(stderr, "LOG-%i-%s: %s\n", event.severity(), event.fac().c_str(), event.str().c_str());
+        break;
+
+      default:
+        std::cerr << "EVENT " << event.type() << " (" << RdKafka::err2str(event.err()) << "): " << event.str() << std::endl;
+        break;
+    }
   }
-
-  // 设置Conf的各个配置参数：
-  RdKafka::Conf::ConfResult result;
-  std::string error_str;
-
-  result = m_config->set("bootstrap.servers", m_brokers, error_str);
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'bootstrap.servers' failed: " << error_str << std::endl;
-  }
-
-  result = m_config->set("group.id", m_groupId, error_str);  // 设置消费组名：group.id（string类型）
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'group.id' failed: " << error_str << std::endl;
-  }
-
-  result = m_config->set("max.partition.fetch.bytes", "1024000", error_str);  // 消费消息的最大大小
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'max.partition.fetch.bytes' failed: " << error_str << std::endl;
-  }
-
-  result = m_config->set("enable.partition.eof", "false", error_str);  // enable.partition.eof: 当消费者到达分区结尾，发送 RD_KAFKA_RESP_ERR__PARTITION_EOF 事件，默认值 true
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'enable.partition.eof' failed: " << error_str << std::endl;
-  }
-
-  m_event_cb = new ConsumerEventCb;
-  result = m_config->set("event_cb", m_event_cb, error_str);
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'event_cb' failed: " << error_str << std::endl;
-  }
-
-  m_rebalance_cb = new ConsumerRebalanceCb;
-  result = m_config->set("rebalance_cb", m_rebalance_cb, error_str);
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'rebalance_cb' failed: " << error_str << std::endl;
-  }
-
-  // 设置 topic_conf的配置项：
-  result = m_topicConfig->set("auto.offset.reset", "latest", error_str);
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Topic Conf set 'auto.offset.reset' failed: " << error_str << std::endl;
-  }
-
-  result = m_config->set("default_topic_conf", m_topicConfig, error_str);
-  if (result != RdKafka::Conf::CONF_OK) {
-    std::cout << "Conf set 'default_topic_conf' failed: " << error_str << std::endl;
-  }
-
-  // 创建消费者客户端：
-  m_consumer = RdKafka::KafkaConsumer::create(m_config, error_str);
-  if (m_consumer == nullptr) {
-    std::cout << "Create KafkaConsumer failed: " << error_str << std::endl;
-  }
-  std::cout << "Create KafkaConsumer succeed, consumer name : " << m_consumer->name() << std::endl;
-}
-
-void KafkaConsumer::pullMessage() {
-}
+};
 
 int main() {
+  /*
+   * Create configuration objects
+   */
+  RdKafka::Conf* conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
+  RdKafka::Conf* tconf = RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC);
 
-  std::string brokers = ",10.180.98.132:9092,10.180.98.133:9092";
-  std::string topic = "test";
+   conf->set("metadata.broker.list", brokers, errstr);
 
-  std::vector<std::string> topics;  // 待消费主题的集合
-  topics.push_back(topic);
+  ExampleEventCb ex_event_cb;
+  conf->set("event_cb", &ex_event_cb, errstr);
 
-  std::string group = "consumer-group-demo";  // 消费组
+  /*
+   * Consumer mode
+   */
 
-  KafkaConsumer consumer(brokers, group, topics, RdKafka::Topic::OFFSET_BEGINNING);
+  conf->set("enable.partition.eof", "true", errstr);
 
-  consumer.pullMessage();
+  /*
+   * Create consumer using accumulated global configuration.
+   */
+  RdKafka::Consumer* consumer = RdKafka::Consumer::create(conf, errstr);
+  if (!consumer) {
+    std::cerr << "Failed to create consumer: " << errstr << std::endl;
+    exit(1);
+  }
 
-  RdKafka::wait_destroyed(5000);
+  std::cout << "% Created consumer " << consumer->name() << std::endl;
 
-  return 0;
+  /*
+   * Create topic handle.
+   */
+  RdKafka::Topic* topic = RdKafka::Topic::create(consumer, topicName, tconf, errstr);
+  if (!topic) {
+    std::cerr << "Failed to create topic: " << errstr << std::endl;
+    exit(1);
+  }
+
+  /*
+   * Start consumer for topic+partition at start offset
+   */
+  RdKafka::ErrorCode resp = consumer->start(topic, partition, start_offset);
+  if (resp != RdKafka::ERR_NO_ERROR) {
+    std::cerr << "Failed to start consumer: " << RdKafka::err2str(resp)
+              << std::endl;
+    exit(1);
+  }
+
+  ExampleConsumeCb ex_consume_cb;
+
+  /*
+   * Consume messages
+   */
+  while (run) {
+    if (use_ccb) {
+      consumer->consume_callback(topic, partition, 1000, &ex_consume_cb, &use_ccb);
+    } else {
+      RdKafka::Message* msg = consumer->consume(topic, partition, 1000);
+      msg_consume(msg, NULL);
+      delete msg;
+    }
+    consumer->poll(0);
+  }
+
+  /*
+   * Stop consumer
+   */
+  consumer->stop(topic, partition);
+
+  consumer->poll(1000);
+
+  delete topic;
+  delete consumer;
 }
 
-/*
-在生产者/消费者 客户端 连接 broker 时，填充“bootstrap.server” 参数：
-        Q: 为什么只设置了一个broker的地址（port = 9092），如果Kafka集群中有多个broker，且生产者/消费者订阅的Topic横跨多个broker时，生产者是如何知道其他broker的？
-        A: bootstrap.server 参数用来指定生产者客户端连接Kafka集群所需的broker地址清单，具体的内容格式为：
-        host1:port1, host2:port2
-        可以设置一个或多个地址，中间以逗号隔开，此参数的默认值为 " "。
-        【注意这里并非需要所有的broker地址，因为生产者会从给定的broker里查找到其他broker信息。】
-        不过建议至少要设置两个以上的broker地址信息，当其中任意一个宕机时，生产者仍然可以连接到Kafka集群上。
-*/
+void msg_consume(RdKafka::Message* message, void* opaque) {
+  const RdKafka::Headers* headers;
+
+  switch (message->err()) {
+    case RdKafka::ERR__TIMED_OUT:
+      break;
+
+    case RdKafka::ERR_NO_ERROR:
+      /* Real message */
+      std::cout << "Read msg at offset " << message->offset() << std::endl;
+      if (message->key()) {
+        std::cout << "Key: " << *message->key() << std::endl;
+      }
+      headers = message->headers();
+      if (headers) {
+        std::vector<RdKafka::Headers::Header> hdrs = headers->get_all();
+        for (size_t i = 0; i < hdrs.size(); i++) {
+          const RdKafka::Headers::Header hdr = hdrs[i];
+
+          if (hdr.value() != NULL)
+            printf(" Header: %s = \"%.*s\"\n", hdr.key().c_str(), (int)hdr.value_size(), (const char*)hdr.value());
+          else
+            printf(" Header:  %s = NULL\n", hdr.key().c_str());
+        }
+      }
+      printf("%.*s\n", static_cast<int>(message->len()), static_cast<const char*>(message->payload()));
+      break;
+
+    case RdKafka::ERR__PARTITION_EOF:
+      /* Last message */
+      if (exit_eof) {
+        run = 0;
+      }
+      break;
+
+    case RdKafka::ERR__UNKNOWN_TOPIC:
+    case RdKafka::ERR__UNKNOWN_PARTITION:
+      std::cerr << "Consume failed: " << message->errstr() << std::endl;
+      run = 0;
+      break;
+
+    default:
+      /* Errors */
+      std::cerr << "Consume failed: " << message->errstr() << std::endl;
+      run = 0;
+  }
+}

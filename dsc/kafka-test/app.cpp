@@ -159,8 +159,7 @@ class ExampleEventCb : public RdKafka::EventCb {
   }
 };
 
-/* Use of this partitioner is pretty pointless since no key is provided
- * in the produce() call. */
+/* Use of this partitioner is pretty pointless since no key is provided in the produce() call. */
 class MyHashPartitionerCb : public RdKafka::PartitionerCb {
  public:
   int32_t partitioner_cb(const RdKafka::Topic* topic, const std::string* key, int32_t partition_cnt, void* msg_opaque) {
@@ -201,8 +200,7 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
             printf(" Header:  %s = NULL\n", hdr.key().c_str());
         }
       }
-      printf("%.*s\n", static_cast<int>(message->len()),
-             static_cast<const char*>(message->payload()));
+      printf("%.*s\n", static_cast<int>(message->len()), static_cast<const char*>(message->payload()));
       break;
 
     case RdKafka::ERR__PARTITION_EOF:
@@ -427,8 +425,7 @@ int main(int argc, char** argv) {
         std::cout << "# Topic config" << std::endl;
       }
 
-      for (std::list<std::string>::iterator it = dump->begin();
-           it != dump->end();) {
+      for (std::list<std::string>::iterator it = dump->begin(); it != dump->end();) {
         std::cout << *it << " = ";
         it++;
         std::cout << *it << std::endl;
@@ -495,14 +492,11 @@ int main(int argc, char** argv) {
                             0,
                             /* Message headers, if any */
                             headers,
-                            /* Per-message opaque value passed to
-                             * delivery report */
+                            /* Per-message opaque value passed to * delivery report */
                             NULL);
       if (resp != RdKafka::ERR_NO_ERROR) {
-        std::cerr << "% Produce failed: " << RdKafka::err2str(resp)
-                  << std::endl;
-        delete headers; /* Headers are automatically deleted on produce()
-                         * success. */
+        std::cerr << "% Produce failed: " << RdKafka::err2str(resp) << std::endl;
+        delete headers; /* Headers are automatically deleted on produce() * success. */
       } else {
         std::cerr << "% Produced message (" << line.size() << " bytes)"
                   << std::endl;
@@ -543,8 +537,7 @@ int main(int argc, char** argv) {
     /*
      * Create topic handle.
      */
-    RdKafka::Topic* topic =
-        RdKafka::Topic::create(consumer, topic_str, tconf, errstr);
+    RdKafka::Topic* topic = RdKafka::Topic::create(consumer, topic_str, tconf, errstr);
     if (!topic) {
       std::cerr << "Failed to create topic: " << errstr << std::endl;
       exit(1);
