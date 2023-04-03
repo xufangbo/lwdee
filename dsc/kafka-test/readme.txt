@@ -10,4 +10,11 @@ cd /home/apps/kafka/kafka_2.11-2.1.1/bin
 ./kafka-console-consumer.sh --bootstrap-server 10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092 --group topic_lwdee --topic test --from-beginning
 ./kafka-console-producer.sh --broker-list 10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092  --topic test
 
-./build/app -C -t test -b "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092" -p 1
+# 创建分区
+./kafka-topics.sh --zookeeper 10.180.98.131:2181,10.180.98.132:2181,10.180.98.133:2181 --create --topic test-topic --partitions 3 --replication-factor 3
+# 查看分区
+./kafka-topics.sh --zookeeper 10.180.98.131:2181,10.180.98.132:2181,10.180.98.133:2181 -list
+./kafka-topics.sh --zookeeper 10.180.98.131:2181,10.180.98.132:2181,10.180.98.133:2181 --describe --topic test
+
+./build/app -C -t test -b "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092" -p 0
+./build/producer
