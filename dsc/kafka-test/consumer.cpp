@@ -18,6 +18,7 @@ int use_ccb = true;
 
 int64_t start_offset = RdKafka::Topic::OFFSET_STORED;
 
+void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic);
 void msg_consume(RdKafka::Message* message, void* opaque);
 
 class ExampleConsumeCb : public RdKafka::ConsumeCb {
@@ -89,6 +90,8 @@ int main() {
     std::cerr << "Failed to create topic: " << errstr << std::endl;
     exit(1);
   }
+
+  showMetadata(consumer, topic);
 
   /*
    * Start consumer for topic+partition at start offset
@@ -171,5 +174,71 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
       /* Errors */
       std::cerr << "Consume failed: " << message->errstr() << std::endl;
       run = 0;
+  }
+}
+
+static void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata);
+
+void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic) {
+  class RdKafka::Metadata* metadata;
+
+  /* Fetch metadata */
+  RdKafka::ErrorCode err = consumer->metadata(false, topic, &metadata, 5000);
+  if (err != RdKafka::ERR_NO_ERROR) {
+    std::cerr << "%% Failed to acquire metadata: " << RdKafka::err2str(err) << std::endl;
+    return;
+  }
+
+  metadata_print(topic->name(), metadata);
+
+  delete metadata;
+  run = 0;
+}
+
+void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata) {
+  std::cout << "Metadata for " << (topic.empty() ? "" : "all topics") << "(from broker " << metadata->orig_broker_id() << ":" << metadata->orig_broker_name() << std::endl;
+
+  /* Iterate brokers */
+  std::cout << " " << metadata->brokers()->size() << " brokers:" << std::endl;
+  RdKafka::Metadata::BrokerMetadataIterator ib;
+  for (ib = metadata->brokers()->begin(); ib != metadata->brokers()->end(); ++ib) {
+    std::cout << "  broker " << (*ib)->id() << " at " << (*ib)->host() << ":" << (*ib)->port() << std::endl;
+  }
+  /* Iterate topics */
+  std::cout << metadata->topics()->size() << " topics:" << std::endl;
+  RdKafka::Metadata::TopicMetadataIterator it;
+  for (it = metadata->topics()->begin(); it != metadata->topics()->end(); ++it) {
+    std::cout << "  topic \"" << (*it)->topic() << "\" with " << (*it)->partitions()->size() << " partitions:";
+
+    if ((*it)->err() != RdKafka::ERR_NO_ERROR) {
+      std::cout << " " << err2str((*it)->err());
+      if ((*it)->err() == RdKafka::ERR_LEADER_NOT_AVAILABLE)
+        std::cout << " (try again)";
+    }
+    std::cout << std::endl;
+
+    /* Iterate topic's partitions */
+    RdKafka::TopicMetadata::PartitionMetadataIterator ip;
+    for (ip = (*it)->partitions()->begin(); ip != (*it)->partitions()->end();
+         ++ip) {
+      std::cout << "    partition " << (*ip)->id() << ", leader " << (*ip)->leader() << ", replicas: ";
+
+      /* Iterate partition's replicas */
+      RdKafka::PartitionMetadata::ReplicasIterator ir;
+      for (ir = (*ip)->replicas()->begin(); ir != (*ip)->replicas()->end(); ++ir) {
+        std::cout << (ir == (*ip)->replicas()->begin() ? "" : ",") << *ir;
+      }
+
+      /* Iterate partition's ISRs */
+      std::cout << ", isrs: ";
+      RdKafka::PartitionMetadata::ISRSIterator iis;
+      for (iis = (*ip)->isrs()->begin(); iis != (*ip)->isrs()->end(); ++iis)
+        std::cout << (iis == (*ip)->isrs()->begin() ? "" : ",") << *iis;
+
+      if ((*ip)->err() != RdKafka::ERR_NO_ERROR)
+        std::cout << ", " << RdKafka::err2str((*ip)->err()) << std::endl;
+      else
+        std::cout << std::endl;
+    }
   }
 }
