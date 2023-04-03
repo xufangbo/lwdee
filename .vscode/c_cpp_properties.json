@@ -5,6 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/terasort",
+                "${workspaceFolder}/dsc",
+                "${workspaceFolder}/inc",
                 "${workspaceFolder}/uhconnect"
             ],
             "defines": [],
