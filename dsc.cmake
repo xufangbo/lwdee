@@ -12,7 +12,7 @@ add_subdirectory(uhshell) # lwdee/uhconnect/api/UhconnDco.cpp:8:10: fatal error:
 add_subdirectory(terasort)
 
 SET(SRC_FILES 
-terasort/app.cpp
+app.cpp
 terasort/terasort.cpp
 terasort/TerasortDCOFactory.cpp
 )

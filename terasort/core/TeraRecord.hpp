@@ -38,7 +38,7 @@ typedef struct {
   std::string line() {
     std::string line(101, '\0');
     memcpy((void*)line.data(), key, 10);
-    memcpy((void*)line.data() + 10, value, 90);
+    memcpy((void*)(line.data() + 10), value, 90);
     return line;
   }
 } TeraRecord;

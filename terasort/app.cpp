@@ -11,7 +11,7 @@
 #include "lwdee/lwdee.h"
 #include "matrix/LinuxMatrix.h"
 #include "terasort.h"
-#include "terasort/TerasortDCOFactory.h"
+#include "TerasortDCOFactory.h"
 #include "uhshell.h"
 #include "driver/TerasortConfig.hpp"
 
@@ -27,12 +27,7 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
   if (localNode->itId() == 1) {
-    int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
     Driver().startJob();
-
-    // test_dco(1);
-    // test_dco(2);
-    // test_dco(3);
   }
 
   while (true) {

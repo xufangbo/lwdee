@@ -47,7 +47,7 @@ class Bytes10 {
 
   uint16_t right2() {
     uint16_t i;
-    memcpy(&i, (void*)values + 8, 2);
+    memcpy(&i, (void*)(values + 8), 2);
 
     char* ptr = (char*)&i;
     std::reverse(ptr, ptr + 2);
