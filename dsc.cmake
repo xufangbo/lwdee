@@ -1,5 +1,5 @@
 
-include_directories(./terasort)
+include_directories(./dsc)
 include_directories(./uhconnect)
 # include_directories(.)
 # include_directories(../uhconnect)
@@ -9,12 +9,11 @@ include_directories(./uhconnect)
 
 add_subdirectory(uhconnect)
 add_subdirectory(uhshell) # lwdee/uhconnect/api/UhconnDco.cpp:8:10: fatal error: log.h: No such file or directory
-add_subdirectory(terasort)
+add_subdirectory(dsc)
 
 SET(SRC_FILES 
-app.cpp
-terasort/terasort.cpp
-terasort/TerasortDCOFactory.cpp
+dsc/app.cpp
+dsc/DscDcoFactory.cpp
 )
 add_executable(app ${SRC_FILES}) 
 

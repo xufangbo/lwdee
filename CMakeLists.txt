@@ -16,4 +16,5 @@ set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -w -g")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 # include(${CMAKE_CURRENT_SOURCE_DIR}/demo.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/terasort.cmake)
+# include(${CMAKE_CURRENT_SOURCE_DIR}/terasort.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/dsc.cmake)
