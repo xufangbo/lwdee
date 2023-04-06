@@ -1,19 +1,19 @@
 const fs = require('fs');
 
-let workers = [
-    { "name": "k8s-node01", "ip": "10.180.98.131" },
-    { "name": "k8s-node01", "ip": "10.180.98.131" },
-    { "name": "k8s-node02", "ip": "10.180.98.132" },
-    { "name": "k8s-node03", "ip": "10.180.98.133" },
-    { "name": "k8s-node04", "ip": "10.180.98.134" },
-    { "name": "k8s-node05", "ip": "10.180.98.135" }
-];
-
 // let workers = [
-//     { "name": "localhost", "ip": "127.0.0.1" },
-//     { "name": "localhost", "ip": "127.0.0.1" },
-//     { "name": "localhost", "ip": "127.0.0.1" }
+//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-node02", "ip": "10.180.98.132" },
+//     { "name": "k8s-node03", "ip": "10.180.98.133" },
+//     { "name": "k8s-node04", "ip": "10.180.98.134" },
+//     { "name": "k8s-node05", "ip": "10.180.98.135" }
 // ];
+
+let workers = [
+    { "name": "localhost", "ip": "127.0.0.1" },
+    { "name": "localhost", "ip": "127.0.0.1" },
+    { "name": "localhost", "ip": "127.0.0.1" }
+];
 
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
 

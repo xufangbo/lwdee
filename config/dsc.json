@@ -6,6 +6,6 @@
     "topic": "test",
     "outTopic":"xx",
     "partitions": [0],
-    "splitNums1": 2,
-    "splitNums2": 2
+    "splitNums1": 1,
+    "splitNums2": 1
 }

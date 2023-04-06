@@ -4,10 +4,13 @@
 #include <sstream>
 
 #include "KafkaJobConsumer.hpp"
+#include "JobManager.hpp"
 #include "Step1Task.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/Stopwatch.h"
+#include "core/UhconnVoxorFactory.h"
+#include "core/UhconnWorkNode.h"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
 
@@ -23,12 +26,17 @@ std::string MapDCO::start(std::string a) {
     PartitionStep1 input;
     input.fromJson(&a);
 
-    KafkaJobConsumer::start(input.index);
+    KafkaJobConsumer* consumer = new KafkaJobConsumer();
+    JobManager::add(consumer);
+    consumer->start(input.index);
 
     LinuxMatrix::print();
     logger_info("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
-    return "succeed";
+    auto node = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+
+    return std::to_string(node->itId()) + "." + std::to_string(input.index);
+
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";

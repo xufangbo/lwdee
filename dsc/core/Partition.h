@@ -36,14 +36,6 @@ typedef struct {
   DdoDataId dataId;
 } SubSplitDDO;
 
-class Step1Output {
- public:
-  std::vector<SubSplitDDO> items;
-
-  std::string toJson();
-  void fromJson(std::string* json);
-};
-
 class PartitionStep2 : public Partition {
  public:
   string outputFile;

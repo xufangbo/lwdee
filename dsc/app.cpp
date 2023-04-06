@@ -13,8 +13,9 @@
 #include "lwdee/lwdee.h"
 #include "matrix/LinuxMatrix.h"
 
-void init_logger(std::string nodeName);
+void logger_init(std::string nodeName);
 void init(int argc, char* argv[]);
+std::string configFile();
 
 int main(int argc, char* argv[]) {
   init(argc, argv);
@@ -39,16 +40,45 @@ void init(int argc, char* argv[]) {
     nodeName = argv[1];
     if (nodeName == "${nodename}") {
       nodeName = getenv("nodename");
-      logger_info("this is %s", nodeName.c_str());
+      
     }
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
 
   DscConfig::instance()->readConfig();
-  init_logger(nodeName);
+  logger_init(nodeName);
+  logger_warn("this is %s", nodeName.c_str());
   LinuxMatrix::start();
 
+  if (UhconnConfig::getInstance().loadConf(configFile(), nodeName) == 0) {
+    // int nodeAmount = UhconnConfig::getInstance().getInt("node_amount");
+    // UhconnConfig::getInstance().setNodeAmount(nodeAmount);
+    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new DscDcoFactory(), UhconnConfig::getInstance().getNodeId());
+    UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+    workNode->itsRouter().setupRouteInfoFromConf();
+  } else {
+    logger_error("load config failed!!");
+  }
+}
+
+void logger_init(std::string nodeName) {
+  LogOption option;
+  option.initalized = false;
+  option.level = log_trace;
+  strcpy(option.path, "./log");
+  strcpy(option.name, nodeName.c_str());
+  option.is_color = true;
+  option.days = 10;
+
+  if (logger_initialize(option) != 0) {
+    printf("log initialize error\n");
+  } else {
+    logger_info("-- app starting ... ");
+  }
+}
+
+std::string configFile() {
   std::string configFile = "./conf.json";
   FILE* fp = fopen(configFile.c_str(), "r");
   if (fp != NULL) {
@@ -63,29 +93,5 @@ void init(int argc, char* argv[]) {
     }
   }
 
-  if (UhconnConfig::getInstance().loadConf(configFile, nodeName) == 0) {
-    // int nodeAmount = UhconnConfig::getInstance().getInt("node_amount");
-    // UhconnConfig::getInstance().setNodeAmount(nodeAmount);
-    UhconnVoxorFactory::getInstance().setupLocalWorkEnvironment(new DscDcoFactory(), UhconnConfig::getInstance().getNodeId());
-    UhconnWorkNode* workNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-    workNode->itsRouter().setupRouteInfoFromConf();
-  } else {
-    logger_error("load config failed!!");
-  }
-}
-
-void init_logger(std::string nodeName) {
-  LogOption option;
-  option.initalized = false;
-  option.level = log_trace;
-  strcpy(option.path, "./log");
-  strcpy(option.name, nodeName.c_str());
-  option.is_color = true;
-  option.days = 10;
-
-  if (logger_initialize(option) != 0) {
-    printf("log initialize error\n");
-  } else {
-    logger_info("-- app starting ... ");
-  }
+  return configFile;
 }

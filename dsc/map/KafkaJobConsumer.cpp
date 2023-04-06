@@ -4,11 +4,8 @@
 
 static std::string errstr;
 
-bool KafkaJobConsumer::use_ccb = true;
-std::thread KafkaJobConsumer::thread;
-
 void KafkaJobConsumer::start(int partition) {
-  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart, partition);
+  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart,this, partition);
 }
 
 void KafkaJobConsumer::doStart(int partition) {

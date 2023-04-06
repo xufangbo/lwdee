@@ -4,6 +4,7 @@ MapDCO.cpp
 Step1Task.cpp
 KafkaCallback.cpp
 KafkaJobConsumer.cpp
+JobManager.cpp
 )
 
 target_link_libraries(map rdkafka++ core)

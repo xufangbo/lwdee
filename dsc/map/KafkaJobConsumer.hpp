@@ -5,12 +5,12 @@
 
 class KafkaJobConsumer {
  private:
- static bool use_ccb;
-  static std::thread thread;
+  bool use_ccb = true;
+  std::thread thread;
 
-  private:
-  static void doStart(int partition);
+ private:
+  void doStart(int partition);
 
  public:
-  static void start(int partition);
+  void start(int partition);
 };

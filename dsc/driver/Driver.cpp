@@ -24,7 +24,7 @@ void Driver::startJob() {
 
     this->map();
     this->mapToReduce();
-    this->reduce();
+    // this->reduce();
 
     LinuxMatrix::print();
     logger_info("< job,eclipse %lf s", sw.stop());
@@ -60,7 +60,7 @@ void Driver::mapToReduce() {
   logger_info("< mapToReduce");
   Stopwatch sw;
 
-  std::vector<Step1Output> step1Outputs;
+  std::vector<std::string> step1Outputs;
   for (auto& kv : step1Invokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
@@ -69,23 +69,22 @@ void Driver::mapToReduce() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      // logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
-
-      Step1Output setp1Output;
-      setp1Output.fromJson(bytes.get());
+      logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
       ddo.releaseGlobal();
 
-      step1Outputs.push_back(setp1Output);
+      step1Outputs.push_back(*bytes);
     } catch (Exception& ex) {
       ex.trace(ZONE);
+      throw ex;
     }
   }
 
   for (int i = 0; i < conf->splitNums2; i++) {
     PartitionStep2 step2Input(i, conf->outTopic);
-    for (Step1Output& step1Output : step1Outputs) {
-      step2Input.subSplitDDOs.push_back(step1Output.items[i]);
+
+    for (std::string& output1 : step1Outputs) {
+      // step2Input.subSplitDDOs.push_back(step1Output.items[i]);
     }
 
     step2Inputs.push_back(step2Input);
@@ -128,6 +127,7 @@ void Driver::reduce() {
       ddo.releaseGlobal();
     } catch (Exception& ex) {
       ex.trace(ZONE);
+      throw ex;
     }
   }
 
