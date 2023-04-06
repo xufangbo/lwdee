@@ -4,7 +4,7 @@
 #include <iostream>
 
 std::string brokers = "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092";
-std::string topic = "test";
+std::string topic = "topic_dcs";
 
 void sendMessage(RdKafka::Producer* producer);
 
@@ -26,7 +26,7 @@ int main() {
 
   for (;;) {
     sendMessage(producer);
-    sleep(1);
+    usleep(1000000 / 10);
   }
 
   return 1;

@@ -8,7 +8,7 @@
 
 std::string brokers = "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092";
 std::string groupName = "test-group";
-std::string topicName = "test";
+std::string topicName = "topic_lwdee";
 int32_t partition = 0;  // RdKafka::Topic::PARTITION_UA;
 std::string errstr;
 
@@ -92,7 +92,7 @@ int main() {
     exit(1);
   }
 
-  // showMetadata(consumer, topic);
+  showMetadata(consumer, topic);
 
   /*
    * Start consumer for topic+partition at start offset
