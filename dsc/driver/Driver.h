@@ -3,25 +3,25 @@
 #include <iostream>
 #include <vector>
 
+#include "core/DscConfig.hpp"
 #include "core/Partition.h"
 #include "lwdee/DCO.h"
-#include "core/DscConfig.hpp"
 
 class Driver {
  private:
   DscConfig* conf = nullptr;
-  std::vector<pair<DCO, DDOId>> step1Invokers;
-  std::vector<pair<DCO, DDOId>> step2Invokers;
+  std::vector<pair<DCO, DDOId>> kafkaInvokers;
+  std::vector<pair<DCO, DDOId>> mapInvokers;
+  std::vector<pair<DCO, DDOId>> reduceInvokers;
   std::vector<PartitionStep2> step2Inputs;
 
  public:
   void startJob();
 
  private:
+  void kafka();
+  void kafkaToMap();
 
-  /**
-   * 执行map计算
-   * */
   void map();
 
   void mapToReduce();

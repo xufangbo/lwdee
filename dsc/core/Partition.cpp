@@ -1,12 +1,30 @@
 #include "Partition.h"
 #include "core/cjson.hpp"
 
+std::string PartitionKafka::toJson() {
+  cJSON* root = cJSON_CreateObject();
+
+  cJSON_AddNumberToObject(root, "index", index);
+  cJSON_AddStringToObject(root, "group", group.c_str());
+  cJSON_AddStringToObject(root, "topic", topic.c_str());
+
+  char* jsonText = cJSON_Print(root);
+
+  return jsonText;
+}
+
+void PartitionKafka::fromJson(std::string* json) {
+  cJSON* node = cJSON_Parse(json->c_str());
+  index = cJSON_GetObjectItem(node, "index")->valueint;
+  group = cJSON_GetObjectItem(node, "group")->valuestring;
+  topic = cJSON_GetObjectItem(node, "topic")->valuestring;
+}
+
 std::string PartitionStep1::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "index", index);
   cJSON_AddStringToObject(root, "fileName", fileName.c_str());
-
 
   char* jsonText = cJSON_Print(root);
 

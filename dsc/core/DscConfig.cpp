@@ -51,16 +51,18 @@ void DscConfig::readConfig() {
     partitions.push_back(partitionId);
   }
 
+  logger_debug("%s %s %s %s %d %d", inputFile.c_str(), brokers.c_str(), topic.c_str(), partitionsString().c_str(), _instance.splitNums1, _instance.splitNums2);
+}
 
-  std::string partionsString = "[";
-  for (int i = 0; i < size - 1; i++) {
-    partionsString += std::to_string(partitions[i]);
-    partionsString += ",";
+std::string DscConfig::partitionsString() {
+  std::string str = "[";
+  for (int i = 0; i < partitions.size() - 1; i++) {
+    str += std::to_string(partitions[i]);
+    str += ",";
   }
-  partionsString += std::to_string(partitions[size - 1]);
-  partionsString += "]";
-  logger_debug("%s %s %s %s %d %d", inputFile.c_str(), brokers.c_str(),topic.c_str(), partitionsNode->string, _instance.splitNums1, _instance.splitNums2);
-  
+  str += std::to_string(partitions[partitions.size() - 1]);
+  str += "]";
+  return str;
 }
 
 DscConfig* DscConfig::instance() {

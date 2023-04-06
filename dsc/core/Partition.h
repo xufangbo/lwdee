@@ -13,6 +13,21 @@ class Partition {
   int index;
 };
 
+class PartitionKafka : public Partition {
+ public:
+  string group;
+  string topic;
+
+ public:
+  PartitionKafka() {}
+  PartitionKafka(int index, string group, string topic)
+      : Partition(index), group(group),topic(topic) {}
+
+  std::string toJson();
+  void fromJson(std::string* json);
+};
+
+
 class PartitionStep1 : public Partition {
  public:
   string fileName;

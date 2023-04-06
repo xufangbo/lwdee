@@ -17,6 +17,7 @@ int main() {
   init_logger("producer");
 
   dsconf->readConfig();
+  logger_info("topic: %s,partitions:%s",dsconf->topic.c_str(),dsconf->partitionsString().c_str());
 
   RdKafka::Conf* conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
 

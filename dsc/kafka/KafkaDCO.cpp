@@ -23,7 +23,7 @@ std::string KafkaDCO::start(std::string a) {
     LinuxMatrix::print();
     // logger_info("< invokded start %s", a.c_str());
 
-    PartitionStep1 input;
+    PartitionKafka input;
     input.fromJson(&a);
 
     KafkaJobConsumer* consumer = new KafkaJobConsumer();

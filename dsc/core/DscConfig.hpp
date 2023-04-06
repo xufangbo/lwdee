@@ -17,6 +17,7 @@ class DscConfig {
   std::vector<int> partitions;
   int splitNums1 = 0;
   int splitNums2 = 0;
+  std::string partitionsString();
 
  public:
   void readConfig();
