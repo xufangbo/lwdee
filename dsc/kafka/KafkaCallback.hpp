@@ -5,14 +5,6 @@
 
 static void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata);
 void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic);
-void msg_consume(RdKafka::Message* message, void* opaque);
-
-class ExampleConsumeCb : public RdKafka::ConsumeCb {
- public:
-  void consume_cb(RdKafka::Message& msg, void* opaque) {
-    msg_consume(&msg, opaque);
-  }
-};
 
 class ExampleEventCb : public RdKafka::EventCb {
  public:

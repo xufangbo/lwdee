@@ -1,49 +1,6 @@
 #include "KafkaCallback.hpp"
 #include <iostream>
 
-static bool exit_eof = false;
-
-void msg_consume(RdKafka::Message* message, void* opaque) {
-  const RdKafka::Headers* headers;
-
-  switch (message->err()) {
-    case RdKafka::ERR__TIMED_OUT:
-      break;
-
-    case RdKafka::ERR_NO_ERROR:
-      /* Real message */
-      std::cout << "Read msg at offset " << message->offset() << ": ";
-      if (message->key()) {
-        std::cout << "Key: " << *message->key() << std::endl;
-      }
-      headers = message->headers();
-      if (headers) {
-        std::vector<RdKafka::Headers::Header> hdrs = headers->get_all();
-        for (size_t i = 0; i < hdrs.size(); i++) {
-          const RdKafka::Headers::Header hdr = hdrs[i];
-
-          if (hdr.value() != NULL)
-            printf(" Header: %s = \"%.*s\"\n", hdr.key().c_str(), (int)hdr.value_size(), (const char*)hdr.value());
-          else
-            printf(" Header:  %s = NULL\n", hdr.key().c_str());
-        }
-      }
-      printf("%.*s\n", static_cast<int>(message->len()), static_cast<const char*>(message->payload()));
-      break;
-
-    case RdKafka::ERR__PARTITION_EOF:
-      // logger_warn("kafka partition eof");
-      break;
-
-    case RdKafka::ERR__UNKNOWN_TOPIC:
-    case RdKafka::ERR__UNKNOWN_PARTITION:
-      logger_error("Consume failed: %s",message->errstr());
-      break;
-
-    default:
-     logger_error("Consume failed: %s",message->errstr());
-  }
-}
 
 void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic) {
   class RdKafka::Metadata* metadata;

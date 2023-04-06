@@ -7,6 +7,7 @@ std::string PartitionKafka::toJson() {
   cJSON_AddNumberToObject(root, "index", index);
   cJSON_AddStringToObject(root, "group", group.c_str());
   cJSON_AddStringToObject(root, "topic", topic.c_str());
+  cJSON_AddNumberToObject(root, "mapCount", mapCount);
 
   char* jsonText = cJSON_Print(root);
 
@@ -18,6 +19,7 @@ void PartitionKafka::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
   group = cJSON_GetObjectItem(node, "group")->valuestring;
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
+  mapCount = cJSON_GetObjectItem(node, "mapCount")->valueint;
 }
 
 std::string PartitionMap::toJson() {

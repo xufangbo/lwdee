@@ -10,7 +10,7 @@ class DCO {
   UhconnDcoRef uh_dco;
 
  public:
-  DCO(){};
+  // DCO(){};
   DCO(UhconnDcoRef dco) : uh_dco(dco){};
   DDOId async(std::string function, DDO input);
   DDOId async(std::string function, std::string args);

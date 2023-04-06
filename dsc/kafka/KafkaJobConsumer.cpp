@@ -4,11 +4,17 @@
 
 static std::string errstr;
 
-void KafkaJobConsumer::start(int partition) {
-  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart,this, partition);
+void KafkaJobConsumer::start(std::shared_ptr<PartitionKafka> input) {
+  this->input = input;
+
+  for (int i = 0; i < input->mapCount; i++) {
+    DCO dco = lwdee::create_dco("MapDCO");
+    mapDocs.push_back(dco);
+  }
+  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart, this);
 }
 
-void KafkaJobConsumer::doStart(int partition) {
+void KafkaJobConsumer::doStart() {
   auto dsconf = DscConfig::instance();
   /*
    * Create configuration objects
@@ -50,35 +56,54 @@ void KafkaJobConsumer::doStart(int partition) {
   /*
    * Start consumer for topic+partition at start offset
    */
-  RdKafka::ErrorCode resp = consumer->start(topic, partition, RdKafka::Topic::OFFSET_STORED);
+  RdKafka::ErrorCode resp = consumer->start(topic, input->index, RdKafka::Topic::OFFSET_STORED);
   if (resp != RdKafka::ERR_NO_ERROR) {
     std::cerr << "Failed to start consumer: " << RdKafka::err2str(resp) << std::endl;
     exit(1);
   }
 
-  ExampleConsumeCb ex_consume_cb;
-
   /*
    * Consume messages
    */
   while (true) {
-    if (use_ccb) {
-      consumer->consume_callback(topic, partition, 1000, &ex_consume_cb, &use_ccb);
-    } else {
-      RdKafka::Message* msg = consumer->consume(topic, partition, 1000);
-      msg_consume(msg, NULL);
-      delete msg;
-    }
+    RdKafka::Message* msg = consumer->consume(topic, input->index, 1000);
+    this->msg_consume(msg, NULL);
+    delete msg;
     consumer->poll(0);
   }
 
   /*
    * Stop consumer
    */
-  consumer->stop(topic, partition);
+  consumer->stop(topic, input->index);
 
   consumer->poll(1000);
 
   delete topic;
   delete consumer;
+}
+
+void KafkaJobConsumer::msg_consume(RdKafka::Message* message, void* opaque) {
+  switch (message->err()) {
+    case RdKafka::ERR__TIMED_OUT:
+      break;
+
+    case RdKafka::ERR_NO_ERROR:
+      std::cout << "Read msg at offset " << message->offset() << ": ";
+      printf("%.*s\n", static_cast<int>(message->len()), static_cast<const char*>(message->payload()));
+      logger_debug("map size %d", input->mapCount);
+      break;
+
+    case RdKafka::ERR__PARTITION_EOF:
+      // logger_warn("kafka partition eof");
+      break;
+
+    case RdKafka::ERR__UNKNOWN_TOPIC:
+    case RdKafka::ERR__UNKNOWN_PARTITION:
+      logger_error("Consume failed: %s", message->errstr());
+      break;
+
+    default:
+      logger_error("Consume failed: %s", message->errstr());
+  }
 }

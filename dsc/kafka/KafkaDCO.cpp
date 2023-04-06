@@ -3,8 +3,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "KafkaJobConsumer.hpp"
 #include "JobManager.hpp"
+#include "KafkaJobConsumer.hpp"
 #include "KafkaTask.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
@@ -23,19 +23,19 @@ std::string KafkaDCO::start(std::string a) {
     LinuxMatrix::print();
     // logger_info("< invokded start %s", a.c_str());
 
-    PartitionKafka input;
-    input.fromJson(&a);
+    std::shared_ptr<PartitionKafka> input = std::make_shared<PartitionKafka>();
+    input->fromJson(&a);
 
     KafkaJobConsumer* consumer = new KafkaJobConsumer();
     JobManager::add(consumer);
-    consumer->start(input.index);
+    consumer->start(input);
 
     LinuxMatrix::print();
-    logger_info("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
+    logger_info("> accept start ,partition : %d,mapCount: %d,eclipse %lf", input->index, input->mapCount, sw.stop());
 
     auto node = UhconnVoxorFactory::getInstance().getLocalWorkNode();
 
-    return std::to_string(node->itId()) + "." + std::to_string(input.index);
+    return std::to_string(node->itId()) + "." + std::to_string(input->index);
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());

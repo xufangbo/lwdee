@@ -2,15 +2,19 @@
 
 #include <librdkafka/rdkafkacpp.h>
 #include <thread>
+#include "core/Partition.h"
+#include "lwdee/lwdee.h"
 
 class KafkaJobConsumer {
  private:
-  bool use_ccb = true;
+  std::shared_ptr<PartitionKafka> input;
   std::thread thread;
+  std::vector<DCO> mapDocs;
 
  private:
-  void doStart(int partition);
+  void doStart();
+  void msg_consume(RdKafka::Message* message, void* opaque);
 
  public:
-  void start(int partition);
+  void start(std::shared_ptr<PartitionKafka> input);
 };

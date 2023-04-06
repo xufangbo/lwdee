@@ -16,7 +16,8 @@ class Partition {
 class PartitionKafka : public Partition {
  public:
   string group;
-  string topic;
+  string topic;  
+  int mapCount = 0;
 
  public:
   PartitionKafka() {}

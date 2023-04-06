@@ -40,13 +40,23 @@ void Driver::kafka() {
   logger_info("< kafka");
   Stopwatch sw;
 
+  std::vector<PartitionKafka> inputs;
   for (int& i : conf->partitions) {
-    logger_debug("invoke dco.kafka, split: %d", (i + 1));
+    PartitionKafka input(i, conf->group, conf->topic);
+    input.mapCount = conf->splitNums1 / conf->partitions.size();
+    inputs.push_back(input);
+  }
+  for (int i = 0; i < conf->splitNums1 % conf->partitions.size(); i++) {
+    inputs[i].mapCount++;
+  }
+
+  for (PartitionKafka &input : inputs) {
+
+    logger_debug("invoke dco.kafka, split: %d", (input.index + 1));
 
     DCO dco = lwdee::create_dco("KafkaDCO");
     // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
 
-    PartitionKafka input(i, conf->group, conf->topic);
     auto json = input.toJson();
 
     DDOId ddoId = dco.async("start", json);

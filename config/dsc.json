@@ -5,7 +5,7 @@
     "group": "test-group",
     "topic": "topic_dcs",
     "outTopic":"xx",
-    "partitions": [0,1,2],
-    "splitNums1": 12,
+    "partitions": [0,1],
+    "splitNums1": 4,
     "splitNums2": 3
 }
