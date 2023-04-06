@@ -6,6 +6,10 @@
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
+ToMap::ToMap() {
+  releaseThread = std::thread(&ToMap::releaseDdo, this);
+}
+
 void ToMap::accept(RdKafka::Message* message) {
   // logger_trace("offset: %d,%s",message->offset(), static_cast<const char*>(message->payload()));
 
@@ -51,7 +55,20 @@ void ToMap::toMap(int index) {
   string jsonText = cJSON_Print(nodes);
   lines->clear();
 
-  // logger_trace("%s", jsonText.c_str());
-
   DDOId ddoId = dco->async("accept", jsonText);
+
+  ddoIds.push(std::make_pair(ddoId, dco));
+}
+
+void ToMap::releaseDdo() {
+  while (true) {
+    if (ddoIds.size() > 0) {
+      ddoIds.pop();
+      auto i = ddoIds.front();
+      i.second->wait(i.first);
+      DDO(i.first).releaseGlobal();
+    }
+
+    usleep(1000000 / 100);
+  }
 }
