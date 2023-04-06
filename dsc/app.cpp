@@ -76,7 +76,6 @@ void init(int argc, char* argv[]) {
 }
 
 void init_logger(std::string nodeName) {
-  // LogOption option{false, log_trace, "../log", "edc", true, 10};
   LogOption option;
   option.initalized = false;
   option.level = log_trace;
@@ -90,8 +89,4 @@ void init_logger(std::string nodeName) {
   } else {
     logger_info("-- app starting ... ");
   }
-
-  // for (int i = 0; i < 10000;i++){
-  //   logger_info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx %d",i);
-  // }
 }
