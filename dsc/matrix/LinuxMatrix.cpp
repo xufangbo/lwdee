@@ -7,7 +7,7 @@
 #include <thread>
 #include "core/log.hpp"
 #include "cpu.h"
-#include "driver/TerasortConfig.hpp"
+#include "core/DscConfig.hpp"
 
 bool LinuxMatrix::is_running = false;
 double LinuxMatrix::cpu_bottom = 0;

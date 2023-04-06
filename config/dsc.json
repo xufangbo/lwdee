@@ -1,0 +1,9 @@
+{
+    "port": 400,
+    "inputFile": "/home/kevin/git/lwdee/data/harry-potter-01.txt",
+    "brokers": "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092",
+    "topic": "test",
+    "partitions": [0,1],
+    "splitNums1": 2,
+    "splitNums2": 2
+}

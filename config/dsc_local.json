@@ -1,0 +1,8 @@
+{
+    "port": 400,
+    "inputFile": "/home/kevin/git/lwdee/data/harry-potter-01.txt",
+    "brokers": "/home/terasort/data/data-output.dat",
+    "partitions": [],
+    "splitNums1": 2,
+    "splitNums2": 2
+}

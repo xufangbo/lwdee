@@ -1,8 +1,0 @@
-{
-    "port": 400,
-    "inputFile": "/home/kevin/git/lwdee/data/data-input.dat",
-    "outputFile": "/home/kevin/git/lwdee/data/data-output.dat",
-    "datum": 3,
-    "splitNums1": 4,
-    "splitNums2": 4
-}

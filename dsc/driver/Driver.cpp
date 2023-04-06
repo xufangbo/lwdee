@@ -8,7 +8,7 @@
 #include "core/Partition.h"
 #include "core/Stopwatch.h"
 #include "core/log.hpp"
-#include "driver/TerasortConfig.hpp"
+#include "core/DscConfig.hpp"
 #include "lwdee/DDO.h"
 #include "lwdee/lwdee.h"
 #include "map/Step1Task.h"
@@ -18,11 +18,11 @@ void Driver::startJob() {
   logger_info("> job");
   LinuxMatrix::print();
 
-  this->inputFile = TerasortConfig::instance()->inputFile;
-  this->outputFile = TerasortConfig::instance()->outputFile;
-  this->datum = TerasortConfig::instance()->datum;
-  this->splitNums1 = TerasortConfig::instance()->splitNums1;
-  this->splitNums2 = TerasortConfig::instance()->splitNums2;
+  this->inputFile = DscConfig::instance()->inputFile;
+  // this->outputFile = DscConfig::instance()->outputFile;
+  // this->datum = DscConfig::instance()->datum;
+  this->splitNums1 = DscConfig::instance()->splitNums1;
+  this->splitNums2 = DscConfig::instance()->splitNums2;
 
   try {
     Stopwatch sw;

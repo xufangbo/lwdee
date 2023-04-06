@@ -92,7 +92,7 @@ int main() {
     exit(1);
   }
 
-  showMetadata(consumer, topic);
+  // showMetadata(consumer, topic);
 
   /*
    * Start consumer for topic+partition at start offset
@@ -205,37 +205,36 @@ void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata)
   }
   /* Iterate topics */
   std::cout << metadata->topics()->size() << " topics:" << std::endl;
-  RdKafka::Metadata::TopicMetadataIterator it;
-  for (it = metadata->topics()->begin(); it != metadata->topics()->end(); ++it) {
-    std::cout << "  topic \"" << (*it)->topic() << "\" with " << (*it)->partitions()->size() << " partitions:";
+  RdKafka::Metadata::TopicMetadataIterator t;
+  for (t = metadata->topics()->begin(); t != metadata->topics()->end(); ++t) {
+    std::cout << "  topic \"" << (*t)->topic() << "\" with " << (*t)->partitions()->size() << " partitions:";
 
-    if ((*it)->err() != RdKafka::ERR_NO_ERROR) {
-      std::cout << " " << err2str((*it)->err());
-      if ((*it)->err() == RdKafka::ERR_LEADER_NOT_AVAILABLE)
+    if ((*t)->err() != RdKafka::ERR_NO_ERROR) {
+      std::cout << " " << err2str((*t)->err());
+      if ((*t)->err() == RdKafka::ERR_LEADER_NOT_AVAILABLE)
         std::cout << " (try again)";
     }
     std::cout << std::endl;
 
     /* Iterate topic's partitions */
-    RdKafka::TopicMetadata::PartitionMetadataIterator ip;
-    for (ip = (*it)->partitions()->begin(); ip != (*it)->partitions()->end();
-         ++ip) {
-      std::cout << "    partition " << (*ip)->id() << ", leader " << (*ip)->leader() << ", replicas: ";
+    RdKafka::TopicMetadata::PartitionMetadataIterator p;
+    for (p = (*t)->partitions()->begin(); p != (*t)->partitions()->end(); ++p) {
+      std::cout << "    partition " << (*p)->id() << ", leader " << (*p)->leader() << ", replicas: ";
 
       /* Iterate partition's replicas */
-      RdKafka::PartitionMetadata::ReplicasIterator ir;
-      for (ir = (*ip)->replicas()->begin(); ir != (*ip)->replicas()->end(); ++ir) {
-        std::cout << (ir == (*ip)->replicas()->begin() ? "" : ",") << *ir;
+      RdKafka::PartitionMetadata::ReplicasIterator r;
+      for (r = (*p)->replicas()->begin(); r != (*p)->replicas()->end(); ++r) {
+        std::cout << (r == (*p)->replicas()->begin() ? "" : ",") << *r;
       }
 
       /* Iterate partition's ISRs */
       std::cout << ", isrs: ";
       RdKafka::PartitionMetadata::ISRSIterator iis;
-      for (iis = (*ip)->isrs()->begin(); iis != (*ip)->isrs()->end(); ++iis)
-        std::cout << (iis == (*ip)->isrs()->begin() ? "" : ",") << *iis;
+      for (iis = (*p)->isrs()->begin(); iis != (*p)->isrs()->end(); ++iis)
+        std::cout << (iis == (*p)->isrs()->begin() ? "" : ",") << *iis;
 
-      if ((*ip)->err() != RdKafka::ERR_NO_ERROR)
-        std::cout << ", " << RdKafka::err2str((*ip)->err()) << std::endl;
+      if ((*p)->err() != RdKafka::ERR_NO_ERROR)
+        std::cout << ", " << RdKafka::err2str((*p)->err()) << std::endl;
       else
         std::cout << std::endl;
     }

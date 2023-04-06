@@ -14,6 +14,7 @@ add_subdirectory(driver)
 add_subdirectory(sample)
 add_subdirectory(map)
 add_subdirectory(reduce)
+add_subdirectory(producer)
 
 # target_link_libraries(uhconnect
 #         PUBLIC libgo static_hook uhshell

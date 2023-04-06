@@ -3,6 +3,8 @@
 // #include "DemoConfig.h"
 // #include "UserDcoFactory.h"
 #include <stdlib.h>
+#include "DscDcoFactory.h"
+#include "core/DscConfig.hpp"
 #include "core/UhconnConfig.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
@@ -10,15 +12,12 @@
 #include "driver/Driver.h"
 #include "lwdee/lwdee.h"
 #include "matrix/LinuxMatrix.h"
-#include "DscDcoFactory.h"
-#include "uhshell.h"
-#include "driver/TerasortConfig.hpp"
 
 void init_logger(std::string nodeName);
 void init(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
-  init(argc, argv);  
+  init(argc, argv);
 
   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
   if (localNode == nullptr) {
@@ -46,7 +45,7 @@ void init(int argc, char* argv[]) {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
 
-  TerasortConfig::instance()->readConfig();
+  DscConfig::instance()->readConfig();
   init_logger(nodeName);
   LinuxMatrix::start();
 
@@ -79,7 +78,7 @@ void init_logger(std::string nodeName) {
   LogOption option;
   option.initalized = false;
   option.level = log_trace;
-  strcpy(option.path, "../log");
+  strcpy(option.path, "./log");
   strcpy(option.name, nodeName.c_str());
   option.is_color = true;
   option.days = 10;
