@@ -5,7 +5,6 @@
 
 #include "JobManager.hpp"
 #include "KafkaJobConsumer.hpp"
-#include "KafkaTask.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/Stopwatch.h"

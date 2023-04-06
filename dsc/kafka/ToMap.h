@@ -9,7 +9,7 @@
 typedef vector<string> Strings;
 typedef shared_ptr<Strings> Strings_ref;
 
-class KafkaTask {
+class ToMap {
  private:
   PartitionKafka *partition;
 

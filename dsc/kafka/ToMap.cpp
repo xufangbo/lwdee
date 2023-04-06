@@ -1,4 +1,4 @@
-#include "KafkaTask.h"
+#include "ToMap.h"
 
 #include "core/Stopwatch.h"
 #include "core/log.hpp"
@@ -6,7 +6,7 @@
 #include "map/MapDCO.h"
 
 
-std::string KafkaTask::start(PartitionKafka* partition) {
+std::string ToMap::start(PartitionKafka* partition) {
   logger_info("< map task start");
   Stopwatch sw;
 
