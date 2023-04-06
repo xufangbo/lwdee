@@ -5,13 +5,13 @@
 #include "api/UhconnDco.h"
 #include "lwdee/DDO.h"
 
-class MapDCO : public UhconnDco {
+class KafkaDCO : public UhconnDco {
  public:
-  MapDCO();
-  virtual ~MapDCO();
+  KafkaDCO();
+  virtual ~KafkaDCO();
 
  private:
-  std::string map(std::string a);
+  std::string start(std::string a);
   std::string ddo(std::string voxorId,DdoDataId ddoId);
 
  public:

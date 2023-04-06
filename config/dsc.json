@@ -6,6 +6,6 @@
     "topic": "topic_dcs",
     "outTopic":"xx",
     "partitions": [0,1,2],
-    "splitNums1": 1,
-    "splitNums2": 1
+    "splitNums1": 12,
+    "splitNums2": 3
 }

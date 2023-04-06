@@ -3,8 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "KafkaJobConsumer.hpp"
-#include "JobManager.hpp"
 #include "Step1Task.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
@@ -16,26 +14,20 @@
 
 std::vector<DDO> MapDCO::ddos;
 
-std::string MapDCO::start(std::string a) {
+std::string MapDCO::map(std::string a) {
   try {
-    logger_info("< accept start ");
+    logger_info("< accept map ");
     Stopwatch sw;
     LinuxMatrix::print();
-    // logger_info("< invokded start %s", a.c_str());
+    // logger_info("< invokded map %s", a.c_str());
 
     PartitionStep1 input;
     input.fromJson(&a);
 
-    KafkaJobConsumer* consumer = new KafkaJobConsumer();
-    JobManager::add(consumer);
-    consumer->start(input.index);
-
     LinuxMatrix::print();
-    logger_info("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
+    logger_info("> accept map ,partition : %d,eclipse %lf", input.index, sw.stop());
 
-    auto node = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-
-    return std::to_string(node->itId()) + "." + std::to_string(input.index);
+    return std::to_string(input.index);
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
@@ -52,7 +44,7 @@ std::string MapDCO::ddo(std::string voxorId, DdoDataId ddoId) {
 }
 
 MapDCO::MapDCO() {
-  getFunctionTable()["start"] = (PTR)&MapDCO::start;
+  getFunctionTable()["map"] = (PTR)&MapDCO::map;
   getFunctionTable()["ddo"] = (PTR)&MapDCO::ddo;
 }
 MapDCO::~MapDCO() {}
