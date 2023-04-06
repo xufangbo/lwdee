@@ -7,11 +7,9 @@ static std::string errstr;
 void KafkaJobConsumer::start(std::shared_ptr<PartitionKafka> input) {
   this->input = input;
 
-  for (int i = 0; i < input->mapCount; i++) {
-    DCO dco = lwdee::create_dco("MapDCO");
-    mapDocs.push_back(dco);
-  }
+  toMap.create_dco(input->mapCount);
   KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart, this);
+  
 }
 
 void KafkaJobConsumer::doStart() {
@@ -36,7 +34,7 @@ void KafkaJobConsumer::doStart() {
    */
   RdKafka::Consumer* consumer = RdKafka::Consumer::create(conf, errstr);
   if (!consumer) {
-    std::cerr << "Failed to create consumer: " << errstr << std::endl;
+    logger_error("Failed to create consumer: %s",errstr.c_str());
     exit(1);
   }
 
@@ -47,7 +45,7 @@ void KafkaJobConsumer::doStart() {
 
   RdKafka::Topic* topic = RdKafka::Topic::create(consumer, dsconf->topic, tconf, errstr);
   if (!topic) {
-    std::cerr << "Failed to create topic: " << errstr << std::endl;
+    logger_error("Failed to create topic: %s",errstr.c_str());
     exit(1);
   }
 
@@ -58,7 +56,7 @@ void KafkaJobConsumer::doStart() {
    */
   RdKafka::ErrorCode resp = consumer->start(topic, input->index, RdKafka::Topic::OFFSET_STORED);
   if (resp != RdKafka::ERR_NO_ERROR) {
-    std::cerr << "Failed to start consumer: " << RdKafka::err2str(resp) << std::endl;
+    logger_error("Failed to start consumer: %s",errstr.c_str());
     exit(1);
   }
 
@@ -88,10 +86,8 @@ void KafkaJobConsumer::msg_consume(RdKafka::Message* message, void* opaque) {
     case RdKafka::ERR__TIMED_OUT:
       break;
 
-    case RdKafka::ERR_NO_ERROR:
-      std::cout << "Read msg at offset " << message->offset() << ": ";
-      printf("%.*s\n", static_cast<int>(message->len()), static_cast<const char*>(message->payload()));
-      logger_debug("map size %d", input->mapCount);
+    case RdKafka::ERR_NO_ERROR:      
+      toMap.accept(message);
       break;
 
     case RdKafka::ERR__PARTITION_EOF:

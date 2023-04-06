@@ -1,21 +1,57 @@
 #include "ToMap.h"
 
 #include "core/Stopwatch.h"
+#include "core/cjson.hpp"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
+void ToMap::accept(RdKafka::Message* message) {
+  // logger_trace("offset: %d,%s",message->offset(), static_cast<const char*>(message->payload()));
 
-std::string ToMap::start(PartitionKafka* partition) {
-  logger_info("< map task start");
-  Stopwatch sw;
+  string line = string(message->len() + 1, '\0');
+  memcpy((void*)line.data(), message->payload(), message->len());
 
-  this->partition = partition;
+  int index = this->nextMap();
+  auto lines = this->mapLines.data() + index;
+  lines->push_back(line);
 
-  
-  
-
-  logger_info("> map task start,eclipse %lf", sw.stop());
-
-  return "success";
+  if (lines->size() >= window) {
+    this->toMap(index);
+  }
 };
+
+void ToMap::create_dco(int size) {
+  for (int i = 0; i < size; i++) {
+    DCO dco = lwdee::create_dco("MapDCO");
+    mapDocs.push_back(dco);
+
+    vector<string> lines;
+    mapLines.push_back(lines);
+  }
+}
+
+int ToMap::nextMap() {
+  currentMap++;
+  if (currentMap >= mapDocs.size()) {
+    currentMap = 0;
+  }
+  return currentMap;
+}
+
+void ToMap::toMap(int index) {
+  auto dco = this->mapDocs.data() + index;
+  auto lines = this->mapLines.data() + index;
+
+  cJSON* nodes = cJSON_CreateArray();
+  for (string& line : *lines) {
+    auto item = cJSON_CreateString(line.c_str());
+    cJSON_AddItemToArray(nodes, item);
+  }
+  string jsonText = cJSON_Print(nodes);
+  lines->clear();
+
+  // logger_trace("%s", jsonText.c_str());
+
+  DDOId ddoId = dco->async("accept", jsonText);
+}

@@ -1,14 +1,1 @@
-要先写一个producer测试工具，从哈利波特中读取
-
-map中接收的是kafka的数据，hash生成分区ddo，调用reduce
-reduct进行即窗口和分区的完整采集，然后再进行聚合
-最终在reduce中再插入到kafka中
-
-总的来说，还是需要driver来启动，用来进行统计
-driver的意义就是启动了具体的服务，dco只是一个rpc接口
-这样的话map和reduce都需要写一个常驻的服务进行处理
-
-dco一次create可以多次async调用吗
-
-
-还要考虑批次
+ToMap::toMap 的ddoId要删除

@@ -1,20 +1,30 @@
 #pragma once
 
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <vector>
 
+#include <librdkafka/rdkafkacpp.h>
 #include "core/Partition.h"
+#include "lwdee/lwdee.h"
 
-typedef vector<string> Strings;
-typedef shared_ptr<Strings> Strings_ref;
+using namespace std;
 
 class ToMap {
  private:
-  PartitionKafka *partition;
+  vector<DCO> mapDocs;
+  vector<vector<string>> mapLines;
 
  public:
-  std::string start(PartitionKafka *p);
+  void accept(RdKafka::Message* message);
+  void create_dco(int size);
 
  private:
+  int currentMap = -1;
+  int nextMap();
+  void toMap(int index);
+
+ private:
+  int window = 10;
 };

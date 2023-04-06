@@ -3,13 +3,15 @@
 #include <librdkafka/rdkafkacpp.h>
 #include <thread>
 #include "core/Partition.h"
-#include "lwdee/lwdee.h"
+#include "ToMap.h"
+
 
 class KafkaJobConsumer {
  private:
   std::shared_ptr<PartitionKafka> input;
   std::thread thread;
-  std::vector<DCO> mapDocs;
+  ToMap toMap;
+  
 
  private:
   void doStart();

@@ -10,24 +10,28 @@
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
 #include "core/log.hpp"
+#include "core/cjson.hpp"
 #include "matrix/LinuxMatrix.h"
 
 std::vector<DDO> MapDCO::ddos;
 
-std::string MapDCO::map(std::string a) {
+std::string MapDCO::accept(std::string a) {
   try {
-    logger_info("< accept map ");
-    Stopwatch sw;
-    LinuxMatrix::print();
-    // logger_info("< invokded map %s", a.c_str());
+    // logger_info("< accept map ");
+    // logger_trace("%s", a.c_str());
 
-    PartitionMap input;
-    input.fromJson(&a);
+    std::vector<std::string> lines;
 
-    LinuxMatrix::print();
-    logger_info("> accept map ,partition : %d,eclipse %lf", input.index, sw.stop());
+    cJSON* node = cJSON_Parse(a.c_str());
+    int size = cJSON_GetArraySize(node);
+    for (int i = 0; i < size; i++) {
+      std:string line = cJSON_GetArrayItem(node, i)->valuestring;
+      lines.push_back(line);
+    }
 
-    return std::to_string(input.index);
+    logger_info("< accept map %d ",lines.size());
+
+    return "succeed";
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
@@ -38,13 +42,7 @@ std::string MapDCO::map(std::string a) {
   }
 }
 
-std::string MapDCO::ddo(std::string voxorId, DdoDataId ddoId) {
-  std::cout << "call f2(" << voxorId << ")" << std::endl;
-  return voxorId;
-}
-
 MapDCO::MapDCO() {
-  getFunctionTable()["map"] = (PTR)&MapDCO::map;
-  getFunctionTable()["ddo"] = (PTR)&MapDCO::ddo;
+  getFunctionTable()["accept"] = (PTR)&MapDCO::accept;
 }
 MapDCO::~MapDCO() {}
