@@ -38,7 +38,9 @@ void DscConfig::readConfig() {
   cJSON* node = cJSON_Parse(json.c_str());
   inputFile = cJSON_GetObjectItem(node, "inputFile")->valuestring;
   brokers = cJSON_GetObjectItem(node, "brokers")->valuestring;
+  group = cJSON_GetObjectItem(node, "group")->valuestring;
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
+  outTopic = cJSON_GetObjectItem(node, "outTopic")->valuestring;
   splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
   splitNums2 = cJSON_GetObjectItem(node, "splitNums2")->valueint;
 

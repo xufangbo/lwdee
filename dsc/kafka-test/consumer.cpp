@@ -191,7 +191,7 @@ void showMetadata(RdKafka::Consumer* consumer, RdKafka::Topic* topic) {
   metadata_print(topic->name(), metadata);
 
   delete metadata;
-  run = 0;
+  run = 1;
 }
 
 void metadata_print(const std::string& topic, const RdKafka::Metadata* metadata) {

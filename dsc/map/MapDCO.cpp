@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "KafkaJobConsumer.hpp"
 #include "Step1Task.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
@@ -12,27 +13,22 @@
 
 std::vector<DDO> MapDCO::ddos;
 
-std::string MapDCO::f1(std::string a) {
-  logger_debug("invokded f1 , args : %s", a.c_str());
-  return a;
-}
-
-std::string MapDCO::map(std::string a) {
+std::string MapDCO::start(std::string a) {
   try {
-    logger_info("< accept map ");
+    logger_info("< accept start ");
     Stopwatch sw;
     LinuxMatrix::print();
-    // logger_info("< invokded map %s", a.c_str());
+    // logger_info("< invokded start %s", a.c_str());
 
     PartitionStep1 input;
     input.fromJson(&a);
 
-    auto output = Step1Task().run(&input);
+    KafkaJobConsumer::start(input.index);
 
     LinuxMatrix::print();
-    logger_info("> accept map ,partition : %d, ddoId: %ld, fileName: %s,eclipse %lf", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str(), sw.stop());
+    logger_info("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
-    return output.toJson();
+    return "succeed";
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
@@ -46,9 +42,9 @@ std::string MapDCO::ddo(std::string voxorId, DdoDataId ddoId) {
   std::cout << "call f2(" << voxorId << ")" << std::endl;
   return voxorId;
 }
+
 MapDCO::MapDCO() {
-  getFunctionTable()["f1"] = (PTR)&MapDCO::f1;
-  getFunctionTable()["map"] = (PTR)&MapDCO::map;
+  getFunctionTable()["start"] = (PTR)&MapDCO::start;
   getFunctionTable()["ddo"] = (PTR)&MapDCO::ddo;
 }
 MapDCO::~MapDCO() {}

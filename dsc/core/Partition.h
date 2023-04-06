@@ -2,11 +2,8 @@
 #include <iostream>
 #include <vector>
 #include "lwdee/DDO.h"
-#include "Bytes10.h"
 
 using namespace std;
-
-typedef std::pair<Bytes10, Bytes10> MinAndMax;
 
 class Partition {
  public:
@@ -16,38 +13,15 @@ class Partition {
   int index;
 };
 
-class SampleSplit {
- public:
-  uint64_t min;
-  uint64_t max;
-};
-
-class PartitionStep0 : public Partition {
- public:
-  string fileName;
-  int splitNums1;
-  int datum;
-  DDO outputDDO;
-
- public:
-  PartitionStep0() {}
-  PartitionStep0(int index, string fileName,int splitNums1,int datum)
-      : Partition(index), fileName(fileName),splitNums1(splitNums1),datum(datum) {}
-
-  std::string toJson();
-  void fromJson(std::string* json);
-};
-
 class PartitionStep1 : public Partition {
  public:
   string fileName;
-  vector<SampleSplit> sampleSplits;
   DDO outputDDO;
 
  public:
   PartitionStep1() {}
-  PartitionStep1(int index, string fileName, vector<SampleSplit> sampleSplits)
-      : Partition(index), fileName(fileName), sampleSplits(sampleSplits) {}
+  PartitionStep1(int index, string fileName)
+      : Partition(index), fileName(fileName) {}
 
   std::string toJson();
   void fromJson(std::string* json);

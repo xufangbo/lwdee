@@ -1,43 +1,12 @@
 #include "Partition.h"
 #include "core/cjson.hpp"
 
-std::string PartitionStep0::toJson() {
-  cJSON* root = cJSON_CreateObject();
-
-  cJSON_AddNumberToObject(root, "index", index);
-  cJSON_AddNumberToObject(root, "splitNums1", splitNums1);
-  cJSON_AddNumberToObject(root, "datum", datum);
-  cJSON_AddStringToObject(root, "fileName", fileName.c_str());
-
-  char* jsonText = cJSON_Print(root);
-
-  return jsonText;
-}
-
-void PartitionStep0::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-  index = cJSON_GetObjectItem(node, "index")->valueint;
-  splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
-  datum = cJSON_GetObjectItem(node, "datum")->valueint;
-  fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
-}
-
 std::string PartitionStep1::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "index", index);
   cJSON_AddStringToObject(root, "fileName", fileName.c_str());
 
-  cJSON* nodes = cJSON_CreateArray();
-  cJSON_AddItemToObject(root, "sampleSplits", nodes);
-
-  for (SampleSplit& item : sampleSplits) {
-    cJSON* split = cJSON_CreateObject();
-    cJSON_AddStringToObject(split, "min", std::to_string(item.min).c_str());
-    cJSON_AddStringToObject(split, "max", std::to_string(item.max).c_str());
-
-    cJSON_AddItemToArray(nodes, split);
-  }
 
   char* jsonText = cJSON_Print(root);
 
@@ -48,21 +17,6 @@ void PartitionStep1::fromJson(std::string* json) {
   cJSON* node = cJSON_Parse(json->c_str());
   index = cJSON_GetObjectItem(node, "index")->valueint;
   fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
-
-  cJSON* subNodes = cJSON_GetObjectItem(node, "sampleSplits");
-  cJSON* child = subNodes->child;
-  while (child != NULL) {
-    SampleSplit split;
-    char* min = cJSON_GetObjectItem(child, "min")->valuestring;
-    split.min = strtoull(min, NULL, 0);
-
-    char* max = cJSON_GetObjectItem(child, "max")->valuestring;
-    split.max = strtoull(max, NULL, 0);
-
-    sampleSplits.push_back(split);
-
-    child = child->next;
-  }
 }
 
 std::string Step1Output::toJson() {

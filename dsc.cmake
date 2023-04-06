@@ -1,30 +1,27 @@
 
 include_directories(./dsc)
 include_directories(./uhconnect)
-# include_directories(.)
-# include_directories(../uhconnect)
-# include_directories(../inc/libgo)
-# include_directories(.../inc/boost)
-# include_directories(../inc )
 
 add_subdirectory(uhconnect)
-add_subdirectory(uhshell) # lwdee/uhconnect/api/UhconnDco.cpp:8:10: fatal error: log.h: No such file or directory
+add_subdirectory(uhshell)
 add_subdirectory(dsc)
 
-SET(SRC_FILES 
-dsc/app.cpp
-dsc/DscDcoFactory.cpp
-)
-add_executable(app ${SRC_FILES}) 
+add_executable(app dsc/app.cpp dsc/DscDcoFactory.cpp) 
 
-list(APPEND EXTRA_LIBS uhconnect)
+target_link_directories(app
+        PUBLIC ${PROJECT_SOURCE_DIR}/lib/librdkafka
+        )
+target_link_libraries(app PUBLIC rdkafka++)
+
+# list(APPEND EXTRA_LIBS rdkafka++)
+# list(APPEND EXTRA_LIBS pthread)
+
 list(APPEND EXTRA_LIBS core) 
 list(APPEND EXTRA_LIBS matrix) 
 list(APPEND EXTRA_LIBS lwdee) 
-list(APPEND EXTRA_LIBS sample) 
 list(APPEND EXTRA_LIBS map) 
 list(APPEND EXTRA_LIBS reduce) 
-list(APPEND EXTRA_LIBS driver) 
+list(APPEND EXTRA_LIBS driver)
 target_link_libraries(app PUBLIC ${EXTRA_LIBS})
 
 target_link_options(app PUBLIC "-T${PROJECT_SOURCE_DIR}/app.lds" )

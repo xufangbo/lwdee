@@ -2,7 +2,6 @@
 
 #include <regex>
 #include "core/Partition.h"
-#include "core/TeraRecord.hpp"
 
 class Step2Task {
  private:
@@ -10,7 +9,6 @@ class Step2Task {
   Step2Output output;
   unsigned long size = 0;
   char* content = nullptr;
-  TeraRecord* trs = nullptr;
 
  public:
   Step2Output run(PartitionStep2* p);
@@ -19,16 +17,10 @@ class Step2Task {
       delete[] content;
       content = nullptr;
     }
-
-    if (trs != nullptr) {
-      delete[] trs;
-      trs = nullptr;
-    }
   }
 
  private:
   void read();
-  void sort();
   void save();
 
   std::string fileName() {

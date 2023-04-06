@@ -11,8 +11,7 @@ class MapDCO : public UhconnDco {
   virtual ~MapDCO();
 
  private:
-  std::string f1(std::string a);
-  std::string map(std::string a);
+  std::string start(std::string a);
   std::string ddo(std::string voxorId,DdoDataId ddoId);
 
  public:

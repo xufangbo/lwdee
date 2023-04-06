@@ -81,7 +81,7 @@ void sendMessage(RdKafka::Producer* producer, char* line) {
       producer->poll(1000 /*block for max 1000ms*/);
     }
   } else {
-    logger_trace("%s [%s] [%d bytes]", line, dsconf->topic.c_str(), strlen(line));
+    logger_trace("%s", line);
   }
 }
 
