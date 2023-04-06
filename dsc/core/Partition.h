@@ -28,14 +28,14 @@ class PartitionKafka : public Partition {
 };
 
 
-class PartitionStep1 : public Partition {
+class PartitionMap : public Partition {
  public:
   string fileName;
   DDO outputDDO;
 
  public:
-  PartitionStep1() {}
-  PartitionStep1(int index, string fileName)
+  PartitionMap() {}
+  PartitionMap(int index, string fileName)
       : Partition(index), fileName(fileName) {}
 
   std::string toJson();
@@ -51,14 +51,14 @@ typedef struct {
   DdoDataId dataId;
 } SubSplitDDO;
 
-class PartitionStep2 : public Partition {
+class PartitionReduce : public Partition {
  public:
   string outputFile;
   vector<SubSplitDDO> subSplitDDOs;
 
  public:
-  PartitionStep2() {}
-  PartitionStep2(int index, string outputFile)
+  PartitionReduce() {}
+  PartitionReduce(int index, string outputFile)
       : Partition(index), outputFile(outputFile) {}
 
   std::string toJson();

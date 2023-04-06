@@ -11,10 +11,10 @@ typedef shared_ptr<Strings> Strings_ref;
 
 class KafkaTask {
  private:
-  PartitionStep1 *partition;
+  PartitionKafka *partition;
 
  public:
-  std::string start(PartitionStep1 *p);
+  std::string start(PartitionKafka *p);
 
  private:
 };

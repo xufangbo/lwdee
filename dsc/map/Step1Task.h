@@ -11,10 +11,10 @@ typedef shared_ptr<Strings> Strings_ref;
 
 class Step1Task {
  private:
-  PartitionStep1 *partition;
+  PartitionMap *partition;
 
  public:
-  std::string start(PartitionStep1 *p);
+  std::string start(PartitionMap *p);
 
  private:
 };

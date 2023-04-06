@@ -40,7 +40,7 @@ void Driver::kafka() {
   logger_info("< kafka");
   Stopwatch sw;
 
-  for (int i = 0; i < conf->splitNums1; i++) {
+  for (int& i : conf->partitions) {
     logger_debug("invoke dco.kafka, split: %d", (i + 1));
 
     DCO dco = lwdee::create_dco("KafkaDCO");
@@ -57,7 +57,7 @@ void Driver::kafka() {
   logger_info("> kafka,eclipse %lf", sw.stop());
 }
 
-void  Driver::kafkaToMap() {
+void Driver::kafkaToMap() {
   logger_info("< kafkaToMap");
   Stopwatch sw;
 
@@ -70,7 +70,7 @@ void  Driver::kafkaToMap() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      logger_debug("get kafka ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
       ddo.releaseGlobal();
 
@@ -82,7 +82,7 @@ void  Driver::kafkaToMap() {
   }
 
   for (int i = 0; i < conf->splitNums2; i++) {
-    PartitionStep2 step2Input(i, conf->outTopic);
+    PartitionReduce step2Input(i, conf->outTopic);
 
     for (std::string& output1 : step1Outputs) {
       // step2Input.subSplitDDOs.push_back(step1Output.items[i]);
@@ -104,7 +104,7 @@ void Driver::map() {
     DCO dco = lwdee::create_dco("MapDCO");
     // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
 
-    PartitionStep1 input(i, conf->inputFile);
+    PartitionMap input(i, conf->inputFile);
     auto json = input.toJson();
 
     DDOId ddoId = dco.async("start", json);
@@ -140,7 +140,7 @@ void Driver::mapToReduce() {
   }
 
   for (int i = 0; i < conf->splitNums2; i++) {
-    PartitionStep2 step2Input(i, conf->outTopic);
+    PartitionReduce step2Input(i, conf->outTopic);
 
     for (std::string& output1 : step1Outputs) {
       // step2Input.subSplitDDOs.push_back(step1Output.items[i]);
@@ -159,7 +159,7 @@ void Driver::reduce() {
   for (int i = 0; i < step2Inputs.size(); i++) {
     logger_debug("invoke dco.reduce, split: %d", (i + 1));
 
-    PartitionStep2& step2Input = step2Inputs[i];
+    PartitionReduce& step2Input = step2Inputs[i];
 
     DCO dco = lwdee::create_dco("ReduceDCO");
     // DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");

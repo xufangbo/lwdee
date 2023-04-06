@@ -7,7 +7,7 @@
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 
-Step2Output Step2Task::run(PartitionStep2* partition) {
+Step2Output Step2Task::run(PartitionReduce* partition) {
   this->input = partition;
 
   logger_info("< reduce task run");

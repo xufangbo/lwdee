@@ -12,7 +12,7 @@ std::string ReduceDCO::reduce(std::string a) {
     logger_info("< accept reduce ");
     Stopwatch sw;
     LinuxMatrix::print();
-    PartitionStep2 input;
+    PartitionReduce input;
     input.fromJson(&a);
 
     Step2Task().run(&input);

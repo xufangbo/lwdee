@@ -33,7 +33,7 @@ void Driver::startJob() {
     this->mapToReduce();
     this->reduce();
 
-LinuxMatrix::print();
+    LinuxMatrix::print();
     logger_info("< job,eclipse %lf s", sw.stop());
 
     logger_info("finished");

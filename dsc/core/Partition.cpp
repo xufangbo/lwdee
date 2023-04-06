@@ -20,7 +20,7 @@ void PartitionKafka::fromJson(std::string* json) {
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
 }
 
-std::string PartitionStep1::toJson() {
+std::string PartitionMap::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "index", index);
@@ -31,13 +31,13 @@ std::string PartitionStep1::toJson() {
   return jsonText;
 }
 
-void PartitionStep1::fromJson(std::string* json) {
+void PartitionMap::fromJson(std::string* json) {
   cJSON* node = cJSON_Parse(json->c_str());
   index = cJSON_GetObjectItem(node, "index")->valueint;
   fileName = cJSON_GetObjectItem(node, "fileName")->valuestring;
 }
 
-std::string PartitionStep2::toJson() {
+std::string PartitionReduce::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "index", index);
@@ -60,7 +60,7 @@ std::string PartitionStep2::toJson() {
   return jsonText;
 }
 
-void PartitionStep2::fromJson(std::string* json) {
+void PartitionReduce::fromJson(std::string* json) {
   cJSON* node = cJSON_Parse(json->c_str());
   index = cJSON_GetObjectItem(node, "index")->valueint;
   outputFile = cJSON_GetObjectItem(node, "fileName")->valuestring;

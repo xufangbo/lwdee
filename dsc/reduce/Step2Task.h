@@ -5,13 +5,13 @@
 
 class Step2Task {
  private:
-  PartitionStep2* input;
+  PartitionReduce* input;
   Step2Output output;
   unsigned long size = 0;
   char* content = nullptr;
 
  public:
-  Step2Output run(PartitionStep2* p);
+  Step2Output run(PartitionReduce* p);
   ~Step2Task() {
     if (content != nullptr) {
       delete[] content;

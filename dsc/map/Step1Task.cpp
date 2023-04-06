@@ -6,7 +6,7 @@
 #include "map/MapDCO.h"
 
 
-std::string Step1Task::start(PartitionStep1* partition) {
+std::string Step1Task::start(PartitionMap* partition) {
   logger_info("< map task start");
   Stopwatch sw;
 

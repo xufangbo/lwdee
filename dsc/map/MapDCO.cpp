@@ -21,7 +21,7 @@ std::string MapDCO::map(std::string a) {
     LinuxMatrix::print();
     // logger_info("< invokded map %s", a.c_str());
 
-    PartitionStep1 input;
+    PartitionMap input;
     input.fromJson(&a);
 
     LinuxMatrix::print();

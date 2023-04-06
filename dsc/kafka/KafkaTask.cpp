@@ -6,7 +6,7 @@
 #include "map/MapDCO.h"
 
 
-std::string KafkaTask::start(PartitionStep1* partition) {
+std::string KafkaTask::start(PartitionKafka* partition) {
   logger_info("< map task start");
   Stopwatch sw;
 

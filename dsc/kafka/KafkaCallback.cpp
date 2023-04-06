@@ -32,7 +32,7 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
       break;
 
     case RdKafka::ERR__PARTITION_EOF:
-      logger_warn("kafka partition eof");
+      // logger_warn("kafka partition eof");
       break;
 
     case RdKafka::ERR__UNKNOWN_TOPIC:

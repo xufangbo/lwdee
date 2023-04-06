@@ -13,7 +13,7 @@ class Driver {
   std::vector<pair<DCO, DDOId>> kafkaInvokers;
   std::vector<pair<DCO, DDOId>> mapInvokers;
   std::vector<pair<DCO, DDOId>> reduceInvokers;
-  std::vector<PartitionStep2> step2Inputs;
+  std::vector<PartitionReduce> step2Inputs;
 
  public:
   void startJob();
