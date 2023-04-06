@@ -1,7 +1,7 @@
 ﻿
 add_library (map 
 MapDCO.cpp
-Step1Task.cpp
+Mapper.cpp
 )
 
 target_link_libraries(map core)

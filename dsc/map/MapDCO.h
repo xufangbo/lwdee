@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "api/UhconnDco.h"
-#include "lwdee/DDO.h"
+#include "lwdee/lwdee.h"
 
 class MapDCO : public UhconnDco {
  public:
@@ -13,6 +13,6 @@ class MapDCO : public UhconnDco {
  private:
   std::string accept(std::string a);
 
- public:
-  static std::vector<DDO> ddos;
+ private:
+  static std::vector<DCO> reduceDcos;
 };

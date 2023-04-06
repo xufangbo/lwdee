@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -9,12 +9,10 @@
 typedef vector<string> Strings;
 typedef shared_ptr<Strings> Strings_ref;
 
-class Step1Task {
- private:
-  PartitionMap *partition;
-
+class Mapper {
  public:
-  std::string start(PartitionMap *p);
+  static void map(std::vector<std::string>& lines);
+  static std::vector<std::string> split(std::string& line);
 
  private:
 };
