@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 
 MAINTAINER kevin "kevin@hotmail.com"
 
-WORKDIR /home/terasort
+WORKDIR /home/dscproducer
 
 ARG nodename
 ENV nodename=$nodename
