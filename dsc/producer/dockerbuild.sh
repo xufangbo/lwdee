@@ -1,7 +1,9 @@
 app=dscproducer
-version=v1.0.1
+version=v1.0.4
 
 cp ../../build/dsc/producer/$app ./
+# cp ../../config ./config
+cp ../../data ./data
 
 docker stop $app
 docker rm $app
@@ -17,4 +19,4 @@ docker build -t $app .
 docker tag $app registry.cn-beijing.aliyuncs.com/xufangbo/$app:$version
 docker push registry.cn-beijing.aliyuncs.com/xufangbo/$app:$version
 
-# docker pull registry.cn-beijing.aliyuncs.com/xufangbo/dscproducer:v1.0.18
+# docker pull registry.cn-beijing.aliyuncs.com/xufangbo/dscproducer:v1.0.1
