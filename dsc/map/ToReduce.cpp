@@ -35,7 +35,7 @@ void ToReduce::send(vector<string>& words) {
     auto dco = reduceDcos[i];
     auto& str = reduceWords[i];
 
-    auto ddoId = dco.async("accept", str);
+    auto ddoId = dco.async("reduce", str);
 
     // ddoIds.push(std::make_pair(ddoId, &dco));
   }
