@@ -11,18 +11,21 @@
 int lwdee::currentNodeId = 0;
 
 DCO lwdee::create_dco(std::string name) {
+  DCO dco = create_dco_byindex(currentNodeId, name);
+  currentNodeId++;
+  return dco;
+}
 
-  int nodeAmount = UhconnConfig::getInstance().getNodeAmount();  
-  currentNodeId = currentNodeId % (nodeAmount - 1);
-
-  int nodeId = currentNodeId + 2;
+DCO lwdee::create_dco_byindex(int indexId, std::string name) {
+  int nodeAmount = UhconnConfig::getInstance().getNodeAmount();
+  indexId = indexId % (nodeAmount - 1);
+  int nodeId = indexId + 2;
 
   logger_trace("create dco node%d %s", nodeId, name.c_str());
 
   UhconnDcoRef uh_dco = UhconnApi::create(nodeId, name);
   DCO dco(uh_dco);
 
-  currentNodeId++;
   return dco;
 }
 

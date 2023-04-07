@@ -16,7 +16,7 @@ class ToReduce {
   void send(vector<string>& words);
 
  private:
-  queue<pair<DDOId, DCO>> ddoIds;
+  queue<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;
 
   void releaseDdo();
