@@ -14,7 +14,7 @@
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
 
-std::string MapDCO::accept(std::string a) {
+std::string MapDCO::map(std::string a) {
   try {
     std::vector<std::string> lines;
 
@@ -45,7 +45,7 @@ std::string MapDCO::accept(std::string a) {
 }
 
 MapDCO::MapDCO() {
-  getFunctionTable()["accept"] = (PTR)&MapDCO::accept;
+  getFunctionTable()["map"] = (PTR)&MapDCO::map;
 
   toReduce.create_dcos();
 }

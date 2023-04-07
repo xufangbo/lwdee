@@ -55,7 +55,8 @@ void ToMap::toMap(int index) {
   string jsonText = cJSON_Print(nodes);
   lines->clear();
 
-  DDOId ddoId = dco->async("accept", jsonText);
+  logger_trace("invoke map dco");
+  DDOId ddoId = dco->async("map", jsonText);
 
   ddoIds.push(std::make_pair(ddoId, dco));
 }

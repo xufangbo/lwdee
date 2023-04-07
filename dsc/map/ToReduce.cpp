@@ -18,16 +18,13 @@ void ToReduce::send(vector<string>& words) {
 
   vector<string> reduceWords(split);
 
-  for (string& word : words) {
-    int i = _hash(word) % split;
-    reduceWords[i] += "|";
-    reduceWords[i] += word;
-  }
+  for (int i = 0; i < words.size(); i++) {
+    string& word = words[i];
+    int x = _hash(word) % split;
 
-  for (int i = 0; i < split; i++) {
-    auto& str = reduceWords[i];
-    if (str.size() > 0) {
-      str[str.size() - 1] = '\0';
+    reduceWords[x] += word;
+    if (i != (words.size() - 1)) {
+      reduceWords[x] += "|";
     }
   }
 
