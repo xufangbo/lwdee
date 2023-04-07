@@ -8,6 +8,14 @@
 std::string ReduceDCO::reduce(std::string a) {
   try {
     logger_info("< accept reduce %s", a.c_str());
+
+    /**
+     * reduce要集齐所有的map再计算才有意义
+     * 这里的json也会崩溃
+     */
+
+
+
     // Stopwatch sw;
     // LinuxMatrix::print();
     // PartitionReduce input;

@@ -228,6 +228,10 @@ static void rm_history_task() {
   int days = (gmt->tm_year + 1900) * 10000 + (gmt->tm_mon + 1) * 100 + gmt->tm_mday;
 
   DIR* dp = opendir(log_option.path);
+  if (dp == NULL) {
+    printf("can't open dir %s\n",log_option.path);
+    return;
+  }
   struct dirent* entry;
   while ((entry = readdir(dp)) != NULL) {
     if (strcmp(entry->d_name, ".") == 0) {
@@ -290,7 +294,6 @@ static void* rm_history_job(void* arg) {
 
 /* 日志初始化 */
 int logger_initialize(LogOption option) {
-
   pthread_mutex_init(&mut, NULL);
 
   // 初始化日志选项
