@@ -11,7 +11,7 @@ DscDcoFactory::~DscDcoFactory() {
 }
 
 UhconnDco* DscDcoFactory::newDco(std::string& class_name) {
-  logger_debug("create dco %s", class_name.c_str());
+  // logger_debug("create dco %s", class_name.c_str());
 
   if (class_name == "KafkaDCO") {
     return new KafkaDCO();

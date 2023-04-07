@@ -1,25 +1,22 @@
 #include "ReduceDCO.h"
-#include "Step2Task.h"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
+#include "core/Stopwatch.h"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
-#include "core/Stopwatch.h"
 
 std::string ReduceDCO::reduce(std::string a) {
-  logger_trace("---------------------------------");
   try {
-    logger_info("< accept reduce ");
-    Stopwatch sw;
-    LinuxMatrix::print();
-    PartitionReduce input;
-    input.fromJson(&a);
+    logger_info("< accept reduce %s", a.c_str());
+    // Stopwatch sw;
+    // LinuxMatrix::print();
+    // PartitionReduce input;
+    // input.fromJson(&a);
 
-    Step2Task().run(&input);
+    // Step2Task().run(&input);
 
-    // logger_trace(a.c_str());
-    LinuxMatrix::print();
-    logger_info("> accept reduct ,partition : %d,eclipse %lf", input.index, sw.stop());
+    // // logger_trace(a.c_str());
+    // LinuxMatrix::print();
 
     return "success";
   } catch (Exception& ex) {

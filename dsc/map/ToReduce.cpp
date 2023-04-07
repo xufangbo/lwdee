@@ -37,7 +37,7 @@ void ToReduce::send(vector<string>& words) {
 
     auto ddoId = dco.async("accept", str);
 
-    ddoIds.push(std::make_pair(ddoId, &dco));
+    // ddoIds.push(std::make_pair(ddoId, &dco));
   }
 }
 
