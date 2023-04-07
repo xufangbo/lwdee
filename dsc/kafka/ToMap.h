@@ -30,7 +30,7 @@ class ToMap {
   string json(vector<string> *lines);
 
  private:
-  queue<pair<DDOId, DCO*>> ddoIds;
+  queue<pair<DDOId, DCO>> ddoIds;
   thread releaseThread;
 
   void releaseDdo();

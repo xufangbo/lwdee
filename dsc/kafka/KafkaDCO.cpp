@@ -45,13 +45,7 @@ std::string KafkaDCO::start(std::string a) {
   }
 }
 
-std::string KafkaDCO::ddo(std::string voxorId, DdoDataId ddoId) {
-  std::cout << "call f2(" << voxorId << ")" << std::endl;
-  return voxorId;
-}
-
 KafkaDCO::KafkaDCO() {
   getFunctionTable()["start"] = (PTR)&KafkaDCO::start;
-  getFunctionTable()["ddo"] = (PTR)&KafkaDCO::ddo;
 }
 KafkaDCO::~KafkaDCO() {}
