@@ -47,18 +47,24 @@ void ToMap::toMap(int index) {
   auto dco = this->mapDocs.data() + index;
   auto lines = this->mapLines.data() + index;
 
-  cJSON* nodes = cJSON_CreateArray();
-  for (string& line : *lines) {
-    auto item = cJSON_CreateString(line.c_str());
-    cJSON_AddItemToArray(nodes, item);
-  }
-  string jsonText = cJSON_Print(nodes);
+  string jsonText = json(lines);
   lines->clear();
 
   logger_trace("invoke map dco");
   DDOId ddoId = dco->async("map", jsonText);
 
   ddoIds.push(std::make_pair(ddoId, dco));
+}
+
+string ToMap::json(vector<string>* lines) {
+  cJSON* nodes = cJSON_CreateArray();
+  for (string& line : *lines) {
+    auto item = cJSON_CreateString(line.c_str());
+    cJSON_AddItemToArray(nodes, item);
+  }
+  string jsonText = cJSON_Print(nodes);
+
+  return jsonText;
 }
 
 void ToMap::releaseDdo() {

@@ -27,6 +27,7 @@ class ToMap {
  private:
   int nextMap();
   void toMap(int index);
+  string json(vector<string> *lines);
 
  private:
   queue<pair<DDOId, DCO*>> ddoIds;
