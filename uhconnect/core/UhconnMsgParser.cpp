@@ -17,9 +17,9 @@ UhconnMsgParser::~UhconnMsgParser()
 }
 
 int UhconnMsgParser::parse(void){
-    //std::cout<<"parse JSON str:"<<jstr<<std::endl;
-    auto pjo = boost::json::parse(jstr);
+    std::cout<<"parse JSON str:"<<jstr<<std::endl;    
     try{
+        auto pjo = boost::json::parse(jstr);
         jobj =pjo.as_object();
     }catch(exception &e){
         cout << "exception:" << e.what()<<endl;

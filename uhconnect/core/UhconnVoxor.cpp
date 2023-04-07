@@ -38,14 +38,11 @@ void UhconnVoxor::run(void) {
                     #ifdef DEBUGINFO
                     std::cout << "UhconnVoxor::run receive request methode: " << in_msg.getMethodName() << " param:"<< in_msg.getMethodPara() << std::endl;
                     #endif
-                    
-                    
+                                        
                     auto methodName = in_msg.getMethodName();
-                    auto table = ItsDco->getFunctionTable();
-                    auto fun = table.at(methodName);
-                    // fun(in_msg.getMethodPara());
+                    auto par = in_msg.getMethodPara();
                     
-                    std::string ret = (ItsDco->*ItsDco->getFunctionTable()[in_msg.getMethodName()])(in_msg.getMethodPara());
+                    std::string ret = (ItsDco->*ItsDco->getFunctionTable()[methodName])(par);
 
                     switch(in_msg.getCmd()) {
                         case MSG_CMD_CREATE:
