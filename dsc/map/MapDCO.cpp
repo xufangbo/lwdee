@@ -28,7 +28,10 @@ std::string MapDCO::accept(std::string a) {
 
     logger_info("< accept map %d ", lines.size());
 
-    auto words = Mapper::map(lines);
+    vector<string> words;
+    Mapper::map(lines, words);
+
+    toReduce.send(words);
 
     return "succeed";
 
@@ -44,10 +47,6 @@ std::string MapDCO::accept(std::string a) {
 MapDCO::MapDCO() {
   getFunctionTable()["accept"] = (PTR)&MapDCO::accept;
 
-  int splits = DscConfig::instance()->splitNums2;
-  for (int i = 0; i < splits; i++) {
-    DCO dco = lwdee::create_dco("ReduceDCO");
-    reduceDcos.push_back(dco);
-  }
+  toReduce.create_dcos();
 }
 MapDCO::~MapDCO() {}

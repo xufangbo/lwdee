@@ -2,8 +2,8 @@
 
 #include <vector>
 
+#include "ToReduce.hpp"
 #include "api/UhconnDco.h"
-#include "lwdee/lwdee.h"
 
 class MapDCO : public UhconnDco {
  public:
@@ -11,8 +11,6 @@ class MapDCO : public UhconnDco {
   virtual ~MapDCO();
 
  private:
+  ToReduce toReduce;
   std::string accept(std::string a);
-
- private:
-  static std::vector<DCO> reduceDcos;
 };
