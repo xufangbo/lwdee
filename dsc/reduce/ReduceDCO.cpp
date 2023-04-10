@@ -7,7 +7,8 @@
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    logger_info("< accept reduce %s", a.c_str());
+    logger_info("reduce dco accept");
+    // logger_info("reduce dco accept %s", a.c_str());
 
     /**
      * reduce要集齐所有的map再计算才有意义

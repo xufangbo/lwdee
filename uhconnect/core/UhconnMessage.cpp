@@ -107,3 +107,4 @@ void UhconnMessage::setMsgId(size_t id){
     msgId = id;
 }
 
+std::atomic<int> MessagIdHelper::seq(0);

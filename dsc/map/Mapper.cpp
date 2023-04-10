@@ -9,22 +9,10 @@
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
-string trim(const string& str) {
-  string::size_type pos = str.find_first_not_of(' ');
-  if (pos == string::npos) {  // 若找不到空格
-    return str;
-  }
-  string::size_type pos2 = str.find_last_not_of(' ');
-  if (pos2 != string::npos)
-    return str.substr(pos, pos2 - pos + 1);  // 子串：第一个非空格作为起始位置
-                                             //  字符个数：pos2-pos+1
-  return str.substr(pos);
-}
 
 void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
   // 先合并成一行
   std::string output;
-
   for (std::string& line : lines) {
     for (char& c : line) {      
       if (c >= 'A' && c <= 'Z') {
@@ -48,6 +36,18 @@ void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
     }
   }
 }
+
+// string trim(const string& str) {
+//   string::size_type pos = str.find_first_not_of(' ');
+//   if (pos == string::npos) {  // 若找不到空格
+//     return str;
+//   }
+//   string::size_type pos2 = str.find_last_not_of(' ');
+//   if (pos2 != string::npos)
+//     return str.substr(pos, pos2 - pos + 1);  // 子串：第一个非空格作为起始位置
+//                                              //  字符个数：pos2-pos+1
+//   return str.substr(pos);
+// }
 
 // void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
 //   // 先合并成一行

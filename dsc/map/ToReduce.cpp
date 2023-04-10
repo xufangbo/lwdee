@@ -29,10 +29,9 @@ void ToReduce::send(vector<string>& words) {
     DCO dco = lwdee::create_dco_byindex(i, "ReduceDCO");
     auto str = json(reduceWords[i]);
 
-    // logger_trace("%s", str.c_str());
-
+    logger_debug("invoke reduce dco");
+    usleep(1000000 / 100);
     auto ddoId = dco.async("reduce", str);
-
     ddoIds.push(std::make_pair(ddoId, dco));
   }
 }
@@ -57,6 +56,6 @@ void ToReduce::releaseDdo() {
       DDO(i.first).releaseGlobal();
     }
 
-    usleep(1000000 / 100);
+    usleep(1000000 / 10);
   }
 }

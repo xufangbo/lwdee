@@ -8,7 +8,7 @@
 #include "map/MapDCO.h"
 
 ToMap::ToMap() {
-  releaseThread = std::thread(&ToMap::releaseDdo, this);
+  // releaseThread = std::thread(&ToMap::releaseDdo, this);
 }
 
 void ToMap::create_dco(int size) {

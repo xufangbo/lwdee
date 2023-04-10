@@ -1,90 +1,47 @@
 {
-  "node_amount": 3,
-  "port": 360,
+  "node_amount": 2,
+  "port": 790,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 3601,
-    "msgPort": 3611,
+    "dataPort": 7901,
+    "msgPort": 7911,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 3601,
-        "mport": 3611
+        "dport": 7901,
+        "mport": 7911
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 3602,
-        "mport": 3612
-      },
-      {
-        "worker": "localhost",
-        "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3603,
-        "mport": 3613
+        "dport": 7902,
+        "mport": 7912
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 3602,
-    "msgPort": 3612,
+    "dataPort": 7902,
+    "msgPort": 7912,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 3601,
-        "mport": 3611
+        "dport": 7901,
+        "mport": 7911
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 3602,
-        "mport": 3612
-      },
-      {
-        "worker": "localhost",
-        "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3603,
-        "mport": 3613
-      }
-    ]
-  },
-  "node3": {
-    "nodeId": 3,
-    "ip": "127.0.0.1",
-    "dataPort": 3603,
-    "msgPort": 3613,
-    "routeInfo": [
-      {
-        "worker": "localhost",
-        "nid": 1,
-        "ip": "127.0.0.1",
-        "dport": 3601,
-        "mport": 3611
-      },
-      {
-        "worker": "localhost",
-        "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 3602,
-        "mport": 3612
-      },
-      {
-        "worker": "localhost",
-        "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3603,
-        "mport": 3613
+        "dport": 7902,
+        "mport": 7912
       }
     ]
   }

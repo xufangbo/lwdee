@@ -17,7 +17,7 @@ std::vector<DDO> KafkaDCO::ddos;
 
 std::string KafkaDCO::start(std::string a) {
   try {
-    logger_trace("< accept start ");
+    logger_trace("kafka dco accept ");
     Stopwatch sw;
     LinuxMatrix::print();
     // logger_info("< invokded start %s", a.c_str());
