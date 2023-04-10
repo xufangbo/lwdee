@@ -38,13 +38,13 @@ int UhconnWorkNode::inputMessage(UhconnMessage& in_msg) {
     }
     // std::cout <<"in_msg.getMsgId:"<<in_msg.getMsgId()<<std::endl;
 
-    if( isWaitResponse(in_msg) && isMsgInWaitingTable(in_msg) ) {
+    if( isWaitResponse(in_msg) && isMsgInWaitingTable(in_msg) ) { // client
         // std::cout << "yes isMsgInWaitingTable" << std::endl;
         auto channel = getFromWaitingTable(in_msg);
         assert(channel);
         channel->push(in_msg);
     }
-    else {
+    else { // server
         std::map<std::string, UhconnVoxor&>::iterator it = voxor_map.find(in_msg.getDestVoxor());
         if(it != voxor_map.end()) {
             it->second.getMsgQ() << in_msg;

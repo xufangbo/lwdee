@@ -42,7 +42,7 @@ void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
   string token;
   while (!iss.eof()) {
     iss >> token;
-    token = trim(token);
+    // token = trim(token);
     if (!token.empty()) {
       words.push_back(token);
     }

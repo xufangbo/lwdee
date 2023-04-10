@@ -1,90 +1,90 @@
 {
   "node_amount": 3,
-  "port": 350,
+  "port": 360,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 3501,
-    "msgPort": 3511,
+    "dataPort": 3601,
+    "msgPort": 3611,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 3501,
-        "mport": 3511
+        "dport": 3601,
+        "mport": 3611
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 3502,
-        "mport": 3512
+        "dport": 3602,
+        "mport": 3612
       },
       {
         "worker": "localhost",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 3503,
-        "mport": 3513
+        "dport": 3603,
+        "mport": 3613
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 3502,
-    "msgPort": 3512,
+    "dataPort": 3602,
+    "msgPort": 3612,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 3501,
-        "mport": 3511
+        "dport": 3601,
+        "mport": 3611
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 3502,
-        "mport": 3512
+        "dport": 3602,
+        "mport": 3612
       },
       {
         "worker": "localhost",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 3503,
-        "mport": 3513
+        "dport": 3603,
+        "mport": 3613
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 3503,
-    "msgPort": 3513,
+    "dataPort": 3603,
+    "msgPort": 3613,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 3501,
-        "mport": 3511
+        "dport": 3601,
+        "mport": 3611
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 3502,
-        "mport": 3512
+        "dport": 3602,
+        "mport": 3612
       },
       {
         "worker": "localhost",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 3503,
-        "mport": 3513
+        "dport": 3603,
+        "mport": 3613
       }
     ]
   }
