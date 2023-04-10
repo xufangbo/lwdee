@@ -2,6 +2,7 @@
 #include "UhconnVoxor.h"
 #include "UhconnWorkNode.h"
 #include "api/UhconnDco.h"
+#include "DcoFactory.h"
 
 UhconnVoxorFactory::UhconnVoxorFactory()
 {
@@ -45,4 +46,19 @@ UhconnWorkNode* UhconnVoxorFactory::getLocalWorkNode(void) {
 }
 DcoFactory* UhconnVoxorFactory::getLocalFactory(void) {
     return local_factory;
+}
+
+void UhconnVoxorFactory::setLocalFactory(DcoFactory* nf) {
+    if( local_factory ) {
+        delete local_factory;
+    }
+    local_factory = nf;
+}
+
+DcoFactory* UhconnVoxorFactory::switchLocalFactory(DcoFactory* nf) {
+    DcoFactory* old = local_factory;
+    if( nf ) {
+        local_factory = nf;
+    }
+    return old;
 }

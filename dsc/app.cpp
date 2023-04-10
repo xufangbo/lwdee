@@ -12,6 +12,7 @@
 #include "driver/Driver.h"
 #include "lwdee/lwdee.h"
 #include "matrix/LinuxMatrix.h"
+#include "test/jsontest.cpp"
 
 void logger_init(std::string nodeName);
 void init(int argc, char* argv[]);
@@ -32,6 +33,8 @@ int main(int argc, char* argv[]) {
   while (true) {
     usleep(1000000);
   }
+
+  // jsonTest();
 }
 
 void init(int argc, char* argv[]) {

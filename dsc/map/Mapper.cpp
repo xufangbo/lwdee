@@ -23,23 +23,22 @@ string trim(const string& str) {
 
 void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
   // 先合并成一行
-  std::string line;
-  std::transform(line.begin(), line.end(), line.begin(), ::tolower);
-  for (auto& i : lines) {
-    line += " ";
-    line += i;
+  std::string output;
+
+  for (std::string& line : lines) {
+    for (char& c : line) {      
+      if (c >= 'A' && c <= 'Z') {
+        output += (c + 32); // to lower
+      } else if (c >= 'a' && c <= 'z') {
+        output += c;
+      } else {
+        output += ' ';
+      }
+    }
   }
 
-  // 去掉数字
-  std::regex pattern1("[0-9]");
-  auto output1 = std::regex_replace(line, pattern1, "");
-
-  // 去掉特殊字符
-  std::regex pattern2("[,|-|.|?|:|-|”|“|!|;|’s]");
-  auto output2 = std::regex_replace(output1, pattern2, " ");
-
   // 执行分割
-  stringstream iss(output2);
+  stringstream iss(output);
   string token;
   while (!iss.eof()) {
     iss >> token;
@@ -49,3 +48,32 @@ void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
     }
   }
 }
+
+// void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
+//   // 先合并成一行
+//   std::string line;
+//   std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+//   for (auto& i : lines) {
+//     line += " ";
+//     line += i;
+//   }
+
+//   // 去掉数字
+//   std::regex pattern1("[0-9]");
+//   auto output1 = std::regex_replace(line, pattern1, "");
+
+//   // 去掉特殊字符
+//   std::regex pattern2("[,|-|.|?|:|-|”|“|!|;|’s]");
+//   auto output2 = std::regex_replace(output1, pattern2, " ");
+
+//   // 执行分割
+//   stringstream iss(output2);
+//   string token;
+//   while (!iss.eof()) {
+//     iss >> token;
+//     token = trim(token);
+//     if (!token.empty()) {
+//       words.push_back(token);
+//     }
+//   }
+// }

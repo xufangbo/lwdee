@@ -25,8 +25,25 @@ typedef struct NodeInfo_t{
     UhconnTCPClient * dataClient;
     co_mutex *msgLock;
     co_mutex *dataLock;
-
+    void setMsgClient(UhconnTCPClient *client) {
+        msgLock->lock();
+        if(msgClient == nullptr){
+            msgClient = client;
+        } else{
+            delete msgClient;
+            msgClient = client;
+        }
+        msgLock->unlock();
+    };
 }NodeInfo;
+
+class co_mutex_lock {
+public:
+    co_mutex_lock(co_mutex& m) : m_(m) { m_.lock(); }
+    ~co_mutex_lock() { m_.unlock(); }
+private:
+    co_mutex& m_;
+};
 
 class UhconnWorkNode;
 class UhconnRouter
@@ -42,7 +59,7 @@ public:
     int pushData(int destNodeId, DdoDataId ddoId);
     int deleteData(int destNodeId, DdoDataId ddoId);
     int deleteData(DdoDataId ddoId);
-    int regNode(int id, NodeInfo info);
+    int regNode(int id, const NodeInfo& info);
     int setupRouteInfoFromConf(void);
     UhconnWorkNode * getWorkNode();
     virtual int nodeInfo(int id,NodeInfo& info);
@@ -53,9 +70,10 @@ public:
     //static UhconnTCPClient tcpClient;  
     
 private:
+    co_mutex mapLock;
     std::map<int,NodeInfo> nodeMap;
     UhconnWorkNode *workNode;  
-
+    NodeInfo& getNodeInfo(int destNodeId);
 };
 
 #endif

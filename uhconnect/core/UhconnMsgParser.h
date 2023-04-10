@@ -17,7 +17,7 @@ public:
     int getType();
     std::string getClassName(void);
     std::string getMethodName(void);
-    unsigned int  getMsgId(void);
+    size_t  getMsgId(void);
     std::string  getFromDco(void);
     std::string  getToDco(void);
     unsigned long long  getDdoId(void);

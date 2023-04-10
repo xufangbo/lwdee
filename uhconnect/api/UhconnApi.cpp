@@ -18,9 +18,9 @@ UhconnDcoRef UhconnApi::create(std::string className) {
     return localNode->itsDeamon().create(className);
 }
 
-UhconnDcoRef UhconnApi::create(int nodeId,std::string className) {
+UhconnDcoRef UhconnApi::create(std::string className, int destnode) {
     UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-    return localNode->itsDeamon().create(nodeId,className);
+    return localNode->itsDeamon().create(className, destnode);
 }
 
 UhconnDcoRef UhconnApi::create(std::string className, std::string classConstructor) {
@@ -50,8 +50,13 @@ UhconnDdoRef UhconnApi::async(UhconnDcoRef& dco, std::string reqFuncName, Uhconn
     return localNode->itsDeamon().async(dco, reqFuncName,reqPara);    
 }    
 
-DdoBlockData UhconnApi::loadData(UhconnDdoRef& ddo_id) {
-    DdoBlockData data;
-    wait(ddo_id)->loadBlock(data);
-    return data;
+UhconnDdo* UhconnApi::makeLocalDdo(void* data, uint32_t len) {
+    UhconnDdoRef df(UhconnVoxorFactory::getInstance().getLocalWorkNode()->itsDeamon().itsAddr());
+    UhconnDdo* ddo_obj = new UhconnDdo(df);
+    DdoBlockData test_data;
+    test_data.type = 22;
+    test_data.len = len;
+    test_data.data = data; 
+    ddo_obj->storeBlock(test_data);
+    return ddo_obj;
 }

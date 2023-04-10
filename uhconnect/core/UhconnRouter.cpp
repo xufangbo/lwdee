@@ -26,7 +26,10 @@ int msgRxHandler(void* p1, void* p2, int fd, int len){
     for(int i=0;i<messages.size();i++)
     {
         UhconnMsgParser parser(messages[i]);
-        parser.parse();
+        if( parser.parse() < 0 ) {
+            std::cout << "parse message failed!!!" << std::endl;
+            return -1;
+        }
         UhconnMessage msg;
         parser.getMsg(msg);
         #ifdef DEBUGINFO
@@ -56,7 +59,6 @@ int dataRxHandler(void* p1, void* p2, int fd, int len){
         DdoBlockData block;
         if(cmd.compare("pullDdoData")==0){
             int ret = UhconnSimpleDB::getInstance().loadBlockFromLocal(did,block);
-            // cout << "==== pullDdoData 1,size: " << block.len << ", content: " << block.data << endl;
             uint32_t total_bytes = 0;
             unsigned char p[8] = {0}; 
             if(ret < 0){
@@ -157,7 +159,6 @@ int dataRxHandler2(void* p1, void* p2, int fd, int len){
         DdoBlockData *block;
         if(cmd.compare("pullDdoData")==0){
             block = UhconnSimpleDB::getInstance().getBlockFromLocal(did);
-            // cout << "==== pullDdoData 2,size: " << block->len << ", content: " << block->data << endl;
             uint32_t total_bytes = 0;
             unsigned char p[8] = {0}; 
             if(block == nullptr){
@@ -222,8 +223,13 @@ UhconnRouter::~UhconnRouter()
     tcpDataServer.detach();
 }
 
-int UhconnRouter::regNode(int id, NodeInfo info){
-    nodeMap.insert(pair<int,NodeInfo>(id, info));
+int UhconnRouter::regNode(int id, const NodeInfo& info) {
+    auto it = nodeMap.find(id);
+    if (it != nodeMap.end()) {
+        it->second = info;
+    } else {
+        nodeMap.insert(make_pair(id, info));
+    }
     return 0;
 }
 
@@ -232,126 +238,230 @@ int UhconnRouter::setupRouteInfoFromConf(void){
     return 0;
 }
 
-int UhconnRouter::nodeInfo(int id,NodeInfo& info){
-    map<int, NodeInfo>::iterator it = nodeMap.find(id);
-    if(it != nodeMap.end()) {
-        info.ipv4Addr = it->second.ipv4Addr;
-        info.msgPort = it->second.msgPort;
-        info.dataPort = it->second.dataPort;
-        info.nodeId = it->second.nodeId;
-        info.dataClient = it->second.dataClient;
-        info.msgClient = it->second.msgClient;
-        info.dataLock = it->second.dataLock;
-        info.msgLock = it->second.msgLock;
+// int UhconnRouter::nodeInfo(int id,NodeInfo& info){
+//     map<int, NodeInfo>::iterator it = nodeMap.find(id);
+//     if(it != nodeMap.end()) {
+//         info.ipv4Addr = it->second.ipv4Addr;
+//         info.msgPort = it->second.msgPort;
+//         info.dataPort = it->second.dataPort;
+//         info.nodeId = it->second.nodeId;
+//         info.dataClient = it->second.dataClient;
+//         info.msgClient = it->second.msgClient;
+//         info.dataLock = it->second.dataLock;
+//         info.msgLock = it->second.msgLock;
+//         return 0;
+//     }
+//     return -1;
+// }
+int UhconnRouter::nodeInfo(int id, NodeInfo& info) {
+    auto it = nodeMap.find(id);
+    if (it != nodeMap.end()) {
+        info = it->second;
         return 0;
     }
     return -1;
 }
 
- int UhconnRouter::sendMsg(UhconnMessage& msg){
-    int ret = 0;
-    int rd_chan;
-    NodeInfo destInfo;
+void printNodeInfo(const NodeInfo& info) {
+    std::cout << "NodeInfo:\n";
+    std::cout << "ipv4Addr: " << info.ipv4Addr << "\n";
+    std::cout << "nodeId: " << info.nodeId << "\n";
+    std::cout << "msgPort: " << info.msgPort << "\n";
+    std::cout << "dataPort: " << info.dataPort << "\n";
+    std::cout << "msgClient: " << info.msgClient << "\n";
+    std::cout << "dataClient: " << info.dataClient << "\n";
+    std::cout << "msgLock: " << info.msgLock << "\n";
+    std::cout << "dataLock: " << info.dataLock << "\n";    
+}
 
+NodeInfo& UhconnRouter::getNodeInfo(int destNodeId) {
+    static NodeInfo dummy;
+    dummy.nodeId = -1;
+
+    co_mutex_lock lock(mapLock);
+
+    auto it = nodeMap.find(destNodeId);
+    if (it == nodeMap.end()) {
+        return dummy;
+    }
+
+    NodeInfo& node = it->second;
+
+    if (node.msgClient == nullptr) {
+        node.msgClient =new UhconnTCPClient();
+        assert(node.msgClient);
+        node.msgClient->setup(node.ipv4Addr, node.msgPort);
+    }
+    if( node.dataClient == nullptr) {
+        node.dataClient = new UhconnTCPClient();
+        assert(node.dataClient);
+        node.dataClient->setup(node.ipv4Addr, node.dataPort);
+    }
+    return node;
+}
+
+int UhconnRouter::sendMsg(UhconnMessage &msg) {
+    int destNodeId = msg.getDestNodeId();
     int localNodeId = workNode->itsAddr();
-    if(localNodeId == msg.getDestNodeId()){
+    if(localNodeId == destNodeId){
         workNode->inputMessage(msg);
         return 0;
     }
-    ret = nodeInfo(msg.getDestNodeId(), destInfo);
-    if(ret < 0){
-        cout << "sendMsg:dest work node not found!!" << endl;
+
+    NodeInfo& node = getNodeInfo(destNodeId);
+    if (node.nodeId == -1) {
+        std::cout << "UhconnRouter::sendMsg failed to find destination node: " << destNodeId;
         return -1;
     }
-    
-    destInfo.msgLock->lock();
-    if(destInfo.msgClient == NULL){
-        destInfo.msgClient =new UhconnTCPClient();
-        destInfo.msgClient->setup(destInfo.ipv4Addr, destInfo.msgPort);
+    UhconnTCPClient *client = node.msgClient;
+    if( client == nullptr ) {
+        return -3;
     }
-    destInfo.msgLock->unlock();
-    string str = UhconnProtocol::left_enc + msg.getMessageJsonStr()+ UhconnProtocol::right_enc ;
-    #ifdef DEBUGINFO
-    std::cout << "sendMsg:"<< str << std::endl;
-    #endif
-    destInfo.msgLock->lock();
-    ret = destInfo.msgClient->Send(str);
-    if(ret <0){
-        destInfo.msgClient->exit();
-        delete destInfo.msgClient;
-        destInfo.msgClient = NULL;
-        ret = -2;
-    }
-    destInfo.msgLock->unlock();
-    return ret;
- }
+    co_mutex_lock lock(*(node.msgLock));
 
+    string str = UhconnProtocol::left_enc + msg.getMessageJsonStr()+ UhconnProtocol::right_enc;
+
+    if(!client->Send(str)) {
+        cerr << "Failed to send message." << endl;
+        node.msgClient->exit();
+        delete node.msgClient;
+        node.msgClient = nullptr;
+        return -2;            
+    }
+    return 0;
+
+}
+
+// int UhconnRouter::sendMsg(UhconnMessage& msg){
+//     int ret = 0;
+//     int rd_chan;
+//     NodeInfo destInfo;
+
+//     int localNodeId = workNode->itsAddr();
+//     if(localNodeId == msg.getDestNodeId()){
+//         workNode->inputMessage(msg);
+//         return 0;
+//     }
+//     ret = nodeInfo(msg.getDestNodeId(), destInfo);
+//     if(ret < 0){
+//         cout << "sendMsg:dest work node not found!!" << endl;
+//         return -1;
+//     }
+
+//     printNodeInfo(destInfo);    
+//     destInfo.msgLock->lock();
+//     if(destInfo.msgClient == NULL){
+//         destInfo.msgClient =new UhconnTCPClient();
+//         destInfo.msgClient->setup(destInfo.ipv4Addr, destInfo.msgPort);
+//         regNode(msg.getDestNodeId(),destInfo);
+//     }
+//     destInfo.msgLock->unlock();
+//     string str = UhconnProtocol::left_enc + msg.getMessageJsonStr()+ UhconnProtocol::right_enc ;
+//     #ifdef DEBUGINFO
+//     std::cout << "sendMsg:"<< str << std::endl;
+//     #endif
+//     destInfo.msgLock->lock();
+//     ret = destInfo.msgClient->Send(str);
+//     if(ret <0){
+//         destInfo.msgClient->exit();
+//         delete destInfo.msgClient;
+//         destInfo.msgClient = NULL;
+//         ret = -2;
+//         std::cerr << "Error: !!!!!!!estInfo.msgClient == NULL." << std::endl;
+//         std::abort();
+//     }
+//     destInfo.msgLock->unlock();
+//     return ret;
+//  }
+
+
+void cleanTcpClient(UhconnTCPClient** pclient) {
+    assert(pclient);
+    UhconnTCPClient *client = *pclient;
+    assert(client);
+    client->exit();
+    delete client;
+    client = nullptr;    
+}
+
+/**
+ * @brief 拉取远端ddo到本地
+ * 
+ * @param destNodeId ddo所在worknode
+ * @param ddoId ddo标识
+ * @return int 
+ */
  int UhconnRouter::pullData(int destNodeId, DdoDataId ddoId){
-    int ret;
     // int const rxLen = ROUTER_MAX_DATA_PKT_LEN;
-    NodeInfo destInfo;
-    int localNodeId = workNode->itsAddr();
+    enum {
+        ok = 0,
+        err_node = -1,
+        err_client = -2,
+        err_send = -3,
+        err_rcv = -4,
+        err_nodata = -5,
+        err_datalen = -6,
+        
+    };
+    if(UhconnSimpleDB::getInstance().isBlockAtLocal(ddoId)){
+        return ok;
+    }
 
-    if(localNodeId == destNodeId){
-        return -1;
+    if(workNode->itsAddr() == destNodeId){
+        return ok;
     }
-    ret = nodeInfo(destNodeId, destInfo);
-    if(ret < 0){
-        cout << "pullData:dest work node not found!!" << endl;
-        return -2;
+
+    NodeInfo& destInfo = getNodeInfo(destNodeId);
+    if (destInfo.nodeId == -1) {
+        std::cout << "UhconnRouter::pullData failed to find destination node: " << destNodeId;
+        return err_node;
     }
-    destInfo.dataLock->lock();
-    if(destInfo.dataClient == NULL){
-        destInfo.dataClient = new UhconnTCPClient();
-        bool result = destInfo.dataClient->setup(destInfo.ipv4Addr, destInfo.dataPort);
-        if(!result){
-            destInfo.dataLock->unlock();
-            return -3;
-        }
+    UhconnTCPClient *client = destInfo.dataClient;
+    if( client == nullptr ) {
+        return err_client;
     }
-    destInfo.dataLock->unlock();
-    //UhconnTCPClient* tcpClient = new UhconnTCPClient();
-    //tcpClient->setup(destInfo.ipv4Addr, destInfo.dataPort);
+
     std::stringstream ss;
     ss<<"pullDdoData"<<" "<<ddoId;
-    // unsigned char * rbuf = (unsigned char *)malloc(rxLen);
-    // memset(rbuf,0,rxLen);
-    std::string sendStr= UhconnProtocol::left_enc + ss.str() +UhconnProtocol::right_enc;
-    destInfo.dataLock->lock();
-    if(UhconnSimpleDB::getInstance().isBlockAtLocal(ddoId)||UhconnSimpleDB::getInstance().isBlockPreparing(ddoId)){
-        destInfo.dataLock->unlock();
-        return 0;
+    string str = UhconnProtocol::left_enc + ss.str()+ UhconnProtocol::right_enc;
+
+    co_mutex_lock lock(*(destInfo.dataLock));
+
+
+    if(!client->Send(str)) {
+        cerr << "Failed to send message." << endl;
+        cleanTcpClient(&client);
+        return err_send;            
     }
-    ret = destInfo.dataClient->Send(sendStr);
-    if(ret < 0){
-        destInfo.dataClient->exit();
-        delete destInfo.dataClient;
-        destInfo.dataClient = NULL;
-        destInfo.dataLock->unlock();
-        return -4;
-    }
+
+
     //先获取数据长度
     unsigned char head[8];
-    ret = destInfo.dataClient->receive(head,sizeof(head));
+    int ret = client->receive(head,sizeof(head));
     if( ret < 0 ) {
-        destInfo.dataLock->unlock();
-        return -5;
+        cerr << "Failed to receive data." << endl;
+        cleanTcpClient(&client);
+        return err_rcv;
     }
-    DdoBlockData block;
+    // DdoBlockData block;
 
-    block.type = ntohl(*((int*)&head[0]));
-    block.len = ntohl(*((int*)&head[4]));
+    int type = ntohl(*((int*)&head[0]));
+    if( type == ROUTER_DATA_NOT_FOUND ) {
+        return err_nodata;
+    }
+    int len = ntohl(*((int*)&head[4]));
+    if( len <= 0 ) {
+        return err_datalen;
+    }
+
+    DdoBlockData* block = UhconnSimpleDB::getInstance().createBlock(ddoId, len, 0);
     #ifdef DEBUGINFO
     std::cout << "tcp will rcv len:" << block.len << std::endl;
     #endif
-    block.data = malloc(block.len);
-    if( block.data == nullptr ) {
-        destInfo.dataLock->unlock();
-        return -6;
-    }
+
     uint64_t totleBytes = 0;
-    while( totleBytes < block.len ) {
-        ret = destInfo.dataClient->receive((unsigned char*)block.data + totleBytes, block.len-totleBytes);
+    while( totleBytes < block->len ) {
+        ret = client->receive((unsigned char*)block->data + totleBytes, block->len-totleBytes);
         if( ret > 0 ) {
             totleBytes += ret;
         }
@@ -360,10 +470,10 @@ int UhconnRouter::nodeInfo(int id,NodeInfo& info){
         }
         else {
             std::cout << "TCP receive error!!! at bytes: " << totleBytes << std::endl;
-            free(block.data);
-            block.data = nullptr;
-            destInfo.dataLock->unlock();
-            return -7;
+            free(block->data);
+            block->data = nullptr;
+            cleanTcpClient(&client);
+            return err_rcv;
         }
     }
 
@@ -371,44 +481,16 @@ int UhconnRouter::nodeInfo(int id,NodeInfo& info){
     std::cout << "TCP receive total bytes: " << totleBytes << std::endl;
     #endif
 
-    destInfo.dataLock->unlock();
-
     #ifdef DEBUGINFO
     std::cout<<"pull data, store with id:"<< ddoId << std::endl;
     #endif
-    UhconnSimpleDB::getInstance().storeBlock(ddoId, block);
-    if( block.data ) {
-        free(block.data);
-    }
-    return 1;
+    return ok;
  }
 
  int UhconnRouter::pullData(DdoDataId ddoId){
-    int destNodeId = ddoId>>48 & 0xffff;
+    int destNodeId = (ddoId>>48) & 0xffff;
     int ret = -100;
-    ret = pullData(destNodeId, ddoId);
-    if(ret >=0){
-        return ret;
-    }else{
-        std::cout<<"pulldata ret "<<ret<<" node:id = "<<destNodeId<<" : "<<ddoId<<std::endl;
-    }
-    int nodeCnt = 0;
-    for(auto it : nodeMap){
-        if(++nodeCnt > UhconnConfig::getInstance().getNodeAmount()){
-            break;
-        }
-        if(it.first == destNodeId){
-            std::cout<<"it.first == destNodeId continue"<<it.first<<":"<<destNodeId<<" "<<std::endl;
-            continue;
-        }
-        std::cout<<"try to pull data from node "<<it.first<<std::endl;
-        ret = pullData(it.first, ddoId);
-        if(ret >= 0){
-            std::cout<<"at last get data from node "<<it.first<<std::endl;
-            break;
-        }
-    }
-    return ret;
+    return pullData(destNodeId, ddoId);
  }
 
 
@@ -422,6 +504,9 @@ int receive_block(int fd,  DdoDataId &ddoId){
     }
 
     int type = ntohl(*((int*)&head[0]));
+    if( type == ROUTER_DATA_NOT_FOUND ) {
+        return -108;
+    }
     unsigned int len = ntohl(*((int*)&head[4]));
     #ifdef DEBUGINFO
     std::cout << "tcp will rcv len2:" << len << std::endl;
@@ -460,50 +545,42 @@ int receive_block(int fd,  DdoDataId &ddoId){
 }
 
  int UhconnRouter::pullData2(int destNodeId, DdoDataId ddoId){
-    int ret;
-    NodeInfo destInfo;
+
     int localNodeId = workNode->itsAddr();
-    if(localNodeId == destNodeId){
+    if(localNodeId == destNodeId || UhconnSimpleDB::getInstance().isBlockAtLocal(ddoId)){
         return 0;
     }
-    ret = nodeInfo(destNodeId, destInfo);
-    if(ret < 0){
-        cout << "pullData:dest work node not found!!" << endl;
-        return -2;
+
+    NodeInfo& destInfo = getNodeInfo(destNodeId);
+    if (destInfo.nodeId == -1) {
+        std::cout << "UhconnRouter::sendMsg failed to find destination node: " << destNodeId;
+        return -1;
     }
-    destInfo.dataLock->lock();
-    if(destInfo.dataClient == NULL){
-        destInfo.dataClient = new UhconnTCPClient();
-        bool result = destInfo.dataClient->setup(destInfo.ipv4Addr, destInfo.dataPort);
-        if(!result){
-            destInfo.dataLock->unlock();
-            return -3;
-        }
+
+    UhconnTCPClient *client = destInfo.dataClient;
+    if( client == nullptr ) {
+        return -3;
     }
-    destInfo.dataLock->unlock();
+
+
     std::stringstream ss;
     ss<<"pullDdoData"<<" "<<ddoId;
-    std::string sendStr= UhconnProtocol::left_enc + ss.str() +UhconnProtocol::right_enc;
-    destInfo.dataLock->lock();
-    if(UhconnSimpleDB::getInstance().isBlockAtLocal(ddoId)){
-        destInfo.dataLock->unlock();
-        return 0;
+    string str = UhconnProtocol::left_enc + ss.str()+ UhconnProtocol::right_enc;
+    
+    co_mutex_lock lock(*(destInfo.dataLock));
+    if(!client->Send(str)) {
+        cerr << "Failed to send data ." << ss.str() << endl;
+        client->exit();
+        delete client;
+        client = nullptr;
+        return -2;            
     }
-    ret = destInfo.dataClient->Send(sendStr);
-    if(ret < 0){
-        destInfo.dataClient->exit();
-        delete destInfo.dataClient;
-        destInfo.dataClient = NULL;
-        destInfo.dataLock->unlock();
-        return -4;
-    }
+
     //先获取数据长度
-    // std::cout << "recv block id "<< ddoId <<std::endl;
-    ret = receive_block(destInfo.dataClient->getSockFd(), ddoId);
+    int ret = receive_block(client->getSockFd(), ddoId);
     #ifdef DEBUGINFO
     std::cout<<"receive_block return " <<ret<<std::endl;
     #endif
-    destInfo.dataLock->unlock();
     #ifdef DEBUGINFO
     DdoBlockData* blk = UhconnSimpleDB::getInstance().getBlock(ddoId);
     std::cout<<"pull data, TCP receive total bytes: "<<blk->len <<" store with id:"<< ddoId << std::endl;
@@ -512,75 +589,68 @@ int receive_block(int fd,  DdoDataId &ddoId){
     return ret;
  }
 
- int UhconnRouter::pullData2(DdoDataId ddoId){
-    int destNodeId = ddoId>>48 & 0xffff;
-    int ret = -100;
-    ret = pullData2(destNodeId, ddoId);
-    if(ret >=0){
-        return ret;
-    }else{
-        std::cout<<"pulldata2 ret "<<ret<<" node:id = "<<destNodeId<<" : "<<ddoId<<std::endl;
-    }
-    int nodeCnt = 0;
-    for(auto it : nodeMap){
-        if(++nodeCnt > UhconnConfig::getInstance().getNodeAmount()){
-            break;
-        }
-        if(it.first == destNodeId){
-            std::cout<<"it.first == destNodeId continue"<<it.first<<":"<<destNodeId<<" "<<std::endl;
-            continue;
-        }
-        std::cout<<"try to pull data from node "<<it.first<<std::endl;
-        ret = pullData2(it.first, ddoId);
-        if(ret >= 0){
-            std::cout<<"at last get data from node "<<it.first<<std::endl;
-            break;
-        }
-    }
-    return ret;
- }
+//  int UhconnRouter::pullData2(DdoDataId ddoId){
+//     int destNodeId = ddoId>>48 & 0xffff;
+//     int ret = -100;
+//     ret = pullData2(destNodeId, ddoId);
+//     if(ret >=0){
+//         return ret;
+//     }else{
+//         std::cout<<"pulldata2 ret "<<ret<<" node:id = "<<destNodeId<<" : "<<ddoId<<std::endl;
+//     }
+//     int nodeCnt = 0;
+//     for(auto it : nodeMap){
+//         if(++nodeCnt > UhconnConfig::getInstance().getNodeAmount()){
+//             break;
+//         }
+//         if(it.first == destNodeId){
+//             std::cout<<"it.first == destNodeId continue"<<it.first<<":"<<destNodeId<<" "<<std::endl;
+//             continue;
+//         }
+//         std::cout<<"try to pull data from node "<<it.first<<std::endl;
+//         ret = pullData2(it.first, ddoId);
+//         if(ret >= 0){
+//             std::cout<<"at last get data from node "<<it.first<<std::endl;
+//             break;
+//         }
+//     }
+//     return ret;
+//  }
 
 
 int UhconnRouter::pushData(int destNodeId, DdoDataId ddoId){
-    int ret;
-    NodeInfo destInfo;
+
     int localNodeId = workNode->itsAddr();
     if(localNodeId == destNodeId){
         return 0;
     }
-    ret = nodeInfo(destNodeId, destInfo);
-    if(ret < 0){
-        cout << "pushData:dest work-node "<<destNodeId<<" not found!!" << endl;
-        return -2;
+    NodeInfo& destInfo = getNodeInfo(destNodeId);
+    if (destInfo.nodeId == -1) {
+        std::cout << "UhconnRouter::sendMsg failed to find destination node: " << destNodeId;
+        return -1;
     }
-    destInfo.dataLock->lock();
-    if(destInfo.dataClient == NULL){
-        destInfo.dataClient = new UhconnTCPClient();
-        bool result = destInfo.dataClient->setup(destInfo.ipv4Addr, destInfo.dataPort);
-        if(!result){
-            destInfo.dataLock->unlock();
-            return -3;
-        }
-    }
-    destInfo.dataLock->unlock();
+    UhconnTCPClient *client = destInfo.dataClient;
+    if( client == nullptr ) {
+        return -3;
+    }    
+
     #ifdef DEBUGINFO
     std::cout<<"push ddo "<<ddoId <<" to node "<<destNodeId <<std::endl;
     #endif 
     std::stringstream ss;
     ss<<"pushDdoData"<<" "<<ddoId;
     std::string sendStr= UhconnProtocol::left_enc + ss.str() +UhconnProtocol::right_enc;
-    destInfo.dataLock->lock();
-    ret = destInfo.dataClient->Send(sendStr);
-    if(ret < 0){
-        destInfo.dataClient->exit();
-        delete destInfo.dataClient;
-        destInfo.dataClient = NULL;
-        destInfo.dataLock->unlock();
-        return -4;
+    co_mutex_lock lock(*(destInfo.dataLock));
+    if(!client->Send(sendStr)) {
+        cerr << "Failed to send data ." << ss.str() << endl;
+        client->exit();
+        delete client;
+        client = nullptr;
+        return -2;            
     }
     char rxBuf[64];
     memset(rxBuf,0,sizeof(rxBuf));
-    ret = destInfo.dataClient->receive((unsigned char*)rxBuf,sizeof(rxBuf));
+    int ret = client->receive((unsigned char*)rxBuf,sizeof(rxBuf));
     if(ret <= 0){
         return -5;
     }
@@ -599,46 +669,39 @@ int UhconnRouter::pushData(int destNodeId, DdoDataId ddoId){
     }else{
         ret = 0;
     }
-    destInfo.dataLock->unlock();
+
 
     return ret;
  }
 
 int UhconnRouter::deleteData(int destNodeId, DdoDataId ddoId){
-    int ret;
-    NodeInfo destInfo;
+
     int localNodeId = workNode->itsAddr();
     if(localNodeId == destNodeId){
         return -1;
     }
-    ret = nodeInfo(destNodeId, destInfo);
-    if(ret < 0){
-        cout << "pullData:dest work node not found!!" << endl;
-        return -2;
+    NodeInfo& destInfo = getNodeInfo(destNodeId);
+    if (destInfo.nodeId == -1) {
+        std::cout << "UhconnRouter::sendMsg failed to find destination node: " << destNodeId;
+        return -1;
     }
-    destInfo.dataLock->lock();
-    if(destInfo.dataClient == NULL){
-        destInfo.dataClient = new UhconnTCPClient();
-        bool result = destInfo.dataClient->setup(destInfo.ipv4Addr, destInfo.dataPort);
-        if(!result){
-            destInfo.dataLock->unlock();
-            return -3;
-        }
+
+    UhconnTCPClient *client = destInfo.dataClient;
+    if( client == nullptr ) {
+        return -3;
     }
-    destInfo.dataLock->unlock();
     std::stringstream ss;
     ss<<"delDdoData"<<" "<<ddoId;
     std::string sendStr= UhconnProtocol::left_enc + ss.str() +UhconnProtocol::right_enc;
-    destInfo.dataLock->lock();
-    ret = destInfo.dataClient->Send(sendStr);
-    if(ret < 0){
-        destInfo.dataClient->exit();
-        delete destInfo.dataClient;
-        destInfo.dataClient = NULL;
-        destInfo.dataLock->unlock();
-        return -4;
+    co_mutex_lock lock(*(destInfo.dataLock));
+    if(!client->Send(sendStr)) {
+        cerr << "Failed to send data ." << ss.str() << endl;
+        client->exit();
+        delete client;
+        client = nullptr;
+        return -2;            
     }
-    destInfo.dataLock->unlock();
+
     return 0;
  }
 

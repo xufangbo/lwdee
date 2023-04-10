@@ -38,12 +38,7 @@ void UhconnVoxor::run(void) {
                     #ifdef DEBUGINFO
                     std::cout << "UhconnVoxor::run receive request methode: " << in_msg.getMethodName() << " param:"<< in_msg.getMethodPara() << std::endl;
                     #endif
-                                        
-                    auto methodName = in_msg.getMethodName();
-                    auto par = in_msg.getMethodPara();
-                    
-                    std::string ret = (ItsDco->*ItsDco->getFunctionTable()[methodName])(par);
-
+                    std::string ret = (ItsDco->*ItsDco->getFunctionTable()[in_msg.getMethodName()])(in_msg.getMethodPara());
                     switch(in_msg.getCmd()) {
                         case MSG_CMD_CREATE:
                         case MSG_CMD_WAIT: 
@@ -51,6 +46,7 @@ void UhconnVoxor::run(void) {
                             UhconnMessage out_msg(in_msg.getDestNodeId(), in_msg.getSrcNodeId(), in_msg.getCmd(), MSG_TYPE_RESP);
                             out_msg.setMethodPara(ret);
                             out_msg.setDestVoxor(in_msg.getSrcVoxor());
+                            out_msg.setMsgId(in_msg.getMsgId());
                             // std::cout << "make response msg" << out_msg.getDestVoxor() << std::endl;
                             UhconnVoxorFactory::getInstance().getLocalWorkNode()->itsRouter().sendMsg(out_msg);
                         }
@@ -78,11 +74,11 @@ void UhconnVoxor::run(void) {
                     // std::cout << "receive a response!!" << std::endl;
                     switch( in_msg.getCmd()) {
                     case MSG_CMD_CREATE:
-                    case MSG_CMD_WAIT: 
                     {
-                        ItsDco->getMsgQ() << in_msg;
+                        // ItsDco->getMsgQ() << in_msg;
                     }
                     break;
+                    case MSG_CMD_WAIT: 
                     case MSG_CMD_ASYNC:
                     default:
                     break;

@@ -16,7 +16,7 @@ public:
     ~UhconnApi();
 
     static UhconnDcoRef create(std::string className);
-    static UhconnDcoRef create(int nodeId,std::string className);
+    static UhconnDcoRef create(std::string className, int destnode);
     static UhconnDcoRef create(std::string className, std::string classConstructor);
 
     static const UhconnDdoRef async(UhconnDcoRef& dco, std::string funcName, std::string funcPara);
@@ -24,7 +24,10 @@ public:
 
     static UhconnDdo* wait(UhconnDdoRef& ddo_id);
     static std::vector<UhconnDdo*> wait(std::vector<UhconnDdoRef>& ddo_ref, bool postIfReady);
-    static DdoBlockData loadData(UhconnDdoRef& ddo_id);
+    // static DdoBlockData loadData(UhconnDdoRef& ddo_id);
+
+
+    static UhconnDdo* makeLocalDdo(void* data, uint32_t len);
       
 private:
 

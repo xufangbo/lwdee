@@ -17,7 +17,7 @@ std::vector<DDO> KafkaDCO::ddos;
 
 std::string KafkaDCO::start(std::string a) {
   try {
-    logger_info("< accept start ");
+    logger_trace("< accept start ");
     Stopwatch sw;
     LinuxMatrix::print();
     // logger_info("< invokded start %s", a.c_str());
@@ -30,7 +30,7 @@ std::string KafkaDCO::start(std::string a) {
     consumer->start(input);
 
     LinuxMatrix::print();
-    logger_info("> accept start ,partition : %d,mapCount: %d,eclipse %lf", input->index, input->mapCount, sw.stop());
+    logger_trace("> accept start ,partition : %d,mapCount: %d,eclipse %lf", input->index, input->mapCount, sw.stop());
 
     auto node = UhconnVoxorFactory::getInstance().getLocalWorkNode();
 

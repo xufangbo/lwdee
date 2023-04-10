@@ -4,8 +4,7 @@
 #pragma once
 
 #include <map>
-#include <iostream>
-
+#include <cstdint>
 class UhconnMemoryDataCell;
 class UhconnMemoryDB
 {

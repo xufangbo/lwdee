@@ -33,17 +33,24 @@ void UhconnWorkNode::start(void) {
 int UhconnWorkNode::inputMessage(UhconnMessage& in_msg) {
     //std::cout <<"inputMessage"<<std::endl;
     if( !isForMe(in_msg) ) {
-        std::cout <<"wrongly delivered msg!! message is to "<< in_msg.getDestNodeId() <<std::endl;
+        // std::cout <<"wrongly delivered msg!!"<<std::endl;
         return -1;
     }
-    #ifdef DEBUGINFO
-    std::cout <<"in_msg.getDestVoxor:"<<in_msg.getDestVoxor()<<std::endl;
-    #endif
-    std::map<std::string, UhconnVoxor&>::iterator it = voxor_map.find(in_msg.getDestVoxor());
-    if(it != voxor_map.end()) {
-        it->second.getMsgQ() << in_msg;
-    }else{
-        std::cout <<"dest Q not found!!"<<std::endl;
+    // std::cout <<"in_msg.getMsgId:"<<in_msg.getMsgId()<<std::endl;
+
+    if( isWaitResponse(in_msg) && isMsgInWaitingTable(in_msg) ) {
+        // std::cout << "yes isMsgInWaitingTable" << std::endl;
+        auto channel = getFromWaitingTable(in_msg);
+        assert(channel);
+        channel->push(in_msg);
+    }
+    else {
+        std::map<std::string, UhconnVoxor&>::iterator it = voxor_map.find(in_msg.getDestVoxor());
+        if(it != voxor_map.end()) {
+            it->second.getMsgQ() << in_msg;
+        }else{
+            std::cout <<"dest Q not found!!"<<std::endl;
+        }
     }
     return 0;
 }
@@ -55,4 +62,43 @@ int UhconnWorkNode::addVoxor(UhconnVoxor& v) {
 
 bool UhconnWorkNode::isForMe(UhconnMessage& in_msg) {
     return in_msg.getDestNodeId() == itsAddr();
+}
+
+bool UhconnWorkNode::isWaitResponse(UhconnMessage& in_msg) {
+    return (in_msg.getType() == MSG_TYPE_RESP) && (in_msg.getCmd() == MSG_CMD_WAIT || in_msg.getCmd() == MSG_CMD_CREATE);
+}
+
+bool UhconnWorkNode::isMsgInWaitingTable(UhconnMessage& in_msg) {
+    size_t msg_hash = in_msg.getMsgId();
+    auto iter = waiting_table.find(msg_hash);
+    if (iter != waiting_table.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+std::shared_ptr<co_chan<UhconnMessage>> UhconnWorkNode::addToWaitingTable(UhconnMessage& in_msg) {
+    size_t msg_hash = std::hash<UhconnMessage>()(in_msg);
+    in_msg.setMsgId(msg_hash);
+    auto channel = std::make_shared<co_chan<UhconnMessage>>(10);
+    std::lock_guard<std::mutex> lock(waiting_table_mutex);
+    waiting_table[msg_hash] = channel;
+    return std::move(channel);
+}
+
+std::shared_ptr<co_chan<UhconnMessage>> UhconnWorkNode::getFromWaitingTable(const UhconnMessage& msg) {
+    std::lock_guard<std::mutex> guard(waiting_table_mutex);
+    auto it = waiting_table.find(msg.getMsgId());
+    if (it != waiting_table.end()) {
+        return it->second;
+    }
+    return nullptr;
+}
+bool UhconnWorkNode::removeFromWaitingTable(UhconnMessage& msg) {
+    size_t msg_hash = msg.getMsgId();
+    std::lock_guard<std::mutex> lock(waiting_table_mutex);
+    waiting_table.erase(msg_hash);    
+    return true;
 }

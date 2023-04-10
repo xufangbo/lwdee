@@ -23,6 +23,15 @@ public:
     }errno_ddo;
     errno_ddo writeData(void* data_, uint64_t len_);
     void* readData(uint64_t* len_);
+    uint32_t size(void) {
+        return getBlock()->len;
+    };
+    DdoDataId itsUID(void) {
+        return df.itsId();
+    };
+    std::string itsLocation(void) {
+        return df.itsVoxorId();
+    }
 
     //以下接口将被删除
     int storeBlock(DdoBlockData& data);

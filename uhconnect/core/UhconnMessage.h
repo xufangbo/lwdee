@@ -10,6 +10,7 @@ typedef enum {
     MSG_CMD_CREATE,
     MSG_CMD_WAIT,
     MSG_CMD_ASYNC,
+    MSG_CMD_ASYNC_PRO,
 }Uh_Message_Command_E;
 
 typedef enum {
@@ -45,7 +46,13 @@ public:
     int getSrcNodeId() const;
     int getDestNodeId() const;
     void setClassName(std::string name);
-    void setMsgId(unsigned int id);
+    std::string getClassName(void) const {
+        return className;
+    };
+    void setMsgId(size_t id);
+    size_t getMsgId(void) const {
+        return msgId;
+    };
 
     void setDdoData(unsigned int dt);
 
@@ -69,7 +76,7 @@ private:
     int destNodeId;
     std::string fromDco; 
     std::string toDco;   
-    unsigned int msgId;
+    size_t msgId;
     unsigned long long DdoId;
 
     std::string fromVoxorId;
@@ -81,4 +88,24 @@ private:
     std::string methodPara;
 };
 
+namespace std {
+    template <>
+    struct hash<UhconnMessage> {
+        size_t operator()(const UhconnMessage& msg) const {
+            size_t h1 = std::hash<int>()(msg.getSrcNodeId());
+            size_t h2 = std::hash<int>()(msg.getDestNodeId());
+            size_t h3 = std::hash<int>()(static_cast<int>(msg.getCmd()));
+            size_t h4 = std::hash<int>()(static_cast<int>(msg.getType()));
+            size_t h5 = 0;//std::hash<std::string>()(msg.getMessageJsonStr());
+            size_t h6 = std::hash<size_t>()(msg.getMsgId());
+            size_t h7 = std::hash<unsigned long long>()(msg.getDdoId());
+            size_t h8 = std::hash<std::string>()(msg.getDestVoxor());
+            size_t h9 = std::hash<std::string>()(msg.getSrcVoxor());
+            size_t h10 = std::hash<std::string>()(msg.getClassName());
+            size_t h11 = std::hash<std::string>()(msg.getMethodName());
+            size_t h12 = std::hash<std::string>()(msg.getMethodPara());
+            return h1 ^ h2 ^ h3 ^ h4 ^ h5 ^ h6 ^ h7 ^ h8 ^ h9 ^ h10 ^ h11 ^ h12;
+        }
+    };
+}
 #endif

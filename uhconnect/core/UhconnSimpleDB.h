@@ -108,7 +108,7 @@ public:
     };
 
     DdoDataId genDataId();
-    int storeBlock(DdoDataId id, DdoBlockData& data);
+    int storeBlock(DdoDataId id, DdoBlockData&& data);
     int loadBlock(DdoDataId id, DdoBlockData& data);
     int loadBlock(DdoDataId id, DdoBlockData& data, int nodeId);
     int loadBlockFromLocal(DdoDataId id, DdoBlockData& data);
@@ -125,7 +125,7 @@ public:
     int shareBlock(DdoDataId id);
     int deleteShareBlock(DdoDataId id);
     int setUpLevelDdoUrl(std::string& url);
-    bool isBlockPreparing(DdoDataId id);
+    bool isBlockPreparing(const DdoDataId& id);
     bool addToPrepArray(DdoDataId id);
     bool delFromPrepArray(DdoDataId id);
     DdoDataId getFirstDdo(void);

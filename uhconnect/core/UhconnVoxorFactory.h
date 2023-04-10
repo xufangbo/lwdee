@@ -29,6 +29,8 @@ public:
     UhconnVoxor* createVoxor(UhconnDco* dco);
     UhconnWorkNode* getLocalWorkNode(void);
     DcoFactory* getLocalFactory(void);
+    void setLocalFactory(DcoFactory* nf);
+    DcoFactory* switchLocalFactory(DcoFactory* nf);
 private:
     UhconnWorkNode* Local_Worknode;
     DcoFactory* local_factory;

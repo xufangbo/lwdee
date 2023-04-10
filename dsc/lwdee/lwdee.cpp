@@ -21,16 +21,16 @@ DCO lwdee::create_dco_byindex(int indexId, std::string name) {
   indexId = indexId % (nodeAmount - 1);
   int nodeId = indexId + 2;
 
-  logger_trace("create dco node%d %s", nodeId, name.c_str());
+  // logger_trace("create dco node%d %s", nodeId, name.c_str());
 
-  UhconnDcoRef uh_dco = UhconnApi::create(nodeId, name);
+  UhconnDcoRef uh_dco = UhconnApi::create(name, nodeId);
   DCO dco(uh_dco);
 
   return dco;
 }
 
 DCO lwdee::create_dco(int nodeId, std::string name) {
-  UhconnDcoRef uh_dco = UhconnApi::create(nodeId, name);
+  UhconnDcoRef uh_dco = UhconnApi::create(name, nodeId);
   DCO dco(uh_dco);
   return dco;
 }

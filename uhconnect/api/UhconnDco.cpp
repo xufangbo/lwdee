@@ -24,7 +24,6 @@ std::string UhconnDco::wait_ddo(std::string ddo_id) {
     int post;
     ss >> ddoId >> nodeId >> post;
     logInfo("receive sb check ddo data:%llu", ddoId);
-    // std::cout <<"wait_ddo id:nodeid:push = "<<ddoId<<":"<<nodeId<<":"<<post<<std::endl;
     DdoBlockData data;
     while(true) {
         //int ret = UhconnSimpleDB::getInstance().loadBlockFromLocal(ddoId,data);
@@ -63,27 +62,33 @@ co_chan<UhconnMessage> UhconnDco::getMsgQ(void) {
     return itsVoxor->getMsgQ();
 }
 
-UhconnDcoRef UhconnDco::create(std::string className) {
-    UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-    int destNode = localNode->itsScheduler().getDestWorkNode();
-    UhconnDcoRef dco = this->create(destNode, className);
-    return dco;
-}
-
-UhconnDcoRef UhconnDco::create(int nodeId,std::string className) {
+UhconnDcoRef UhconnDco::create(std::string className, int in_destNode) {
     //构建create消息
     UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-    UhconnMessage msg(localNode->itsAddr(), nodeId, MSG_CMD_CREATE, MSG_TYPE_REQ);
+
+    int destNode = localNode->itsScheduler().getDestWorkNode();
+    if(in_destNode != -1 ) {
+        destNode = in_destNode;
+    }
+    UhconnMessage msg(localNode->itsAddr(), destNode, MSG_CMD_CREATE, MSG_TYPE_REQ);
     msg.setMethodName("create");
     msg.setMethodPara(className);
-    UhconnSimpleAddr addr(nodeId, 0);
+    UhconnSimpleAddr addr(destNode, 0);
     // std::cout << "voxor addr: " << addr.itsValue() << std::endl;
     msg.setDestVoxor(addr.itsValue());
     msg.setSrcVoxor(itsAddr());
+
+    auto channel = localNode->addToWaitingTable(msg);
+    // std::cout <<"----create.getMsgId:"<<msg.getMsgId()<<std::endl;
+    assert(localNode->getFromWaitingTable(msg));
+
     logDebug("request create class:%s at worknode:%d",className.c_str(), msg.getDestNodeId());
     localNode->itsRouter().sendMsg(msg);
+
+    //阻塞等待
     UhconnMessage result;
-    getMsgQ() >> result;
+    channel->pop(result);
+    localNode->removeFromWaitingTable(msg);
     // std::cout << "UhconnDcoRef:" << result.getCmd() << result.getMethodPara() << std::endl;
     UhconnDcoRef dco(result.getMethodPara());
     logDebug("create Dco:%s at dco:%s success!", dco.itsBelongVoxorId().c_str(), dco.itsBelongVoxorId().c_str());
@@ -155,12 +160,15 @@ UhconnDdoRef UhconnDco::async(UhconnDcoRef& dco, std::string reqFuncName, Uhconn
 
 
 UhconnDdo* UhconnDco::wait(UhconnDdoRef& ddo_ref) {
-    UhconnMessage msg;
-    if(UhconnSimpleDB::getInstance().isBlockPreparing(ddo_ref.itsId()) ||UhconnSimpleDB::getInstance().isBlockAtLocal(ddo_ref.itsId())){
-         return new UhconnDdo(ddo_ref);  
+    // 先判断本地是否已经有预备块或本地块了
+    if (UhconnSimpleDB::getInstance().isBlockPreparing(ddo_ref.itsId()) || UhconnSimpleDB::getInstance().isBlockAtLocal(ddo_ref.itsId())) {
+        return new UhconnDdo(ddo_ref);
     }
+
+    // 构造消息
     UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
     UhconnSimpleAddr addr(ddo_ref.itsVoxorId());
+    UhconnMessage msg;
     msg.setupMessage(localNode->itsAddr(), addr.workNodeSn(), MSG_CMD_WAIT, MSG_TYPE_REQ);
     msg.setMethodName("wait");
     std::stringstream ss;
@@ -168,52 +176,115 @@ UhconnDdo* UhconnDco::wait(UhconnDdoRef& ddo_ref) {
     msg.setMethodPara(ss.str());
     msg.setDestVoxor(ddo_ref.itsVoxorId());
     msg.setSrcVoxor(itsAddr());
+
+    auto channel = localNode->addToWaitingTable(msg);
+    std::cout <<"----wait.getMsgId:"<<msg.getMsgId()<<std::endl;
+    assert(localNode->getFromWaitingTable(msg));
     logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref.itsId());
     localNode->itsRouter().sendMsg(msg);
+
     // 阻塞等待response
     UhconnMessage result;
-    getMsgQ() >> result; //@todo 需要增加超
-
+    channel->pop(result);
+    localNode->removeFromWaitingTable(msg);
     logDebug("remote dco answer back: the ddo data:%s is ready", result.getMethodPara().c_str());
-    return new UhconnDdo(ddo_ref, true);    
-    
+    return new UhconnDdo(ddo_ref, true);
+    // if (channel->TimedPop(result, std::chrono::seconds(300))) {
+    //     localNode->removeFromWaitingTable(msg);
+    //     logDebug("remote dco answer back: the ddo data:%s is ready", result.getMethodPara().c_str());
+    //     return new UhconnDdo(ddo_ref, true);
+    // } else {
+    //     localNode->removeFromWaitingTable(msg);
+    //     logDebug("waiting for ddo data:%llu timeout", ddo_ref.itsId());
+    //     return nullptr;
+    // }
 }
 
 
-std::vector<UhconnDdo*> UhconnDco::wait(std::vector<UhconnDdoRef>& ddo_ref, bool postIfReady) {
-    UhconnMessage msg;
-    int size = ddo_ref.size();
-    int wait_count = 0;
-    std::vector<UhconnDdo*> result(size);
-    for(int i=0; i<size; i++){
-        result[i] = new UhconnDdo(ddo_ref[i]); 
-        if(UhconnSimpleDB::getInstance().isBlockPreparing(ddo_ref[i].itsId()) ||UhconnSimpleDB::getInstance().isBlockAtLocal(ddo_ref[i].itsId())){
-            continue;  
+// std::vector<UhconnDdo*> UhconnDco::wait(std::vector<UhconnDdoRef>& ddo_ref, bool postIfReady) {
+//     UhconnMessage msg;
+//     int size = ddo_ref.size();
+//     int wait_count = 0;
+//     std::vector<UhconnDdo*> result(size);
+//     for(int i=0; i<size; i++){
+//         result[i] = new UhconnDdo(ddo_ref[i]); 
+//         if(UhconnSimpleDB::getInstance().isBlockPreparing(ddo_ref[i].itsId()) ||UhconnSimpleDB::getInstance().isBlockAtLocal(ddo_ref[i].itsId())){
+//             continue;  
+//         }
+//         UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
+//         UhconnSimpleAddr addr(ddo_ref[i].itsVoxorId());
+//         msg.setupMessage(localNode->itsAddr(), addr.workNodeSn(), MSG_CMD_WAIT, MSG_TYPE_REQ);
+//         msg.setMethodName("wait");
+//         std::stringstream ss;
+//         ss << ddo_ref[i].itsId() << " " << localNode->itsAddr() <<" "<< postIfReady?1:0; // don't post
+//         msg.setMethodPara(ss.str());
+//         msg.setDestVoxor(ddo_ref[i].itsVoxorId());
+//         msg.setSrcVoxor(itsAddr());
+//         logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref[i].itsId());
+//         auto channel = localNode->addToWaitingTable(msg);
+
+//         localNode->itsRouter().sendMsg(msg);
+//         wait_count++;
+//     }
+    
+//     // 阻塞等待response
+//     UhconnMessage res_msg;
+//     for(int i=0;i<wait_count;i++){
+//         getMsgQ() >> res_msg; //@todo 需要增加超
+//     }
+//     logDebug("all remote dco answer back: the ddo list is ready");
+//     std::cout<<"all remote dco answer back: the ddo list is ready"<<std::endl;
+//     return result;    
+    
+// }
+
+std::vector<UhconnDdo*> UhconnDco::wait(std::vector<UhconnDdoRef>& ddo_refs, bool postIfReady) {
+    UhconnSimpleDB& db = UhconnSimpleDB::getInstance();
+    UhconnVoxorFactory& vf = UhconnVoxorFactory::getInstance();
+    UhconnWorkNode* localNode = vf.getLocalWorkNode();
+
+    std::vector<UhconnMessage> msgs;
+    std::vector<UhconnDdo*> results;
+
+    for (auto& ddo_ref : ddo_refs) {
+        if (db.isBlockPreparing(ddo_ref.itsId()) || db.isBlockAtLocal(ddo_ref.itsId())) {
+            results.emplace_back(new UhconnDdo(ddo_ref, true));
+            continue;
         }
-        UhconnWorkNode* localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-        UhconnSimpleAddr addr(ddo_ref[i].itsVoxorId());
+
+        UhconnSimpleAddr addr(ddo_ref.itsVoxorId());
+        UhconnMessage msg;
         msg.setupMessage(localNode->itsAddr(), addr.workNodeSn(), MSG_CMD_WAIT, MSG_TYPE_REQ);
         msg.setMethodName("wait");
         std::stringstream ss;
-        ss << ddo_ref[i].itsId() << " " << localNode->itsAddr() <<" "<< postIfReady?1:0; // don't post
+        ss << ddo_ref.itsId() << " " << addr.workNodeSn() << " " << postIfReady?1:0; // don't post
         msg.setMethodPara(ss.str());
-        msg.setDestVoxor(ddo_ref[i].itsVoxorId());
+        msg.setDestVoxor(ddo_ref.itsVoxorId());
         msg.setSrcVoxor(itsAddr());
-        logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref[i].itsId());
+        auto channel = localNode->addToWaitingTable(msg);
+        std::cout <<"++++wait.getMsgId:"<<msg.getMsgId()<<std::endl;
+
+        logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref.itsId());
         localNode->itsRouter().sendMsg(msg);
-        wait_count++;
+
+        msgs.emplace_back(std::move(msg));
     }
-    
-    // 阻塞等待response
-    UhconnMessage res_msg;
-    for(int i=0;i<wait_count;i++){
-        getMsgQ() >> res_msg; //@todo 需要增加超
+
+    for (auto& msg : msgs) {
+        auto channel = localNode->getFromWaitingTable(msg);
+        if (!channel) {
+            continue;
+        }
+        UhconnMessage result;
+        channel->pop(result);
+        localNode->removeFromWaitingTable(msg);
+        logDebug("remote dco answer back: the ddo data:%s is ready", result.getMethodPara().c_str());
+        results.emplace_back(new UhconnDdo(ddo_refs[&msg - msgs.data()], true));
     }
-    logDebug("all remote dco answer back: the ddo list is ready");
-    std::cout<<"all remote dco answer back: the ddo list is ready"<<std::endl;
-    return result;    
-    
+
+    return results;
 }
+
 
 int UhconnDco::itsWorkNodeSn(void) {
     return itsVoxor->itsBelongToWorkNode()->itId();

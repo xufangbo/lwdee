@@ -1,5 +1,5 @@
 #include "UhconnMemoryDB.h"
-
+#include <cstdint>
 UhconnMemoryDB::UhconnMemoryDB()
 {
 

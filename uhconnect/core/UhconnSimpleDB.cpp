@@ -2,7 +2,7 @@
 #include "UhconnConfig.h"
 #include "UhconnVoxorFactory.h"
 #include "UhconnWorkNode.h"
-
+#include <memory>
 using namespace std;
 //#define DEBUGINFO
 
@@ -31,12 +31,19 @@ DdoDataId UhconnSimpleDB::genDataId(){
     return genId;
 }
 
-int UhconnSimpleDB::storeBlock(DdoDataId id, DdoBlockData& data){
+// int UhconnSimpleDB::storeBlock(DdoDataId id, DdoBlockData& data){
+//     DDO_LOCK;
+//     localDdo.insert(std::pair<DdoDataId,DdoBlockData>(id,data));
+//     DDO_UNLOCK;
+//     return 0;
+// }
+int UhconnSimpleDB::storeBlock(DdoDataId id, DdoBlockData&& data){
     DDO_LOCK;
-    localDdo.insert(std::pair<DdoDataId,DdoBlockData>(id,data));
+    localDdo.insert(std::make_pair(id, std::move(data)));
     DDO_UNLOCK;
     return 0;
 }
+
 
 int UhconnSimpleDB::loadBlock(DdoDataId id, DdoBlockData& data, int nodeId){
 
@@ -119,11 +126,11 @@ bool UhconnSimpleDB::isBlockAtLocal(DdoDataId id){
     return true;
 }
 
-bool UhconnSimpleDB::isBlockPreparing(DdoDataId id){
+bool UhconnSimpleDB::isBlockPreparing(const DdoDataId& id) {
     PREP_LOCK;
     bool ret = false;
-    for(auto it:prep_array){
-        if(it == id){
+    for (const auto& it : prep_array) {
+        if (it == id) {
            ret = true;
            break;
         }
@@ -131,6 +138,7 @@ bool UhconnSimpleDB::isBlockPreparing(DdoDataId id){
     PREP_UNLOCK;
     return ret;
 }
+
 
 bool UhconnSimpleDB::addToPrepArray(DdoDataId id){
     PREP_LOCK;
@@ -158,15 +166,13 @@ bool UhconnSimpleDB::delFromPrepArray(DdoDataId id){
 }
 
 int UhconnSimpleDB::deleteBlock(DdoDataId id){
-    // cout << "delete block " << endl;
     DDO_LOCK;
     std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.find(id);
-    // DDO_UNLOCK;
+    DDO_UNLOCK;
     if(it == localDdo.end()) {
-        DDO_UNLOCK;
         return -1;
     }
-    // DDO_LOCK;
+    DDO_LOCK;
     if(it->second.data) {//if(!it->second.isCopyConstruct){
         free(it->second.data);
         it->second.data = nullptr;
@@ -183,27 +189,46 @@ int UhconnSimpleDB::deleteBlockGlobal(DdoDataId id){
     return 0;
 }
 
-DdoBlockData* UhconnSimpleDB::createBlock(DdoDataId id,int blockSize,int lifeCycle){
-    if(isBlockAtLocal(id)){
-        std::cout << "block exist at-local "<<isBlockAtLocal(id)<<std::endl;
-        return getBlockFromLocal(id); 
+// DdoBlockData* UhconnSimpleDB::createBlock(DdoDataId id,int blockSize,int lifeCycle){
+//     if(isBlockAtLocal(id)){
+//         std::cout << "block exist at-local "<<id<<std::endl;
+//         return getBlockFromLocal(id); 
+//     }
+//     DdoBlockData data;
+//     data.len = blockSize;
+//     data.data = malloc(blockSize);
+//     if(data.data == NULL){
+//         std::cout << "malloc failed while create block"<<std::endl;
+//         return nullptr;
+//     }
+//     memset(data.data, 0, data.len);
+//     data.lifeCycle = lifeCycle;
+//     storeBlock(id, data);
+//     return getBlockFromLocal(id);
+// }
+DdoBlockData* UhconnSimpleDB::createBlock(DdoDataId id, int blockSize, int lifeCycle) {
+    if (isBlockAtLocal(id)) {
+        std::cout << "block exist at-local " << id << std::endl;
+        return getBlockFromLocal(id);
     }
-    DdoBlockData data;
-    data.len = blockSize;
-    data.data = malloc(blockSize);
-    if(data.data == NULL){
-        std::cout << "malloc failed while create block"<<std::endl;
+
+    std::unique_ptr<DdoBlockData> data(new DdoBlockData());
+    data->len = blockSize;
+    data->data = std::malloc(blockSize);
+    if (data->data == nullptr) {
+        std::cout << "malloc failed while create block" << std::endl;
         return nullptr;
     }
-    memset(data.data, 0, data.len);
-    data.lifeCycle = lifeCycle;
-    storeBlock(id, data);
+    std::memset(data->data, 0, data->len);
+    data->lifeCycle = lifeCycle;
+
+    storeBlock(id, std::move(*data));
     return getBlockFromLocal(id);
 }
 
  DdoBlockData* UhconnSimpleDB::getBlockFromLocal(DdoDataId id){
     DDO_LOCK;
-    std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.find(id);
+    auto it = localDdo.find(id);
     DDO_UNLOCK;
     if(it == localDdo.end()) {
         return nullptr;
@@ -212,31 +237,8 @@ DdoBlockData* UhconnSimpleDB::createBlock(DdoDataId id,int blockSize,int lifeCyc
 }
 
 DdoBlockData* UhconnSimpleDB::getBlock(DdoDataId id){
-    int ret = 0;
-    if(!isBlockAtLocal(id)){
-        if(isBlockPreparing(id)){
-            #ifdef DEBUGINFO
-            std::cout<<"wait block " << id << std::endl;
-            #endif
-            while(isBlockPreparing(id)){
-               co_sleep(20);
-            }
-        }else{
-            #ifdef DEBUGINFO
-            std::cout<<"to pull data 1" << id << std::endl;
-            #endif
-            addToPrepArray(id);
-            UhconnWorkNode* workNode =  UhconnVoxorFactory::getInstance().getLocalWorkNode();
-            workNode->itsRouter().pullData2(id);
-            delFromPrepArray(id);
-        }
-    }
-    if(ret >= 0){
-        return getBlockFromLocal(id);
-    }else{
-        return nullptr;
-    }
-    
+    int destNodeId = (id>>48) & 0xffff;
+    return getBlock(id, destNodeId);
 }
 
 DdoBlockData* UhconnSimpleDB::getBlock(DdoDataId id, int destNodeId){
@@ -255,7 +257,9 @@ DdoBlockData* UhconnSimpleDB::getBlock(DdoDataId id, int destNodeId){
             #endif
             addToPrepArray(id);
             UhconnWorkNode* workNode =  UhconnVoxorFactory::getInstance().getLocalWorkNode();
-            workNode->itsRouter().pullData2(destNodeId, id);
+            if(workNode->itsRouter().pullData(destNodeId, id) < 0) {
+                ret = -1;
+            }
             delFromPrepArray(id);
         }
 
@@ -302,18 +306,24 @@ int UhconnSimpleDB::setUpLevelDdoUrl(string& url){
 }
 
 DdoDataId UhconnSimpleDB::getFirstDdo(void) {
+    DdoDataId rtn = 0;
+    DDO_LOCK;
     std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.begin();
     if( it != localDdo.end() ) {
-        return it->first;
+        rtn = it->first;
     }
-    return 0;
+    DDO_UNLOCK;
+    return rtn;
 }
 DdoDataId UhconnSimpleDB::getNextDdo(DdoDataId cur_ddo) {
+    DdoDataId rtn = 0;
+    DDO_LOCK;
     std::map<DdoDataId, DdoBlockData>::iterator it = localDdo.find(cur_ddo);
     if( ++it != localDdo.end() ) {
-        return it->first;
+        rtn =  it->first;
     }
-    return 0;
+    DDO_UNLOCK;
+    return rtn;
 }
 #include <shell_cpp.h>
 

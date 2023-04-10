@@ -15,7 +15,7 @@ void DDO::write(ByteSpan_ref bytesSpan) {
 
   bytesSpan->releaseOwner();
 
-  UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), blockdata);
+  UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), std::move(blockdata));
 }
 
 void DDO::write(std::string& str) {
@@ -26,7 +26,7 @@ void DDO::write(std::string& str) {
 
   memcpy(blockdata.data, str.data(), str.size());
 
-  UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), blockdata);
+  UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), std::move(blockdata));
 }
 
 // ByteSpan_ref DDO::read() {
@@ -48,7 +48,7 @@ string_ref DDO::read() {
   // UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
   DdoBlockData* blockdata = UhconnSimpleDB::getInstance().getBlock(ddoId.itsId(), ddoId.itsWorkNodeId());
   if (blockdata == nullptr) {
-    auto message = std::string("failed read ddo(node")+ std::to_string(ddoId.itsWorkNodeId())+")";
+    auto message = std::string("failed read ddo(node") + std::to_string(ddoId.itsWorkNodeId()) + ")";
     throw LwdeeException(message, ZONE);
   }
 

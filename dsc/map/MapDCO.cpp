@@ -26,7 +26,7 @@ std::string MapDCO::map(std::string a) {
       lines.push_back(line);
     }
 
-    logger_info("< accept map %d ", lines.size());
+    logger_debug("< accept map %d ", lines.size());
 
     vector<string> words;
     Mapper::map(lines, words);

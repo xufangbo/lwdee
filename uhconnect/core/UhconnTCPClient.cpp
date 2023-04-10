@@ -65,44 +65,57 @@ bool UhconnTCPClient::setup(string address , int port)
   	return true;
 }
 
-bool UhconnTCPClient::Send(string data)
-{
-	int ret = 0;
-	if(sock != -1) 
-	{
-		ret = send(sock , data.c_str() , strlen( data.c_str() ) , 0);
-		//std::cout << "UhconnTCPClient::Send() ret "<< ret <<std::endl;
-		if( ret < 0)
-		{
-			cout << "Send failed : " << data << endl;
-			return false;
-		}
-	}
-	else{
-		cout << "Send failed as socket not created!!" << endl;
-        return false;
-	}
+// bool UhconnTCPClient::Send(string data)
+// {
+// 	int ret = 0;
+// 	if(sock != -1) 
+// 	{
+// 		ret = send(sock , data.c_str() , strlen( data.c_str() ) , 0);
+// 		//std::cout << "UhconnTCPClient::Send() ret "<< ret <<std::endl;
+// 		if( ret < 0)
+// 		{
+// 			cout << "Send failed : " << data << endl;
+// 			return false;
+// 		}
+// 	}
+// 	else{
+// 		cout << "Send failed as socket not created!!" << endl;
+//         return false;
+// 	}
 		
-	return true;
+// 	return true;
+// }
+bool UhconnTCPClient::Send(const string& data) {
+    if (sock == -1) {
+        cerr << "Send failed as socket not created!!" << endl;
+        return false;
+    }
+    
+    int ret = send(sock, data.c_str(), data.length(), 0);
+    if (ret == -1) {
+        cerr << "Send failed: " << strerror(errno) << endl;
+        return false;
+    }
+    
+    return true;
 }
-
-string UhconnTCPClient::receive(int size)
-{
-  	char buffer[size];
-	memset(&buffer[0], 0, sizeof(buffer));
-    int ret;
-  	string reply;
-	ret = recv(sock , buffer , size, 0);
-	if( ret < 0)
-  	{
-	    cout << "tcp client string receive failed! ret=" << ret <<
-		"errno="<<errno<<strerror(errno)<<endl;
-		return nullptr;
-  	}
-	buffer[size-1]='\0';
-  	reply = buffer;
-  	return reply;
-}
+// string UhconnTCPClient::receive(int size)
+// {
+//   	char buffer[size];
+// 	memset(&buffer[0], 0, sizeof(buffer));
+//     int ret;
+//   	string reply;
+// 	ret = recv(sock , buffer , size, 0);
+// 	if( ret < 0)
+//   	{
+// 	    cout << "tcp client string receive failed! ret=" << ret <<
+// 		"errno="<<errno<<strerror(errno)<<endl;
+// 		return nullptr;
+//   	}
+// 	buffer[size-1]='\0';
+//   	reply = buffer;
+//   	return reply;
+// }
 
 int UhconnTCPClient::receive(unsigned char * buf, int size)
 {
