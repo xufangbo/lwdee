@@ -12,7 +12,8 @@ const fs = require('fs');
 let workers = [
     { "name": "localhost", "ip": "127.0.0.1" },
     { "name": "localhost", "ip": "127.0.0.1" },
-    // { "name": "localhost", "ip": "127.0.0.1" }
+    { "name": "localhost", "ip": "127.0.0.1" },
+    { "name": "localhost", "ip": "127.0.0.1" }
 ];
 
 let fileName = "/home/kevin/git/lwdee/config/conf.json";

@@ -7,7 +7,7 @@ std::string PartitionKafka::toJson() {
   cJSON_AddNumberToObject(root, "index", index);
   cJSON_AddStringToObject(root, "group", group.c_str());
   cJSON_AddStringToObject(root, "topic", topic.c_str());
-  cJSON_AddNumberToObject(root, "mapCount", mapCount);
+  cJSON_AddNumberToObject(root, "window", window);
 
   cJSON* voxorNodes = cJSON_CreateArray();
   cJSON_AddItemToObject(root, "mapVoxors", voxorNodes);
@@ -26,7 +26,7 @@ void PartitionKafka::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
   group = cJSON_GetObjectItem(node, "group")->valuestring;
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
-  mapCount = cJSON_GetObjectItem(node, "mapCount")->valueint;
+  window = cJSON_GetObjectItem(node, "window")->valueint;
 
   cJSON* voxorNodes = cJSON_GetObjectItem(node, "mapVoxors");
   int size = cJSON_GetArraySize(voxorNodes);
@@ -80,21 +80,30 @@ void PartitionReduce::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
 }
 
-std::string StringsSerializer::toJson(vector<string>& items) {
+std::string StringsSerializer::toJson(int index, vector<string>& items) {
+  cJSON* root = cJSON_CreateObject();
+  cJSON_AddNumberToObject(root, "index", index);
+
   cJSON* nodes = cJSON_CreateArray();
+  cJSON_AddItemToObject(root, "items", nodes);
   for (string& i : items) {
     auto item = cJSON_CreateString(i.c_str());
     cJSON_AddItemToArray(nodes, item);
   }
-  string jsonText = cJSON_Print(nodes);
+  string jsonText = cJSON_Print(root);
   return jsonText;
 }
-void StringsSerializer::fromJson(std::string &json, vector<string> &items) {
-  cJSON* node = cJSON_Parse(json.c_str());
-  int size = cJSON_GetArraySize(node);
+
+int StringsSerializer::fromJson(std::string& json, vector<string>& items) {
+  cJSON* root = cJSON_Parse(json.c_str());
+  int index = cJSON_GetObjectItem(root, "index")->valueint;
+
+  cJSON* nodes = cJSON_GetObjectItem(root, "items");
+  int size = cJSON_GetArraySize(nodes);
   for (int i = 0; i < size; i++) {
-  std:
-    string line = cJSON_GetArrayItem(node, i)->valuestring;
+    string line = cJSON_GetArrayItem(nodes, i)->valuestring;
     items.push_back(line);
   }
+
+  return index;
 }

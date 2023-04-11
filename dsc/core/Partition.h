@@ -17,13 +17,13 @@ class PartitionKafka : public Partition {
  public:
   string group;
   string topic;
-  int mapCount = 0;
+  int window = 0;
   std::vector<string> mapVoxors;
 
  public:
   PartitionKafka() {}
-  PartitionKafka(int index, string group, string topic, std::vector<string> mapVoxors)
-      : Partition(index), group(group), topic(topic), mapVoxors(mapVoxors) {}
+  PartitionKafka(int index, string group, string topic,int window, std::vector<string> mapVoxors)
+      : Partition(index), group(group), topic(topic), window(window),mapVoxors(mapVoxors) {}
 
   std::string toJson();
   void fromJson(std::string* json);
@@ -42,15 +42,6 @@ class PartitionMap : public Partition {
   void fromJson(std::string* json);
 };
 
-/**
- * 因为lwdee不能返回多个DDO，所以二次获取DDO
- * 这个对象是首次DDO返回的信息明细
- */
-typedef struct {
-  std::string voxorId;
-  DdoDataId dataId;
-} SubSplitDDO;
-
 class PartitionReduce : public Partition {
  public:
   string outputFile;
@@ -66,6 +57,6 @@ class PartitionReduce : public Partition {
 
 class StringsSerializer {
  public:
-  static std::string toJson(vector<string>& items);
-  static void fromJson(std::string& json, vector<string>& items);
+  static std::string toJson(int index,vector<string>& items);
+  static int fromJson(std::string& json, vector<string>& items);
 };

@@ -6,6 +6,8 @@
 #include "lwdee/lwdee.h"
 
 void ToReduce::create_dcos(PartitionMap* input) {
+  this->input = input;
+
   for (auto& reduceVoxorId : input->reduceVoxors) {
     DCO dco = lwdee::get_dco(reduceVoxorId);
     reduceDcos.push_back(dco);
@@ -28,7 +30,7 @@ void ToReduce::send(vector<string>& words) {
   for (int i = 0; i < split; i++) {
     DCO* dco = reduceDcos.data() + i;
 
-    auto jsonText = StringsSerializer::toJson(reduceWords[i]);
+    auto jsonText = StringsSerializer::toJson(input->index, reduceWords[i]);
 
     // logger_debug("invoke reduce dco");
     auto ddoId = dco->async("reduce", jsonText);
@@ -42,7 +44,6 @@ void ToReduce::send(vector<string>& words) {
 
 void ToReduce::releaseDdo() {
   while (true) {
-    
     // logger_info("remove wait reduce ddo , %d", ddoIds.size());
     int size = ddoIds.size();
     for (int i = 0; i < size - 1; i++) {
@@ -53,7 +54,7 @@ void ToReduce::releaseDdo() {
         ddoIds.pop_front();
       }
     }
-    
+
     usleep(1000000 / 10);
   }
 }

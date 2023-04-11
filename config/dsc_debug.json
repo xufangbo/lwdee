@@ -6,7 +6,7 @@
     "topic": "topic_dcs",
     "outTopic":"xx",
     "window": 20,
-    "partitions": [0,1,3],
-    "splitNums1": 3,
+    "partitions": [0,1],
+    "splitNums1": 2,
     "splitNums2": 2
 }

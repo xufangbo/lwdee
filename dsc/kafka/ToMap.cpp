@@ -11,6 +11,9 @@ ToMap::ToMap() {
 }
 
 void ToMap::create_dco(PartitionKafka *input) {
+  this->input = input;
+  this->window = input->window;
+  
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
     mapDocs.push_back(dco);
@@ -50,7 +53,7 @@ void ToMap::toMap(int index) {
   auto dco = this->mapDocs.data() + index;
   auto lines = this->mapLines.data() + index;
 
-  auto jsonText = StringsSerializer::toJson(*lines);
+  auto jsonText = StringsSerializer::toJson(input->index,*lines);
   lines->clear();
 
   // logger_trace("invoke map dco");

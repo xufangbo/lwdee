@@ -18,12 +18,12 @@ std::string MapDCO::start(std::string a) {
   try {
     logger_trace("accept map sart");
     Stopwatch sw;
-    // logger_info("< invokded start %s", a.c_str());
 
     input.fromJson(&a);
     toReduce.create_dcos(&input);
 
     logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index, sw.stop());
+    LinuxMatrix::print();
 
     return "succeed!";
 
@@ -40,9 +40,10 @@ std::string MapDCO::map(std::string a) {
   try {
     std::vector<std::string> lines;
 
-    StringsSerializer::fromJson(a, lines);
+    int kafkaIndex = StringsSerializer::fromJson(a, lines);
 
-    logger_debug("accept map, %d lines,partition: %d ", lines.size(), input.index);
+    logger_trace("accept map, %d lines, (kafka-%02d,map-%02d)", lines.size(), kafkaIndex,input.index);
+    LinuxMatrix::print();
 
     vector<string> words;
     Mapper::map(lines, words);

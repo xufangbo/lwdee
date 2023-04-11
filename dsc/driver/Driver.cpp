@@ -49,7 +49,7 @@ void Driver::startKafka() {
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
       kafka_mapVoxors.push_back(mapVoxorIds[m]);
     }
-    PartitionKafka input(i, conf->group, conf->topic, kafka_mapVoxors);
+    PartitionKafka input(i, conf->group, conf->topic,conf->window, kafka_mapVoxors);
 
     DCO dco = lwdee::create_dco("KafkaDCO");
     logger_info("kafka voxorId: %s",dco.voxorId().c_str());

@@ -5,9 +5,9 @@
 #include <sys/sysinfo.h>
 #include <unistd.h>
 #include <thread>
+#include "core/DscConfig.hpp"
 #include "core/log.hpp"
 #include "cpu.h"
-#include "core/DscConfig.hpp"
 
 bool LinuxMatrix::is_running = false;
 double LinuxMatrix::cpu_bottom = 0;
@@ -43,9 +43,9 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
 }
 
 void LinuxMatrix::print() {
-  logger_trace("CPU(%.2f%%-%.2f%%: %.2f%%),RAM(%ldM-%ldM: %ldM), cpu:%.2f%%,ram total:%ldM,avai:%ldM,used:%ldM,free:%ldM ",
-               cpu_bottom, cpu_top, cpu_top - cpu_bottom, ram_bottom, ram_top, ram_top - ram_bottom,
-               cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
+  logger_warn("CPU(%.2f%%-%.2f%%: %.2f%%),RAM(%ldM-%ldM: %ldM), cpu:%.2f%%,ram total:%ldM,avai:%ldM,used:%ldM,free:%ldM ",
+         cpu_bottom, cpu_top, cpu_top - cpu_bottom, ram_bottom, ram_top, ram_top - ram_bottom,
+         cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
 }
 
 void LinuxMatrix::start() {

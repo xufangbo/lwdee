@@ -14,7 +14,7 @@ using namespace std;
 
 class ToMap {
  private:
-  int window = 10;
+  int window = 0;
   int currentMap = -1;
   PartitionKafka *input;
   vector<DCO> mapDocs;

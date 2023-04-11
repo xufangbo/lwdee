@@ -9,6 +9,7 @@ using namespace std;
 
 class ToReduce {
  private:
+  PartitionMap* input;
   std::vector<DCO> reduceDcos;
   std::hash<std::string> _hash;
 
@@ -17,7 +18,6 @@ class ToReduce {
   void send(vector<string>& words);
 
  private:
- 
   list<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;
 

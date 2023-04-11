@@ -8,12 +8,12 @@ class DscConfig {
   static DscConfig _instance;
 
  public:
-  // terasort
   std::string inputFile;
   std::string brokers;
   std::string group;
   std::string topic;
   std::string outTopic;
+  int window = 10;
   std::vector<int> partitions;
   int splitNums1 = 0;
   int splitNums2 = 0;

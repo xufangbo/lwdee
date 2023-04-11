@@ -41,6 +41,7 @@ void DscConfig::readConfig() {
   group = cJSON_GetObjectItem(node, "group")->valuestring;
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
   outTopic = cJSON_GetObjectItem(node, "outTopic")->valuestring;
+  window = cJSON_GetObjectItem(node, "window")->valueint;
   splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
   splitNums2 = cJSON_GetObjectItem(node, "splitNums2")->valueint;
 
@@ -51,7 +52,7 @@ void DscConfig::readConfig() {
     partitions.push_back(partitionId);
   }
 
-  logger_debug("%s %s %s %s %d %d", inputFile.c_str(), brokers.c_str(), topic.c_str(), partitionsString().c_str(), _instance.splitNums1, _instance.splitNums2);
+  logger_debug("%s %s %s %d %d",  brokers.c_str(), topic.c_str(), partitionsString().c_str(), _instance.splitNums1, _instance.splitNums2);
 }
 
 std::string DscConfig::partitionsString() {

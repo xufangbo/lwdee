@@ -26,28 +26,12 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    
-    // logger_info("reduce dco accept %s", a.c_str());
+    Words words;
+    int mapIndex = StringsSerializer::fromJson(a, words);
 
-    vector<string> words;
-    StringsSerializer::fromJson(a, words);
+    logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d)",words.size(),mapIndex,input.index);
 
-    logger_info("accept reduce, %d words,partition: %d",words.size(),input.index);
-
-    /**
-     * reduce要集齐所有的map再计算才有意义
-     * 这里的json也会崩溃
-     */
-
-    // Stopwatch sw;
-    // LinuxMatrix::print();
-    // PartitionReduce input;
-    // input.fromJson(&a);
-
-    // Step2Task().run(&input);
-
-    // // logger_trace(a.c_str());
-    // LinuxMatrix::print();
+    this->reducer.accept(mapIndex,words);
 
     return "success";
   } catch (Exception& ex) {
