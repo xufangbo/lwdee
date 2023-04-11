@@ -43,7 +43,7 @@ void Driver::startKafka() {
 
   std::vector<pair<DCO, DDOId>> kafkaInvokers;
   for (int i = 0; i < conf->partitions.size(); i++) {
-    logger_debug("start kafka %d", i);
+    logger_info("start kafka %d -----------------", i);
 
     std::vector<string> kafka_mapVoxors;
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
@@ -52,8 +52,10 @@ void Driver::startKafka() {
     PartitionKafka input(i, conf->group, conf->topic, kafka_mapVoxors);
 
     DCO dco = lwdee::create_dco("KafkaDCO");
+    logger_info("kafka voxorId: %s",dco.voxorId().c_str());
+
     DDOId ddoId = dco.async("start", input.toJson());
-    logger_info("%s",input.toJson().c_str());
+    logger_info("%s", input.toJson().c_str());
 
     kafkaInvokers.push_back(std::make_pair(dco, ddoId));
   }
@@ -84,15 +86,15 @@ void Driver::startMap() {
 
   std::vector<pair<DCO, DDOId>> mapInvokers;
   for (int i = 0; i < conf->splitNums1; i++) {
-    logger_debug("start map %d", i);
+    logger_debug("start map %d -----------------", i);
 
     DCO dco = lwdee::create_dco("MapDCO");
-    reduceVoxorIds.push_back(dco.voxorId());
-    // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
+    mapVoxorIds.push_back(dco.voxorId());
+    logger_debug("map voxorId: %s", dco.voxorId().c_str());
 
     PartitionMap input(i, reduceVoxorIds);
     DDOId ddoId = dco.async("start", input.toJson());
-    logger_debug("%s",input.toJson().c_str());
+    logger_debug("%s", input.toJson().c_str());
 
     mapInvokers.push_back(std::make_pair(dco, ddoId));
   }
@@ -124,16 +126,15 @@ void Driver::startReduce() {
 
   std::vector<pair<DCO, DDOId>> reduceInvokers;
   for (int i = 0; i < conf->splitNums2; i++) {
-    logger_trace("start reduce  %d", i);
+    logger_trace("start reduce %d -----------------", i);
 
     DCO dco = lwdee::create_dco("ReduceDCO");
-
     reduceVoxorIds.push_back(dco.voxorId());
-    // DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");
+    logger_trace("reduce voxorId: %s", dco.voxorId().c_str());
 
     PartitionReduce input(i);
     DDOId ddoId = dco.async("start", input.toJson());
-    logger_trace("%s",input.toJson().c_str());
+    logger_trace("%s", input.toJson().c_str());
 
     reduceInvokers.push_back(std::make_pair(dco, ddoId));
   }
@@ -155,5 +156,5 @@ void Driver::startReduce() {
     }
   }
 
-  logger_info("> start reduce,eclipse %lf", sw.stop());
+  logger_trace("> start reduce,eclipse %lf", sw.stop());
 }

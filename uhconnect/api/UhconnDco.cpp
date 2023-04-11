@@ -129,7 +129,7 @@ const UhconnDdoRef UhconnDco::async(UhconnDcoRef& dco, std::string funcName, std
   msg.setDdoId(ddoref.itsId());
   UhconnVoxorFactory::getInstance().getLocalWorkNode()->itsRouter().sendMsg(msg);
 
-  std::cout << "client async invoke,dco voxor id:"<< dco.itsBelongVoxorId() <<", msg id: " << msg.getMsgId() << std::endl;
+  // std::cout << "client async invoke,dco voxor id:"<< dco.itsBelongVoxorId() <<", msg id: " << msg.getMsgId() << std::endl;
 
   return ddoref;
 }
@@ -179,7 +179,7 @@ UhconnDdo* UhconnDco::wait(UhconnDdoRef& ddo_ref) {
   msg.setSrcVoxor(itsAddr());
 
   auto channel = localNode->addToWaitingTable(msg);
-  std::cout << "----wait.getMsgId:" << msg.getMsgId() << std::endl;
+  // std::cout << "----wait.getMsgId:" << msg.getMsgId() << std::endl;
   assert(localNode->getFromWaitingTable(msg));
   logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref.itsId());
   localNode->itsRouter().sendMsg(msg);
