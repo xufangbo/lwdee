@@ -14,7 +14,7 @@ std::string PartitionKafka::toJson() {
   for (auto& i : this->mapVoxors) {
     auto item = cJSON_CreateString(i.c_str());
     cJSON_AddItemToArray(voxorNodes, item);
-  }  
+  }
 
   char* jsonText = cJSON_Print(root);
 
@@ -33,7 +33,7 @@ void PartitionKafka::fromJson(std::string* json) {
   for (int i = 0; i < size; i++) {
     auto voxorId = cJSON_GetArrayItem(voxorNodes, i)->valuestring;
     this->mapVoxors.push_back(voxorId);
-  }  
+  }
 }
 
 std::string PartitionMap::toJson() {
@@ -80,46 +80,21 @@ void PartitionReduce::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
 }
 
-std::string Step2Output::toJson() {
-  cJSON* root = cJSON_CreateObject();
-
-  // cJSON_AddNumberToObject(root, "index", index);
-  // cJSON_AddStringToObject(root, "fileName", outputFile.c_str());
-
-  // cJSON* nodes = cJSON_CreateArray();
-  // cJSON_AddItemToObject(root, "subSplitDDOs", nodes);
-
-  // for (SubSplitDDO& item : subSplitDDOs) {
-  //   cJSON* split = cJSON_CreateObject();
-
-  //   cJSON_AddStringToObject(split, "voxorId", item.voxorId.c_str());
-  //   cJSON_AddStringToObject(split, "dataId", std::to_string(item.dataId).c_str());
-
-  //   cJSON_AddItemToArray(nodes, split);
-  // }
-
-  char* jsonText = cJSON_Print(root);
-
+std::string StringsSerializer::toJson(vector<string>& items) {
+  cJSON* nodes = cJSON_CreateArray();
+  for (string& i : items) {
+    auto item = cJSON_CreateString(i.c_str());
+    cJSON_AddItemToArray(nodes, item);
+  }
+  string jsonText = cJSON_Print(nodes);
   return jsonText;
 }
-
-void Step2Output::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-
-  // index = cJSON_GetObjectItem(node, "index")->valueint;
-  // outputFile = cJSON_GetObjectItem(node, "fileName")->valuestring;
-
-  // cJSON* subNodes = cJSON_GetObjectItem(node, "subSplitDDOs");
-  // cJSON* child = subNodes->child;
-  // while (child != NULL) {
-  //   SubSplitDDO split;
-  //   split.voxorId = cJSON_GetObjectItem(child, "voxorId")->valuestring;
-
-  //   char* dataId = cJSON_GetObjectItem(child, "dataId")->valuestring;
-  //   split.dataId = strtoull(dataId, NULL, 0);
-
-  //   this->subSplitDDOs.push_back(split);
-
-  //   child = child->next;
-  // }
+void StringsSerializer::fromJson(std::string &json, vector<string> &items) {
+  cJSON* node = cJSON_Parse(json.c_str());
+  int size = cJSON_GetArraySize(node);
+  for (int i = 0; i < size; i++) {
+  std:
+    string line = cJSON_GetArrayItem(node, i)->valuestring;
+    items.push_back(line);
+  }
 }

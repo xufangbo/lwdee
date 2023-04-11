@@ -8,21 +8,10 @@
 std::string ReduceDCO::start(std::string a) {
   try {
     logger_info("reduce start");
-    // logger_info("reduce dco accept %s", a.c_str());
 
-    /**
-     * reduce要集齐所有的map再计算才有意义
-     * 这里的json也会崩溃
-     */
-
-    // Stopwatch sw;
-    // LinuxMatrix::print();
-    // PartitionReduce input;
-    // input.fromJson(&a);
-
-    // Step2Task().run(&input);
-
-    // // logger_trace(a.c_str());
+    Stopwatch sw;
+    LinuxMatrix::print();
+    input.fromJson(&a);
     // LinuxMatrix::print();
 
     return "success";
@@ -37,8 +26,13 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    logger_info("reduce dco accept");
+    
     // logger_info("reduce dco accept %s", a.c_str());
+
+    vector<string> words;
+    StringsSerializer::fromJson(a, words);
+
+    logger_info("accept reduce, %d words,partition: %d",words.size(),input.index);
 
     /**
      * reduce要集齐所有的map再计算才有意义

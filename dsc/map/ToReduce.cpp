@@ -28,28 +28,16 @@ void ToReduce::send(vector<string>& words) {
   for (int i = 0; i < split; i++) {
     DCO* dco = reduceDcos.data() + i;
 
-    auto str = json(reduceWords[i]);
+    auto jsonText = StringsSerializer::toJson(reduceWords[i]);
 
-    logger_debug("invoke reduce dco");
-
-    auto ddoId = dco->async("reduce", str);
+    // logger_debug("invoke reduce dco");
+    auto ddoId = dco->async("reduce", jsonText);
 
     // logger_warn("ready to lock");
     // mut.lock();
     ddoIds.push_back(std::make_pair(ddoId, dco));
     // mut.unlock();
   }
-}
-
-string ToReduce::json(vector<string>& words) {
-  cJSON* nodes = cJSON_CreateArray();
-  for (string& word : words) {
-    auto item = cJSON_CreateString(word.c_str());
-    cJSON_AddItemToArray(nodes, item);
-  }
-  string jsonText = cJSON_Print(nodes);
-
-  return jsonText;
 }
 
 void ToReduce::releaseDdo() {
@@ -65,7 +53,6 @@ void ToReduce::releaseDdo() {
         ddoIds.pop_front();
       }
     }
-    
     
     usleep(1000000 / 10);
   }

@@ -40,15 +40,9 @@ std::string MapDCO::map(std::string a) {
   try {
     std::vector<std::string> lines;
 
-    cJSON* node = cJSON_Parse(a.c_str());
-    int size = cJSON_GetArraySize(node);
-    for (int i = 0; i < size; i++) {
-    std:
-      string line = cJSON_GetArrayItem(node, i)->valuestring;
-      lines.push_back(line);
-    }
+    StringsSerializer::fromJson(a, lines);
 
-    logger_debug("map dco accept %d ", lines.size());
+    logger_debug("accept map, %d lines,partition: %d ", lines.size(), input.index);
 
     vector<string> words;
     Mapper::map(lines, words);

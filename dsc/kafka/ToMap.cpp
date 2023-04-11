@@ -10,7 +10,7 @@
 ToMap::ToMap() {
 }
 
-void ToMap::create_dco(std::shared_ptr<PartitionKafka> input) {
+void ToMap::create_dco(PartitionKafka *input) {
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
     mapDocs.push_back(dco);
@@ -50,27 +50,16 @@ void ToMap::toMap(int index) {
   auto dco = this->mapDocs.data() + index;
   auto lines = this->mapLines.data() + index;
 
-  string jsonText = json(lines);
+  auto jsonText = StringsSerializer::toJson(*lines);
   lines->clear();
 
-  logger_trace("invoke map dco");
+  // logger_trace("invoke map dco");
   DDOId ddoId = dco->async("map", jsonText);
 
   // logger_warn("ready to lock");
   // mut.lock();
   ddoIds.push_back(std::make_pair(ddoId, dco));
   // mut.unlock();
-}
-
-string ToMap::json(vector<string>* lines) {
-  cJSON* nodes = cJSON_CreateArray();
-  for (string& line : *lines) {
-    auto item = cJSON_CreateString(line.c_str());
-    cJSON_AddItemToArray(nodes, item);
-  }
-  string jsonText = cJSON_Print(nodes);
-
-  return jsonText;
 }
 
 void ToMap::releaseDdo() {

@@ -17,9 +17,6 @@ class ToReduce {
   void send(vector<string>& words);
 
  private:
-  string json(vector<string>& words);
-
- private:
  
   list<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;

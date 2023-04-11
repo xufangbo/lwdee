@@ -20,15 +20,14 @@ std::string KafkaDCO::start(std::string a) {
     logger_trace("kafka dco accept ");
     Stopwatch sw;
 
-    std::shared_ptr<PartitionKafka> input = std::make_shared<PartitionKafka>();
-    input->fromJson(&a);
+    input.fromJson(&a);
 
     KafkaJobConsumer* consumer = new KafkaJobConsumer();
     JobManager::add(consumer);
-    consumer->start(input);
+    consumer->start(&input);
 
     LinuxMatrix::print();
-    logger_trace("> accept start ,partition : %d,mapCount: %d,eclipse %lf", input->index, input->mapCount, sw.stop());
+    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index,  sw.stop());
 
     return "succeed!";
 

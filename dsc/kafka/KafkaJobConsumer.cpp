@@ -4,7 +4,7 @@
 
 static std::string errstr;
 
-void KafkaJobConsumer::start(std::shared_ptr<PartitionKafka> input) {
+void KafkaJobConsumer::start(PartitionKafka *input) {
   this->input = input;
 
   toMap.create_dco(input);

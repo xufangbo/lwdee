@@ -1,47 +1,47 @@
 {
   "node_amount": 2,
-  "port": 570,
+  "port": 610,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 5701,
-    "msgPort": 5711,
+    "dataPort": 6101,
+    "msgPort": 6111,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 5701,
-        "mport": 5711
+        "dport": 6101,
+        "mport": 6111
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 5702,
-        "mport": 5712
+        "dport": 6102,
+        "mport": 6112
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 5702,
-    "msgPort": 5712,
+    "dataPort": 6102,
+    "msgPort": 6112,
     "routeInfo": [
       {
         "worker": "localhost",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 5701,
-        "mport": 5711
+        "dport": 6101,
+        "mport": 6111
       },
       {
         "worker": "localhost",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 5702,
-        "mport": 5712
+        "dport": 6102,
+        "mport": 6112
       }
     ]
   }

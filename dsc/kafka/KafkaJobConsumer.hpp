@@ -8,7 +8,7 @@
 
 class KafkaJobConsumer {
  private:
-  std::shared_ptr<PartitionKafka> input;
+  PartitionKafka *input;
   std::thread thread;
   ToMap toMap;
 
@@ -17,5 +17,5 @@ class KafkaJobConsumer {
   void msg_consume(RdKafka::Message* message, void* opaque);
 
  public:
-  void start(std::shared_ptr<PartitionKafka> input);
+  void start(PartitionKafka *input);
 };

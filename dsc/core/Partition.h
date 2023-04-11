@@ -64,10 +64,8 @@ class PartitionReduce : public Partition {
   void fromJson(std::string* json);
 };
 
-class Step2Output {
+class StringsSerializer {
  public:
-  bool succeed;
-
-  std::string toJson();
-  void fromJson(std::string* json);
+  static std::string toJson(vector<string>& items);
+  static void fromJson(std::string& json, vector<string>& items);
 };
