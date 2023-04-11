@@ -18,7 +18,6 @@ UhconnTCPServer UhconnRouter::tcpDataServer;
 int receive_block(int fd,  DdoDataId &ddoId);
 int send_block(DdoBlockData *block, int fd, uint32_t &total_bytes);
 
-
 int msgRxHandler(void* p1, void* p2, int fd, int len){
     UhconnRouter *router = (UhconnRouter *)p1;
 

@@ -12,11 +12,10 @@ std::string UhconnSysDco::create_dco(std::string cname) {
     return dco->itsRef().itsBelongVoxorId();
 }
 
-
-
 UhconnSysDco::UhconnSysDco()
 {
     getFunctionTable()["create"] = (PTR)&UhconnSysDco::create_dco;
+    this->name = "SysDCO";
 
 }
 

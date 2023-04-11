@@ -12,5 +12,6 @@ class MapDCO : public UhconnDco {
 
  private:
   ToReduce toReduce;
+  std::string start(std::string a);
   std::string map(std::string a);
 };

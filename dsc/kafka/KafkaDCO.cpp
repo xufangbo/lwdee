@@ -47,5 +47,6 @@ std::string KafkaDCO::start(std::string a) {
 
 KafkaDCO::KafkaDCO() {
   getFunctionTable()["start"] = (PTR)&KafkaDCO::start;
+  name = "KafkaDCO";
 }
 KafkaDCO::~KafkaDCO() {}

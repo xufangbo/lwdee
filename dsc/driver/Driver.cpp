@@ -21,9 +21,11 @@ void Driver::startJob() {
   try {
     Stopwatch sw;
 
-    this->kafka();
-    this->kafkaToMap();
-    // this->map();
+    this->startReduce();
+
+    this->startMap();
+
+    this->startKafka();
     // this->mapToReduce();
 
     LinuxMatrix::print();
@@ -35,42 +37,27 @@ void Driver::startJob() {
   }
 }
 
-void Driver::kafka() {
-  logger_info("< kafka");
+void Driver::startKafka() {
+  logger_info("< start kafka");
   Stopwatch sw;
 
-  std::vector<PartitionKafka> inputs;
-  for (int& i : conf->partitions) {
-    PartitionKafka input(i, conf->group, conf->topic);
-    input.mapCount = conf->splitNums1 / conf->partitions.size();
-    inputs.push_back(input);
-  }
-  for (int i = 0; i < conf->splitNums1 % conf->partitions.size(); i++) {
-    inputs[i].mapCount++;
-  }
+  std::vector<pair<DCO, DDOId>> kafkaInvokers;
+  for (int i = 0; i < conf->partitions.size(); i++) {
+    logger_debug("start kafka %d", i);
 
-  for (PartitionKafka &input : inputs) {
-
-    logger_debug("invoke dco.kafka, split: %d", (input.index + 1));
+    std::vector<string> kafka_mapVoxors;
+    for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
+      kafka_mapVoxors.push_back(mapVoxorIds[m]);
+    }
+    PartitionKafka input(i, conf->group, conf->topic, kafka_mapVoxors);
 
     DCO dco = lwdee::create_dco("KafkaDCO");
-    // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
-
-    auto json = input.toJson();
-
-    DDOId ddoId = dco.async("start", json);
+    DDOId ddoId = dco.async("start", input.toJson());
+    logger_info("%s",input.toJson().c_str());
 
     kafkaInvokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  logger_info("> kafka,eclipse %lf", sw.stop());
-}
-
-void Driver::kafkaToMap() {
-  logger_info("< kafkaToMap");
-  Stopwatch sw;
-
-  std::vector<std::string> step1Outputs;
   for (auto& kv : kafkaInvokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
@@ -79,56 +66,37 @@ void Driver::kafkaToMap() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_debug("get kafka ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      logger_info("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
       ddo.releaseGlobal();
-
-      step1Outputs.push_back(*bytes);
     } catch (Exception& ex) {
       ex.trace(ZONE);
       throw ex;
     }
   }
 
-  for (int i = 0; i < conf->splitNums2; i++) {
-    PartitionReduce step2Input(i, conf->outTopic);
-
-    for (std::string& output1 : step1Outputs) {
-      // step2Input.subSplitDDOs.push_back(step1Output.items[i]);
-    }
-
-    step2Inputs.push_back(step2Input);
-  }
-
-  logger_info("> kafkaToMap,eclipse %lf", sw.stop());
+  logger_info("> start kafka,eclipse %lf", sw.stop());
 }
 
-void Driver::map() {
-  logger_info("< map");
+void Driver::startMap() {
+  logger_debug("< map");
   Stopwatch sw;
 
+  std::vector<pair<DCO, DDOId>> mapInvokers;
   for (int i = 0; i < conf->splitNums1; i++) {
-    logger_debug("invoke dco.map, split: %d", (i + 1));
+    logger_debug("start map %d", i);
 
     DCO dco = lwdee::create_dco("MapDCO");
+    reduceVoxorIds.push_back(dco.voxorId());
     // DCO dco = lwdee::create_dco(i + 2, "MapDCO");
 
-    PartitionMap input(i, conf->inputFile);
-    auto json = input.toJson();
-
-    DDOId ddoId = dco.async("start", json);
+    PartitionMap input(i, reduceVoxorIds);
+    DDOId ddoId = dco.async("start", input.toJson());
+    logger_debug("%s",input.toJson().c_str());
 
     mapInvokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  logger_info("> map,eclipse %lf", sw.stop());
-}
-
-void Driver::mapToReduce() {
-  logger_info("< mapToReduce");
-  Stopwatch sw;
-
-  std::vector<std::string> step1Outputs;
   for (auto& kv : mapInvokers) {
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
@@ -137,44 +105,35 @@ void Driver::mapToReduce() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_debug("get step 1 ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      logger_debug("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
 
       ddo.releaseGlobal();
 
-      step1Outputs.push_back(*bytes);
     } catch (Exception& ex) {
       ex.trace(ZONE);
       throw ex;
     }
   }
 
-  for (int i = 0; i < conf->splitNums2; i++) {
-    PartitionReduce step2Input(i, conf->outTopic);
-
-    for (std::string& output1 : step1Outputs) {
-      // step2Input.subSplitDDOs.push_back(step1Output.items[i]);
-    }
-
-    step2Inputs.push_back(step2Input);
-  }
-
-  logger_info("> mapToReduce,eclipse %lf", sw.stop());
+  logger_debug("> start map,eclipse %lf", sw.stop());
 }
 
-void Driver::reduce() {
-  logger_info("< reduce");
+void Driver::startReduce() {
+  logger_trace("< start reduce");
   Stopwatch sw;
 
-  for (int i = 0; i < step2Inputs.size(); i++) {
-    logger_debug("invoke dco.reduce, split: %d", (i + 1));
-
-    PartitionReduce& step2Input = step2Inputs[i];
+  std::vector<pair<DCO, DDOId>> reduceInvokers;
+  for (int i = 0; i < conf->splitNums2; i++) {
+    logger_trace("start reduce  %d", i);
 
     DCO dco = lwdee::create_dco("ReduceDCO");
-    // DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");
-    auto json = step2Input.toJson();
 
-    DDOId ddoId = dco.async("reduce", json);
+    reduceVoxorIds.push_back(dco.voxorId());
+    // DCO dco = lwdee::create_dco(i + 2, "ReduceDCO");
+
+    PartitionReduce input(i);
+    DDOId ddoId = dco.async("start", input.toJson());
+    logger_trace("%s",input.toJson().c_str());
 
     reduceInvokers.push_back(std::make_pair(dco, ddoId));
   }
@@ -187,10 +146,7 @@ void Driver::reduce() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_debug("get step 2 ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
-
-      // Step1Output setp1Output;
-      // setp1Output.fromJson(bytes.get());
+      logger_trace("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
 
       ddo.releaseGlobal();
     } catch (Exception& ex) {
@@ -199,5 +155,5 @@ void Driver::reduce() {
     }
   }
 
-  logger_info("> reduce,eclipse %lf", sw.stop());
+  logger_info("> start reduce,eclipse %lf", sw.stop());
 }

@@ -30,7 +30,7 @@ void ToReduce::send(vector<string>& words) {
     auto str = json(reduceWords[i]);
 
     logger_debug("invoke reduce dco");
-    usleep(1000000 / 100);
+    usleep(1000000 / 1);
     auto ddoId = dco.async("reduce", str);
     ddoIds.push(std::make_pair(ddoId, dco));
   }

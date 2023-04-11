@@ -10,24 +10,19 @@
 class Driver {
  private:
   DscConfig* conf = nullptr;
-  std::vector<pair<DCO, DDOId>> kafkaInvokers;
-  std::vector<pair<DCO, DDOId>> mapInvokers;
-  std::vector<pair<DCO, DDOId>> reduceInvokers;
-  std::vector<PartitionReduce> step2Inputs;
+  std::vector<std::string> mapVoxorIds;
+  std::vector<std::string> reduceVoxorIds;
 
  public:
   void startJob();
 
  private:
-  void kafka();
-  void kafkaToMap();
+  void startKafka();
 
-  void map();
-
-  void mapToReduce();
+  void startMap();
 
   /**
    * 执行reduce计算
    * */
-  void reduce();
+  void startReduce();
 };

@@ -15,3 +15,7 @@ DDO DCO::wait(DDOId ddoId) {
   UhconnDdo* ddo = UhconnApi::wait(ddoId); // 会有内存泄漏
   return DDO(ddo->itsRef());
 }
+
+std::string DCO::voxorId(){
+  return this->uh_dco.itsBelongVoxorId();
+}

@@ -129,6 +129,8 @@ const UhconnDdoRef UhconnDco::async(UhconnDcoRef& dco, std::string funcName, std
   msg.setDdoId(ddoref.itsId());
   UhconnVoxorFactory::getInstance().getLocalWorkNode()->itsRouter().sendMsg(msg);
 
+  std::cout << "client async invoke,dco voxor id:"<< dco.itsBelongVoxorId() <<", msg id: " << msg.getMsgId() << std::endl;
+
   return ddoref;
 }
 

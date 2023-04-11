@@ -46,6 +46,7 @@ int UhconnWorkNode::inputMessage(UhconnMessage& in_msg) {
   } else {  // server
     std::map<std::string, UhconnVoxor&>::iterator it = voxor_map.find(in_msg.getDestVoxor());
     if (it != voxor_map.end()) {
+      // std::cout << "accept message,----------------------------------------- " << it->second.docName() << "::" << in_msg.getMethodName() << std::endl;
       it->second.getMsgQ() << in_msg;
     } else {
       std::cout << "dest Q not found!!" << std::endl;
@@ -86,7 +87,7 @@ co_chan<UhconnMessage>* UhconnWorkNode::addToWaitingTable(UhconnMessage& in_msg)
   std::lock_guard<std::mutex> lock(waiting_table_mutex);
   waiting_table[msg_hash] = channel;
   // return std::move(channel);
-  std::cout << "add waint table : " << msg_hash << std::endl;
+  // std::cout << "add waiting table : " << msg_hash << std::endl;
   return channel;
 }
 

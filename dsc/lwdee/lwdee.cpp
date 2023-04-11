@@ -21,10 +21,10 @@ DCO lwdee::create_dco_byindex(int indexId, std::string name) {
   indexId = indexId % (nodeAmount - 1);
   int nodeId = indexId + 2;
 
-  // logger_trace("create dco node%d %s", nodeId, name.c_str());
-
   UhconnDcoRef uh_dco = UhconnApi::create(name, nodeId);
   DCO dco(uh_dco);
+
+  // logger_trace("get create dco voxorId:%s", uh_dco.itsBelongVoxorId().c_str());
 
   return dco;
 }

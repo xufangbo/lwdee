@@ -9,5 +9,6 @@ public:
     virtual ~ReduceDCO();
 
 private:
+    std::string start(std::string a);
     std::string reduce(std::string a);
 };

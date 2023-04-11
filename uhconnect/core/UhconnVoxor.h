@@ -5,6 +5,7 @@
 
 #include "UhconnSimpleAddr.h"
 #include "libgo.h"
+#include "api/UhconnDco.h"
 
 class UhconnWorkNode;
 class UhconnMessage;
@@ -22,6 +23,8 @@ public:
     UhconnWorkNode* itsBelongToWorkNode(void) {
         return belongTo;
     };
+
+    std::string docName(){return ItsDco->name;};
 private:
     UhconnSimpleAddr ItsAddr;
     UhconnWorkNode* belongTo;

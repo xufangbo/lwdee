@@ -15,4 +15,6 @@ class DCO {
   DDOId async(std::string function, DDO input);
   DDOId async(std::string function, std::string args);
   DDO wait(DDOId ddoId);
+
+  std::string voxorId();
 };

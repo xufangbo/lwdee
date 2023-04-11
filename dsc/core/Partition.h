@@ -18,26 +18,25 @@ class PartitionKafka : public Partition {
   string group;
   string topic;
   int mapCount = 0;
+  std::vector<string> mapVoxors;
 
  public:
   PartitionKafka() {}
-  PartitionKafka(int index, string group, string topic)
-      : Partition(index), group(group),topic(topic) {}
+  PartitionKafka(int index, string group, string topic, std::vector<string> mapVoxors)
+      : Partition(index), group(group), topic(topic), mapVoxors(mapVoxors) {}
 
   std::string toJson();
   void fromJson(std::string* json);
 };
 
-
 class PartitionMap : public Partition {
  public:
-  string fileName;
-  DDO outputDDO;
+  std::vector<string> reduceVoxors;
 
  public:
   PartitionMap() {}
-  PartitionMap(int index, string fileName)
-      : Partition(index), fileName(fileName) {}
+  PartitionMap(int index, std::vector<string> reduceVoxors)
+      : Partition(index), reduceVoxors(reduceVoxors) {}
 
   std::string toJson();
   void fromJson(std::string* json);
@@ -55,12 +54,11 @@ typedef struct {
 class PartitionReduce : public Partition {
  public:
   string outputFile;
-  vector<SubSplitDDO> subSplitDDOs;
 
  public:
   PartitionReduce() {}
-  PartitionReduce(int index, string outputFile)
-      : Partition(index), outputFile(outputFile) {}
+  PartitionReduce(int index)
+      : Partition(index) {}
 
   std::string toJson();
   void fromJson(std::string* json);
