@@ -20,7 +20,7 @@ class ToReduce {
   string json(vector<string>& words);
 
  private:
-  mutex mut;
+ 
   list<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;
 

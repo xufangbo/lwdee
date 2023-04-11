@@ -31,7 +31,6 @@ class ToMap {
   string json(vector<string>* lines);
 
  private:
-  mutex mut;
   list<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;
 

@@ -3,15 +3,8 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"label": "driver",
-			"command": "${workspaceFolder}/build/edc/driver/driver",
-			"problemMatcher": [],
-			"detail": "CMake template test task"
-		},
-		{
-			"type": "shell",
-			"label": "worker",
-			"command": "${workspaceFolder}/build/edc/worker/worker",
+			"label": "config",
+			"command": "node ${workspaceFolder}/scripts/conf.js",
 			"problemMatcher": [],
 			"detail": "CMake template test task"
 		},{

@@ -56,10 +56,10 @@ void ToMap::toMap(int index) {
   logger_trace("invoke map dco");
   DDOId ddoId = dco->async("map", jsonText);
 
-  logger_warn("ready to lock");
-  mut.lock();
+  // logger_warn("ready to lock");
+  // mut.lock();
   ddoIds.push_back(std::make_pair(ddoId, dco));
-  mut.unlock();
+  // mut.unlock();
 }
 
 string ToMap::json(vector<string>* lines) {
@@ -75,9 +75,10 @@ string ToMap::json(vector<string>* lines) {
 
 void ToMap::releaseDdo() {
   while (true) {
-    logger_warn("ready to lock");
-    mut.lock();
-    while (true) {
+    
+    // logger_debug("remove wait map ddo , %d", ddoIds.size());
+    int size = ddoIds.size();
+    for (int i = 0; i < size - 1; i++) {
       if (!ddoIds.empty()) {
         auto i = ddoIds.front();
         i.second->wait(i.first);
@@ -85,8 +86,8 @@ void ToMap::releaseDdo() {
         ddoIds.pop_front();
       }
     }
-    mut.unlock();
-    logger_warn("remove wait map ddo , %d", ddoIds.size());
-    usleep(1000000 / 100);
+    
+    
+    usleep(1000000 / 10);
   }
 }

@@ -31,13 +31,13 @@ void ToReduce::send(vector<string>& words) {
     auto str = json(reduceWords[i]);
 
     logger_debug("invoke reduce dco");
-    
+
     auto ddoId = dco->async("reduce", str);
-    
-    logger_warn("ready to lock");
-    mut.lock();
+
+    // logger_warn("ready to lock");
+    // mut.lock();
     ddoIds.push_back(std::make_pair(ddoId, dco));
-    mut.unlock();
+    // mut.unlock();
   }
 }
 
@@ -54,9 +54,10 @@ string ToReduce::json(vector<string>& words) {
 
 void ToReduce::releaseDdo() {
   while (true) {
-    logger_warn("ready to lock");
-    mut.lock();
-    while (true) {
+    
+    // logger_info("remove wait reduce ddo , %d", ddoIds.size());
+    int size = ddoIds.size();
+    for (int i = 0; i < size - 1; i++) {
       if (!ddoIds.empty()) {
         auto i = ddoIds.front();
         i.second->wait(i.first);
@@ -64,8 +65,8 @@ void ToReduce::releaseDdo() {
         ddoIds.pop_front();
       }
     }
-    mut.unlock();
-    logger_warn("remove wait reduce ddo , %d", ddoIds.size());
-    usleep(1000000 / 100);
+    
+    
+    usleep(1000000 / 10);
   }
 }
