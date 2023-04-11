@@ -19,8 +19,6 @@ std::string KafkaDCO::start(std::string a) {
   try {
     logger_trace("kafka dco accept ");
     Stopwatch sw;
-    LinuxMatrix::print();
-    // logger_info("< invokded start %s", a.c_str());
 
     std::shared_ptr<PartitionKafka> input = std::make_shared<PartitionKafka>();
     input->fromJson(&a);
@@ -32,9 +30,7 @@ std::string KafkaDCO::start(std::string a) {
     LinuxMatrix::print();
     logger_trace("> accept start ,partition : %d,mapCount: %d,eclipse %lf", input->index, input->mapCount, sw.stop());
 
-    auto node = UhconnVoxorFactory::getInstance().getLocalWorkNode();
-
-    return std::to_string(node->itId()) + "." + std::to_string(input->index);
+    return "succeed!";
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());

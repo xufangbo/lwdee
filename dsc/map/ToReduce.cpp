@@ -5,18 +5,18 @@
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 
-void ToReduce::create_dcos() {
-  // int splits = DscConfig::instance()->splitNums2;
-  // for (int i = 0; i < splits; i++) {
-  //   DCO dco = lwdee::create_dco("ReduceDCO");
-  //   reduceDcos.push_back(dco);
-  // }
+void ToReduce::create_dcos(PartitionMap* input) {
+  for (auto& reduceVoxorId : input->reduceVoxors) {
+    DCO dco = lwdee::get_dco(reduceVoxorId);
+    reduceDcos.push_back(dco);
+  }
 
-  // releaseThread = std::thread(&ToReduce::releaseDdo, this);
+  releaseThread = std::thread(&ToReduce::releaseDdo, this);
+  releaseThread.detach();
 }
 
 void ToReduce::send(vector<string>& words) {
-  int split = DscConfig::instance()->splitNums2;
+  int split = reduceDcos.size();
 
   vector<vector<string>> reduceWords(split);
   for (int i = 0; i < words.size(); i++) {
@@ -26,13 +26,18 @@ void ToReduce::send(vector<string>& words) {
   }
 
   for (int i = 0; i < split; i++) {
-    DCO dco = lwdee::create_dco_byindex(i, "ReduceDCO");
+    DCO* dco = reduceDcos.data() + i;
+
     auto str = json(reduceWords[i]);
 
     logger_debug("invoke reduce dco");
-    usleep(1000000 / 1);
-    auto ddoId = dco.async("reduce", str);
-    ddoIds.push(std::make_pair(ddoId, dco));
+    
+    auto ddoId = dco->async("reduce", str);
+    
+    logger_warn("ready to lock");
+    mut.lock();
+    ddoIds.push_back(std::make_pair(ddoId, dco));
+    mut.unlock();
   }
 }
 
@@ -49,13 +54,18 @@ string ToReduce::json(vector<string>& words) {
 
 void ToReduce::releaseDdo() {
   while (true) {
-    if (ddoIds.size() > 0) {
-      ddoIds.pop();
-      auto i = ddoIds.front();
-      i.second.wait(i.first);
-      DDO(i.first).releaseGlobal();
+    logger_warn("ready to lock");
+    mut.lock();
+    while (true) {
+      if (!ddoIds.empty()) {
+        auto i = ddoIds.front();
+        i.second->wait(i.first);
+        DDO(i.first).releaseGlobal();
+        ddoIds.pop_front();
+      }
     }
-
-    usleep(1000000 / 10);
+    mut.unlock();
+    logger_warn("remove wait reduce ddo , %d", ddoIds.size());
+    usleep(1000000 / 100);
   }
 }

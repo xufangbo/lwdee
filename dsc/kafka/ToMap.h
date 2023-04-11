@@ -16,21 +16,23 @@ class ToMap {
  private:
   int window = 10;
   int currentMap = -1;
+  std::shared_ptr<PartitionKafka> input;
   vector<DCO> mapDocs;
   vector<vector<string>> mapLines;
 
  public:
   ToMap();
   void accept(RdKafka::Message* message);
-  void create_dco(int size);
+  void create_dco(std::shared_ptr<PartitionKafka> input);
 
  private:
   int nextMap();
   void toMap(int index);
-  string json(vector<string> *lines);
+  string json(vector<string>* lines);
 
  private:
-  queue<pair<DDOId, DCO>> ddoIds;
+  mutex mut;
+  list<pair<DDOId, DCO*>> ddoIds;
   thread releaseThread;
 
   void releaseDdo();

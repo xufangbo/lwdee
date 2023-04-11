@@ -11,6 +11,7 @@ class MapDCO : public UhconnDco {
   virtual ~MapDCO();
 
  private:
+  PartitionMap input;
   ToReduce toReduce;
   std::string start(std::string a);
   std::string map(std::string a);

@@ -8,22 +8,19 @@
 #include "map/MapDCO.h"
 
 ToMap::ToMap() {
-  // releaseThread = std::thread(&ToMap::releaseDdo, this);
 }
 
-void ToMap::create_dco(int size) {
-  // for (int i = 0; i < size; i++) {
-  //   DCO dco = lwdee::create_dco("MapDCO");
-  //   mapDocs.push_back(dco);
+void ToMap::create_dco(std::shared_ptr<PartitionKafka> input) {
+  for (auto& mapVoxorId : input->mapVoxors) {
+    DCO dco = lwdee::get_dco(mapVoxorId);
+    mapDocs.push_back(dco);
 
-  //   vector<string> lines;
-  //   mapLines.push_back(lines);
-  // }
-  auto dsconf = DscConfig::instance();
-  for (int i = 0; i < dsconf->splitNums1; i++) {
     vector<string> lines;
     mapLines.push_back(lines);
   }
+
+  releaseThread = std::thread(&ToMap::releaseDdo, this);
+  releaseThread.detach();
 }
 
 void ToMap::accept(RdKafka::Message* message) {
@@ -50,17 +47,19 @@ int ToMap::nextMap() {
 }
 
 void ToMap::toMap(int index) {
-  // auto dco = this->mapDocs.data() + index;
-  auto dco = lwdee::create_dco("MapDCO");
+  auto dco = this->mapDocs.data() + index;
   auto lines = this->mapLines.data() + index;
 
   string jsonText = json(lines);
   lines->clear();
 
   logger_trace("invoke map dco");
-  DDOId ddoId = dco.async("map", jsonText);
+  DDOId ddoId = dco->async("map", jsonText);
 
-  ddoIds.push(std::make_pair(ddoId, dco));
+  logger_warn("ready to lock");
+  mut.lock();
+  ddoIds.push_back(std::make_pair(ddoId, dco));
+  mut.unlock();
 }
 
 string ToMap::json(vector<string>* lines) {
@@ -76,13 +75,18 @@ string ToMap::json(vector<string>* lines) {
 
 void ToMap::releaseDdo() {
   while (true) {
-    if (ddoIds.size() > 0) {
-      ddoIds.pop();
-      auto i = ddoIds.front();
-      i.second.wait(i.first);
-      DDO(i.first).releaseGlobal();
+    logger_warn("ready to lock");
+    mut.lock();
+    while (true) {
+      if (!ddoIds.empty()) {
+        auto i = ddoIds.front();
+        i.second->wait(i.first);
+        DDO(i.first).releaseGlobal();
+        ddoIds.pop_front();
+      }
     }
-
+    mut.unlock();
+    logger_warn("remove wait map ddo , %d", ddoIds.size());
     usleep(1000000 / 100);
   }
 }

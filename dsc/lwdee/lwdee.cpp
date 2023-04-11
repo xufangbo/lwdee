@@ -35,6 +35,12 @@ DCO lwdee::create_dco(int nodeId, std::string name) {
   return dco;
 }
 
+DCO lwdee::get_dco(std::string voxorId) {
+  UhconnDcoRef uh_dco(voxorId);
+  DCO dco(uh_dco);
+  return dco;
+}
+
 DDO lwdee::create_ddo() {
   auto addr = UhconnVoxorFactory::getInstance()
                   .getLocalWorkNode()

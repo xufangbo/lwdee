@@ -16,24 +16,16 @@
 
 std::string MapDCO::start(std::string a) {
   try {
-    // std::vector<std::string> lines;
+    logger_trace("accept map sart");
+    Stopwatch sw;
+    // logger_info("< invokded start %s", a.c_str());
 
-    // cJSON* node = cJSON_Parse(a.c_str());
-    // int size = cJSON_GetArraySize(node);
-    // for (int i = 0; i < size; i++) {
-    // std:
-    //   string line = cJSON_GetArrayItem(node, i)->valuestring;
-    //   lines.push_back(line);
-    // }
+    input.fromJson(&a);
+    toReduce.create_dcos(&input);
 
-    // logger_debug("map dco accept %d ", lines.size());
+    logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index, sw.stop());
 
-    // vector<string> words;
-    // Mapper::map(lines, words);
-
-    // toReduce.send(words);
-
-    return "succeed";
+    return "succeed!";
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
@@ -77,7 +69,6 @@ std::string MapDCO::map(std::string a) {
 MapDCO::MapDCO() {
   getFunctionTable()["start"] = (PTR)&MapDCO::start;
   getFunctionTable()["map"] = (PTR)&MapDCO::map;
-  toReduce.create_dcos();
   name = "MapDCO";
 }
 MapDCO::~MapDCO() {}

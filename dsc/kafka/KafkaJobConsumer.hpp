@@ -11,7 +11,6 @@ class KafkaJobConsumer {
   std::shared_ptr<PartitionKafka> input;
   std::thread thread;
   ToMap toMap;
-  
 
  private:
   void doStart();
