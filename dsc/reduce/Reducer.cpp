@@ -35,15 +35,19 @@ void Reducer::reduce() {
     queue.pop_front();
   }
 
-  // typedef std::pair<std::string, int> MapItem;
-  // std::vector<MapItem> items;
-  // for (auto& i : map) {
-  //   items.push_back(i);
+  // for (auto item : maps) {
+  //   printf("(%s,%d) ", item->first.c_str(), item->second);
   // }
-  // std::sort(items.begin(), items.end(), [](MapItem& l, MapItem& r) { return l.second - r.second; });
+  // printf("\n");
 
-  for (auto& item : map) {
-    printf("(%s,%d) ", item.first.c_str(), item.second);
+  typedef std::pair<const std::string, int> MapItem;
+  std::vector<MapItem*> items;
+  for (auto& i : map) {
+    items.push_back(&i);
+  }
+  std::sort(items.begin(), items.end(), [](MapItem* l, MapItem* r) { return l->second - r->second; });
+  for (auto item : items) {
+    printf("(%s,%d) ", item->first.c_str(), item->second);
   }
   printf("\n");
 }
