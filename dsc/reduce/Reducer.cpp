@@ -1,6 +1,7 @@
 #include "Reducer.hpp"
 #include <algorithm>
 #include "core/DscConfig.hpp"
+#include "core/log.hpp"
 
 Reducer::Reducer() {
   DscConfig* conf = DscConfig::instance();
@@ -8,9 +9,11 @@ Reducer::Reducer() {
 }
 
 void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
+  logger_debug("< accept");
   mut.lock();
 
   MapQueue* mapQueue = maps.data() + mapIndex;
+  logger_debug("push_back words");
   mapQueue->push_back(words);
 
   if (isFull()) {
@@ -18,9 +21,12 @@ void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
   }
 
   mut.unlock();
+  logger_debug("> accept");
 }
 
 void Reducer::reduce() {
+
+  logger_trace("< reduce");
 
   typedef std::pair<std::string,int> WordPair;
   typedef std::vector<WordPair> ReduceWords;
@@ -39,6 +45,7 @@ void Reducer::reduce() {
         it->second++;
       }
     }
+    logger_trace("pop_front");
     queue.pop_front();
   }
 
@@ -47,6 +54,8 @@ void Reducer::reduce() {
   //   printf("(%s,%d) ", i.first.c_str(), i.second);
   // }
   // printf("\n");
+
+  logger_trace("> reduce");
 }
 
 bool Reducer::isFull() {

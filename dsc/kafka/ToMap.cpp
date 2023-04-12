@@ -72,8 +72,9 @@ void ToMap::toMap(int index) {
   auto lines = this->mapLines->data() + index;
 
   auto jsonText = StringsSerializer::toJson(input->index, lines);
+  logger_info("send to map %d lines",lines->size());
+  
   lines->clear();
-
   DDOId ddoId = dco->async("map", jsonText);
 
   ddoIds->push_back(std::make_pair(ddoId, dco));

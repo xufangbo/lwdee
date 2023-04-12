@@ -1,20 +1,20 @@
 const fs = require('fs');
 
-// let workers = [
-//     { "name": "k8s-master", "ip": "10.180.98.130" },
-//     { "name": "k8s-node01", "ip": "10.180.98.131" },
-//     { "name": "k8s-node02", "ip": "10.180.98.132" },
-//     { "name": "k8s-node03", "ip": "10.180.98.133" },
-//     { "name": "k8s-node04", "ip": "10.180.98.134" },
-//     { "name": "k8s-node05", "ip": "10.180.98.135" }
-// ];
-
 let workers = [
     { "name": "k8s-master", "ip": "10.180.98.130" },
     { "name": "k8s-node01", "ip": "10.180.98.131" },
     { "name": "k8s-node02", "ip": "10.180.98.132" },
     { "name": "k8s-node03", "ip": "10.180.98.133" },
+    { "name": "k8s-node04", "ip": "10.180.98.134" },
+    { "name": "k8s-node05", "ip": "10.180.98.135" }
 ];
+
+// let workers = [
+//     { "name": "k8s-master", "ip": "10.180.98.130" },
+//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-node02", "ip": "10.180.98.132" },
+//     { "name": "k8s-node03", "ip": "10.180.98.133" },
+// ];
 
 let imgVersion = "v1.0.8";
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
@@ -55,43 +55,41 @@ fs.writeFileSync(fileName, json);
 // docker run --name $app -p 16501:16501 -e nodename=node3 -v /home/kevin/git/lwdee/log1:/home/log -d $app 
 
 let deployScripts = [];
+let s1 = [];
+let s2 = [];
+let s3 = [];
+let s4 = [];
+let s5 = [];
+
 let preWorker;
 for (var i in routerInfos) {
     let router = routerInfos[i];
     if (router.worker != preWorker) {
         preWorker = router.worker;
     }
-    deployScripts.push(`ssh root@${router.worker} "docker stop dsc${router.nid}"`);
-}
-deployScripts.push("");
-for (var i in routerInfos) {
-    let router = routerInfos[i];
-    if (router.worker != preWorker) {
-        preWorker = router.worker;
-    }
-    deployScripts.push(`ssh root@${router.worker} "docker rm dsc${router.nid}"`);
-}
-deployScripts.push("");
-for (var i in routerInfos) {
-    let router = routerInfos[i];
-    if (router.worker != preWorker) {
-        preWorker = router.worker;
-    }
-    deployScripts.push(`ssh root@${router.worker} "docker start dsc${router.nid}"`);
+    s1.push(`ssh root@${router.worker} "docker stop dsc${router.nid}"`);
+    s2.push(`ssh root@${router.worker} "docker rm dsc${router.nid}"`);
+    s3.push(`ssh root@${router.worker} "docker start dsc${router.nid}"`);
+
+    s4.push(`docker stop dsc${router.nid}`);
+    s5.push(`docker rm dsc${router.nid}`);
 }
 
+s1.forEach(x=> deployScripts.push(x));
 deployScripts.push("");
 deployScripts.push("");
+s2.forEach(x=> deployScripts.push(x));
 deployScripts.push("");
-
-// for (var ri in routerInfos) {
-//     let router = routerInfos[ri];
-//     if (router.worker != preWorker) {
-//         preWorker = router.worker;
-//     }
-//     deployScripts.push(`docker start dsc${router.nid} `);
-// }
-// deployScripts.push("");
+deployScripts.push("");
+s3.forEach(x=> deployScripts.push(x));
+deployScripts.push("");
+deployScripts.push("");
+s4.forEach(x=> deployScripts.push(x));
+deployScripts.push("");
+deployScripts.push("");
+s5.forEach(x=> deployScripts.push(x));
+deployScripts.push("");
+deployScripts.push("");
 
 for (var i in routerInfos) {
     let router = routerInfos[i];

@@ -43,8 +43,8 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
 }
 
 void LinuxMatrix::print() {
-  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),ram total:%ldM,avai:%ldM,used:%ldM,free:%ldM ",
-         cpu_bottom, cpu_top, cpu_top - cpu_bottom,cpu, ram_bottom, ram_top, ram_top - ram_bottom,ram.total, ram.available, (ram.total - ram.available), ram.free);
+  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ",
+         cpu_bottom, cpu_top, cpu_top - cpu_bottom,cpu, ram_bottom, ram_top, ram_top - ram_bottom,ram.available, (ram.total - ram.available), ram.free);
 }
 
 void LinuxMatrix::start() {
