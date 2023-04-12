@@ -2,68 +2,70 @@
 #include <algorithm>
 #include "core/DscConfig.hpp"
 #include "core/log.hpp"
+#include <memory>
 
 Reducer::Reducer() {
-  DscConfig* conf = DscConfig::instance();
-  maps.resize(conf->splitNums1);
+  auto conf = DscConfig::instance();
+  this->window = conf->window;
+
+  time_t ts = time(NULL);
+  currentTs = ts + window - (ts % window);
 }
 
-void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
-  // logger_debug("< accept");
+void Reducer::accept(int mapIndex, std::shared_ptr<std::vector<DeviceRecord>> inputs) {
+  time_t ts = time(NULL);
+  auto nowTs = ts + window - (ts % window);
+
   mut.lock();
 
-  MapQueue* mapQueue = maps.data() + mapIndex;
-  // logger_debug("push_back words");
-  mapQueue->push_back(words);
+  for (auto& record : *inputs) {
+    this->records->push_back(record);
+  }
 
-  if (isFull()) {
+  if (nowTs > currentTs) {
+    currentTs = nowTs;
     this->reduce();
   }
+
+  inputs->clear();
+  inputs.reset();
 
   mut.unlock();
   // logger_debug("> accept");
 }
 
 void Reducer::reduce() {
-
   // logger_trace("< reduce");
 
-  typedef std::pair<std::string,int> WordPair;
-  typedef std::vector<WordPair> ReduceWords;
+  time_t now = time(NULL);
+  time_t sum = 0;
+  for (auto& record : *records) {
+    sum += (now - record.ts);
+  }
+  logger_info("reduce %ld records,avrage delay %f",records->size(), sum * 1.0 / records->size());
 
-  std::shared_ptr<ReduceWords> all_words= std::make_shared<ReduceWords>();
+  typedef std::pair<std::string, int> Pair;
+  typedef std::map<std::string, int> Map;
 
-  for (MapQueue& queue : maps) {
-    std::shared_ptr<Words> words = queue.front();
+  auto map = std::make_shared<Map>();
 
-    for (std::string& i : *words) {
-      auto it = std::find_if(all_words->begin(),all_words->end(),[&i](WordPair &t){return t.first ==i; });
-      if (it == all_words->end()) {
-        auto pair = WordPair(i, 1);
-        all_words->push_back(pair);
-      } else {
-        it->second++;
-      }
+  for (auto& record : *records) {
+    auto it = map->find(record.did);
+    if (it == map->end()) {
+      auto pair = Pair(record.did, 1);
+      map->insert(pair);
+    } else {
+      it->second++;
     }
-    // logger_trace("pop_front");
-    queue.pop_front();
   }
 
-  // std::sort(all_words->begin(), all_words->end(), [](WordPair& l, WordPair& r) { return l.second >= r.second; });
-  // for (auto &i : *all_words) {
-  //   printf("(%s,%d) ", i.first.c_str(), i.second);
-  // }
-  // printf("\n");
+  for(auto &it : *map){
+    printf("(%s,%d) ",it.first.c_str(),it.second);
+  }
+  printf("\n");
+
+  map.reset();
+  records->clear();
 
   logger_trace("> reduce");
-}
-
-bool Reducer::isFull() {
-  for (MapQueue& queue : maps) {
-    if (queue.empty()) {
-      return false;
-    }
-  }
-
-  return true;
 }

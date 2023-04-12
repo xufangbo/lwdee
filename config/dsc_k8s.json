@@ -6,7 +6,7 @@
     "group": "test-group",
     "topic": "topic_lwdee",
     "outTopic":"xx",
-    "window": 5,
+    "window": 50,
     "partitions": [0,1,2],
     "splitNums1": 3,
     "splitNums2": 2,

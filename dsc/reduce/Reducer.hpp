@@ -1,23 +1,24 @@
 #include <iostream>
-#include <map>
 #include <list>
-#include <vector>
+#include <map>
 #include <memory>
 #include <mutex>
+#include <vector>
+#include "core/Partition.h"
 
-typedef std::vector<std::string> Words;
-typedef std::list<std::shared_ptr<Words>> MapQueue;
+typedef std::vector<DeviceRecord> Records;
 
 class Reducer {
  private:
-  std::vector<MapQueue> maps;
+  int window = 0;  // 秒为单位
+  int currentTs = 0;
+  std::shared_ptr<Records> records = std::make_shared<Records>();
 
  private:
-  bool isFull();
   void reduce();
   std::mutex mut;
 
  public:
   Reducer();
-  void accept(int mapIndex,std::shared_ptr<Words> words);
+  void accept(int mapIndex, std::shared_ptr<std::vector<DeviceRecord>> records);
 };

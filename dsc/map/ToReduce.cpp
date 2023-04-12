@@ -32,15 +32,11 @@ void ToReduce::send(vector<DeviceRecord>* words) {
 
     ReduceData reduceData(input->index, &reduceWords->at(i));
 
-    auto jsonText =reduceData.toJson();
+    auto jsonText = reduceData.toJson();
 
-    // logger_debug("invoke reduce dco");
-    // auto ddoId = dco->async("reduce", jsonText);
+    auto ddoId = dco->async("reduce", jsonText);
 
-    // logger_warn("ready to lock");
-    // mut.lock();
-    // ddoIds->push_back(std::make_pair(ddoId, dco));
-    // mut.unlock();
+    ddoIds->push_back(std::make_pair(ddoId, dco));
   }
 }
 

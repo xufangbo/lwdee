@@ -29,11 +29,13 @@ std::string ReduceDCO::reduce(std::string a) {
   try {
     logger_debug("< accept reduce ");
     Stopwatch sw;
-    std::shared_ptr<Words> words = std::make_shared<Words>();
-    int mapIndex = StringsSerializer::fromJson(a, words.get());
-    this->reducer.accept(mapIndex, words);
 
-    logger_debug("< accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
+    auto records = std::make_shared<std::vector<DeviceRecord>>();
+
+    ReduceData reduceData(0,records.get());
+    reduceData.fromJson(&a);
+
+    logger_debug("< accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", reduceData.items->size(), reduceData.mapIndex, input.index,sw.stop());
     // logger_debug("accept reduce");
     LinuxMatrix::print();
 

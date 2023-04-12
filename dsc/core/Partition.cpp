@@ -102,19 +102,19 @@ std::string ReduceData::toJson() {
 }
 
 void ReduceData::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-  mapIndex = cJSON_GetObjectItem(node, "mapIndex")->valueint;
+  cJSON* root = cJSON_Parse(json->c_str());
+  mapIndex = cJSON_GetObjectItem(root, "mapIndex")->valueint;
 
-  cJSON* itemsNode = cJSON_GetObjectItem(node, "items");
+  cJSON* itemsNode = cJSON_GetObjectItem(root, "items");
   int size = cJSON_GetArraySize(itemsNode);
 
-  this->items = new std::vector<DeviceRecord>(size);
+  this->items->resize(size);
   for (int i = 0; i < size; i++) {
     auto itemNode = cJSON_GetArrayItem(itemsNode, i);
     DeviceRecord& record = this->items->at(i);
 
-    record.did = cJSON_GetObjectItem(node, "did")->valuestring;
-    record.ts = cJSON_GetObjectItem(node, "ts")->valueint;
+    record.did = cJSON_GetObjectItem(itemNode, "did")->valuestring;
+    record.ts = cJSON_GetObjectItem(itemNode, "ts")->valueint;
   }
 }
 
