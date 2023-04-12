@@ -1,5 +1,6 @@
 
 tail -fn 50 /home/kevin/git/lwdee/log/dsc-2023-04-12.log
+docker logs -f dsc
 
 
 scp /home/kevin/git/lwdee/build/app root@k8s-master:/home/kevin/git/lwdee/build/
