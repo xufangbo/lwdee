@@ -17,27 +17,29 @@ void ToReduce::create_dcos(PartitionMap* input) {
   releaseThread.detach();
 }
 
-void ToReduce::send(vector<string>* words) {
+void ToReduce::send(vector<DeviceRecord>* words) {
   int split = reduceDcos.size();
 
-  auto reduceWords = std::make_shared<vector<vector<string>>>(split);
+  auto reduceWords = std::make_shared<vector<vector<DeviceRecord>>>(split);
   for (int i = 0; i < words->size(); i++) {
-    string& word = words->at(i);
-    int x = _hash(word) % split;
+    DeviceRecord& word = words->at(i);
+    int x = _hash(word.did) % split;
     reduceWords->at(x).push_back(word);
   }
 
   for (int i = 0; i < split; i++) {
     DCO* dco = reduceDcos.data() + i;
 
-    auto jsonText = StringsSerializer::toJson(input->index, &reduceWords->at(i));
+    ReduceData reduceData(input->index, &reduceWords->at(i));
+
+    auto jsonText =reduceData.toJson();
 
     // logger_debug("invoke reduce dco");
-    auto ddoId = dco->async("reduce", jsonText);
+    // auto ddoId = dco->async("reduce", jsonText);
 
     // logger_warn("ready to lock");
     // mut.lock();
-    ddoIds->push_back(std::make_pair(ddoId, dco));
+    // ddoIds->push_back(std::make_pair(ddoId, dco));
     // mut.unlock();
   }
 }

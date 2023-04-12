@@ -84,24 +84,22 @@ for (var i in routerInfos) {
 // deployScripts.push("");
 // deployScripts.push("");
 
-for (var i in routerInfos) {
-    let router = routerInfos[i];
 
+function docker_run(router){
     deployScripts.push(`ssh root@${router.worker} "docker run --name dsc${router.nid}  -e nodename=node${router.nid} --net=host ` +
-        `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
-        `-v /home/kevin/git/lwdee/build/app:/home/dsc/app ` +
-        `-v /home/kevin/git/lwdee/log:/home/dsc/log ` +
-        `-v /home/kevin/git/lwdee/data:/home/dsc/data ` +
-        `-v /home/kevin/git/lwdee/config:/home/dsc/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/dsc:${imgVersion}"`);
-
-    if (i == 0) {
-        deployScripts.push("");
-        deployScripts.push("");
-    }
+    `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
+    `-v /home/kevin/git/lwdee/build/app:/home/dsc/app ` +
+    `-v /home/kevin/git/lwdee/log:/home/dsc/log ` +
+    `-v /home/kevin/git/lwdee/data:/home/dsc/data ` +
+    `-v /home/kevin/git/lwdee/config:/home/dsc/config ` +
+    `-d registry.cn-beijing.aliyuncs.com/xufangbo/dsc:${imgVersion}"`);
 }
-deployScripts.push("");
-deployScripts.push("");
+
+for (var i=1 ;i< routerInfos.length;i++) {
+    docker_run(routerInfos[i]);
+}
+deployScripts.push("----");
+docker_run(routerInfos[0]);
 
 // for (var i in routerInfos) {
 //     let router = routerInfos[i];

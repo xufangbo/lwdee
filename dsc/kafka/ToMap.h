@@ -1,11 +1,12 @@
 #pragma once
 
+#include <time.h>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <thread>
 #include <mutex>
+#include <thread>
 
 #include <librdkafka/rdkafkacpp.h>
 #include "core/Partition.h"
@@ -15,8 +16,8 @@ using namespace std;
 
 class ToMap {
  private:
-  int window = 0;
   int currentMap = -1;
+  int mapSize = 0;
   PartitionKafka* input;
   vector<DCO> mapDocs;
   vector<vector<string>>* mapLines = new vector<vector<string>>();
@@ -28,8 +29,10 @@ class ToMap {
   void create_dco(PartitionKafka* input);
 
  private:
+  time_t currentTs;
   std::mutex mut;
   int nextMap();
+  void toMaps();
   void toMap(int index);
 
  private:

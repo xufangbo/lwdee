@@ -1,5 +1,6 @@
 #include "ToMap.h"
 
+#include <time.h>
 #include "core/DscConfig.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.h"
@@ -25,7 +26,7 @@ ToMap::~ToMap() {
 
 void ToMap::create_dco(PartitionKafka* input) {
   this->input = input;
-  this->window = input->window;
+  this->mapSize = input->mapVoxors.size();
 
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
@@ -39,26 +40,30 @@ void ToMap::create_dco(PartitionKafka* input) {
   releaseThread.detach();
 }
 
+uint32_t counter = 0;
 void ToMap::accept(RdKafka::Message* message) {
   // logger_trace("< accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
+
+  counter++;
   try {
-    
+    time_t ts = time(NULL);
+
     string line = string(message->len() + 1, '\0');
     memcpy((void*)line.data(), message->payload(), message->len());
-
 
     int index = this->nextMap();
     auto lines = this->mapLines->data() + index;
 
-    // mut.lock();
-
-    // std::cout << 6 << std::endl;
-    lines->push_back(line);
-    if (lines->size() >= window) {
-      this->toMap(index);
+    // lines->push_back(line);
+    if (counter % 100 == 0) {
+      lines->push_back(line);
     }
-    
-    // mut.unlock();
+
+    if (ts != currentTs) {
+      currentTs = ts;
+      this->toMaps();
+    }
+
     // logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   } catch (Exception& ex) {
     logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
@@ -73,6 +78,12 @@ int ToMap::nextMap() {
     currentMap = 0;
   }
   return currentMap;
+}
+
+void ToMap::toMaps() {
+  for(int i=0;i<mapSize;i++){
+    this->toMap(i);
+  }
 }
 
 void ToMap::toMap(int index) {

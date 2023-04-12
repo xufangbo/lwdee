@@ -80,13 +80,51 @@ void PartitionReduce::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
 }
 
+
+std::string ReduceData::toJson() {
+  cJSON* root = cJSON_CreateObject();
+
+  cJSON_AddNumberToObject(root, "mapIndex", mapIndex);
+
+  cJSON* itemsNode = cJSON_CreateArray();
+  cJSON_AddItemToObject(root, "items", itemsNode);
+  for (auto& i : *this->items) {
+    cJSON* itemNode = cJSON_CreateObject();
+    cJSON_AddStringToObject(itemNode, "did", i.did.c_str());
+    cJSON_AddNumberToObject(itemNode, "ts", i.ts);
+
+    cJSON_AddItemToArray(itemsNode, itemNode);
+  }
+
+  char* jsonText = cJSON_Print(root);
+
+  return jsonText;
+}
+
+void ReduceData::fromJson(std::string* json) {
+  cJSON* node = cJSON_Parse(json->c_str());
+  mapIndex = cJSON_GetObjectItem(node, "mapIndex")->valueint;
+
+  cJSON* itemsNode = cJSON_GetObjectItem(node, "items");
+  int size = cJSON_GetArraySize(itemsNode);
+
+  this->items = new std::vector<DeviceRecord>(size);
+  for (int i = 0; i < size; i++) {
+    auto itemNode = cJSON_GetArrayItem(itemsNode, i);
+    DeviceRecord& record = this->items->at(i);
+
+    record.did = cJSON_GetObjectItem(node, "did")->valuestring;
+    record.ts = cJSON_GetObjectItem(node, "ts")->valueint;
+  }
+}
+
 std::string StringsSerializer::toJson(int index, vector<string>* items) {
   cJSON* root = cJSON_CreateObject();
   cJSON_AddNumberToObject(root, "index", index);
 
   cJSON* nodes = cJSON_CreateArray();
   cJSON_AddItemToObject(root, "items", nodes);
-  for(int i=0;i<items->size();i++){
+  for (int i = 0; i < items->size(); i++) {
     string* str = items->data() + i;
     auto item = cJSON_CreateString(str->c_str());
     cJSON_AddItemToArray(nodes, item);

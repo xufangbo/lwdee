@@ -5,74 +5,65 @@
 #include <sstream>
 #include "core/DscConfig.hpp"
 #include "core/Stopwatch.h"
+#include "core/cjson.hpp"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
-void Mapper::map(std::vector<std::string>* lines, vector<string>* words) {
-  // 先合并成一行
-  std::string output;
+void Mapper::map(std::vector<std::string>* lines, vector<DeviceRecord>* words) {
   for (std::string& line : *lines) {
-    for (char& c : line) {      
-      if (c >= 'A' && c <= 'Z') {
-        output += (c + 32); // to lower
-      } else if (c >= 'a' && c <= 'z') {
-        output += c;
-      } else {
-        output += ' ';
-      }
-    }
-  }
-
-  // 执行分割
-  stringstream iss(output);
-  string token;
-  while (!iss.eof()) {
-    iss >> token;
-    // token = trim(token);
-    if (!token.empty()) {
-      words->push_back(token);
+    DeviceRecord word;
+    if (parse(&line, &word)) {
+      words->push_back(word);
+      // logger_trace("did:%s,ts:%d", word.did.c_str(), word.ts);
     }
   }
 }
 
-// string trim(const string& str) {
-//   string::size_type pos = str.find_first_not_of(' ');
-//   if (pos == string::npos) {  // 若找不到空格
-//     return str;
-//   }
-//   string::size_type pos2 = str.find_last_not_of(' ');
-//   if (pos2 != string::npos)
-//     return str.substr(pos, pos2 - pos + 1);  // 子串：第一个非空格作为起始位置
-//                                              //  字符个数：pos2-pos+1
-//   return str.substr(pos);
-// }
+bool Mapper::parse(std::string* line, DeviceRecord* word) {
+  cJSON* root = cJSON_Parse(line->c_str());
+  if (root == NULL) {
+    return false;
+  }
 
-// void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
+  auto node_did = cJSON_GetObjectItem(root, "dId");
+  if (node_did == NULL) {
+    return false;
+  }
+  word->did = node_did->valuestring;
+
+  auto ts_did = cJSON_GetObjectItem(root, "ts");
+  if (ts_did == NULL) {
+    return false;
+  }
+  word->ts = ts_did->valueint;
+
+  return true;
+}
+
+// void Mapper::map(std::vector<std::string>* lines, vector<string>* words) {
 //   // 先合并成一行
-//   std::string line;
-//   std::transform(line.begin(), line.end(), line.begin(), ::tolower);
-//   for (auto& i : lines) {
-//     line += " ";
-//     line += i;
+//   std::string output;
+//   for (std::string& line : *lines) {
+//     for (char& c : line) {
+//       if (c >= 'A' && c <= 'Z') {
+//         output += (c + 32); // to lower
+//       } else if (c >= 'a' && c <= 'z') {
+//         output += c;
+//       } else {
+//         output += ' ';
+//       }
+//     }
 //   }
-
-//   // 去掉数字
-//   std::regex pattern1("[0-9]");
-//   auto output1 = std::regex_replace(line, pattern1, "");
-
-//   // 去掉特殊字符
-//   std::regex pattern2("[,|-|.|?|:|-|”|“|!|;|’s]");
-//   auto output2 = std::regex_replace(output1, pattern2, " ");
 
 //   // 执行分割
-//   stringstream iss(output2);
+//   stringstream iss(output);
 //   string token;
 //   while (!iss.eof()) {
 //     iss >> token;
-//     token = trim(token);
+//     // token = trim(token);
 //     if (!token.empty()) {
-//       words.push_back(token);
+//       words->push_back(token);
 //     }
 //   }
 // }

@@ -70,7 +70,7 @@ void KafkaJobConsumer::doStart() {
     exit(1);
   }
 
-  logger_info("ready to consume kafka...");
+  logger_info("ready to consume kafka topic %s ...",dsconf->topic.c_str());
 
   /*
    * Consume messages

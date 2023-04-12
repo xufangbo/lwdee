@@ -45,7 +45,7 @@ std::string MapDCO::map(std::string a) {
 
     LinuxMatrix::print();
 
-    auto words = std::make_shared<vector<string>>();
+    auto words = std::make_shared<vector<DeviceRecord>>();
     Mapper::map(lines.get(), words.get());
 
     toReduce.send(words.get());

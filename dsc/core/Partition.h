@@ -55,6 +55,25 @@ class PartitionReduce : public Partition {
   void fromJson(std::string* json);
 };
 
+struct DeviceRecord {
+  std::string did;
+  int ts;
+};
+
+class ReduceData {
+ public:
+  int mapIndex;
+  vector<DeviceRecord>* items = nullptr;
+
+ public:
+  ReduceData() {}
+  ReduceData(int mapIndex, vector<DeviceRecord>* items)
+      : mapIndex(mapIndex), items(items) {}
+
+  std::string toJson();
+  void fromJson(std::string* json);
+};
+
 class StringsSerializer {
  public:
   static std::string toJson(int index, vector<string>* items);

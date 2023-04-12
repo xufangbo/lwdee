@@ -1,4 +1,6 @@
+#include <memory.h>
 #include <unistd.h>
+#include <fstream>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -50,6 +52,32 @@ void ps_task(std::string nodeName, string container) {
   system(script.c_str());
 }
 
+void docker_run_task() {
+  auto fileName = "./scripts/docker.sh";
+  fstream f(fileName, ios_base::in);
+  if (!f.is_open()) {
+    cout << "can't open file " << fileName << endl;
+  }
+
+  int BUF_SIZE = 1024;
+  char line[BUF_SIZE];
+  while (!f.eof()) {
+    memset(line, BUF_SIZE, '\0');
+    f.getline(line, BUF_SIZE);
+    if (strcmp(line, "----")) {
+      sleep(2);
+    }
+    cout << line << endl;
+    system(line);
+  }
+}
+
+void js_task() {
+  auto fileName = "./scripts/conf.js";
+  string cmd = string("node ") + fileName;
+  system(cmd.c_str());
+}
+
 int main(int argv, char** argc) {
   if (argv <= 1) {
     cout << "please input args" << endl;
@@ -59,6 +87,7 @@ int main(int argv, char** argc) {
   string par = argc[1];
 
   thread ts[6];
+  bool is_multi_thread = true;
   if (par == "app") {
     for (int i = 0; i < 6; i++) {
       ts[i] = thread(app_task, nodes[i]);
@@ -89,12 +118,20 @@ int main(int argv, char** argc) {
     for (int i = 0; i < 6; i++) {
       ts[i] = thread(ps_task, nodes[i], containers[i]);
     }
+  } else if (par == "docker") {
+    is_multi_thread = false;
+    docker_run_task();
+  } else if (par == "js") {
+    is_multi_thread = false;
+    js_task();
   } else {
     cout << "no " << par << endl;
   }
 
-  for (int i = 0; i < 6; i++) {
-    ts[i].join();
+  if (is_multi_thread) {
+    for (int i = 0; i < 6; i++) {
+      ts[i].join();
+    }
   }
 
   cout << "-----------------\nok" << endl;

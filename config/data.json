@@ -1,0 +1,25 @@
+{
+    "frm": "haier",
+    "ver": "v1.1.6",
+    "bName": "NetConnectivity",
+    "nId": "ags_devag_wifie_sec1_03",
+    "sys": "MODULE",
+    "type": "log",
+    "args": {
+        "ats": "4",
+        "snr": "34",
+        "ilost": "0",
+        "its": "83",
+        "alost": "0",
+        "itype": "1",
+        "dbm": "40"
+    },
+    "nIP": "10.205.70.190",
+    "subSys": "",
+    "sn": "6685bb2004043e03b2696ba65368ff92",
+    "bId": "net",
+    "key": "18A7F171A5F7",
+    "dId": "18A7F171A5F7",
+    "ts": 1680511793283,
+    "span": 0
+}
