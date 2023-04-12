@@ -51,8 +51,8 @@ void init(int argc, char* argv[]) {
   }
 
   DscConfig::instance()->readConfig();
-  logger_init("dsc");
-  // logger_init(nodeName);
+  // logger_init("dsc");
+  logger_init(nodeName);
   logger_warn("this is %s", nodeName.c_str());
   LinuxMatrix::start();
 
