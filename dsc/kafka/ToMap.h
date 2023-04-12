@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <thread>
+#include <mutex>
 
 #include <librdkafka/rdkafkacpp.h>
 #include "core/Partition.h"
@@ -27,6 +28,7 @@ class ToMap {
   void create_dco(PartitionKafka* input);
 
  private:
+  std::mutex mut;
   int nextMap();
   void toMap(int index);
 

@@ -38,6 +38,7 @@ std::string MapDCO::start(std::string a) {
 
 std::string MapDCO::map(std::string a) {
   try {
+    logger_trace("< accept map");
     Stopwatch sw;
     auto lines = std::make_shared<vector<string>>();
     int kafkaIndex = StringsSerializer::fromJson(a, lines.get());
@@ -49,7 +50,7 @@ std::string MapDCO::map(std::string a) {
 
     toReduce.send(words.get());
 
-    logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), kafkaIndex, input.index, sw.stop());
+    logger_trace("> accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), kafkaIndex, input.index, sw.stop());
     return "succeed";
 
   } catch (Exception& ex) {

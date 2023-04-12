@@ -9,11 +9,13 @@ int len = 6;
 std::string nodes[] = {"k8s-master", "k8s-node01", "k8s-node02", "k8s-node03", "k8s-node04", "k8s-node05"};
 std::string containers[] = {"dsc1", "dsc2", "dsc3", "dsc4", "dsc5", "dsc6"};
 
-void copy_task(std::string nodeName) {
+void app_task(std::string nodeName) {
   string script = string("scp /home/kevin/git/lwdee/build/app root@") + nodeName + ":/home/kevin/git/lwdee/build/";
   system(script.c_str());
+}
 
-  script = string("scp /home/kevin/git/lwdee/config/dsc.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
+void config_task(std::string nodeName) {
+  string script = string("scp /home/kevin/git/lwdee/config/dsc.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
   system(script.c_str());
 
   script = string("scp /home/kevin/git/lwdee/config/conf.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
@@ -57,9 +59,13 @@ int main(int argv, char** argc) {
   string par = argc[1];
 
   thread ts[6];
-  if (par == "copy") {
+  if (par == "app") {
     for (int i = 0; i < 6; i++) {
-      ts[i] = thread(copy_task, nodes[i]);
+      ts[i] = thread(app_task, nodes[i]);
+    }
+  } else if (par == "config") {
+    for (int i = 0; i < 6; i++) {
+      ts[i] = thread(config_task, nodes[i]);
     }
   } else if (par == "stop") {
     for (int i = 0; i < 6; i++) {

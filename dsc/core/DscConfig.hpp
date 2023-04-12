@@ -8,6 +8,7 @@ class DscConfig {
   static DscConfig _instance;
 
  public:
+  std::string name;
   std::string inputFile;
   std::string brokers;
   std::string group;

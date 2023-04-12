@@ -13,12 +13,16 @@
 #include "matrix/LinuxMatrix.h"
 
 void Driver::startJob() {
-  logger_info("> job");
-  LinuxMatrix::print();
-
-  this->conf = DscConfig::instance();
-
   try {
+    logger_info("> job");
+    LinuxMatrix::print();
+
+    this->conf = DscConfig::instance();
+
+    if (conf->partitions.size() > conf->splitNums1) {
+      throw Exception("kafka partiton cout can't be more than map partitons cout", ZONE);
+    }
+
     Stopwatch sw;
 
     this->startReduce();
@@ -33,7 +37,9 @@ void Driver::startJob() {
 
     logger_info("finished");
   } catch (Exception& ex) {
-    logger_error("execute job error,%s", ex.getMessage().c_str());
+    logger_error("execute driver error,%s", ex.getMessage().c_str());
+  } catch (std::exception& ex) {
+    logger_error("execute driver error,%s", ex.what());
   }
 }
 
@@ -49,10 +55,10 @@ void Driver::startKafka() {
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
       kafka_mapVoxors.push_back(mapVoxorIds[m]);
     }
-    PartitionKafka input(i, conf->group, conf->topic,conf->window, kafka_mapVoxors);
+    PartitionKafka input(i, conf->group, conf->topic, conf->window, kafka_mapVoxors);
 
     DCO dco = lwdee::create_dco("KafkaDCO");
-    logger_info("kafka voxorId: %s",dco.voxorId().c_str());
+    logger_info("kafka voxorId: %s", dco.voxorId().c_str());
 
     DDOId ddoId = dco.async("start", input.toJson());
     logger_info("%s", input.toJson().c_str());

@@ -1,12 +1,19 @@
 {
     "port": 400,
+    "name":"local",
     "inputFile": "/home/kevin/git/lwdee/data/harry-potter-01.txt",
     "brokers": "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092",
     "group": "test-group",
     "topic": "topic_dcs",
     "outTopic":"xx",
     "window": 20,
-    "partitions": [0,1],
+    "partitions": [0,1,2],
     "splitNums1": 2,
-    "splitNums2": 2
+    "splitNums2": 1,
+    "workers" :[
+        { "name": "node1", "ip": "127.0.0.1" },
+        { "name": "node2", "ip": "127.0.0.1" },
+        { "name": "node3", "ip": "127.0.0.1" },
+        { "name": "node4", "ip": "127.0.0.1" }
+    ]
 }

@@ -1,27 +1,20 @@
 const fs = require('fs');
 
-let workers = [
-    { "name": "k8s-master", "ip": "10.180.98.130" },
-    { "name": "k8s-node01", "ip": "10.180.98.131" },
-    { "name": "k8s-node02", "ip": "10.180.98.132" },
-    { "name": "k8s-node03", "ip": "10.180.98.133" },
-    { "name": "k8s-node04", "ip": "10.180.98.134" },
-    { "name": "k8s-node05", "ip": "10.180.98.135" }
-];
-
-// let workers = [
-//     { "name": "k8s-master", "ip": "10.180.98.130" },
-//     { "name": "k8s-node01", "ip": "10.180.98.131" },
-//     { "name": "k8s-node02", "ip": "10.180.98.132" },
-//     { "name": "k8s-node03", "ip": "10.180.98.133" },
-// ];
+let fileName = "/home/kevin/git/lwdee/config/dsc.json";
+let json = fs.readFileSync(fileName);
+let dscConfig = JSON.parse(json);
+let workers = dscConfig.workers;
 
 let imgVersion = "v1.0.8";
-let fileName = "/home/kevin/git/lwdee/config/conf.json";
+fileName = "/home/kevin/git/lwdee/config/conf.json";
 
-let json = fs.readFileSync(fileName);
+json = fs.readFileSync(fileName);
 let db = JSON.parse(json);
+// let port = db.port;
 let port = db.port > 800 ? 100 : db.port + 10;
+if(dscConfig.name != "local"){
+    port = 100;
+}
 
 let routerInfos = workers.map(x => {
     let i = workers.indexOf(x);
@@ -75,21 +68,21 @@ for (var i in routerInfos) {
     s5.push(`docker rm dsc${router.nid}`);
 }
 
-s1.forEach(x=> deployScripts.push(x));
-deployScripts.push("");
-deployScripts.push("");
-s2.forEach(x=> deployScripts.push(x));
-deployScripts.push("");
-deployScripts.push("");
-s3.forEach(x=> deployScripts.push(x));
-deployScripts.push("");
-deployScripts.push("");
-s4.forEach(x=> deployScripts.push(x));
-deployScripts.push("");
-deployScripts.push("");
-s5.forEach(x=> deployScripts.push(x));
-deployScripts.push("");
-deployScripts.push("");
+// s1.forEach(x=> deployScripts.push(x));
+// deployScripts.push("");
+// deployScripts.push("");
+// s2.forEach(x=> deployScripts.push(x));
+// deployScripts.push("");
+// deployScripts.push("");
+// s3.forEach(x=> deployScripts.push(x));
+// deployScripts.push("");
+// deployScripts.push("");
+// s4.forEach(x=> deployScripts.push(x));
+// deployScripts.push("");
+// deployScripts.push("");
+// s5.forEach(x=> deployScripts.push(x));
+// deployScripts.push("");
+// deployScripts.push("");
 
 for (var i in routerInfos) {
     let router = routerInfos[i];

@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     logger_error("localNode is null");
     exit(1);
   }
-  
+
   auto nodeName = getenv("nodename");
   if (localNode->itId() == 1) {
     Driver().startJob();
@@ -44,15 +44,21 @@ void init(int argc, char* argv[]) {
   if (argc >= 2) {
     nodeName = argv[1];
     if (nodeName == "${nodename}") {
-      nodeName = getenv("nodename");      
+      nodeName = getenv("nodename");
     }
   } else {
     std::cout << "usage: app demo <ndname>" << std::endl;
   }
 
-  DscConfig::instance()->readConfig();
-  // logger_init("dsc");
-  logger_init(nodeName);
+  auto conf = DscConfig::instance();
+  conf->readConfig();
+
+  if (conf->name == "local") {
+    logger_init(nodeName);
+  } else {
+    logger_init("dsc");
+  }
+
   logger_warn("this is %s", nodeName.c_str());
   LinuxMatrix::start();
 

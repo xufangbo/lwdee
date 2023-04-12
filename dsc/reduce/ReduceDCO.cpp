@@ -27,12 +27,13 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
+    logger_debug("< accept reduce ");
     Stopwatch sw;
     std::shared_ptr<Words> words = std::make_shared<Words>();
     int mapIndex = StringsSerializer::fromJson(a, words.get());
     this->reducer.accept(mapIndex, words);
 
-    logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
+    logger_debug("< accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
     // logger_debug("accept reduce");
     LinuxMatrix::print();
 

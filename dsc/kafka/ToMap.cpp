@@ -40,18 +40,26 @@ void ToMap::create_dco(PartitionKafka* input) {
 }
 
 void ToMap::accept(RdKafka::Message* message) {
-  // logger_trace("offset: %d,%s",message->offset(), static_cast<const char*>(message->payload()));
+  logger_trace("< accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   try {
+    
     string line = string(message->len() + 1, '\0');
     memcpy((void*)line.data(), message->payload(), message->len());
 
+
     int index = this->nextMap();
     auto lines = this->mapLines->data() + index;
-    lines->push_back(line);
 
+    // mut.lock();
+
+    std::cout << 6 << std::endl;
+    lines->push_back(line);
     if (lines->size() >= window) {
       this->toMap(index);
     }
+    
+    // mut.unlock();
+    logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   } catch (Exception& ex) {
     logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {
@@ -72,8 +80,8 @@ void ToMap::toMap(int index) {
   auto lines = this->mapLines->data() + index;
 
   auto jsonText = StringsSerializer::toJson(input->index, lines);
-  logger_info("send to map %d lines",lines->size());
-  
+  logger_info("send to map %d lines", lines->size());
+
   lines->clear();
   DDOId ddoId = dco->async("map", jsonText);
 
