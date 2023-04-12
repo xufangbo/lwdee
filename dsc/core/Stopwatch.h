@@ -12,4 +12,5 @@ class Stopwatch {
   }
   void start();
   double stop();
+  static long currentMilliSeconds();
 };

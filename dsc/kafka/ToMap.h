@@ -16,21 +16,22 @@ class ToMap {
  private:
   int window = 0;
   int currentMap = -1;
-  PartitionKafka *input;
+  PartitionKafka* input;
   vector<DCO> mapDocs;
-  vector<vector<string>> mapLines;
+  vector<vector<string>>* mapLines = new vector<vector<string>>();
 
  public:
   ToMap();
+  ~ToMap();
   void accept(RdKafka::Message* message);
-  void create_dco(PartitionKafka * input);
+  void create_dco(PartitionKafka* input);
 
  private:
   int nextMap();
   void toMap(int index);
 
  private:
-  list<pair<DDOId, DCO*>> ddoIds;
+  list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();
   thread releaseThread;
 
   void releaseDdo();

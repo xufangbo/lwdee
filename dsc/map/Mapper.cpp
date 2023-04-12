@@ -9,11 +9,10 @@
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
-
-void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
+void Mapper::map(std::vector<std::string>* lines, vector<string>* words) {
   // 先合并成一行
   std::string output;
-  for (std::string& line : lines) {
+  for (std::string& line : *lines) {
     for (char& c : line) {      
       if (c >= 'A' && c <= 'Z') {
         output += (c + 32); // to lower
@@ -32,7 +31,7 @@ void Mapper::map(std::vector<std::string>& lines, vector<string>& words) {
     iss >> token;
     // token = trim(token);
     if (!token.empty()) {
-      words.push_back(token);
+      words->push_back(token);
     }
   }
 }

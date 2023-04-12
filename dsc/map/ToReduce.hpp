@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <thread>
 #include <vector>
 #include "core/Partition.h"
@@ -14,11 +15,17 @@ class ToReduce {
   std::hash<std::string> _hash;
 
  public:
+  ~ToReduce() {
+    if (ddoIds != nullptr) {
+      delete ddoIds;
+      ddoIds = nullptr;
+    }
+  }
   void create_dcos(PartitionMap* input);
-  void send(vector<string>& words);
+  void send(vector<string>* words);
 
  private:
-  list<pair<DDOId, DCO*>> ddoIds;
+  list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();
   thread releaseThread;
 
   void releaseDdo();

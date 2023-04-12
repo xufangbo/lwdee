@@ -7,27 +7,34 @@ Reducer::Reducer() {
   maps.resize(conf->splitNums1);
 }
 
-void Reducer::accept(int mapIndex, Words& words) {
+void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
   mut.lock();
+
   MapQueue* mapQueue = maps.data() + mapIndex;
   mapQueue->push_back(words);
 
   if (isFull()) {
     this->reduce();
   }
+
   mut.unlock();
 }
 
 void Reducer::reduce() {
-  std::map<std::string, int> map;
-  for (MapQueue& queue : maps) {
-    Words& words = queue.front();
 
-    for (std::string& i : words) {
-      auto it = map.find(i);
-      if (it == map.end()) {
-        auto pair = std::pair<std::string, int>(i, 1);
-        map.insert(pair);
+  typedef std::pair<std::string,int> WordPair;
+  typedef std::vector<WordPair> ReduceWords;
+
+  std::shared_ptr<ReduceWords> all_words= std::make_shared<ReduceWords>();
+
+  for (MapQueue& queue : maps) {
+    std::shared_ptr<Words> words = queue.front();
+
+    for (std::string& i : *words) {
+      auto it = std::find_if(all_words->begin(),all_words->end(),[&i](WordPair &t){return t.first ==i; });
+      if (it == all_words->end()) {
+        auto pair = WordPair(i, 1);
+        all_words->push_back(pair);
       } else {
         it->second++;
       }
@@ -35,19 +42,9 @@ void Reducer::reduce() {
     queue.pop_front();
   }
 
-  // for (auto item : maps) {
-  //   printf("(%s,%d) ", item->first.c_str(), item->second);
-  // }
-  // printf("\n");
-
-  typedef std::pair<const std::string, int> MapItem;
-  std::vector<MapItem*> items;
-  for (auto& i : map) {
-    items.push_back(&i);
-  }
-  std::sort(items.begin(), items.end(), [](MapItem* l, MapItem* r) { return l->second - r->second; });
-  for (auto item : items) {
-    printf("(%s,%d) ", item->first.c_str(), item->second);
+  std::sort(all_words->begin(), all_words->end(), [](WordPair& l, WordPair& r) { return l.second > r.second; });
+  for (auto &i : *all_words) {
+    printf("(%s,%d) ", i.first.c_str(), i.second);
   }
   printf("\n");
 }

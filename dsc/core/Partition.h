@@ -22,8 +22,8 @@ class PartitionKafka : public Partition {
 
  public:
   PartitionKafka() {}
-  PartitionKafka(int index, string group, string topic,int window, std::vector<string> mapVoxors)
-      : Partition(index), group(group), topic(topic), window(window),mapVoxors(mapVoxors) {}
+  PartitionKafka(int index, string group, string topic, int window, std::vector<string> mapVoxors)
+      : Partition(index), group(group), topic(topic), window(window), mapVoxors(mapVoxors) {}
 
   std::string toJson();
   void fromJson(std::string* json);
@@ -57,6 +57,6 @@ class PartitionReduce : public Partition {
 
 class StringsSerializer {
  public:
-  static std::string toJson(int index,vector<string>& items);
-  static int fromJson(std::string& json, vector<string>& items);
+  static std::string toJson(int index, vector<string>* items);
+  static int fromJson(std::string& json, vector<string>* items);
 };

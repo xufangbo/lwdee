@@ -60,7 +60,7 @@ for (var i in routerInfos) {
     if (router.worker != preWorker) {
         preWorker = router.worker;
     }
-    deployScripts.push(`docker stop terasort${router.nid}`);
+    deployScripts.push(`docker stop dsc${router.nid}`);
 }
 deployScripts.push("");
 for (var i in routerInfos) {
@@ -68,7 +68,7 @@ for (var i in routerInfos) {
     if (router.worker != preWorker) {
         preWorker = router.worker;
     }
-    deployScripts.push(`docker rm terasort${router.nid} `);
+    deployScripts.push(`docker rm dsc${router.nid} `);
 }
 
 deployScripts.push("");
@@ -80,19 +80,22 @@ deployScripts.push("");
 //     if (router.worker != preWorker) {
 //         preWorker = router.worker;
 //     }
-//     deployScripts.push(`docker start terasort${router.nid} `);
+//     deployScripts.push(`docker start dsc${router.nid} `);
 // }
 // deployScripts.push("");
 
 for (var i in routerInfos) {
     let router = routerInfos[i];
 
-    deployScripts.push(`ssh root@${router.worker} "docker run --name terasort${router.nid}  -e nodename=node${router.nid} --net=host ` +
+    deployScripts.push(`ssh root@${router.worker} "docker run --name dsc${router.nid}  -e nodename=node${router.nid} --net=host ` +
         `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
-        `-v /home/kevin/git/lwdee/log:/home/terasort/log ` +
-        `-v /home/kevin/git/lwdee/data:/home/terasort/data ` +
-        `-v /home/kevin/git/lwdee/config:/home/terasort/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/terasort:v1.0.18"`);
+        `-v /home/kevin/git/lwdee/build/app:/home/dsc/app ` +
+        `-v /home/kevin/git/lwdee/log:/home/dsc/log ` +
+        `-v /home/kevin/git/lwdee/data:/home/dsc/data ` +
+        `-v /home/kevin/git/lwdee/config:/home/dsc/config ` +
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/dsc:v1.0.1"`);
+
+        
 
     if (i == 0) {
         deployScripts.push("");
@@ -105,7 +108,7 @@ deployScripts.push("");
 // for (var i in routerInfos) {
 //     let router = routerInfos[i];
 //     let fname = i == 0 ?  `node${router.nid}-driver.log` :  `node${router.nid}.log`;
-//     deployScripts.push(`ssh root@${router.worker} "rm -rf ${fname} && docker logs terasort${router.nid} > ${fname}"`);
+//     deployScripts.push(`ssh root@${router.worker} "rm -rf ${fname} && docker logs dsc${router.nid} > ${fname}"`);
 // }
 // deployScripts.push("");
 // deployScripts.push("");

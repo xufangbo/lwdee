@@ -80,21 +80,22 @@ void PartitionReduce::fromJson(std::string* json) {
   index = cJSON_GetObjectItem(node, "index")->valueint;
 }
 
-std::string StringsSerializer::toJson(int index, vector<string>& items) {
+std::string StringsSerializer::toJson(int index, vector<string>* items) {
   cJSON* root = cJSON_CreateObject();
   cJSON_AddNumberToObject(root, "index", index);
 
   cJSON* nodes = cJSON_CreateArray();
   cJSON_AddItemToObject(root, "items", nodes);
-  for (string& i : items) {
-    auto item = cJSON_CreateString(i.c_str());
+  for(int i=0;i<items->size();i++){
+    string* str = items->data() + i;
+    auto item = cJSON_CreateString(str->c_str());
     cJSON_AddItemToArray(nodes, item);
   }
   string jsonText = cJSON_Print(root);
   return jsonText;
 }
 
-int StringsSerializer::fromJson(std::string& json, vector<string>& items) {
+int StringsSerializer::fromJson(std::string& json, vector<string>* items) {
   cJSON* root = cJSON_Parse(json.c_str());
   int index = cJSON_GetObjectItem(root, "index")->valueint;
 
@@ -102,7 +103,7 @@ int StringsSerializer::fromJson(std::string& json, vector<string>& items) {
   int size = cJSON_GetArraySize(nodes);
   for (int i = 0; i < size; i++) {
     string line = cJSON_GetArrayItem(nodes, i)->valuestring;
-    items.push_back(line);
+    items->push_back(line);
   }
 
   return index;

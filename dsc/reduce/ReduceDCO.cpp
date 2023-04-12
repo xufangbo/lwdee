@@ -1,4 +1,5 @@
 #include "ReduceDCO.h"
+#include <memory>
 #include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/Stopwatch.h"
@@ -26,12 +27,12 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    Words words;
-    int mapIndex = StringsSerializer::fromJson(a, words);
+    Stopwatch sw;
+    std::shared_ptr<Words> words = std::make_shared<Words>();
+    int mapIndex = StringsSerializer::fromJson(a, words.get());
+    this->reducer.accept(mapIndex, words);
 
-    logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d)",words.size(),mapIndex,input.index);
-
-    this->reducer.accept(mapIndex,words);
+    logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
 
     return "success";
   } catch (Exception& ex) {
