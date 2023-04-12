@@ -1,14 +1,25 @@
 #include "KafkaJobConsumer.hpp"
 #include "KafkaCallback.hpp"
 #include "core/DscConfig.hpp"
+#include "core/Exception.hpp"
 
 static std::string errstr;
 
-void KafkaJobConsumer::start(PartitionKafka *input) {
+void KafkaJobConsumer::start(PartitionKafka* input) {
   this->input = input;
 
   toMap.create_dco(input);
-  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::doStart, this);
+  KafkaJobConsumer::thread = std::thread(&KafkaJobConsumer::startKafka, this);
+}
+
+void KafkaJobConsumer::startKafka() {
+  try {
+    this->doStart();
+  } catch (Exception& ex) {
+    logger_error("kafka job failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+  } catch (std::exception& ex) {
+    logger_error("kafka job failed,%s", ex.what());
+  }
 }
 
 void KafkaJobConsumer::doStart() {

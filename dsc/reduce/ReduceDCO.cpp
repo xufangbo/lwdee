@@ -17,10 +17,10 @@ std::string ReduceDCO::start(std::string a) {
 
     return "success";
   } catch (Exception& ex) {
-    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+    logger_error("reduce start failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
-    logger_error("step2 failed,%s", ex.what());
+    logger_error("reduce start failed,%s", ex.what());
     return "failed";
   }
 }
@@ -28,18 +28,19 @@ std::string ReduceDCO::start(std::string a) {
 std::string ReduceDCO::reduce(std::string a) {
   try {
     Stopwatch sw;
-    std::shared_ptr<Words> words = std::make_shared<Words>();
-    int mapIndex = StringsSerializer::fromJson(a, words.get());
-    this->reducer.accept(mapIndex, words);
+    // std::shared_ptr<Words> words = std::make_shared<Words>();
+    // int mapIndex = StringsSerializer::fromJson(a, words.get());
+    // this->reducer.accept(mapIndex, words);
 
-    logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
+    // logger_debug("accept reduce, %d words, (map-%02d, reduce-%02d),eclapse:%lfs", words->size(), mapIndex, input.index,sw.stop());
+    logger_debug("accept reduce");
 
     return "success";
   } catch (Exception& ex) {
-    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+    logger_error("reduce failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
-    logger_error("step2 failed,%s", ex.what());
+    logger_error("reduce failed,%s", ex.what());
     return "failed";
   }
 }

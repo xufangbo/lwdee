@@ -44,6 +44,8 @@ typedef struct
      */
     int is_color;
 
+    bool writeFile;
+
     /**
      * 日志保留天数
      */

@@ -13,6 +13,7 @@ class KafkaJobConsumer {
   ToMap toMap;
 
  private:
+  void startKafka();
   void doStart();
   void msg_consume(RdKafka::Message* message, void* opaque);
 

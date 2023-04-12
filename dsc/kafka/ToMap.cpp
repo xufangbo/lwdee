@@ -1,6 +1,7 @@
 #include "ToMap.h"
 
 #include "core/DscConfig.hpp"
+#include "core/Exception.hpp"
 #include "core/Stopwatch.h"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
@@ -40,16 +41,21 @@ void ToMap::create_dco(PartitionKafka* input) {
 
 void ToMap::accept(RdKafka::Message* message) {
   // logger_trace("offset: %d,%s",message->offset(), static_cast<const char*>(message->payload()));
+  try {
+    string line = string(message->len() + 1, '\0');
+    memcpy((void*)line.data(), message->payload(), message->len());
 
-  string line = string(message->len() + 1, '\0');
-  memcpy((void*)line.data(), message->payload(), message->len());
+    int index = this->nextMap();
+    auto lines = this->mapLines->data() + index;
+    lines->push_back(line);
 
-  int index = this->nextMap();
-  auto lines = this->mapLines->data() + index;
-  lines->push_back(line);
-
-  if (lines->size() >= window) {
-    this->toMap(index);
+    if (lines->size() >= window) {
+      this->toMap(index);
+    }
+  } catch (Exception& ex) {
+    logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+  } catch (std::exception& ex) {
+    logger_error("accept kafka data failed,%s", ex.what());
   }
 };
 

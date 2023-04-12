@@ -42,11 +42,11 @@ void Reducer::reduce() {
     queue.pop_front();
   }
 
-  std::sort(all_words->begin(), all_words->end(), [](WordPair& l, WordPair& r) { return l.second > r.second; });
-  for (auto &i : *all_words) {
-    printf("(%s,%d) ", i.first.c_str(), i.second);
-  }
-  printf("\n");
+  // std::sort(all_words->begin(), all_words->end(), [](WordPair& l, WordPair& r) { return l.second >= r.second; });
+  // for (auto &i : *all_words) {
+  //   printf("(%s,%d) ", i.first.c_str(), i.second);
+  // }
+  // printf("\n");
 }
 
 bool Reducer::isFull() {
