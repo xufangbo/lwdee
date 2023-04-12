@@ -1,11 +1,11 @@
 {
     "port": 400,
-    "inputFile": "/home/dsc/data/data-input.dat",
+    "inputFile": "/home/kevin/git/lwdee/data/harry-potter-01.txt",
     "brokers": "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092",
     "group": "test-group",
     "topic": "topic_dcs",
     "outTopic":"xx",
-    "window": 10,
+    "window": 20,
     "partitions": [0,1,3],
     "splitNums1": 3,
     "splitNums2": 2

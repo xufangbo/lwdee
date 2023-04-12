@@ -10,10 +10,10 @@ const fs = require('fs');
 // ];
 
 let workers = [
-    { "name": "k8s-master", "ip": "10.180.98.130" },
-    { "name": "k8s-node01", "ip": "10.180.98.131" },
-    { "name": "k8s-node02", "ip": "10.180.98.132" },
-    { "name": "k8s-node03", "ip": "10.180.98.133" },
+    { "name": "k8s-master", "ip": "127.0.0.1" },
+    { "name": "k8s-node01", "ip": "127.0.0.1" },
+    { "name": "k8s-node02", "ip": "127.0.0.1" },
+    { "name": "k8s-node03", "ip": "127.0.0.1" },
 ];
 
 let imgVersion = "v1.0.8";
