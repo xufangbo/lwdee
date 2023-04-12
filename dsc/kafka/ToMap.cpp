@@ -46,7 +46,8 @@ void ToMap::accept(RdKafka::Message* message) {
 
   counter++;
   try {
-    time_t ts = time(NULL);
+    
+    time_t now = Stopwatch::currentTs();
 
     string line = string(message->len() + 1, '\0');
     memcpy((void*)line.data(), message->payload(), message->len());
@@ -59,8 +60,8 @@ void ToMap::accept(RdKafka::Message* message) {
       lines->push_back(line);
     }
 
-    if (ts != currentTs) {
-      currentTs = ts;
+    if (now != currentTs) {
+      currentTs = now;
       this->toMaps();
     }
 

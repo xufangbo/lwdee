@@ -1,20 +1,21 @@
 #include "Reducer.hpp"
 #include <algorithm>
-#include "core/DscConfig.hpp"
-#include "core/log.hpp"
 #include <memory>
+#include "core/DscConfig.hpp"
+#include "core/Stopwatch.h"
+#include "core/log.hpp"
 
 Reducer::Reducer() {
   auto conf = DscConfig::instance();
   this->window = conf->window;
 
-  time_t ts = time(NULL);
-  currentTs = ts + window - (ts % window);
+  time_t now = Stopwatch::currentTs();
+  currentTs = now + window - (now % window);
 }
 
-void Reducer::accept(std::vector<DeviceRecord> *inputs) {
-  time_t ts = time(NULL);
-  auto nowTs = ts + window - (ts % window);
+void Reducer::accept(std::vector<DeviceRecord>* inputs) {
+  int now = Stopwatch::currentTs();
+  auto nowTs = now + window - (now % window);
 
   mut.lock();
 
@@ -36,12 +37,15 @@ void Reducer::accept(std::vector<DeviceRecord> *inputs) {
 void Reducer::reduce() {
   // logger_trace("< reduce");
 
-  time_t now = time(NULL);
-  time_t sum = 0;
+  time_t now = Stopwatch::currentTs();
+  uint64_t sum = 0;
   for (auto& record : *records) {
+    // if (now - record.ts > 100) {
+    //   std::cout << now << " - " << record.ts << " = " <<  now - record.ts << std::endl;
+    // }
     sum += (now - record.ts);
   }
-  logger_info("reduce %ld records,avrage delay %f",records->size(), sum * 1.0 / records->size());
+  logger_info("reduce %ld records,avrage delay %fs", records->size(), sum * 1.0 / records->size());
 
   typedef std::pair<std::string, int> Pair;
   typedef std::map<std::string, int> Map;
@@ -58,10 +62,18 @@ void Reducer::reduce() {
     }
   }
 
-  for(auto &it : *map){
-    printf("(%s,%d) ",it.first.c_str(),it.second);
+  int index = 0;
+  for (auto& it : *map) {
+    if (++index > 10) {
+      break;
+    }
+    printf("(%s,%d) ", it.first.c_str(), it.second);
   }
-  printf("\n");
+  if (map->size() > 10) {
+    printf("  ...\n");
+  } else {
+    printf("\n");
+  }
 
   map.reset();
   records->clear();

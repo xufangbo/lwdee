@@ -36,7 +36,8 @@ bool Mapper::parse(std::string* line, DeviceRecord* word) {
   if (ts_did == NULL) {
     return false;
   }
-  word->ts = ts_did->valueint;
+  word->ts = ts_did->valueint; // 日志数据时间戳不对
+  word->ts = Stopwatch::currentTs();
 
   return true;
 }

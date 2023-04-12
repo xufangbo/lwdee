@@ -11,7 +11,7 @@ typedef std::vector<DeviceRecord> Records;
 class Reducer {
  private:
   int window = 0;  // 秒为单位
-  int currentTs = 0;
+  time_t currentTs = 0;
   std::shared_ptr<Records> records = std::make_shared<Records>();
 
  private:
