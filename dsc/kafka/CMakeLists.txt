@@ -7,4 +7,4 @@ JobManager.cpp
 ToMap.cpp
 )
 
-target_link_libraries(kafka rdkafka++ core)
+target_link_libraries(kafka rdkafka++ core crypto ssl)

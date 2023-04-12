@@ -13,6 +13,9 @@ terasort/TerasortDCOFactory.cpp
 )
 add_executable(app ${SRC_FILES}) 
 
+list(APPEND EXTRA_LIBS crypto)
+list(APPEND EXTRA_LIBS ssl)
+
 list(APPEND EXTRA_LIBS uhconnect)
 list(APPEND EXTRA_LIBS core) 
 list(APPEND EXTRA_LIBS matrix) 

@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 // let workers = [
-//     { "name": "k8s-node01", "ip": "10.180.98.131" },
+//     { "name": "k8s-master", "ip": "10.180.98.131" },
 //     { "name": "k8s-node01", "ip": "10.180.98.131" },
 //     { "name": "k8s-node02", "ip": "10.180.98.132" },
 //     { "name": "k8s-node03", "ip": "10.180.98.133" },
@@ -10,12 +10,13 @@ const fs = require('fs');
 // ];
 
 let workers = [
-    { "name": "localhost", "ip": "127.0.0.1" },
-    { "name": "localhost", "ip": "127.0.0.1" },
-    { "name": "localhost", "ip": "127.0.0.1" },
-    { "name": "localhost", "ip": "127.0.0.1" }
+    { "name": "k8s-master", "ip": "10.180.98.131" },
+    { "name": "k8s-node01", "ip": "10.180.98.131" },
+    { "name": "k8s-node02", "ip": "10.180.98.132" },
+    { "name": "k8s-node03", "ip": "10.180.98.133" },
 ];
 
+let imgVersion = "v1.0.8";
 let fileName = "/home/kevin/git/lwdee/config/conf.json";
 
 let json = fs.readFileSync(fileName);
@@ -87,15 +88,13 @@ deployScripts.push("");
 for (var i in routerInfos) {
     let router = routerInfos[i];
 
-    deployScripts.push(`ssh root@${router.worker} "docker run --name dsc${router.nid}  -e nodename=node${router.nid} --net=host ` +
+    deployScripts.push(`ssh root@${router.worker} "docker run --name dsc${router.nid-1}  -e nodename=node${router.nid-1} --net=host ` +
         `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
         `-v /home/kevin/git/lwdee/build/app:/home/dsc/app ` +
         `-v /home/kevin/git/lwdee/log:/home/dsc/log ` +
         `-v /home/kevin/git/lwdee/data:/home/dsc/data ` +
         `-v /home/kevin/git/lwdee/config:/home/dsc/config ` +
-        `-d registry.cn-beijing.aliyuncs.com/xufangbo/dsc:v1.0.1"`);
-
-        
+        `-d registry.cn-beijing.aliyuncs.com/xufangbo/dsc:${imgVersion}"`);
 
     if (i == 0) {
         deployScripts.push("");
