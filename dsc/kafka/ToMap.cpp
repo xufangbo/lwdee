@@ -40,7 +40,7 @@ void ToMap::create_dco(PartitionKafka* input) {
 }
 
 void ToMap::accept(RdKafka::Message* message) {
-  logger_trace("< accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
+  // logger_trace("< accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   try {
     
     string line = string(message->len() + 1, '\0');
@@ -52,14 +52,14 @@ void ToMap::accept(RdKafka::Message* message) {
 
     // mut.lock();
 
-    std::cout << 6 << std::endl;
+    // std::cout << 6 << std::endl;
     lines->push_back(line);
     if (lines->size() >= window) {
       this->toMap(index);
     }
     
     // mut.unlock();
-    logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
+    // logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   } catch (Exception& ex) {
     logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {

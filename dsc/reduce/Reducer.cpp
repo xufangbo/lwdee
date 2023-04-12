@@ -9,11 +9,11 @@ Reducer::Reducer() {
 }
 
 void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
-  logger_debug("< accept");
+  // logger_debug("< accept");
   mut.lock();
 
   MapQueue* mapQueue = maps.data() + mapIndex;
-  logger_debug("push_back words");
+  // logger_debug("push_back words");
   mapQueue->push_back(words);
 
   if (isFull()) {
@@ -21,12 +21,12 @@ void Reducer::accept(int mapIndex, std::shared_ptr<Words> words) {
   }
 
   mut.unlock();
-  logger_debug("> accept");
+  // logger_debug("> accept");
 }
 
 void Reducer::reduce() {
 
-  logger_trace("< reduce");
+  // logger_trace("< reduce");
 
   typedef std::pair<std::string,int> WordPair;
   typedef std::vector<WordPair> ReduceWords;
@@ -45,7 +45,7 @@ void Reducer::reduce() {
         it->second++;
       }
     }
-    logger_trace("pop_front");
+    // logger_trace("pop_front");
     queue.pop_front();
   }
 

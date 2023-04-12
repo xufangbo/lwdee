@@ -1,5 +1,6 @@
 {
     "port": 400,
+    "name":"k8s",
     "inputFile": "/home/dsc/data/data-input.dat",
     "brokers": "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092",
     "group": "test-group",

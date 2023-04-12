@@ -12,9 +12,9 @@ json = fs.readFileSync(fileName);
 let db = JSON.parse(json);
 // let port = db.port;
 let port = db.port > 800 ? 100 : db.port + 10;
-if(dscConfig.name != "local"){
-    port = 100;
-}
+// if(dscConfig.name != "local"){
+//     port = 100;
+// }
 
 let routerInfos = workers.map(x => {
     let i = workers.indexOf(x);
