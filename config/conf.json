@@ -1,147 +1,147 @@
 {
   "node_amount": 4,
-  "port": 460,
+  "port": 470,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 4601,
-    "msgPort": 4611,
+    "dataPort": 4701,
+    "msgPort": 4711,
     "routeInfo": [
       {
         "worker": "node1",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 4601,
-        "mport": 4611
+        "dport": 4701,
+        "mport": 4711
       },
       {
         "worker": "node2",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 4602,
-        "mport": 4612
+        "dport": 4702,
+        "mport": 4712
       },
       {
         "worker": "node3",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 4603,
-        "mport": 4613
+        "dport": 4703,
+        "mport": 4713
       },
       {
         "worker": "node4",
         "nid": 4,
         "ip": "127.0.0.1",
-        "dport": 4604,
-        "mport": 4614
+        "dport": 4704,
+        "mport": 4714
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 4602,
-    "msgPort": 4612,
+    "dataPort": 4702,
+    "msgPort": 4712,
     "routeInfo": [
       {
         "worker": "node1",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 4601,
-        "mport": 4611
+        "dport": 4701,
+        "mport": 4711
       },
       {
         "worker": "node2",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 4602,
-        "mport": 4612
+        "dport": 4702,
+        "mport": 4712
       },
       {
         "worker": "node3",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 4603,
-        "mport": 4613
+        "dport": 4703,
+        "mport": 4713
       },
       {
         "worker": "node4",
         "nid": 4,
         "ip": "127.0.0.1",
-        "dport": 4604,
-        "mport": 4614
+        "dport": 4704,
+        "mport": 4714
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 4603,
-    "msgPort": 4613,
+    "dataPort": 4703,
+    "msgPort": 4713,
     "routeInfo": [
       {
         "worker": "node1",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 4601,
-        "mport": 4611
+        "dport": 4701,
+        "mport": 4711
       },
       {
         "worker": "node2",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 4602,
-        "mport": 4612
+        "dport": 4702,
+        "mport": 4712
       },
       {
         "worker": "node3",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 4603,
-        "mport": 4613
+        "dport": 4703,
+        "mport": 4713
       },
       {
         "worker": "node4",
         "nid": 4,
         "ip": "127.0.0.1",
-        "dport": 4604,
-        "mport": 4614
+        "dport": 4704,
+        "mport": 4714
       }
     ]
   },
   "node4": {
     "nodeId": 4,
     "ip": "127.0.0.1",
-    "dataPort": 4604,
-    "msgPort": 4614,
+    "dataPort": 4704,
+    "msgPort": 4714,
     "routeInfo": [
       {
         "worker": "node1",
         "nid": 1,
         "ip": "127.0.0.1",
-        "dport": 4601,
-        "mport": 4611
+        "dport": 4701,
+        "mport": 4711
       },
       {
         "worker": "node2",
         "nid": 2,
         "ip": "127.0.0.1",
-        "dport": 4602,
-        "mport": 4612
+        "dport": 4702,
+        "mport": 4712
       },
       {
         "worker": "node3",
         "nid": 3,
         "ip": "127.0.0.1",
-        "dport": 4603,
-        "mport": 4613
+        "dport": 4703,
+        "mport": 4713
       },
       {
         "worker": "node4",
         "nid": 4,
         "ip": "127.0.0.1",
-        "dport": 4604,
-        "mport": 4614
+        "dport": 4704,
+        "mport": 4714
       }
     ]
   }

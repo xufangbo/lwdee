@@ -32,10 +32,12 @@ std::string ReduceDCO::reduce(std::string a) {
 
     auto records = std::make_shared<std::vector<DeviceRecord>>();
 
-    ReduceData reduceData(0,records.get());
+    ReduceData reduceData(0, records.get());
     reduceData.fromJson(&a);
 
-    logger_debug("< accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", reduceData.items->size(), reduceData.mapIndex, input.index,sw.stop());
+    reducer.accept(records.get());
+
+    logger_debug("< accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", reduceData.items->size(), reduceData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");
     LinuxMatrix::print();
 

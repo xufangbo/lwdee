@@ -12,7 +12,7 @@ Reducer::Reducer() {
   currentTs = ts + window - (ts % window);
 }
 
-void Reducer::accept(int mapIndex, std::shared_ptr<std::vector<DeviceRecord>> inputs) {
+void Reducer::accept(std::vector<DeviceRecord> *inputs) {
   time_t ts = time(NULL);
   auto nowTs = ts + window - (ts % window);
 
@@ -28,7 +28,6 @@ void Reducer::accept(int mapIndex, std::shared_ptr<std::vector<DeviceRecord>> in
   }
 
   inputs->clear();
-  inputs.reset();
 
   mut.unlock();
   // logger_debug("> accept");

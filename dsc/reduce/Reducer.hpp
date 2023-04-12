@@ -20,5 +20,5 @@ class Reducer {
 
  public:
   Reducer();
-  void accept(int mapIndex, std::shared_ptr<std::vector<DeviceRecord>> records);
+  void accept(std::vector<DeviceRecord>* records);
 };
