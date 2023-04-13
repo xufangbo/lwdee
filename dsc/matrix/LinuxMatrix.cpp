@@ -23,13 +23,16 @@ void matrix() {
   while (true) {
     auto cpu = LinuxMatrix::cpu_usage();
     auto ram = LinuxMatrix::ram_info();
-
     LinuxMatrix::collect(cpu, ram);
-
-    // logger_trace("cpu: %.2f%%,ram total: %ldM,available: %ldM,used: %ldM,free: %ldM", cpu, ram.total, ram.available, (ram.total - ram.available), ram.free);
-
     // sleep(1);
     usleep(1000000 / 10);
+  }
+}
+
+void print_task() {
+  while (true) {
+    LinuxMatrix::print();
+    sleep(1);
   }
 }
 
@@ -45,8 +48,7 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
 }
 
 void LinuxMatrix::print() {
-  
-  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom,cpu, ram_bottom, ram_top, ram_top - ram_bottom,ram.available, (ram.total - ram.available), ram.free);
+  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
 
   int d1 = stream.kafka_dco;
   int d2 = stream.kafka_send;
@@ -70,6 +72,7 @@ void LinuxMatrix::start() {
   ram_bottom = ram_top = ram_info().used;
 
   auto t1 = new std::thread(matrix);
+  auto t2 = new std::thread(print_task);
 }
 
 double LinuxMatrix::cpu_usage() {
