@@ -39,7 +39,7 @@ std::string MapDCO::start(std::string a) {
 
 std::string MapDCO::map(std::string a) {
   try {
-    // logger_trace("< accept map");
+    // logger_trace("< accept map,%s",a.c_str());
     Stopwatch sw;
     auto lines = std::make_shared<vector<MapRecord>>();
     MapInvokeData mapInvokeDta(0, lines.get());
@@ -54,6 +54,10 @@ std::string MapDCO::map(std::string a) {
     toReduce.send(words.get());
 
     // logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), mapInvokeDta.kafkaIndex, input.index, sw.stop());
+
+    lines->clear();
+    words->clear();
+
     return "succeed";
 
   } catch (Exception& ex) {

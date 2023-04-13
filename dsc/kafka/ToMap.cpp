@@ -43,7 +43,6 @@ void ToMap::create_dco(PartitionKafka* input) {
 
 uint32_t counter = 0;
 void ToMap::accept(RdKafka::Message* message) {
-  // logger_trace("< accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
 
   counter++;
   try {
@@ -53,15 +52,13 @@ void ToMap::accept(RdKafka::Message* message) {
 
     this->push(message);
 
-    // logger_debug("newWindowTs: %lld,currentWindowTs: %lld", newWindowTs, currentWindowTs);
     if (newWindowTs != currentWindowTs) {
       currentWindowTs = newWindowTs;
       this->toMaps();
     }
 
     mut.unlock();
-
-    // logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
+    
   } catch (Exception& ex) {
     logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {

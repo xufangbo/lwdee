@@ -64,6 +64,8 @@ void LinuxMatrix::print() {
     logger_info("kafkas(%d / %lld) maps(%d / %lld) reducs(%d / %lld)", d1, d2, d3, d4, d5, d6);
   }
   printf("\n");
+
+
   color_change = !color_change;
 }
 
