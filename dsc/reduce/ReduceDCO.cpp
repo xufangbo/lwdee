@@ -15,6 +15,8 @@ std::string ReduceDCO::start(std::string a) {
     input.fromJson(&a);
     // LinuxMatrix::print();
 
+    LinuxMatrix::stream.reduce_dco++;
+
     return "success";
   } catch (Exception& ex) {
     logger_error("reduce start failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
@@ -36,14 +38,13 @@ std::string ReduceDCO::reduce(std::string a) {
     reduceInvokeData.fromJson(&a);
 
     LinuxMatrix::stream.reduce_accept += records->size();
-    reducer.accept(records.get(),&input);
+    reducer.accept(records.get(), &input);
 
     // logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");
 
     records->clear();
 
-    LinuxMatrix::stream.reduce_dco++;
     // LinuxMatrix::print();
 
     return "success";

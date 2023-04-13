@@ -57,12 +57,13 @@ void LinuxMatrix::print() {
   uint64_t d6 = stream.reduce_accept;
 
   if (color_change) {
-    logger_debug("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
-    logger_debug("kafkas: %d,sends: %d,maps: %d,accepts: %lld,reducs: %lld,accept: %lld", d1, d2, d3, d4, d5, d6);
+    logger_trace("CPU(%.2f%%-%.2f%%=%.2f%%),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
+    logger_trace("kafkas(%d / %lld) maps(%d / %lld) reducs(%d / %lld)", d1, d2, d3, d4, d5, d6);
   } else {
-    logger_info("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
-    logger_info("kafkas: %d,sends: %d,maps: %d,accepts: %lld,reducs: %lld,accept: %lld", d1, d2, d3, d4, d5, d6);
+    logger_info("CPU(%.2f%%-%.2f%%=%.2f%%),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
+    logger_info("kafkas(%d / %lld) maps(%d / %lld) reducs(%d / %lld)", d1, d2, d3, d4, d5, d6);
   }
+  printf("\n");
   color_change = !color_change;
 }
 

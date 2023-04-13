@@ -8,9 +8,7 @@
 Reducer::Reducer() {
   auto conf = DscConfig::instance();
   this->window = conf->window * 1000;
-
-  uint64_t now = (uint64_t)Stopwatch::currentMilliSeconds();
-  currentTs = now + window - (now % window);
+  this->currentWindowTs = this->getCurrentWindow();
 
   this->sum = 0;
   this->count = 0;
@@ -21,7 +19,7 @@ void Reducer::accept(std::vector<ReduceRecord>* records, PartitionReduce* input)
   mut.lock();
 
   uint64_t now = Stopwatch::currentMilliSeconds();
-  auto nowTs = now + window - (now % window);
+  auto newWindowTs = this->getCurrentWindow();
 
   uint64_t b_sum = 0;
   uint64_t b_size = records->size();
@@ -50,8 +48,8 @@ void Reducer::accept(std::vector<ReduceRecord>* records, PartitionReduce* input)
     // logger_info("accept reduce, this delay(%lldms / %lld = %.3lfs),total(%lldms / %lld = %.3lfs)",  b_sum, b_size, ((int64_t)b_sum) * 1.0 / b_size / 1000, t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
-  if (nowTs > currentTs) {
-    currentTs = nowTs;
+  if (newWindowTs > currentWindowTs) {
+    currentWindowTs = newWindowTs;
     this->reduce();
 
     uint64_t t_sum = this->sum;
@@ -81,7 +79,7 @@ void Reducer::reduce() {
     }
   }
 
-  logger_trace("reduce(partiton index %d) %lld -> %lld", input->index, records->size(), map->size());
+  logger_debug("reduce(partiton index %d) %lld -> %lld", input->index, records->size(), map->size());
 
   int index = 0;
   for (auto& it : *map) {
@@ -100,4 +98,9 @@ void Reducer::reduce() {
   records->clear();
 
   // logger_trace("> reduce");
+}
+
+uint64_t Reducer::getCurrentWindow() {
+  uint64_t now = Stopwatch::currentMilliSeconds();
+  return now + window - (now % window);
 }

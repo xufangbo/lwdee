@@ -14,9 +14,9 @@ ToMap::ToMap() {
 }
 
 ToMap::~ToMap() {
-  if (mapLines != nullptr) {
-    delete mapLines;
-    mapLines = nullptr;
+  if (mapRecords != nullptr) {
+    delete mapRecords;
+    mapRecords = nullptr;
   }
 
   if (ddoIds != nullptr) {
@@ -28,15 +28,13 @@ ToMap::~ToMap() {
 void ToMap::create_dco(PartitionKafka* input) {
   this->input = input;
   this->mapSize = input->mapVoxors.size();
+  this->currentWindowTs = this->getCurrentWindow();
 
   this->inputFilter = DscConfig::instance()->inputFilter;
 
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
     mapDocs.push_back(dco);
-
-    vector<MapRecord> lines;
-    mapLines->push_back(lines);
   }
 
   releaseThread = std::thread(&ToMap::releaseDdo, this);
@@ -49,26 +47,19 @@ void ToMap::accept(RdKafka::Message* message) {
 
   counter++;
   try {
-    uint64_t now = Stopwatch::currentMilliSeconds();
+    uint64_t newWindowTs = this->getCurrentWindow();
 
-    string line = string(message->len() + 1, '\0');
-    memcpy((void*)line.data(), message->payload(), message->len());
+    mut.lock();
 
-    int index = this->nextMap();
-    auto lines = this->mapLines->data() + index;
+    this->push(message);
 
-    if (!inputFilter) {
-      LinuxMatrix::stream.kafka_send ++;
-      lines->push_back(MapRecord(line, (double)now));
-    } else if (inputFilter && counter % 100 == 0) {
-      LinuxMatrix::stream.kafka_send ++;
-      lines->push_back(MapRecord(line, (double)now));
-    }
-
-    if (now != currentTs) {
-      currentTs = now;
+    // logger_debug("newWindowTs: %lld,currentWindowTs: %lld", newWindowTs, currentWindowTs);
+    if (newWindowTs != currentWindowTs) {
+      currentWindowTs = newWindowTs;
       this->toMaps();
     }
+
+    mut.unlock();
 
     // logger_trace("> accept kafka offset: %d,%s", message->offset(), static_cast<const char*>(message->payload()));
   } catch (Exception& ex) {
@@ -78,31 +69,67 @@ void ToMap::accept(RdKafka::Message* message) {
   }
 };
 
-int ToMap::nextMap() {
-  currentMap++;
-  if (currentMap >= mapLines->size()) {
-    currentMap = 0;
+void ToMap::push(RdKafka::Message* message) {
+  string line = string(message->len() + 1, '\0');
+  memcpy((void*)line.data(), message->payload(), message->len());
+
+  uint64_t now = Stopwatch::currentMilliSeconds();
+  if (!inputFilter) {
+    LinuxMatrix::stream.kafka_send++;
+    mapRecords->push_back(MapRecord(line, (double)now));
+  } else if (inputFilter && counter % 100 == 0) {
+    LinuxMatrix::stream.kafka_send++;
+    mapRecords->push_back(MapRecord(line, (double)now));
   }
-  return currentMap;
-}
+};
 
 void ToMap::toMaps() {
-  for (int i = 0; i < mapSize; i++) {
-    this->toMap(i);
+  typedef std::shared_ptr<vector<MapRecord>> MapRecords;
+
+  std::vector<MapRecords> bats;
+
+  int range = this->mapRecords->size() / mapSize;
+  int index = -1;
+  
+  for (int mapIndex = 0; mapIndex < mapSize; mapIndex++) {
+    auto bat = std::make_shared<vector<MapRecord>>();
+    bats.push_back(bat);
+    for (int i = 0; i < range; i++) {
+      index++;
+      bat->push_back(this->mapRecords->at(index));
+    }
   }
+
+  MapRecords tail = bats.at(mapSize - 1);
+  for (; index < this->mapRecords->size(); index++) {
+    tail->push_back(this->mapRecords->at(index));
+  }
+
+  for (int i = 0; i < mapSize; i++) {
+    auto bat = bats[i];
+    this->toMap(i, bat.get());
+
+    bat->clear();
+  }
+
+  this->mapRecords->clear();
+  bats.clear();
 }
 
-void ToMap::toMap(int index) {
+void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
   auto dco = this->mapDocs.data() + index;
-  auto lines = this->mapLines->data() + index;
+  auto jsonText = MapInvokeData(input->index, mapLines).toJson();
 
-  auto jsonText = MapInvokeData(input->index, lines).toJson();
-  // logger_info("send to map %d lines", lines->size());
+  // logger_debug("send to map %d lines", mapLines->size());
 
-  lines->clear();
   DDOId ddoId = dco->async("map", jsonText);
 
   ddoIds->push_back(std::make_pair(ddoId, dco));
+}
+
+uint64_t ToMap::getCurrentWindow() {
+  uint64_t now = Stopwatch::currentMilliSeconds();
+  return now + window - (now % window);
 }
 
 void ToMap::releaseDdo() {

@@ -17,24 +17,25 @@ using namespace std;
 class ToMap {
  private:
   bool inputFilter = true;
-  int currentMap = -1;
   int mapSize = 0;
   PartitionKafka* input;
   vector<DCO> mapDocs;
-  vector<vector<MapRecord>>* mapLines = new vector<vector<MapRecord>>();
+  vector<MapRecord>* mapRecords = new vector<MapRecord>();
 
  public:
   ToMap();
   ~ToMap();
   void accept(RdKafka::Message* message);
+  void push(RdKafka::Message* message);
   void create_dco(PartitionKafka* input);
 
  private:
-  uint64_t currentTs;
+  uint64_t currentWindowTs = 0;
+  uint64_t window = 1000;
   std::mutex mut;
-  int nextMap();
+  uint64_t getCurrentWindow();
   void toMaps();
-  void toMap(int index);
+  void toMap(int index,vector<MapRecord>* mapLines);
 
  private:
   list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();
