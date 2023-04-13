@@ -29,5 +29,5 @@ class Reducer {
 
  public:
   Reducer();
-  void accept(std::vector<ReduceRecord>* records,PartitionReduce *input);
+  void accept(std::vector<ReduceRecord>* b_records,PartitionReduce *input);
 };
