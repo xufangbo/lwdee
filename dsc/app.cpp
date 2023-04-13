@@ -21,6 +21,9 @@ std::string configFile();
 int main(int argc, char* argv[]) {
   init(argc, argv);
 
+  // jsonTest();
+  // return 0;
+
   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();
   if (localNode == nullptr) {
     logger_error("localNode is null");

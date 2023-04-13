@@ -31,6 +31,7 @@ void stop_task(std::string nodeName, string container) {
 
 void start_task(std::string nodeName, string container) {
   string script = string("ssh root@") + nodeName + " \"docker start " + container + "\"";
+  cout << script << endl;
   system(script.c_str());
 }
 
@@ -86,36 +87,39 @@ int main(int argv, char** argc) {
 
   string par = argc[1];
 
-  thread ts[6];
+  thread ts[len];
   bool is_multi_thread = true;
   if (par == "app") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(app_task, nodes[i]);
     }
   } else if (par == "config") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(config_task, nodes[i]);
     }
   } else if (par == "stop") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(stop_task, nodes[i], containers[i]);
     }
   } else if (par == "start") {
-    for (int i = 1; i < 6; i++) {
+    for (int i = (len - 1); i >= 0; i--) {
+      if (i == 0) {
+        sleep(1);
+      }
       ts[i] = thread(start_task, nodes[i], containers[i]);
     }
     sleep(0);
     ts[0] = thread(start_task, nodes[0], containers[0]);
   } else if (par == "rm") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(rm_task, nodes[i], containers[i]);
     }
   } else if (par == "log") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(log_task, nodes[i], containers[i]);
     }
   } else if (par == "ps") {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i] = thread(ps_task, nodes[i], containers[i]);
     }
   } else if (par == "docker") {
@@ -129,7 +133,7 @@ int main(int argv, char** argc) {
   }
 
   if (is_multi_thread) {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < len; i++) {
       ts[i].join();
     }
   }

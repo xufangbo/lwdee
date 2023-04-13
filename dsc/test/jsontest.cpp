@@ -4,17 +4,19 @@
 #include "boost/json.hpp"
 #include "core/cjson.hpp"
 
+#define BUFSIZE 1024000
+
 using namespace std;
 
 std::string readFile() {
-  std::string fileName = "/home/kevin/git/lwdee/doc/json.txt";
+  std::string fileName = "/home/kevin/git/lwdee/doc/json.json";
 
   std::string txt;
 
   fstream f(fileName, ios_base::in);
-  char buffer[1024];
+  char buffer[BUFSIZE];
   while (!f.eof()) {
-    f.getline(buffer, 1024);
+    f.getline(buffer, BUFSIZE);
     txt += buffer;
   }
   return txt;
@@ -31,6 +33,9 @@ void boostTest(std::string txt) {
 }
 
 void jsonTest() {
+  cout << "< boost json" << endl;
   std::string txt = readFile();
   boostTest(txt);
+
+  cout << "> boost json parse ok" << endl;
 }

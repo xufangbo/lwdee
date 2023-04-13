@@ -58,6 +58,8 @@ class PartitionReduce : public Partition {
 struct DeviceRecord {
   std::string did;
   int ts;
+
+  bool fromJson(std::string* json);
 };
 
 class ReduceData {

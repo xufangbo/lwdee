@@ -16,24 +16,30 @@ std::string PartitionKafka::toJson() {
     cJSON_AddItemToArray(voxorNodes, item);
   }
 
-  char* jsonText = cJSON_Print(root);
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
 
-  return jsonText;
+  cJSON_Delete(root);
+  free(jsonText);
+
+  return rc;
 }
 
 void PartitionKafka::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-  index = cJSON_GetObjectItem(node, "index")->valueint;
-  group = cJSON_GetObjectItem(node, "group")->valuestring;
-  topic = cJSON_GetObjectItem(node, "topic")->valuestring;
-  window = cJSON_GetObjectItem(node, "window")->valueint;
+  cJSON* root = cJSON_Parse(json->c_str());
+  index = cJSON_GetObjectItem(root, "index")->valueint;
+  group = cJSON_GetObjectItem(root, "group")->valuestring;
+  topic = cJSON_GetObjectItem(root, "topic")->valuestring;
+  window = cJSON_GetObjectItem(root, "window")->valueint;
 
-  cJSON* voxorNodes = cJSON_GetObjectItem(node, "mapVoxors");
+  cJSON* voxorNodes = cJSON_GetObjectItem(root, "mapVoxors");
   int size = cJSON_GetArraySize(voxorNodes);
   for (int i = 0; i < size; i++) {
     auto voxorId = cJSON_GetArrayItem(voxorNodes, i)->valuestring;
     this->mapVoxors.push_back(voxorId);
   }
+
+  cJSON_Delete(root);
 }
 
 std::string PartitionMap::toJson() {
@@ -48,21 +54,27 @@ std::string PartitionMap::toJson() {
     cJSON_AddItemToArray(voxorNodes, item);
   }
 
-  char* jsonText = cJSON_Print(root);
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
 
-  return jsonText;
+  cJSON_Delete(root);
+  free(jsonText);
+  
+  return rc;
 }
 
 void PartitionMap::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-  index = cJSON_GetObjectItem(node, "index")->valueint;
+  cJSON* root = cJSON_Parse(json->c_str());
+  index = cJSON_GetObjectItem(root, "index")->valueint;
 
-  cJSON* voxorNodes = cJSON_GetObjectItem(node, "reduceVoxors");
+  cJSON* voxorNodes = cJSON_GetObjectItem(root, "reduceVoxors");
   int size = cJSON_GetArraySize(voxorNodes);
   for (int i = 0; i < size; i++) {
     auto voxorId = cJSON_GetArrayItem(voxorNodes, i)->valuestring;
     this->reduceVoxors.push_back(voxorId);
   }
+
+  cJSON_Delete(root);
 }
 
 std::string PartitionReduce::toJson() {
@@ -70,14 +82,20 @@ std::string PartitionReduce::toJson() {
 
   cJSON_AddNumberToObject(root, "index", index);
 
-  char* jsonText = cJSON_Print(root);
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
 
-  return jsonText;
+  cJSON_Delete(root);
+  free(jsonText);
+  
+  return rc;
 }
 
 void PartitionReduce::fromJson(std::string* json) {
-  cJSON* node = cJSON_Parse(json->c_str());
-  index = cJSON_GetObjectItem(node, "index")->valueint;
+  cJSON* root = cJSON_Parse(json->c_str());
+  index = cJSON_GetObjectItem(root, "index")->valueint;
+
+  cJSON_Delete(root);
 }
 
 
@@ -96,9 +114,13 @@ std::string ReduceData::toJson() {
     cJSON_AddItemToArray(itemsNode, itemNode);
   }
 
-  char* jsonText = cJSON_Print(root);
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
 
-  return jsonText;
+  cJSON_Delete(root);
+  free(jsonText);
+  
+  return rc;
 }
 
 void ReduceData::fromJson(std::string* json) {
@@ -116,6 +138,8 @@ void ReduceData::fromJson(std::string* json) {
     record.did = cJSON_GetObjectItem(itemNode, "did")->valuestring;
     record.ts = cJSON_GetObjectItem(itemNode, "ts")->valueint;
   }
+
+  cJSON_Delete(root);
 }
 
 std::string StringsSerializer::toJson(int index, vector<string>* items) {
@@ -129,8 +153,14 @@ std::string StringsSerializer::toJson(int index, vector<string>* items) {
     auto item = cJSON_CreateString(str->c_str());
     cJSON_AddItemToArray(nodes, item);
   }
-  string jsonText = cJSON_Print(root);
-  return jsonText;
+
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
+
+  cJSON_Delete(root);
+  free(jsonText);
+  
+  return rc;
 }
 
 int StringsSerializer::fromJson(std::string& json, vector<string>* items) {
@@ -144,5 +174,30 @@ int StringsSerializer::fromJson(std::string& json, vector<string>* items) {
     items->push_back(line);
   }
 
+  cJSON_Delete(root);
+
   return index;
+}
+
+bool DeviceRecord::fromJson(std::string* json) {
+  cJSON* root = cJSON_Parse(json->c_str());
+  if (root == NULL) {
+    return false;
+  }
+
+  auto node_did = cJSON_GetObjectItem(root, "dId");
+  if (node_did == NULL) {
+    return false;
+  }
+  this->did = node_did->valuestring;
+
+  auto ts_did = cJSON_GetObjectItem(root, "ts");
+  if (ts_did == NULL) {
+    return false;
+  }
+  this->ts = ts_did->valueint;  // 日志数据时间戳不对
+
+  cJSON_Delete(root);
+  
+  return true;
 }

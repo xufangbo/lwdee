@@ -13,33 +13,11 @@
 void Mapper::map(std::vector<std::string>* lines, vector<DeviceRecord>* words) {
   for (std::string& line : *lines) {
     DeviceRecord word;
-    if (parse(&line, &word)) {
+    if (word.fromJson(&line)) {
       words->push_back(word);
       // logger_trace("did:%s,ts:%d", word.did.c_str(), word.ts);
     }
   }
-}
-
-bool Mapper::parse(std::string* line, DeviceRecord* word) {
-  cJSON* root = cJSON_Parse(line->c_str());
-  if (root == NULL) {
-    return false;
-  }
-
-  auto node_did = cJSON_GetObjectItem(root, "dId");
-  if (node_did == NULL) {
-    return false;
-  }
-  word->did = node_did->valuestring;
-
-  auto ts_did = cJSON_GetObjectItem(root, "ts");
-  if (ts_did == NULL) {
-    return false;
-  }
-  word->ts = ts_did->valueint; // 日志数据时间戳不对
-  word->ts = Stopwatch::currentTs();
-
-  return true;
 }
 
 // void Mapper::map(std::vector<std::string>* lines, vector<string>* words) {
