@@ -75,7 +75,7 @@ void init(int argc, char* argv[]) {
   }
 
   logger_warn("this is %s", nodeName.c_str());
-  LinuxMatrix::start();
+  // LinuxMatrix::start();
 
   if (UhconnConfig::getInstance().loadConf(configFile(), nodeName) == 0) {
     // int nodeAmount = UhconnConfig::getInstance().getInt("node_amount");

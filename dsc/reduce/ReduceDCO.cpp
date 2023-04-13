@@ -8,6 +8,8 @@
 
 std::string ReduceDCO::start(std::string a) {
   try {
+    LinuxMatrix::start();
+    
     logger_info("reduce start");
 
     Stopwatch sw;

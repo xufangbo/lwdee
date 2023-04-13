@@ -16,6 +16,8 @@
 
 std::string MapDCO::start(std::string a) {
   try {
+    LinuxMatrix::start();
+    
     logger_trace("accept map sart");
     Stopwatch sw;
 

@@ -1,147 +1,303 @@
 {
-  "node_amount": 4,
-  "port": 380,
+  "node_amount": 6,
+  "port": 390,
   "node1": {
     "nodeId": 1,
     "ip": "127.0.0.1",
-    "dataPort": 3801,
-    "msgPort": 3811,
+    "dataPort": 3901,
+    "msgPort": 3911,
     "routeInfo": [
       {
-        "worker": "node1",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
-        "dport": 3801,
-        "mport": 3811
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
       },
       {
-        "worker": "node2",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 3802,
-        "mport": 3812
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
       },
       {
-        "worker": "node3",
+        "worker": "k8s-node02",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3803,
-        "mport": 3813
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
       },
       {
-        "worker": "node4",
+        "worker": "k8s-node03",
         "nid": 4,
-        "ip": "127.0.0.1",
-        "dport": 3804,
-        "mport": 3814
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
       }
     ]
   },
   "node2": {
     "nodeId": 2,
     "ip": "127.0.0.1",
-    "dataPort": 3802,
-    "msgPort": 3812,
+    "dataPort": 3902,
+    "msgPort": 3912,
     "routeInfo": [
       {
-        "worker": "node1",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
-        "dport": 3801,
-        "mport": 3811
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
       },
       {
-        "worker": "node2",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 3802,
-        "mport": 3812
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
       },
       {
-        "worker": "node3",
+        "worker": "k8s-node02",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3803,
-        "mport": 3813
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
       },
       {
-        "worker": "node4",
+        "worker": "k8s-node03",
         "nid": 4,
-        "ip": "127.0.0.1",
-        "dport": 3804,
-        "mport": 3814
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
       }
     ]
   },
   "node3": {
     "nodeId": 3,
     "ip": "127.0.0.1",
-    "dataPort": 3803,
-    "msgPort": 3813,
+    "dataPort": 3903,
+    "msgPort": 3913,
     "routeInfo": [
       {
-        "worker": "node1",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
-        "dport": 3801,
-        "mport": 3811
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
       },
       {
-        "worker": "node2",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 3802,
-        "mport": 3812
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
       },
       {
-        "worker": "node3",
+        "worker": "k8s-node02",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3803,
-        "mport": 3813
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
       },
       {
-        "worker": "node4",
+        "worker": "k8s-node03",
         "nid": 4,
-        "ip": "127.0.0.1",
-        "dport": 3804,
-        "mport": 3814
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
       }
     ]
   },
   "node4": {
     "nodeId": 4,
     "ip": "127.0.0.1",
-    "dataPort": 3804,
-    "msgPort": 3814,
+    "dataPort": 3904,
+    "msgPort": 3914,
     "routeInfo": [
       {
-        "worker": "node1",
+        "worker": "k8s-master",
         "nid": 1,
-        "ip": "127.0.0.1",
-        "dport": 3801,
-        "mport": 3811
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
       },
       {
-        "worker": "node2",
+        "worker": "k8s-node01",
         "nid": 2,
-        "ip": "127.0.0.1",
-        "dport": 3802,
-        "mport": 3812
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
       },
       {
-        "worker": "node3",
+        "worker": "k8s-node02",
         "nid": 3,
-        "ip": "127.0.0.1",
-        "dport": 3803,
-        "mport": 3813
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
       },
       {
-        "worker": "node4",
+        "worker": "k8s-node03",
         "nid": 4,
-        "ip": "127.0.0.1",
-        "dport": 3804,
-        "mport": 3814
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
+      }
+    ]
+  },
+  "node5": {
+    "nodeId": 5,
+    "ip": "127.0.0.1",
+    "dataPort": 3905,
+    "msgPort": 3915,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
+      }
+    ]
+  },
+  "node6": {
+    "nodeId": 6,
+    "ip": "127.0.0.1",
+    "dataPort": 3906,
+    "msgPort": 3916,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 3901,
+        "mport": 3911
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 3902,
+        "mport": 3912
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 3903,
+        "mport": 3913
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 3904,
+        "mport": 3914
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 3905,
+        "mport": 3915
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 3906,
+        "mport": 3916
       }
     ]
   }
