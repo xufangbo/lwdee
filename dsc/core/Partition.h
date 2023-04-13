@@ -55,21 +55,46 @@ class PartitionReduce : public Partition {
   void fromJson(std::string* json);
 };
 
-struct DeviceRecord {
-  std::string did;
-  int ts;
+struct MapRecord {
+  std::string line;
+  double ts;
+
+  MapRecord() {}
+  MapRecord(std::string line, double ts)
+      : line(line), ts(ts) {}
 
   bool fromJson(std::string* json);
 };
 
-class ReduceData {
+class MapInvokeData {
  public:
-  int mapIndex;
-  vector<DeviceRecord>* items = nullptr;
+  int kafkaIndex;
+  vector<MapRecord>* items = nullptr;
 
  public:
-  ReduceData() {}
-  ReduceData(int mapIndex, vector<DeviceRecord>* items)
+  MapInvokeData() {}
+  MapInvokeData(int kafkaIndex, vector<MapRecord>* items)
+      : kafkaIndex(kafkaIndex), items(items) {}
+
+  std::string toJson();
+  void fromJson(std::string* json);
+};
+
+struct ReduceRecord {
+  std::string did;
+  double ts;
+
+  bool fromJson(std::string* json);
+};
+
+class ReduceInvokeData {
+ public:
+  int mapIndex;
+  vector<ReduceRecord>* items = nullptr;
+
+ public:
+  ReduceInvokeData() {}
+  ReduceInvokeData(int mapIndex, vector<ReduceRecord>* items)
       : mapIndex(mapIndex), items(items) {}
 
   std::string toJson();

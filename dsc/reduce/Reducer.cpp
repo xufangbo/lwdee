@@ -7,20 +7,48 @@
 
 Reducer::Reducer() {
   auto conf = DscConfig::instance();
-  this->window = conf->window;
+  this->window = conf->window * 1000;
 
-  time_t now = Stopwatch::currentTs();
+  uint64_t now = (uint64_t)Stopwatch::currentMilliSeconds();
   currentTs = now + window - (now % window);
+
+  this->sum = 0;
+  this->count = 0;
 }
 
-void Reducer::accept(std::vector<DeviceRecord>* inputs) {
-  int now = Stopwatch::currentTs();
+void Reducer::accept(std::vector<ReduceRecord>* inputs) {
+  mut.lock();
+
+  uint64_t now = Stopwatch::currentMilliSeconds();
   auto nowTs = now + window - (now % window);
 
-  mut.lock();
+  uint64_t b_sum = 0;
+  uint64_t b_size = inputs->size();
 
   for (auto& record : *inputs) {
     this->records->push_back(record);
+    b_sum += (now - (uint64_t)record.ts);
+    // logger_info("%lldms = %lldms - %lldms", (now - (uint64_t)record.ts), now, (uint64_t)record.ts);
+  }
+
+  if (inputs->empty()) {
+    logger_info("accept reduce, no data");
+  } else {
+    uint64_t o_sum = this->sum;
+    uint64_t o_size = this->count;
+
+    this->sum = this->sum + b_sum;
+    this->count = this->count + b_size;
+
+    uint64_t t_sum = this->sum;
+    uint64_t t_size = this->count;
+
+    // logger_info("sum  : %lld = %lld + %lld", t_sum, o_sum, b_sum);
+    // logger_info("size : %lld = %lld + %lld", t_size, o_size, b_size);
+
+    logger_info("accept reduce, this delay(%lldms / %lld = %.3lfs),total(%lldms / %lld = %.3lfs)",
+                b_sum, b_size, ((int64_t)b_sum) * 1.0 / b_size / 1000,
+                t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
   if (nowTs > currentTs) {
@@ -28,24 +56,12 @@ void Reducer::accept(std::vector<DeviceRecord>* inputs) {
     this->reduce();
   }
 
-  inputs->clear();
-
   mut.unlock();
   // logger_debug("> accept");
 }
 
 void Reducer::reduce() {
   // logger_trace("< reduce");
-
-  time_t now = Stopwatch::currentTs();
-  uint64_t sum = 0;
-  for (auto& record : *records) {
-    // if (now - record.ts > 100) {
-    //   std::cout << now << " - " << record.ts << " = " <<  now - record.ts << std::endl;
-    // }
-    sum += (now - record.ts);
-  }
-  logger_info("reduce %ld records,avrage delay %fs", records->size(), sum * 1.0 / records->size());
 
   typedef std::pair<std::string, int> Pair;
   typedef std::map<std::string, int> Map;

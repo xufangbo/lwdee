@@ -28,11 +28,13 @@ void ToMap::create_dco(PartitionKafka* input) {
   this->input = input;
   this->mapSize = input->mapVoxors.size();
 
+  this->inputFilter = DscConfig::instance()->inputFilter;
+
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
     mapDocs.push_back(dco);
 
-    vector<string> lines;
+    vector<MapRecord> lines;
     mapLines->push_back(lines);
   }
 
@@ -46,8 +48,7 @@ void ToMap::accept(RdKafka::Message* message) {
 
   counter++;
   try {
-    
-    time_t now = Stopwatch::currentTs();
+    uint64_t now = Stopwatch::currentMilliSeconds();
 
     string line = string(message->len() + 1, '\0');
     memcpy((void*)line.data(), message->payload(), message->len());
@@ -55,9 +56,10 @@ void ToMap::accept(RdKafka::Message* message) {
     int index = this->nextMap();
     auto lines = this->mapLines->data() + index;
 
-    // lines->push_back(line);
-    if (counter % 100 == 0) {
-      lines->push_back(line);
+    if (!inputFilter) {
+      lines->push_back(MapRecord(line, (double)now));
+    } else if (inputFilter && counter % 100 == 0) {
+      lines->push_back(MapRecord(line, (double)now));
     }
 
     if (now != currentTs) {
@@ -82,7 +84,7 @@ int ToMap::nextMap() {
 }
 
 void ToMap::toMaps() {
-  for(int i=0;i<mapSize;i++){
+  for (int i = 0; i < mapSize; i++) {
     this->toMap(i);
   }
 }
@@ -91,8 +93,8 @@ void ToMap::toMap(int index) {
   auto dco = this->mapDocs.data() + index;
   auto lines = this->mapLines->data() + index;
 
-  auto jsonText = StringsSerializer::toJson(input->index, lines);
-  logger_info("send to map %d lines", lines->size());
+  auto jsonText = MapInvokeData(input->index, lines).toJson();
+  // logger_info("send to map %d lines", lines->size());
 
   lines->clear();
   DDOId ddoId = dco->async("map", jsonText);

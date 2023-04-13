@@ -22,7 +22,7 @@ class ToReduce {
     }
   }
   void create_dcos(PartitionMap* input);
-  void send(vector<DeviceRecord>* words);
+  void send(vector<ReduceRecord>* words);
 
  private:
   list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();

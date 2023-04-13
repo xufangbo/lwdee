@@ -98,8 +98,51 @@ void PartitionReduce::fromJson(std::string* json) {
   cJSON_Delete(root);
 }
 
+std::string MapInvokeData::toJson() {
+  cJSON* root = cJSON_CreateObject();
 
-std::string ReduceData::toJson() {
+  cJSON_AddNumberToObject(root, "kafkaIndex", kafkaIndex);
+
+  cJSON* itemsNode = cJSON_CreateArray();
+  cJSON_AddItemToObject(root, "items", itemsNode);
+  for (auto& i : *this->items) {
+    cJSON* itemNode = cJSON_CreateObject();
+    cJSON_AddStringToObject(itemNode, "line", i.line.c_str());
+    cJSON_AddNumberToObject(itemNode, "ts", i.ts);
+
+    cJSON_AddItemToArray(itemsNode, itemNode);
+  }
+
+  char* jsonText = cJSON_PrintUnformatted(root);
+  std::string rc = jsonText;
+
+  cJSON_Delete(root);
+  free(jsonText);
+  
+  return rc;
+}
+
+void MapInvokeData::fromJson(std::string* json) {
+  cJSON* root = cJSON_Parse(json->c_str());
+  kafkaIndex = cJSON_GetObjectItem(root, "kafkaIndex")->valueint;
+
+  cJSON* itemsNode = cJSON_GetObjectItem(root, "items");
+  int size = cJSON_GetArraySize(itemsNode);
+
+  this->items->resize(size);
+  for (int i = 0; i < size; i++) {
+    auto itemNode = cJSON_GetArrayItem(itemsNode, i);
+    MapRecord& record = this->items->at(i);
+
+    record.line = cJSON_GetObjectItem(itemNode, "line")->valuestring;
+    record.ts = cJSON_GetObjectItem(itemNode, "ts")->valuedouble;
+  }
+
+  cJSON_Delete(root);
+}
+
+
+std::string ReduceInvokeData::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "mapIndex", mapIndex);
@@ -123,7 +166,7 @@ std::string ReduceData::toJson() {
   return rc;
 }
 
-void ReduceData::fromJson(std::string* json) {
+void ReduceInvokeData::fromJson(std::string* json) {
   cJSON* root = cJSON_Parse(json->c_str());
   mapIndex = cJSON_GetObjectItem(root, "mapIndex")->valueint;
 
@@ -133,10 +176,10 @@ void ReduceData::fromJson(std::string* json) {
   this->items->resize(size);
   for (int i = 0; i < size; i++) {
     auto itemNode = cJSON_GetArrayItem(itemsNode, i);
-    DeviceRecord& record = this->items->at(i);
+    ReduceRecord& record = this->items->at(i);
 
     record.did = cJSON_GetObjectItem(itemNode, "did")->valuestring;
-    record.ts = cJSON_GetObjectItem(itemNode, "ts")->valueint;
+    record.ts = cJSON_GetObjectItem(itemNode, "ts")->valuedouble;
   }
 
   cJSON_Delete(root);
@@ -179,7 +222,7 @@ int StringsSerializer::fromJson(std::string& json, vector<string>* items) {
   return index;
 }
 
-bool DeviceRecord::fromJson(std::string* json) {
+bool ReduceRecord::fromJson(std::string* json) {
   cJSON* root = cJSON_Parse(json->c_str());
   if (root == NULL) {
     return false;
@@ -191,11 +234,11 @@ bool DeviceRecord::fromJson(std::string* json) {
   }
   this->did = node_did->valuestring;
 
-  auto ts_did = cJSON_GetObjectItem(root, "ts");
-  if (ts_did == NULL) {
-    return false;
-  }
-  this->ts = ts_did->valueint;  // 日志数据时间戳不对
+  // auto ts_did = cJSON_GetObjectItem(root, "ts");
+  // if (ts_did == NULL) {
+  //   return false;
+  // }
+  // this->ts = ts_did->valueint;  // 日志数据时间戳不对
 
   cJSON_Delete(root);
   

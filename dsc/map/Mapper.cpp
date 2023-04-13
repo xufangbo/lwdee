@@ -10,11 +10,12 @@
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
-void Mapper::map(std::vector<std::string>* lines, vector<DeviceRecord>* words) {
-  for (std::string& line : *lines) {
-    DeviceRecord word;
-    if (word.fromJson(&line)) {
-      words->push_back(word);
+void Mapper::map(std::vector<MapRecord>* mapRecords, vector<ReduceRecord>* reduceRecords) {
+  for (MapRecord& m : *mapRecords) {
+    ReduceRecord r;
+    if (r.fromJson(&m.line)) {
+      r.ts = m.ts;
+      reduceRecords->push_back(r);
       // logger_trace("did:%s,ts:%d", word.did.c_str(), word.ts);
     }
   }

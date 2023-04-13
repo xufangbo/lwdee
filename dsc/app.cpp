@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "DscDcoFactory.h"
 #include "core/DscConfig.hpp"
+#include "core/Stopwatch.h"
 #include "core/UhconnConfig.h"
 #include "core/UhconnVoxorFactory.h"
 #include "core/UhconnWorkNode.h"
@@ -21,7 +22,18 @@ std::string configFile();
 int main(int argc, char* argv[]) {
   init(argc, argv);
 
-  // jsonTest();
+  // auto now = Stopwatch::currentMilliSeconds();
+  // printf("ms: %lld\n", now);
+  // int window = 20 * 1000;
+  // auto nowTs = now + window - (now % window);
+  // printf("nowTs: %lld\n", nowTs);
+
+  // double d = now;
+  // printf("double: %lf\n", d);
+  // uint64_t i = d;
+  // printf("uint64_t: %ld\n", i);
+
+  // // jsonTest();
   // return 0;
 
   auto localNode = UhconnVoxorFactory::getInstance().getLocalWorkNode();

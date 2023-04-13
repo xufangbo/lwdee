@@ -12,5 +12,5 @@ typedef shared_ptr<Strings> Strings_ref;
 
 class Mapper {
  public:
-  static void map(std::vector<std::string>* lines, vector<DeviceRecord>* words);
+  static void map(std::vector<MapRecord>* lines, vector<ReduceRecord>* words);
 };

@@ -36,6 +36,7 @@ void DscConfig::readConfig() {
   fclose(fp);
 
   cJSON* node = cJSON_Parse(json.c_str());
+  outputFile = cJSON_GetObjectItem(node, "outputFile")->valuestring;
   inputFile = cJSON_GetObjectItem(node, "inputFile")->valuestring;
   name = cJSON_GetObjectItem(node, "name")->valuestring;
   brokers = cJSON_GetObjectItem(node, "brokers")->valuestring;
@@ -43,6 +44,7 @@ void DscConfig::readConfig() {
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
   outTopic = cJSON_GetObjectItem(node, "outTopic")->valuestring;
   window = cJSON_GetObjectItem(node, "window")->valueint;
+  inputFilter = cJSON_GetObjectItem(node, "inputFilter")->valueint;
   splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
   splitNums2 = cJSON_GetObjectItem(node, "splitNums2")->valueint;
 

@@ -27,18 +27,21 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    logger_debug("< accept reduce ");
+    // logger_debug("< accept reduce ");
     Stopwatch sw;
 
-    auto records = std::make_shared<std::vector<DeviceRecord>>();
+    auto records = std::make_shared<std::vector<ReduceRecord>>();
 
-    ReduceData reduceData(0, records.get());
-    reduceData.fromJson(&a);
+    ReduceInvokeData reduceInvokeData(0, records.get());
+    reduceInvokeData.fromJson(&a);
 
     reducer.accept(records.get());
 
-    logger_debug("< accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", reduceData.items->size(), reduceData.mapIndex, input.index, sw.stop());
+    logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");
+
+    records->clear();
+
     LinuxMatrix::print();
 
     return "success";

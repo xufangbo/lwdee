@@ -17,12 +17,12 @@ void ToReduce::create_dcos(PartitionMap* input) {
   releaseThread.detach();
 }
 
-void ToReduce::send(vector<DeviceRecord>* words) {
+void ToReduce::send(vector<ReduceRecord>* words) {
   int split = reduceDcos.size();
 
-  auto reduceWords = std::make_shared<vector<vector<DeviceRecord>>>(split);
+  auto reduceWords = std::make_shared<vector<vector<ReduceRecord>>>(split);
   for (int i = 0; i < words->size(); i++) {
-    DeviceRecord& word = words->at(i);
+    ReduceRecord& word = words->at(i);
     int x = _hash(word.did) % split;
     reduceWords->at(x).push_back(word);
   }
@@ -30,9 +30,9 @@ void ToReduce::send(vector<DeviceRecord>* words) {
   for (int i = 0; i < split; i++) {
     DCO* dco = reduceDcos.data() + i;
 
-    ReduceData reduceData(input->index, &reduceWords->at(i));
+    ReduceInvokeData ReduceInvokeData(input->index, &reduceWords->at(i));
 
-    auto jsonText = reduceData.toJson();
+    auto jsonText = ReduceInvokeData.toJson();
 
     auto ddoId = dco->async("reduce", jsonText);
 

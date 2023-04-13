@@ -10,11 +10,13 @@ class DscConfig {
  public:
   std::string name;
   std::string inputFile;
+  std::string outputFile;
   std::string brokers;
   std::string group;
   std::string topic;
   std::string outTopic;
   int window = 10;
+  bool inputFilter = 1;
   std::vector<int> partitions;
   int splitNums1 = 0;
   int splitNums2 = 0;

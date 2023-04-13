@@ -16,11 +16,12 @@ using namespace std;
 
 class ToMap {
  private:
+  bool inputFilter = true;
   int currentMap = -1;
   int mapSize = 0;
   PartitionKafka* input;
   vector<DCO> mapDocs;
-  vector<vector<string>>* mapLines = new vector<vector<string>>();
+  vector<vector<MapRecord>>* mapLines = new vector<vector<MapRecord>>();
 
  public:
   ToMap();
@@ -29,7 +30,7 @@ class ToMap {
   void create_dco(PartitionKafka* input);
 
  private:
-  time_t currentTs;
+  uint64_t currentTs;
   std::mutex mut;
   int nextMap();
   void toMaps();

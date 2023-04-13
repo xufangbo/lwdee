@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <sys/time.h>
 
 class Stopwatch {
@@ -12,6 +13,6 @@ class Stopwatch {
   }
   void start();
   double stop();
-  static long currentMilliSeconds();
-  static time_t currentTs();
+  static uint64_t currentMilliSeconds();
+  // static time_t currentTs();
 };

@@ -21,16 +21,17 @@ double Stopwatch::stop() {
   return eclipse * 1.0 / 1000;
 }
 
-long Stopwatch::currentMilliSeconds() {
+uint64_t Stopwatch::currentMilliSeconds() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
-time_t Stopwatch::currentTs() {
-  // time_t t = time(NULL);
-  // return t;
+// long Stopwatch::currentTs() {
 
-  std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-  time_t timestamp = std::chrono::system_clock::to_time_t(now);
-}
+//   time_t t = time(NULL);
+//   return t;
+
+//   // std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+//   // time_t timestamp = std::chrono::system_clock::to_time_t(now);
+// }
