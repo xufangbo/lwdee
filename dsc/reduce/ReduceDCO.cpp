@@ -36,7 +36,7 @@ std::string ReduceDCO::reduce(std::string a) {
     reduceInvokeData.fromJson(&a);
 
     LinuxMatrix::stream.reduce_accept += records->size();
-    reducer.accept(records.get());
+    reducer.accept(records.get(),&input);
 
     // logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");

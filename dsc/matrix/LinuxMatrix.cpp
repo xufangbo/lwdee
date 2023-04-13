@@ -32,7 +32,7 @@ void matrix() {
 void print_task() {
   while (true) {
     LinuxMatrix::print();
-    sleep(1);
+    sleep(2);
   }
 }
 
@@ -47,9 +47,8 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
   LinuxMatrix::ram = ram;
 }
 
+bool color_change = true;
 void LinuxMatrix::print() {
-  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
-
   int d1 = stream.kafka_dco;
   int d2 = stream.kafka_send;
   int d3 = stream.map_dco;
@@ -57,7 +56,14 @@ void LinuxMatrix::print() {
   uint64_t d5 = stream.reduce_dco;
   uint64_t d6 = stream.reduce_accept;
 
-  logger_info("kafkas: %d,sends: %s,maps: %lld,accepts: %lld,reducs: %d,accept: %lld", d1, d2, d3, d4, d5, d6);
+  if (color_change) {
+    logger_debug("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
+    logger_debug("kafkas: %d,sends: %d,maps: %d,accepts: %lld,reducs: %lld,accept: %lld", d1, d2, d3, d4, d5, d6);
+  } else {
+    logger_info("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
+    logger_info("kafkas: %d,sends: %d,maps: %d,accepts: %lld,reducs: %lld,accept: %lld", d1, d2, d3, d4, d5, d6);
+  }
+  color_change = !color_change;
 }
 
 void LinuxMatrix::start() {

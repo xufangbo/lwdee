@@ -17,6 +17,7 @@ class Reducer {
   uint64_t count;
 
  private:
+  PartitionReduce *input;
   int window = 0;  // 秒为单位
   time_t currentTs = 0;
   std::shared_ptr<Records> records = std::make_shared<Records>();
@@ -27,5 +28,5 @@ class Reducer {
 
  public:
   Reducer();
-  void accept(std::vector<ReduceRecord>* records);
+  void accept(std::vector<ReduceRecord>* records,PartitionReduce *input);
 };

@@ -16,22 +16,23 @@ Reducer::Reducer() {
   this->count = 0;
 }
 
-void Reducer::accept(std::vector<ReduceRecord>* inputs) {
+void Reducer::accept(std::vector<ReduceRecord>* records, PartitionReduce* input) {
+  this->input = input;
   mut.lock();
 
   uint64_t now = Stopwatch::currentMilliSeconds();
   auto nowTs = now + window - (now % window);
 
   uint64_t b_sum = 0;
-  uint64_t b_size = inputs->size();
+  uint64_t b_size = records->size();
 
-  for (auto& record : *inputs) {
+  for (auto& record : *records) {
     this->records->push_back(record);
     b_sum += (now - (uint64_t)record.ts);
     // logger_info("%lldms = %lldms - %lldms", (now - (uint64_t)record.ts), now, (uint64_t)record.ts);
   }
 
-  if (inputs->empty()) {
+  if (records->empty()) {
     // logger_info("accept reduce, no data");
   } else {
     // uint64_t o_sum = this->sum;
@@ -55,7 +56,7 @@ void Reducer::accept(std::vector<ReduceRecord>* inputs) {
 
     uint64_t t_sum = this->sum;
     uint64_t t_size = this->count;
-    logger_info("reduce total delay (%lldms / %lld = %.3lfs)", t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
+    logger_trace("reduce total delay (%lldms / %lld = %.3lfs)", t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
   mut.unlock();
@@ -80,6 +81,8 @@ void Reducer::reduce() {
     }
   }
 
+  logger_trace("reduce(partiton index %d) %lld -> %lld", input->index, records->size(), map->size());
+
   int index = 0;
   for (auto& it : *map) {
     if (++index > 10) {
@@ -96,5 +99,5 @@ void Reducer::reduce() {
   map.reset();
   records->clear();
 
-  logger_trace("> reduce");
+  // logger_trace("> reduce");
 }
