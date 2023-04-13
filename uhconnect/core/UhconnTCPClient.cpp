@@ -91,12 +91,25 @@ bool UhconnTCPClient::Send(const string& data) {
         return false;
     }
     
-    int ret = send(sock, data.c_str(), data.length(), 0);
-    if (ret == -1) {
-        cerr << "Send failed: " << strerror(errno) << endl;
-        return false;
-    }
-    
+    // int ret = send(sock, data.c_str(), data.length(), 0);
+    // if (ret == -1) {
+    //     cerr << "Send failed: " << strerror(errno) << endl;
+    //     return false;
+    // }
+	int total_bytes = 0;
+	const char* pdata = data.c_str();
+	int slen = data.length();
+    while(total_bytes < slen) {
+        //ret = router->tcpDataServer.Send((unsigned char*)block->data + total_bytes, block->len-total_bytes, fd);
+        int ret = send(sock, (unsigned char*)pdata + total_bytes, slen-total_bytes, 0);
+        if(ret < 0) {
+			cerr << "Send failed: " << strerror(errno) << endl;
+			return false;
+        }
+        else {
+            total_bytes += ret;
+        }
+    }    
     return true;
 }
 // string UhconnTCPClient::receive(int size)

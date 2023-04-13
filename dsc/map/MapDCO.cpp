@@ -65,6 +65,5 @@ std::string MapDCO::map(std::string a) {
 MapDCO::MapDCO() {
   getFunctionTable()["start"] = (PTR)&MapDCO::start;
   getFunctionTable()["map"] = (PTR)&MapDCO::map;
-  name = "MapDCO";
 }
 MapDCO::~MapDCO() {}

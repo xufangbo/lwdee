@@ -11,13 +11,14 @@ class UhconnProtocol
 public:
     UhconnProtocol();
     ~UhconnProtocol();
-    static std::vector<std::string> parseMsgBuff(char* buf, int len);
-    static std::vector<std::string> parseDataBuff(char* buf, int len);
-    static const std::string left_enc; 
-    static const std::string right_enc; 
+    std::vector<std::string> parseMsgBuff(char* buf, int len);
+    std::vector<std::string> parseDataBuff(char* buf, int len);
+    static const std::string left_enc;
+    static const std::string right_enc;
 private:
-    static std::string lastMsgStr;
-    static std::string lastDataStr;
+    // std::string lastMsgStr;
+    // std::string lastDataStr;
+    std::string buffer;
 };
 
 #endif

@@ -21,12 +21,12 @@ UhconnDdo::~UhconnDdo()
 }
 
 #ifdef DB_BLOCK_WITHOUT_COPY
-int UhconnDdo::storeBlock(DdoBlockData& data) {
-    DdoBlockData * ddo;
-    ddo = UhconnSimpleDB::getInstance().createBlock(itsRef().itsId(),data.len,0);
-    memcpy(ddo->data,data.data,data.len);
-    return 0;
-    //return UhconnSimpleDB::getInstance().storeBlock(df.itsId(), data);
+int UhconnDdo::storeBlock(DdoBlockData&& data) {
+    // DdoBlockData * ddo;
+    // ddo = UhconnSimpleDB::getInstance().createBlock(itsRef().itsId(),data.len,0);
+    // memcpy(ddo->data,data.data,data.len);
+    // return 0;
+    return UhconnSimpleDB::getInstance().storeBlock(df.itsId(), std::move(data));
 }                         
 #else
 
@@ -45,8 +45,8 @@ void* UhconnDdo::readData(uint64_t* len_) {
 }
 
 
-int UhconnDdo::storeBlock(DdoBlockData& data) {
-    return UhconnSimpleDB::getInstance().storeBlock(df.itsId(), data);
+int UhconnDdo::storeBlock(DdoBlockData&& data) {
+    return UhconnSimpleDB::getInstance().storeBlock(df.itsId(), std::move(data));
 }
 #endif //DB_BLOCK_WITHOUT_COPY
 

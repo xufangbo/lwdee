@@ -57,6 +57,6 @@ UhconnDdo* UhconnApi::makeLocalDdo(void* data, uint32_t len) {
     test_data.type = 22;
     test_data.len = len;
     test_data.data = data; 
-    ddo_obj->storeBlock(test_data);
+    ddo_obj->storeBlock(std::move(test_data));
     return ddo_obj;
 }

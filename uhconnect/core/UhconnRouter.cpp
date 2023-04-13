@@ -18,10 +18,11 @@ UhconnTCPServer UhconnRouter::tcpDataServer;
 int receive_block(int fd,  DdoDataId &ddoId);
 int send_block(DdoBlockData *block, int fd, uint32_t &total_bytes);
 
+
 int msgRxHandler(void* p1, void* p2, int fd, int len){
     UhconnRouter *router = (UhconnRouter *)p1;
-
-    std::vector<std::string> messages = UhconnProtocol::parseMsgBuff((char *)p2, len);
+    UhconnProtocol parser;
+    std::vector<std::string> messages = parser.parseMsgBuff((char *)p2, len);
     for(int i=0;i<messages.size();i++)
     {
         UhconnMsgParser parser(messages[i]);
@@ -44,7 +45,8 @@ int msgRxHandler(void* p1, void* p2, int fd, int len){
 int dataRxHandler(void* p1, void* p2, int fd, int len){
     UhconnRouter *router = (UhconnRouter *)p1;
     //std::string rsStr((char *)p2);
-    std::vector<std::string> messages = UhconnProtocol::parseMsgBuff((char *)p2, len);
+    UhconnProtocol parser;
+    std::vector<std::string> messages = parser.parseMsgBuff((char *)p2, len);
     // int const txLen = ROUTER_MAX_DATA_PKT_LEN;
     for(int i=0;i<messages.size();i++){
         std::stringstream ss(messages[i]);
@@ -144,7 +146,8 @@ int send_block(DdoBlockData *block, int fd, uint32_t &total_bytes){
 
 int dataRxHandler2(void* p1, void* p2, int fd, int len){
     UhconnRouter *router = (UhconnRouter *)p1;
-    std::vector<std::string> messages = UhconnProtocol::parseMsgBuff((char *)p2, len);
+    UhconnProtocol parser;
+    std::vector<std::string> messages = parser.parseMsgBuff((char *)p2, len);
     int ret=0;
     for(int i=0;i<messages.size();i++){
         std::stringstream ss(messages[i]);

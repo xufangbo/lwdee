@@ -14,6 +14,8 @@ public:
     ~UhconnConfig();
     int loadConf(std::string file, std::string name);
     int getNodeId();
+    int getParallel();
+    int setParallelAmount(int amount);
     int getMsgPort();
     int getDataPort();
     std::string getIpAddr();
@@ -31,6 +33,7 @@ private:
     boost::json::object jconf;
     int confNodeAmount;
     int nodeAmount;
+    int parallelAmount;
     bool isConfigured;
 
 };

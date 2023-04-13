@@ -173,10 +173,10 @@ int UhconnSimpleDB::deleteBlock(DdoDataId id){
         return -1;
     }
     DDO_LOCK;
-    if(it->second.data) {//if(!it->second.isCopyConstruct){
-        free(it->second.data);
-        it->second.data = nullptr;
-    }
+    // if(it->second.data) {//if(!it->second.isCopyConstruct){
+    //     free(it->second.data);
+    //     it->second.data = nullptr;
+    // }
     localDdo.erase(it);
     DDO_UNLOCK;
     return 0;

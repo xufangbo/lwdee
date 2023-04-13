@@ -54,7 +54,6 @@ std::string ReduceDCO::reduce(std::string a) {
 ReduceDCO::ReduceDCO() {
   getFunctionTable()["reduce"] = (PTR)&ReduceDCO::reduce;
   getFunctionTable()["start"] = (PTR)&ReduceDCO::start;
-  name = "ReduceDCO";
 }
 ReduceDCO::~ReduceDCO() {
 }

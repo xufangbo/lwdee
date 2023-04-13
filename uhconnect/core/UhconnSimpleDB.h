@@ -80,6 +80,7 @@ typedef struct DdoBlockData_t
     ~DdoBlockData_t() {
         if( data && isCopyConstruct) {
             free(data);
+            data = nullptr;
         }
     };
     int type;

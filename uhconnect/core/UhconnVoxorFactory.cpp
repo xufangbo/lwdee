@@ -3,7 +3,6 @@
 #include "UhconnWorkNode.h"
 #include "api/UhconnDco.h"
 #include "DcoFactory.h"
-#include <atomic>
 
 UhconnVoxorFactory::UhconnVoxorFactory()
 {
@@ -31,9 +30,9 @@ void UhconnVoxorFactory::setupLocalWorkEnvironment(DcoFactory* df, int sn) {
 
 
 UhconnVoxor* UhconnVoxorFactory::createVoxor(UhconnDco* dco) {
-    static std::atomic<int> addr_count(0);
+    static std::atomic<int> addr_count{0};
     //@todo voxor加入到本地worknode
-    UhconnVoxor* v = new UhconnVoxor(getLocalWorkNode(), dco, addr_count++);
+    UhconnVoxor* v = new UhconnVoxor(getLocalWorkNode(), dco, addr_count.fetch_add(1));
     #ifdef DEBUGINFO
     std::cout<<"createVoxor:"<<v->getAddr()<<std::endl;
     #endif

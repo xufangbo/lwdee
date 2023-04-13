@@ -34,7 +34,7 @@ public:
     }
 
     //以下接口将被删除
-    int storeBlock(DdoBlockData& data);
+    int storeBlock(DdoBlockData&& data);
     int loadBlock(DdoBlockData& data);
     int deleteBlock();
     DdoBlockData* getBlock();

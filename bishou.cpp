@@ -102,11 +102,11 @@ int main(int argv, char** argc) {
       ts[i] = thread(stop_task, nodes[i], containers[i]);
     }
   } else if (par == "start") {
-    for (int i = (len - 1); i >= 0; i--) {
-      if (i == 0) {
+    for (int i = len; i > 0; i--) {
+      if (i == 1) {
         sleep(1);
       }
-      ts[i] = thread(start_task, nodes[i], containers[i]);
+      ts[i-1] = thread(start_task, nodes[i-1], containers[i-1]);
     }
     sleep(0);
     ts[0] = thread(start_task, nodes[0], containers[0]);

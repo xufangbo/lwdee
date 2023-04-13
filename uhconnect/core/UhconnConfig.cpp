@@ -9,6 +9,7 @@ UhconnConfig::UhconnConfig()
     isConfigured = false;
     confNodeAmount = 0;
     nodeAmount =0;
+    parallelAmount = 0;
 }
 
 UhconnConfig::~UhconnConfig()
@@ -162,4 +163,16 @@ int UhconnConfig::setNodeAmount(int amount){
   nodeAmount = amount;
   // std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
   return 0;
+}
+
+int UhconnConfig::setParallelAmount(int amount){
+  parallelAmount = amount;
+  // std::cout<<"setParallelAmount to "<<parallelAmount<<std::endl;
+  return 0;
+}
+
+int UhconnConfig::getParallel(){
+    if(parallelAmount <= 0)
+        return 1;
+    return parallelAmount;
 }

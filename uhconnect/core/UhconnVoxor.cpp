@@ -63,7 +63,7 @@ void UhconnVoxor::run(void) {
                             d.type = 2;
                             d.len = ret.size();
                             d.data = (void*)ret.c_str();
-                            ddo->storeBlock(d);
+                            ddo->storeBlock(std::move(d));
                         }
                         default:
                         

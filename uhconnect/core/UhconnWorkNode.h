@@ -33,11 +33,12 @@ public:
     int itId(void) {return sn;};
     void setSysDco(UhconnSysDco* d) {system_dco = d;};
 
-    co_chan<UhconnMessage>* addToWaitingTable(UhconnMessage& in_msg);
+    std::shared_ptr<co_chan<UhconnMessage>> addToWaitingTable(UhconnMessage& in_msg);
     bool removeFromWaitingTable(UhconnMessage& msg);
-    co_chan<UhconnMessage>* getFromWaitingTable(const UhconnMessage& msg);
+    std::shared_ptr<co_chan<UhconnMessage>> getFromWaitingTable(const UhconnMessage& msg);
 private:
     int sn;     //从1开始
+    std::mutex voxor_map_mutex;
     std::map<std::string, UhconnVoxor&> voxor_map;
     UhconnSysDco* system_dco;
     UhconnScheduler scheduler;
@@ -47,7 +48,7 @@ private:
     bool isWaitResponse(UhconnMessage&);
     bool isMsgInWaitingTable(UhconnMessage&);
     std::mutex waiting_table_mutex;
-    std::unordered_map<size_t, co_chan<UhconnMessage>*> waiting_table;
+    std::unordered_map<size_t, std::shared_ptr<co_chan<UhconnMessage>>> waiting_table;
 };
 
 #endif
