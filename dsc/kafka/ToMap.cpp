@@ -8,6 +8,7 @@
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
+#include "matrix/LinuxMatrix.h"
 
 ToMap::ToMap() {
 }
@@ -57,8 +58,10 @@ void ToMap::accept(RdKafka::Message* message) {
     auto lines = this->mapLines->data() + index;
 
     if (!inputFilter) {
+      LinuxMatrix::stream.kafka_send ++;
       lines->push_back(MapRecord(line, (double)now));
     } else if (inputFilter && counter % 100 == 0) {
+      LinuxMatrix::stream.kafka_send ++;
       lines->push_back(MapRecord(line, (double)now));
     }
 

@@ -21,7 +21,7 @@ std::string MapDCO::map(std::string a) {
   try {
     logger_info("< accept map ");
     Stopwatch sw;
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     // logger_info("< invokded map %s", a.c_str());
 
     PartitionStep1 input;
@@ -29,7 +29,7 @@ std::string MapDCO::map(std::string a) {
 
     auto output = Step1Task().run(&input);
 
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     logger_info("> accept map ,partition : %d, ddoId: %ld, fileName: %s,eclipse %lf", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str(), sw.stop());
 
     return output.toJson();

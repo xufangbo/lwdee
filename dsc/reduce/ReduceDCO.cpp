@@ -11,7 +11,7 @@ std::string ReduceDCO::start(std::string a) {
     logger_info("reduce start");
 
     Stopwatch sw;
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     input.fromJson(&a);
     // LinuxMatrix::print();
 
@@ -35,14 +35,16 @@ std::string ReduceDCO::reduce(std::string a) {
     ReduceInvokeData reduceInvokeData(0, records.get());
     reduceInvokeData.fromJson(&a);
 
+    LinuxMatrix::stream.reduce_accept += records->size();
     reducer.accept(records.get());
 
-    logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
+    // logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");
 
     records->clear();
 
-    LinuxMatrix::print();
+    LinuxMatrix::stream.reduce_dco++;
+    // LinuxMatrix::print();
 
     return "success";
   } catch (Exception& ex) {

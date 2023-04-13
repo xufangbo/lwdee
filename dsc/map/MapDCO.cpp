@@ -23,7 +23,8 @@ std::string MapDCO::start(std::string a) {
     toReduce.create_dcos(&input);
 
     logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index, sw.stop());
-    LinuxMatrix::print();
+    LinuxMatrix::stream.map_dco++;
+    // LinuxMatrix::print();
 
     return "succeed!";
 
@@ -41,17 +42,18 @@ std::string MapDCO::map(std::string a) {
     // logger_trace("< accept map");
     Stopwatch sw;
     auto lines = std::make_shared<vector<MapRecord>>();
-    MapInvokeData mapInvokeDta(0,lines.get());
+    MapInvokeData mapInvokeDta(0, lines.get());
     mapInvokeDta.fromJson(&a);
 
-    LinuxMatrix::print();
+    LinuxMatrix::stream.map_accept += lines->size();
+    // LinuxMatrix::print();
 
     auto words = std::make_shared<vector<ReduceRecord>>();
     Mapper::map(lines.get(), words.get());
 
     toReduce.send(words.get());
 
-    logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), mapInvokeDta.kafkaIndex, input.index, sw.stop());
+    // logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), mapInvokeDta.kafkaIndex, input.index, sw.stop());
     return "succeed";
 
   } catch (Exception& ex) {

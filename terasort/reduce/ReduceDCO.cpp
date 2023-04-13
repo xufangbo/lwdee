@@ -11,14 +11,14 @@ std::string ReduceDCO::reduce(std::string a) {
   try {
     logger_info("< accept reduce ");
     Stopwatch sw;
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     PartitionStep2 input;
     input.fromJson(&a);
 
     Step2Task().run(&input);
 
     // logger_trace(a.c_str());
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     logger_info("> accept reduct ,partition : %d,eclipse %lf", input.index, sw.stop());
 
     return "success";

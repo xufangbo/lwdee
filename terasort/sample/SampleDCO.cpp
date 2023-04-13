@@ -16,7 +16,7 @@ std::string SampleDCO::sample(std::string a) {
   try {
     logger_info("< accept sample ");
     Stopwatch sw;
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     // logger_info("< invokded map %s", a.c_str());
 
     PartitionStep0 input;
@@ -24,7 +24,7 @@ std::string SampleDCO::sample(std::string a) {
 
     MinAndMax output = Step0Task().run(&input);
 
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     logger_info("> accept sample ,partition : %d, ddoId: %ld, fileName: %s,eclipse %lf", input.index, input.outputDDO.ddoId.itsId(), input.fileName.c_str(), sw.stop());
 
     return std::to_string(output.first.left8()) + "-" + std::to_string(output.second.left8());

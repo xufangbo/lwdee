@@ -16,7 +16,7 @@
 
 void Driver::startJob() {
   logger_info("> job");
-  LinuxMatrix::print();
+  // LinuxMatrix::print();
 
   this->inputFile = TerasortConfig::instance()->inputFile;
   this->outputFile = TerasortConfig::instance()->outputFile;
@@ -33,7 +33,7 @@ void Driver::startJob() {
     this->mapToReduce();
     this->reduce();
 
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     logger_info("< job,eclipse %lf s", sw.stop());
 
     logger_info("finished");

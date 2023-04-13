@@ -9,6 +9,7 @@
 #include "core/log.hpp"
 #include "cpu.h"
 
+std::mutex LinuxMatrix::mut;
 bool LinuxMatrix::is_running = false;
 double LinuxMatrix::cpu_bottom = 0;
 double LinuxMatrix::cpu_top = 0;
@@ -16,6 +17,7 @@ unsigned long LinuxMatrix::ram_bottom = 0;
 unsigned long LinuxMatrix::ram_top = 0;
 double LinuxMatrix::cpu = 0;
 RamInfo LinuxMatrix::ram;
+StreamMatrix LinuxMatrix::stream;
 
 void matrix() {
   while (true) {
@@ -43,20 +45,31 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
 }
 
 void LinuxMatrix::print() {
-  // logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom,cpu, ram_bottom, ram_top, ram_top - ram_bottom,ram.available, (ram.total - ram.available), ram.free);
+  
+  logger_warn("CPU(%.2f%%-%.2f%%=%.2f%%,),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom,cpu, ram_bottom, ram_top, ram_top - ram_bottom,ram.available, (ram.total - ram.available), ram.free);
+
+  int d1 = stream.kafka_dco;
+  int d2 = stream.kafka_send;
+  int d3 = stream.map_dco;
+  uint64_t d4 = stream.map_accept;
+  uint64_t d5 = stream.reduce_dco;
+  uint64_t d6 = stream.reduce_accept;
+
+  logger_info("kafkas: %d,sends: %s,maps: %lld,accepts: %lld,reducs: %d,accept: %lld", d1, d2, d3, d4, d5, d6);
 }
 
 void LinuxMatrix::start() {
+  mut.lock();
   if (is_running) {
     return;
   }
+  is_running = true;
+  mut.unlock();
 
   cpu_bottom = cpu_top = cpu_usage();
   ram_bottom = ram_top = ram_info().used;
 
   auto t1 = new std::thread(matrix);
-
-  is_running = true;
 }
 
 double LinuxMatrix::cpu_usage() {

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <atomic>
+#include <iostream>
+#include <mutex>
+
 typedef struct {
   /**
    * 总内存M
@@ -26,8 +30,28 @@ typedef struct {
   unsigned long available;
 } RamInfo;
 
+class StreamMatrix {
+ public:
+  StreamMatrix() {
+    kafka_dco = 0;
+    map_dco = 0;
+    reduce_dco = 0;
+    kafka_send = 0;
+    map_accept = 0;
+    reduce_accept = 0;
+  }
+  std::atomic<int> kafka_dco;
+  std::atomic<int> map_dco;
+  std::atomic<int> reduce_dco;
+
+  std::atomic<uint64_t> kafka_send;
+  std::atomic<uint64_t> map_accept;
+  std::atomic<uint64_t> reduce_accept;
+};
+
 class LinuxMatrix {
  private:
+  static std::mutex mut;
   static bool is_running;
   static double cpu_bottom;
   static double cpu_top;
@@ -36,6 +60,9 @@ class LinuxMatrix {
 
   static double cpu;
   static RamInfo ram;
+
+ public:
+  static StreamMatrix stream;
 
  private:
   static void running();

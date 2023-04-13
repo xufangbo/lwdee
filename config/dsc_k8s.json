@@ -10,8 +10,8 @@
     "window": 20,
     "inputFilter": 1,
     "partitions": [0,1,2],
-    "splitNums1": 3,
-    "splitNums2": 2,
+    "splitNums1": 12,
+    "splitNums2": 3,
     "workers" :[
         { "name": "k8s-master", "ip": "10.180.98.130" },
         { "name": "k8s-node01", "ip": "10.180.98.131" },

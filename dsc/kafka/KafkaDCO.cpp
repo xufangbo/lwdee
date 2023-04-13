@@ -26,8 +26,9 @@ std::string KafkaDCO::start(std::string a) {
     JobManager::add(consumer);
     consumer->start(&input);
 
-    LinuxMatrix::print();
-    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index,  sw.stop());
+    LinuxMatrix::stream.kafka_dco++;
+    // LinuxMatrix::print();
+    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
     return "succeed!";
 

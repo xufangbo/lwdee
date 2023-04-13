@@ -32,28 +32,30 @@ void Reducer::accept(std::vector<ReduceRecord>* inputs) {
   }
 
   if (inputs->empty()) {
-    logger_info("accept reduce, no data");
+    // logger_info("accept reduce, no data");
   } else {
-    uint64_t o_sum = this->sum;
-    uint64_t o_size = this->count;
+    // uint64_t o_sum = this->sum;
+    // uint64_t o_size = this->count;
 
     this->sum = this->sum + b_sum;
     this->count = this->count + b_size;
 
-    uint64_t t_sum = this->sum;
-    uint64_t t_size = this->count;
+    // uint64_t t_sum = this->sum;
+    // uint64_t t_size = this->count;
 
     // logger_info("sum  : %lld = %lld + %lld", t_sum, o_sum, b_sum);
     // logger_info("size : %lld = %lld + %lld", t_size, o_size, b_size);
 
-    logger_info("accept reduce, this delay(%lldms / %lld = %.3lfs),total(%lldms / %lld = %.3lfs)",
-                b_sum, b_size, ((int64_t)b_sum) * 1.0 / b_size / 1000,
-                t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
+    // logger_info("accept reduce, this delay(%lldms / %lld = %.3lfs),total(%lldms / %lld = %.3lfs)",  b_sum, b_size, ((int64_t)b_sum) * 1.0 / b_size / 1000, t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
   if (nowTs > currentTs) {
     currentTs = nowTs;
     this->reduce();
+
+    uint64_t t_sum = this->sum;
+    uint64_t t_size = this->count;
+    logger_info("reduce total delay (%lldms / %lld = %.3lfs)", t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
   mut.unlock();

@@ -15,7 +15,7 @@
 void Driver::startJob() {
   try {
     logger_info("> job");
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
 
     this->conf = DscConfig::instance();
 
@@ -32,7 +32,7 @@ void Driver::startJob() {
     this->startKafka();
     // this->mapToReduce();
 
-    LinuxMatrix::print();
+    // LinuxMatrix::print();
     logger_info("< job,eclipse %lf s", sw.stop());
 
     logger_info("finished");
