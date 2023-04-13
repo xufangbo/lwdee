@@ -16,7 +16,7 @@ class DscConfig {
   std::string topic;
   std::string outTopic;
   int window = 10;
-  bool inputFilter = 1;
+  int filterCondon = 100;
   std::vector<int> partitions;
   int splitNums1 = 0;
   int splitNums2 = 0;

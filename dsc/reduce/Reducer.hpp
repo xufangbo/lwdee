@@ -24,7 +24,7 @@ class Reducer {
   std::shared_ptr<Records> records = std::make_shared<Records>();
 
  private:
-  void reduce();
+  int reduce();
   std::mutex mut;
 
  public:

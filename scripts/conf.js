@@ -86,7 +86,7 @@ for (var i in routerInfos) {
 
 
 function docker_run(router){
-    deployScripts.push(`ssh root@${router.worker} "docker run --name dsc${router.nid}  -e nodename=node${router.nid} --net=host ` +
+    deployScripts.push(`ssh root@${router.worker} "docker run --name dsc  -e nodename=node${router.nid} --net=host ` +
     `-p ${router.dport}:${router.dport} -p ${router.mport}:${router.mport} ` +
     `-v /home/kevin/git/lwdee/build/app:/home/dsc/app ` +
     `-v /home/kevin/git/lwdee/log:/home/dsc/log ` +

@@ -9,7 +9,8 @@ using namespace std;
 
 int len = 6;
 std::string nodes[] = {"k8s-master", "k8s-node01", "k8s-node02", "k8s-node03", "k8s-node04", "k8s-node05"};
-std::string containers[] = {"dsc1", "dsc2", "dsc3", "dsc4", "dsc5", "dsc6"};
+std::string containers[] = {"dsc", "dsc", "dsc", "dsc", "dsc", "dsc"};
+// std::string containers[] = {"dsc1", "dsc2", "dsc3", "dsc4", "dsc5", "dsc6"};
 
 void app_task(std::string nodeName) {
   string script = string("scp /home/kevin/git/lwdee/build/app root@") + nodeName + ":/home/kevin/git/lwdee/build/";
@@ -106,7 +107,7 @@ int main(int argv, char** argc) {
       if (i == 1) {
         sleep(1);
       }
-      ts[i-1] = thread(start_task, nodes[i-1], containers[i-1]);
+      ts[i - 1] = thread(start_task, nodes[i - 1], containers[i - 1]);
     }
     sleep(0);
     ts[0] = thread(start_task, nodes[0], containers[0]);

@@ -16,7 +16,7 @@ using namespace std;
 
 class ToMap {
  private:
-  bool inputFilter = true;
+  int filterCondon = 100;
   int mapSize = 0;
   PartitionKafka* input;
   vector<DCO> mapDocs;

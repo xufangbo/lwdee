@@ -50,18 +50,19 @@ void Reducer::accept(std::vector<ReduceRecord>* records, PartitionReduce* input)
 
   if (newWindowTs > currentWindowTs) {
     currentWindowTs = newWindowTs;
-    this->reduce();
+    int reduceSize = this->reduce();
 
     uint64_t t_sum = this->sum;
     uint64_t t_size = this->count;
-    logger_trace("reduce total delay (%lldms / %lld = %.3lfs)", t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
+
+    logger_warn("reduce ,(partiton index %d) %lld -> %lld, total delay (%lldms / %lld = %.3lfs)", input->index, records->size(), reduceSize, t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
   }
 
   mut.unlock();
   // logger_debug("> accept");
 }
 
-void Reducer::reduce() {
+int Reducer::reduce() {
   // logger_trace("< reduce");
 
   typedef std::pair<std::string, int> Pair;
@@ -79,7 +80,7 @@ void Reducer::reduce() {
     }
   }
 
-  logger_debug("reduce(partiton index %d) %lld -> %lld", input->index, records->size(), map->size());
+  printf("\n");
 
   int index = 0;
   for (auto& it : *map) {
@@ -91,13 +92,16 @@ void Reducer::reduce() {
   if (map->size() > 10) {
     printf("  ...\n");
   } else {
-    printf("\n");
+    printf("\n\n");
   }
 
+  int reduceSize = map->size();
   map.reset();
   records->clear();
 
   // logger_trace("> reduce");
+
+  return reduceSize;
 }
 
 uint64_t Reducer::getCurrentWindow() {

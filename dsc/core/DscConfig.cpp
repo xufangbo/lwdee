@@ -44,7 +44,7 @@ void DscConfig::readConfig() {
   topic = cJSON_GetObjectItem(node, "topic")->valuestring;
   outTopic = cJSON_GetObjectItem(node, "outTopic")->valuestring;
   window = cJSON_GetObjectItem(node, "window")->valueint;
-  inputFilter = cJSON_GetObjectItem(node, "inputFilter")->valueint;
+  filterCondon = cJSON_GetObjectItem(node, "filterCondon")->valueint;
   splitNums1 = cJSON_GetObjectItem(node, "splitNums1")->valueint;
   splitNums2 = cJSON_GetObjectItem(node, "splitNums2")->valueint;
 

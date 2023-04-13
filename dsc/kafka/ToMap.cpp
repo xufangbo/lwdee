@@ -30,7 +30,7 @@ void ToMap::create_dco(PartitionKafka* input) {
   this->mapSize = input->mapVoxors.size();
   this->currentWindowTs = this->getCurrentWindow();
 
-  this->inputFilter = DscConfig::instance()->inputFilter;
+  this->filterCondon = DscConfig::instance()->filterCondon;
 
   for (auto& mapVoxorId : input->mapVoxors) {
     DCO dco = lwdee::get_dco(mapVoxorId);
@@ -43,7 +43,6 @@ void ToMap::create_dco(PartitionKafka* input) {
 
 uint32_t counter = 0;
 void ToMap::accept(RdKafka::Message* message) {
-
   counter++;
   try {
     uint64_t newWindowTs = this->getCurrentWindow();
@@ -58,7 +57,7 @@ void ToMap::accept(RdKafka::Message* message) {
     }
 
     mut.unlock();
-    
+
   } catch (Exception& ex) {
     logger_error("accept kafka data failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {
@@ -71,10 +70,8 @@ void ToMap::push(RdKafka::Message* message) {
   memcpy((void*)line.data(), message->payload(), message->len());
 
   uint64_t now = Stopwatch::currentMilliSeconds();
-  if (!inputFilter) {
-    LinuxMatrix::stream.kafka_send++;
-    mapRecords->push_back(MapRecord(line, (double)now));
-  } else if (inputFilter && counter % 100 == 0) {
+
+  if (counter % filterCondon == 0) {
     LinuxMatrix::stream.kafka_send++;
     mapRecords->push_back(MapRecord(line, (double)now));
   }
@@ -87,7 +84,7 @@ void ToMap::toMaps() {
 
   int range = this->mapRecords->size() / mapSize;
   int index = -1;
-  
+
   for (int mapIndex = 0; mapIndex < mapSize; mapIndex++) {
     auto bat = std::make_shared<vector<MapRecord>>();
     bats.push_back(bat);
