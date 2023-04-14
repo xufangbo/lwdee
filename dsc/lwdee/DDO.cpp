@@ -59,9 +59,6 @@ string_ref DDO::read() {
 }
 
 void DDO::release() {
-  // uh_ddo->deleteBlock();
-  // uh_ddo.reset();
-
   UhconnSimpleDB::getInstance().deleteBlock(ddoId.itsId());
 }
 

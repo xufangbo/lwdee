@@ -81,6 +81,7 @@ void ToMap::push(RdKafka::Message* message) {
 };
 
 void ToMap::toMaps() {
+  return;
   typedef std::shared_ptr<vector<MapRecord>> MapRecords;
   std::vector<MapRecords> bats;
 

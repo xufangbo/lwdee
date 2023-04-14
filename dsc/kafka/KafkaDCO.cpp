@@ -32,7 +32,7 @@ std::string KafkaDCO::start(std::string a) {
     // LinuxMatrix::print();
     logger_trace("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
-    return "succeed!";
+    return "succeed";
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());

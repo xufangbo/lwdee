@@ -36,7 +36,7 @@
 #define gray FOREGROUND_BLUE | FOREGROUND_GREEN
 #define purple FOREGROUND_BLUE | FOREGROUND_RED
 #else
-#define NONE "\033[0m"  // 清除颜色，即之后的打印为正常输出，之前的不受影响
+#define NONE "\033[0m"         // 清除颜色，即之后的打印为正常输出，之前的不受影响
 #define BLACK "\033[0;30m"     // 深黑
 #define L_BLACK "\033[1;30m"   // 亮黑，偏灰褐
 #define RED "\033[0;31m"       // 深红，暗红
@@ -52,14 +52,14 @@
 #define CYAN "\033[0;36m"      // 暗青色
 #define L_CYAN "\033[1;36m"    // 鲜亮青色
 #define GRAY "\033[0;37m"      // 灰色
-#define WHITE "\033[1;37m"  // 白色，字体粗一点，比正常大，比bold小
-#define BOLD "\033[1m"      // 白色，粗体
-#define UNDERLINE "\033[4m"  // 下划线，白色，正常大小
-#define BLINK "\033[5m"      // 闪烁，白色，正常大小
-#define REVERSE "\033[7m"  // 反转，即字体背景为白色，字体为黑色
-#define HIDE "\033[8m"     // 隐藏
-#define CLEAR "\033[2J"    // 清除
-#define CLRLINE "\r\033[K"  // 清除行
+#define WHITE "\033[1;37m"     // 白色，字体粗一点，比正常大，比bold小
+#define BOLD "\033[1m"         // 白色，粗体
+#define UNDERLINE "\033[4m"    // 下划线，白色，正常大小
+#define BLINK "\033[5m"        // 闪烁，白色，正常大小
+#define REVERSE "\033[7m"      // 反转，即字体背景为白色，字体为黑色
+#define HIDE "\033[8m"         // 隐藏
+#define CLEAR "\033[2J"        // 清除
+#define CLRLINE "\r\033[K"     // 清除行
 #endif
 
 #if defined(WIN32) || defined(WIN64)
@@ -84,8 +84,7 @@ static void generate_file();
 static int string_sub(char* dest, char* src, int startIndex, int endIndex);
 static int string_indexOf(char* str, char c);
 
-void logger(LogLevel level, const char* function, const char* file, int line,
-            const char* msgfmt, ...) {
+void logger(LogLevel level, const char* function, const char* file, int line, const char* msgfmt, ...) {
   if (level < log_option.level) {
     return;
   }
@@ -97,8 +96,7 @@ void logger(LogLevel level, const char* function, const char* file, int line,
   date_millsecond(time, 25);
 
   char message[MAX_DEBUG];
-  int n = snprintf(message, MAX_DEBUG, "%s [%s] [%4lu] %s:%d %s : ", time,
-                   levels[level], pthread_self(), file, line, function);
+  int n = snprintf(message, MAX_DEBUG, "%s [%s] [%4lu] %s:%d %s : ", time, levels[level], pthread_self(), file, line, function);
   int sz = n > 0 ? n : 0;
   char* pos = message;
 
@@ -170,6 +168,26 @@ void wirte_console(LogLevel& level, char* message) {
 }
 #endif
 
+void create_file() {
+  if (!log_option.writeFile) {
+    return;
+  }
+  if (!log_option.initalized) {
+    printf("log is not initilaized\n");
+    return;
+  }
+  generate_file();
+
+  fp = fopen(fileName, log_option.fileMode);
+  if (fp == NULL) {
+    char* err_msg = strerror(errno);
+    printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
+    return;
+  }
+  fclose(fp);
+  fp = NULL;
+}
+
 void write_file(LogLevel& level, char* message) {
   if (!log_option.writeFile) {
     return;
@@ -183,8 +201,7 @@ void write_file(LogLevel& level, char* message) {
   fp = fopen(fileName, "a+");
   if (fp == NULL) {
     char* err_msg = strerror(errno);
-    printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n",
-           __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
+    printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
     return;
   }
   // else{
@@ -208,8 +225,7 @@ void generate_file() {
     char day_string[12];
     date_day(day_string, 12);
 
-    sprintf(fileName, "%s%s%s-%s.log", log_option.path, seperator,
-            log_option.name, day_string);
+    sprintf(fileName, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
 
     day = t;
 
@@ -217,13 +233,11 @@ void generate_file() {
     date_day(day_string, 12, log_option.days);
     char del_file[FILE_LENGTH];
     memset(del_file, 0, FILE_LENGTH);
-    sprintf(del_file, "%s%s%s-%s.log", log_option.path, seperator,
-            log_option.name, day_string);
+    sprintf(del_file, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
     if (access(del_file, F_OK) == 0) {
       int ret = unlink(del_file);
       if (ret != 0) {
-        printf("can't delete %s, errno %d,errmsg : %s", del_file, errno,
-               strerror(errno));
+        printf("can't delete %s, errno %d,errmsg : %s", del_file, errno, strerror(errno));
       }
     }
   }
@@ -236,8 +250,7 @@ static void rm_history_task() {
   tmp.time -= 60 * 60 * 24 * 10;  // 10天前的时间戳
   tmp.time += 8 * 60 * 60;        // 时区
   struct tm* gmt = gmtime(&tmp.time);
-  int days =
-      (gmt->tm_year + 1900) * 10000 + (gmt->tm_mon + 1) * 100 + gmt->tm_mday;
+  int days = (gmt->tm_year + 1900) * 10000 + (gmt->tm_mon + 1) * 100 + gmt->tm_mday;
 
   DIR* dp = opendir(log_option.path);
   struct dirent* entry;
@@ -319,6 +332,8 @@ int logger_initialize(LogOption option) {
 
   log_option.initalized = true;
   //  printf("option.initalized = true \n");
+
+  create_file();
 
   return 0;  // fp == NULL ? -1 : 0;
 }

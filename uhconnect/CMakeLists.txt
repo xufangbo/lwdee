@@ -7,7 +7,7 @@ target_link_libraries(uhconnect
         PUBLIC pthread boost_json dl rt
         )
 
-target_include_directories(uhconnect 
+target_include_directories(uhconnect
         PUBLIC ${PROJECT_SOURCE_DIR}/inc/libgo
         PUBLIC ${PROJECT_SOURCE_DIR}/inc/boost
         PUBLIC ${PROJECT_SOURCE_DIR}/inc

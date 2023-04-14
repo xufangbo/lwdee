@@ -25,6 +25,11 @@ void config_task(std::string nodeName) {
   system(script.c_str());
 }
 
+void dsc_config_task(std::string nodeName) {
+  string script = string("scp /home/kevin/git/lwdee/config/dsc.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
+  system(script.c_str());
+}
+
 void stop_task(std::string nodeName, string container) {
   string script = string("ssh root@") + nodeName + " \"docker stop " + container + "\"";
   system(script.c_str());
@@ -94,11 +99,15 @@ int main(int argv, char** argc) {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(app_task, nodes[i]);
     }
+  } else if (par == "dsc.config") {
+    for (int i = 0; i < len; i++) {
+      ts[i] = thread(dsc_config_task, nodes[i]);
+    }
   } else if (par == "config") {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(config_task, nodes[i]);
     }
-  } else if (par == "stop") {
+  }else if (par == "stop") {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(stop_task, nodes[i], containers[i]);
     }

@@ -161,13 +161,13 @@ int UhconnConfig::getNodeAmount(void){
 
 int UhconnConfig::setNodeAmount(int amount){
   nodeAmount = amount;
-  // std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
+  std::cout<<"setNodeAmount to "<<nodeAmount<<std::endl;
   return 0;
 }
 
 int UhconnConfig::setParallelAmount(int amount){
   parallelAmount = amount;
-  // std::cout<<"setParallelAmount to "<<parallelAmount<<std::endl;
+  std::cout<<"setParallelAmount to "<<parallelAmount<<std::endl;
   return 0;
 }
 

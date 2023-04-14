@@ -79,7 +79,7 @@ UhconnDcoRef UhconnDco::create(std::string className, int in_destNode) {
     msg.setSrcVoxor(itsAddr());
 
     auto channel = localNode->addToWaitingTable(msg);
-    // std::cout <<"----create.getMsgId:"<<msg.getMsgId()<<std::endl;
+    printf("%s:%d %s get msgid: %lld",__FILE__,__LINE__,__FUNCTION__,msg.getMsgId());
     assert(localNode->getFromWaitingTable(msg));
 
     logDebug("request create class:%s at worknode:%d",className.c_str(), msg.getDestNodeId());
@@ -178,7 +178,7 @@ UhconnDdo* UhconnDco::wait(UhconnDdoRef& ddo_ref) {
     msg.setSrcVoxor(itsAddr());
 
     auto channel = localNode->addToWaitingTable(msg);
-    // std::cout <<"----wait.getMsgId:"<<msg.getMsgId()<<std::endl;
+    printf("%s:%d %s wait.getMsgId: %lld",__FILE__,__LINE__,__FUNCTION__,msg.getMsgId());
     assert(localNode->getFromWaitingTable(msg));
     logDebug("ask remote dco:%s if the result data:%llu have been ready", msg.getDestVoxor().c_str(), ddo_ref.itsId());
     localNode->itsRouter().sendMsg(msg);

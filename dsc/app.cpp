@@ -93,6 +93,7 @@ void logger_init(std::string nodeName) {
   LogOption option;
   option.initalized = false;
   option.level = log_trace;
+  strcpy(option.fileMode, "w+");
   strcpy(option.path, "./log");
   strcpy(option.name, nodeName.c_str());
   option.is_color = true;

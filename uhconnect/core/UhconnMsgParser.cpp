@@ -2,6 +2,7 @@
 #include <iostream>
 #include "UhconnMessage.h"
 #include <sstream>
+#include "core/log.hpp"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ UhconnMsgParser::~UhconnMsgParser()
 }
 
 int UhconnMsgParser::parse(void){
-    // std::cout<<"parse JSON str:"<<jstr<<std::endl;
+    logger_trace("%s",jstr.c_str());
     try{
         auto pjo = boost::json::parse(jstr);
         jobj =pjo.as_object();

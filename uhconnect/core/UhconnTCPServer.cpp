@@ -1,16 +1,19 @@
 #include "UhconnTCPServer.h"
 #include "libgo.h"
+#include "UhconnRouter.h"
 
 UhconnTCPServer::UhconnTCPServer()
 {
+}
+
+UhconnTCPServer::UhconnTCPServer(int port, rxFunction rxHandlerFunc) : rxHandler(rxHandlerFunc) {
+	setup(port);
 }
 
 UhconnTCPServer::~UhconnTCPServer()
 {
 	detach();
 }
-
-string UhconnTCPServer::message;
 
 void UhconnTCPServer::setup(int port)
 {
@@ -37,53 +40,56 @@ void UhconnTCPServer::receive()
 		go [=]{
 			char * msg =(char*) malloc(MAXPACKETSIZE);
 			memset(msg,0,MAXPACKETSIZE);
-			int *ret = new int;
+			int ret = 0;
 		    while(1)
 			{
-				*ret=recv(*tmpsockfd, msg, MAXPACKETSIZE-1, 0);
-				if(*ret==0 || *ret < 0)
+				ret=recv(*tmpsockfd, msg, MAXPACKETSIZE-1, 0);
+				if(ret==0 || ret < 0)
 				{
 					close(*tmpsockfd);
 					break;
 				}
-				// msg[*ret]=0;
-				// message = string(msg);
-				// if(message.length()>0){
-				// 	#ifdef DEBUGINFO
-				// 	cout << "rx msg str:" << message << endl;
-				// 	#endif
-				// 	this->handler(this->param, msg,*tmpsockfd);
-				// }
-				this->handler(this->param, (void*)msg,*tmpsockfd,*ret);
+
+				rxHandler(msg,*tmpsockfd, ret);
 			}
 			close(*tmpsockfd);
 			delete tmpsockfd;
-			delete ret;
 			free(msg);
 			return;
 		};
 	}
 }
 
-string UhconnTCPServer::getMessage()
+int UhconnTCPServer::Send(const char * buf, int len, int sockFd)
 {
-	return message;
-}
+	// return send(sockFd,buf,len,0);
+	static std::mutex mlock;
+	if ( sockFd < 0 ) {
+        cout << "Send failed as socket not created!!" << endl;
+        return err_fd;
+    }
 
-int UhconnTCPServer::Send(string msg)
-{
-	return send(newsockfd,msg.c_str(),msg.length(),0);
-}
+	int total_bytes = 0;
+	const char* pdata = buf;
+	int slen = len;
+    std::lock_guard<std::mutex> guard(mlock);
+    while(total_bytes < slen) {
 
-int UhconnTCPServer::Send(unsigned char * buf, int len, int sockFd)
-{
-	return send(sockFd,buf,len,0);
+        int ret = send(sockFd, (unsigned char*)pdata + total_bytes, slen-total_bytes, 0);
+        if(ret < 0) {
+			std::cout << "Send failed: " << strerror(errno) << endl;
+			return err_send;
+        }
+        else {
+            total_bytes += ret;
+        }
+    }    
+    return total_bytes;
 }
 
 void UhconnTCPServer::clean()
 {
-	message = "";
-	memset(msg, 0, MAXPACKETSIZE);
+
 }
 
 void UhconnTCPServer::detach()
@@ -92,7 +98,7 @@ void UhconnTCPServer::detach()
 	close(newsockfd);
 } 
 
-void UhconnTCPServer::setRxHandler(rx_handler h, void * p){
-	handler = h;
-	param = p;
-}
+// void UhconnTCPServer::setRxHandler(rx_handler h, void * p){
+// 	handler = h;
+// 	param = p;
+// }

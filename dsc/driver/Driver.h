@@ -17,12 +17,8 @@ class Driver {
   void startJob();
 
  private:
-  void startKafka();
-
-  void startMap();
-
-  /**
-   * 执行reduce计算
-   * */
-  void startReduce();
+  void start_kafka();
+  void start_map();
+  void start_reduce();
+  void get_ddo(std::string message, int index, size_t size, DCO& dco, DDOId& ddoId);
 };

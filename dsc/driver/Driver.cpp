@@ -25,11 +25,11 @@ void Driver::startJob() {
 
     Stopwatch sw;
 
-    this->startReduce();
+    this->start_reduce();
 
-    this->startMap();
+    this->start_map();
 
-    this->startKafka();
+    this->start_kafka();
     // this->mapToReduce();
 
     // LinuxMatrix::print();
@@ -43,13 +43,13 @@ void Driver::startJob() {
   }
 }
 
-void Driver::startKafka() {
+void Driver::start_kafka() {
   logger_info("< start kafka");
   Stopwatch sw;
 
   std::vector<pair<DCO, DDOId>> kafkaInvokers;
   for (int i = 0; i < conf->partitions.size(); i++) {
-    logger_info("start kafka %d -----------------", i);
+    logger_info("start kafka %d / %d -----------------", i, conf->partitions.size());
 
     std::vector<string> kafka_mapVoxors;
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
@@ -66,37 +66,24 @@ void Driver::startKafka() {
     kafkaInvokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  for (auto& kv : kafkaInvokers) {
+  for (int i = 0; i < kafkaInvokers.size(); i++) {
+    auto& kv = kafkaInvokers[i];
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
-    try {
-      auto ddo = dco.wait(ddoId);
-      auto bytes = ddo.read();
-
-      if (*bytes != "success") {
-        logger_info("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
-      } else {
-        logger_error("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
-      }
-
-      ddo.releaseGlobal();
-    } catch (Exception& ex) {
-      ex.trace(ZONE);
-      throw ex;
-    }
+    this->get_ddo("kafka ddo", i, kafkaInvokers.size(), dco, ddoId);
   }
 
   logger_info("> start kafka,eclipse %lf", sw.stop());
 }
 
-void Driver::startMap() {
+void Driver::start_map() {
   logger_debug("< map");
   Stopwatch sw;
 
   std::vector<pair<DCO, DDOId>> mapInvokers;
   for (int i = 0; i < conf->splitNums1; i++) {
-    logger_debug("start map %d -----------------", i);
+    logger_debug("start map %d / %d -----------------", i, conf->splitNums1);
 
     DCO dco = lwdee::create_dco("MapDCO");
     mapVoxorIds.push_back(dco.voxorId());
@@ -109,70 +96,63 @@ void Driver::startMap() {
     mapInvokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  for (auto& kv : mapInvokers) {
+  for (int i = 0; i < mapInvokers.size(); i++) {
+    auto& kv = mapInvokers[i];
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
-    try {
-      auto ddo = dco.wait(ddoId);
-      auto bytes = ddo.read();
-
-      if (*bytes != "success") {
-        logger_debug("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
-      } else {
-        logger_error("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
-      }
-
-      ddo.releaseGlobal();
-
-    } catch (Exception& ex) {
-      ex.trace(ZONE);
-      throw ex;
-    }
+    this->get_ddo("map ddo", i, mapInvokers.size(), dco, ddoId);
   }
 
   logger_debug("> start map,eclipse %lf", sw.stop());
 }
 
-void Driver::startReduce() {
-  logger_trace("< start reduce");
+void Driver::start_reduce() {
+  logger_warn("< start reduce");
   Stopwatch sw;
 
   std::vector<pair<DCO, DDOId>> reduceInvokers;
   for (int i = 0; i < conf->splitNums2; i++) {
-    logger_trace("start reduce %d -----------------", i);
+    logger_warn("start reduce %d / %d -----------------", i, conf->splitNums2);
 
     DCO dco = lwdee::create_dco("ReduceDCO");
     reduceVoxorIds.push_back(dco.voxorId());
-    logger_trace("reduce voxorId: %s", dco.voxorId().c_str());
+    logger_warn("reduce voxorId: %s", dco.voxorId().c_str());
 
     PartitionReduce input(i);
     DDOId ddoId = dco.async("start", input.toJson());
-    logger_trace("%s", input.toJson().c_str());
+    // logger_warn("%s", input.toJson().c_str());
 
     reduceInvokers.push_back(std::make_pair(dco, ddoId));
   }
 
-  for (auto& kv : reduceInvokers) {
+  for (int i = 0; i < reduceInvokers.size(); i++) {
+    auto& kv = reduceInvokers[i];
     DCO dco = kv.first;
     DDOId ddoId = kv.second;
 
-    try {
-      auto ddo = dco.wait(ddoId);
-      auto bytes = ddo.read();
-
-      if (*bytes != "success") {
-        logger_trace("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
-      } else {
-        logger_error("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
-      }
-
-      ddo.releaseGlobal();
-    } catch (Exception& ex) {
-      ex.trace(ZONE);
-      throw ex;
-    }
+    this->get_ddo("reduce ddo", i, reduceInvokers.size(), dco, ddoId);
   }
 
-  logger_trace("> start reduce,eclipse %lf", sw.stop());
+  logger_warn("> start reduce,eclipse %lf", sw.stop());
+}
+
+void Driver::get_ddo(std::string message, int index, size_t size, DCO& dco, DDOId& ddoId) {
+  printf("\n");
+  try {
+    auto ddo = dco.wait(ddoId);
+    auto bytes = ddo.read();
+
+if (::strcmp(bytes->c_str(), "succeed") == 0) {
+    // if ( *bytes == "success") {
+      logger_warn("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddoId.itsId(), bytes->c_str());
+    } else {
+      logger_error("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddo.ddoId.itsId(), bytes->c_str());
+    }
+
+    ddo.releaseGlobal();
+  } catch (Exception& ex) {
+    ex.trace(ZONE);
+    throw ex;
+  }
 }

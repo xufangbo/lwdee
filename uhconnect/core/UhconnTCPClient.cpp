@@ -1,6 +1,7 @@
 #include "UhconnTCPClient.h"
 #include <time.h>
 #include <errno.h>
+#include "UhconnTCPServer.h"
 
 UhconnTCPClient::UhconnTCPClient()
 {
@@ -86,31 +87,11 @@ bool UhconnTCPClient::setup(string address , int port)
 // 	return true;
 // }
 bool UhconnTCPClient::Send(const string& data) {
-    if (sock == -1) {
-        cerr << "Send failed as socket not created!!" << endl;
-        return false;
-    }
-    
-    // int ret = send(sock, data.c_str(), data.length(), 0);
-    // if (ret == -1) {
-    //     cerr << "Send failed: " << strerror(errno) << endl;
-    //     return false;
-    // }
-	int total_bytes = 0;
-	const char* pdata = data.c_str();
-	int slen = data.length();
-    while(total_bytes < slen) {
-        //ret = router->tcpDataServer.Send((unsigned char*)block->data + total_bytes, block->len-total_bytes, fd);
-        int ret = send(sock, (unsigned char*)pdata + total_bytes, slen-total_bytes, 0);
-        if(ret < 0) {
-			cerr << "Send failed: " << strerror(errno) << endl;
-			return false;
-        }
-        else {
-            total_bytes += ret;
-        }
-    }    
-    return true;
+	int sendBytes = UhconnTCPServer::Send(data.c_str(), data.length(), getSockFd());
+	if( sendBytes < 0) {
+		return false;
+	}
+	return true;
 }
 // string UhconnTCPClient::receive(int size)
 // {
@@ -140,21 +121,6 @@ int UhconnTCPClient::receive(unsigned char * buf, int size)
 		"errno="<<errno<<" "<<strerror(errno)<<endl;
   	}
   	return ret;
-}
-
-string UhconnTCPClient::read()
-{
-  	char buffer[1] = {};
-  	string reply;
-  	while (buffer[0] != '\n') {
-    		if( recv(sock , buffer , sizeof(buffer) , 0) < 0)
-    		{
-      			cout << "tcp client read failed!" << endl;
-			return nullptr;
-    		}
-		reply += buffer[0];
-	}
-	return reply;
 }
 
 void UhconnTCPClient::exit()

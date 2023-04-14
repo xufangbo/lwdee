@@ -5,6 +5,7 @@
 #include <libgo.h>
 #include <string>
 #include <atomic>
+#include "core/log.hpp"
 
 using namespace std;
 UhconnWorkNode::UhconnWorkNode(int ad) : scheduler(ad), router(this), _db(ad)
@@ -37,10 +38,10 @@ int UhconnWorkNode::inputMessage(UhconnMessage& in_msg) {
         std::cout <<"wrongly delivered msg!!"<<std::endl;
         return -1;
     }
-    // std::cout <<"in_msg.getMsgId:"<<in_msg.getMsgId()<<std::endl;
+    logger_trace("in_msg.getMsgId:%lld",in_msg.getMsgId());
 
     if( isWaitResponse(in_msg) && isMsgInWaitingTable(in_msg) ) {
-        // std::cout << "yes isMsgInWaitingTable" << std::endl;
+        logger_trace("yes isMsgInWaitingTable");
         auto channel = getFromWaitingTable(in_msg);
         assert(channel);
         channel->push(in_msg);

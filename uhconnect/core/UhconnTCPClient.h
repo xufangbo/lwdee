@@ -23,8 +23,6 @@ public:
     ~UhconnTCPClient();
     bool setup(string address, int port);
     bool Send(const string& data);
-    // string receive(int size = 4096);
-    string read();
     int receive(unsigned char * buf, int size);
     int getSockFd(){return sock;}
     void exit();

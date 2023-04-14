@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include "core/log.hpp"
 
 // const char  UhconnProtocol::left_enc[]="{[({";
 // const char  UhconnProtocol::right_enc[]="})]}";
@@ -60,9 +61,7 @@ std::vector<std::string> UhconnProtocol::parseMsgBuff(char* buf, int len)
 {
     std::vector<std::string> result;
     std::string newdata(buf, len); 
-    // std::cout << "\n+++++++++++++++++++++\n" \
-    //             << newdata \
-    //             << "\n-------------------\n";
+    logger_trace("%s",newdata.c_str());
     buffer += newdata; // 将新数据追加到缓存中
 
     size_t start_pos = 0;
@@ -88,6 +87,7 @@ std::vector<std::string> UhconnProtocol::parseMsgBuff(char* buf, int len)
     // 更新缓存，保留未处理的部分数据
     buffer = buffer.substr(start_pos);
 
+    logger_trace("%s",buffer.c_str());
     return result;
 }
 

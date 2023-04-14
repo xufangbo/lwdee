@@ -12,38 +12,47 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <functional>
 
 #pragma once
 
 using namespace std;
 #define MAXPACKETSIZE  128*1024
 
-typedef int(*rx_handler)(void* p1, void *p2, int fd, int len);
+// typedef int(*rx_handler)(void* p1, void *p2, int fd, int len);
+using rxFunction = std::function<int(char*, int, int)>;
 
+class UhconnRouter;
 class UhconnTCPServer
 {
+	UhconnTCPServer();
 public:
-    UhconnTCPServer();
+    UhconnTCPServer(int port, rxFunction rxHandlerFunc);
     ~UhconnTCPServer();
 
     int sockfd, newsockfd, n, pid;
 	struct sockaddr_in serverAddress;
 	struct sockaddr_in clientAddress;
 	pthread_t serverThread;
-	char msg[ MAXPACKETSIZE ];
-	static string message;
+	// char msg[ MAXPACKETSIZE ];
+	// static string message;
 
-	void setup(int port);
+
 	void receive();
-	string getMessage();
-	int Send(string msg);
-	int Send(unsigned char * buf, int len, int sockFd);
+	// string getMessage();
+	// int Send(string msg);
+	static int Send(const char * buf, int len, int sockFd);
 	void detach();
 	void clean();
-	void setRxHandler(rx_handler h, void * p);
+	// void setRxHandler(rx_handler h, void * p);
 private:
-    rx_handler handler;
-	void* param;
+	void setup(int port);
+    rxFunction rxHandler; // 保存成员函数指针;
+	enum {
+		ok = 0,
+		err_fd = -1,
+		err_send = -2,
+	};
 };
 
 #endif

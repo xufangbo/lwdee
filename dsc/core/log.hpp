@@ -47,6 +47,11 @@ typedef struct
     bool writeFile;
 
     /**
+     * a+ / w+
+     */
+    char fileMode[10];
+
+    /**
      * 日志保留天数
      */
     int days = 10;
