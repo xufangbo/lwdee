@@ -81,11 +81,10 @@ void ToMap::push(RdKafka::Message* message) {
 };
 
 void ToMap::toMaps() {
-  return;
   typedef std::shared_ptr<vector<MapRecord>> MapRecords;
   std::vector<MapRecords> bats;
 
-  // logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
+  logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
   LinuxMatrix::stream.kafka_qps =  mapRecords->size();
 
   int range = this->mapRecords->size() / mapSize;

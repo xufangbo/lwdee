@@ -54,7 +54,8 @@ public:
     int sendMsg(UhconnMessage& msg);
     int pullData(int destNodeId, DdoDataId ddoId);
     int pullData(DdoDataId ddoId);
-
+    int pullData2(int destNodeId, DdoDataId ddoId);
+    int pullData2(DdoDataId ddoId);
     int pushData(int destNodeId, DdoDataId ddoId);
     int deleteData(int destNodeId, DdoDataId ddoId);
     int deleteData(DdoDataId ddoId);
@@ -64,28 +65,15 @@ public:
     virtual int nodeInfo(int id,NodeInfo& info);
 
 public:
-
+    static UhconnTCPServer tcpMsgServer;
+    static UhconnTCPServer tcpDataServer;
     //static UhconnTCPClient tcpClient;  
-    int msgRxHandler(char* data, int fd, int len);
-    int dataRxHandler(char* data, int fd, int len);    
+    
 private:
     co_mutex mapLock;
     std::map<int,NodeInfo> nodeMap;
     UhconnWorkNode *workNode;  
     NodeInfo& getNodeInfo(int destNodeId);
-    int receive_block(UhconnTCPClient* client, DdoDataId ddoId);
-
-    UhconnTCPServer tcpMsgServer;
-    UhconnTCPServer tcpDataServer;
-    enum {
-        ok = 0,
-        err_node = -1,
-        err_client = -2,
-        err_send = -3,
-        err_rcv = -4,
-        err_nodata = -5,
-        err_datalen = -6,
-    };
 };
 
 #endif

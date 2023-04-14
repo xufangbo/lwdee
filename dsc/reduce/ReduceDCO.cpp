@@ -44,6 +44,7 @@ void createFile(int index) {
 }
 
 std::string ReduceDCO::start(std::string a) {
+  printf("\n");
   try {
     LinuxMatrix::start();
 

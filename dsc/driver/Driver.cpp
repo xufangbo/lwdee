@@ -49,6 +49,7 @@ void Driver::start_kafka() {
 
   std::vector<pair<DCO, DDOId>> kafkaInvokers;
   for (int i = 0; i < conf->partitions.size(); i++) {
+    printf("\n");
     logger_info("start kafka %d / %d -----------------", i, conf->partitions.size());
 
     std::vector<string> kafka_mapVoxors;
@@ -83,6 +84,7 @@ void Driver::start_map() {
 
   std::vector<pair<DCO, DDOId>> mapInvokers;
   for (int i = 0; i < conf->splitNums1; i++) {
+    printf("\n");
     logger_debug("start map %d / %d -----------------", i, conf->splitNums1);
 
     DCO dco = lwdee::create_dco("MapDCO");
@@ -113,6 +115,7 @@ void Driver::start_reduce() {
 
   std::vector<pair<DCO, DDOId>> reduceInvokers;
   for (int i = 0; i < conf->splitNums2; i++) {
+    printf("\n");
     logger_warn("start reduce %d / %d -----------------", i, conf->splitNums2);
 
     DCO dco = lwdee::create_dco("ReduceDCO");
@@ -149,7 +152,7 @@ void Driver::get_ddo(std::string message, int index, size_t size, DCO& dco, DDOI
       logger_error("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddo.ddoId.itsId(), bytes->c_str());
     }
 
-    ddo.releaseGlobal();
+    // ddo.releaseGlobal();
   } catch (Exception& ex) {
     ex.trace(ZONE);
     throw ex;

@@ -8,4 +8,37 @@
 
 /home/kevin/git/lwdee/uhconnect/api/UhconnDco.cpp:82
 
-/home/kevin/git/lwdee/uhconnect/core/UhconnSimpleDB.cpp:174
+/home/kevin/git/lwdee/uhconnect/core/UhconnSimpleDB.cpp:174 releaseGlobal
+/home/kevin/git/lwdee/uhconnect/core/UhconnVoxor.cpp:57 不存储ddo
+
+
+
+
+
+
+
+  std::string getCmdName() const{
+    switch (cmd) {
+      case MSG_CMD_CREATE:
+        return "create";
+      case MSG_CMD_WAIT:
+        return "wait";
+      case MSG_CMD_ASYNC:
+        return "async";
+      case MSG_CMD_ASYNC_PRO:
+        return "async-pro";
+      default:
+        return "null";
+    };
+    return "null";
+  }
+
+  std::string to_string() const{
+    std::string info = std::to_string(msgId);
+    info += "," + getCmdName();
+    info += "," + getClassName() + "::" + getMethodName();
+    info += ",ddoid" + std::to_string(DdoId);
+    return info;
+  }
+
+  

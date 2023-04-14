@@ -29,23 +29,7 @@ void DDO::write(std::string& str) {
   UhconnSimpleDB::getInstance().storeBlock(ddoId.itsId(), std::move(blockdata));
 }
 
-// ByteSpan_ref DDO::read() {
-//   DdoBlockData *blockdata = UhconnSimpleDB::getInstance().getBlock(
-//       ddoId.itsId(), ddoId.itsWorkNodeId());
-//   if (blockdata == nullptr) {
-//     throw LwdeeException("failed read ddo", ZONE);
-//   }
-
-//   ByteSpan_ref bytes = std::make_shared<ByteSpan>(blockdata->len);
-//   bytes->puts((Byte *)blockdata->data, bytes->size);
-//   bytes->reset();
-
-//   return bytes;
-// }
-
 string_ref DDO::read() {
-  // DdoBlockData blockdata;
-  // UhconnSimpleDB::getInstance().loadBlock(ddoId.itsId(), blockdata);
   DdoBlockData* blockdata = UhconnSimpleDB::getInstance().getBlock(ddoId.itsId(), ddoId.itsWorkNodeId());
   if (blockdata == nullptr) {
     auto message = std::string("failed read ddo(node") + std::to_string(ddoId.itsWorkNodeId()) + ")";
@@ -59,6 +43,9 @@ string_ref DDO::read() {
 }
 
 void DDO::release() {
+  // uh_ddo->deleteBlock();
+  // uh_ddo.reset();
+
   UhconnSimpleDB::getInstance().deleteBlock(ddoId.itsId());
 }
 

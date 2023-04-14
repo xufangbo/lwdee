@@ -88,9 +88,15 @@ void Reducer::accept(std::vector<ReduceRecord>* b_records, PartitionReduce* inpu
     uint64_t t_sum = this->sum;
     uint64_t t_size = this->count;
 
-    // logger_warn("reduce ,(partiton index %d) %lld -> %lld, total delay (%lldms / %lld = %.3lfs)", input->index, this->records->size(), reduceSize, t_sum, t_size, (t_sum / t_size) * 1.0 / 1000);
+    if (b_size > 0 &&  t_size > 0) {
+      
+      auto b_delay = ((int64_t)b_sum) * 1.0 / b_size / 1000;
+      auto t_delay = (t_sum / t_size) * 1.0 / 1000;
 
-    writeFile(input->index, this->records->size(), reduceSize, ((int64_t)b_sum) * 1.0 / b_size / 1000, b_sum, b_size, ((t_sum / t_size) * 1.0 / 1000), t_sum, t_size);
+      logger_warn("reduce ,(partiton index %d) %lld -> %lld, total delay (%lldms / %lld = %.3lfs)", input->index, this->records->size(), reduceSize, t_sum, t_size, t_delay);
+
+      writeFile(input->index, this->records->size(), reduceSize, b_delay, b_sum, b_size, t_delay, t_sum, t_size);
+    }
 
     this->records->clear();
   }

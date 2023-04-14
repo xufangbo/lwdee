@@ -15,6 +15,7 @@
 #include "matrix/LinuxMatrix.h"
 
 std::string MapDCO::start(std::string a) {
+  printf("\n");
   try {
     LinuxMatrix::start();
     
