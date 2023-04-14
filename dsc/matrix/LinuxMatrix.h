@@ -33,18 +33,20 @@ typedef struct {
 class StreamMatrix {
  public:
   StreamMatrix() {
-    kafka_dco = 0;
+    kafka_index = 0;
     map_dco = 0;
     reduce_dco = 0;
+    kafka_qps = 0;
     kafka_send = 0;
     map_accept = 0;
     reduce_accept = 0;
   }
-  std::atomic<int> kafka_dco;
+  std::atomic<int> kafka_index;
   std::atomic<int> map_dco;
   std::atomic<int> reduce_dco;
 
   std::atomic<uint64_t> kafka_send;
+  std::atomic<uint64_t> kafka_qps;
   std::atomic<uint64_t> map_accept;
   std::atomic<uint64_t> reduce_accept;
 };
@@ -60,6 +62,8 @@ class LinuxMatrix {
 
   static double cpu;
   static RamInfo ram;
+
+  static std::string fileName;
 
  public:
   static StreamMatrix stream;

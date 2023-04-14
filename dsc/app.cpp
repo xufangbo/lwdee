@@ -67,6 +67,7 @@ void init(int argc, char* argv[]) {
 
   auto conf = DscConfig::instance();
   conf->readConfig();
+  conf->nodeName = nodeName;
 
   if (conf->name == "local") {
     logger_init(nodeName);

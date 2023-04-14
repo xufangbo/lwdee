@@ -74,7 +74,11 @@ void Driver::startKafka() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_info("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      if (*bytes != "success") {
+        logger_info("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      } else {
+        logger_error("get kafka start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      }
 
       ddo.releaseGlobal();
     } catch (Exception& ex) {
@@ -113,7 +117,11 @@ void Driver::startMap() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_debug("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      if (*bytes != "success") {
+        logger_debug("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      } else {
+        logger_error("get map start ddo(%ld),%s", ddo.ddoId.itsId(), bytes->c_str());
+      }
 
       ddo.releaseGlobal();
 
@@ -153,7 +161,11 @@ void Driver::startReduce() {
       auto ddo = dco.wait(ddoId);
       auto bytes = ddo.read();
 
-      logger_trace("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
+      if (*bytes != "success") {
+        logger_trace("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
+      } else {
+        logger_error("get reduce start : ddo(node%d),%s", ddo.ddoId.itsWorkNodeId(), bytes->c_str());
+      }
 
       ddo.releaseGlobal();
     } catch (Exception& ex) {

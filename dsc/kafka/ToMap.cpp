@@ -41,16 +41,13 @@ void ToMap::create_dco(PartitionKafka* input) {
   releaseThread.detach();
 }
 
-uint32_t counter = 0;
 void ToMap::accept(RdKafka::Message* message) {
-  counter++;
   try {
-    uint64_t newWindowTs = this->getCurrentWindow();
-
     mut.lock();
 
     this->push(message);
 
+    uint64_t newWindowTs = this->getCurrentWindow();
     if (newWindowTs != currentWindowTs) {
       currentWindowTs = newWindowTs;
       this->toMaps();
@@ -65,22 +62,30 @@ void ToMap::accept(RdKafka::Message* message) {
   }
 };
 
+uint32_t counter = 0;
 void ToMap::push(RdKafka::Message* message) {
-  string line = string(message->len() + 1, '\0');
-  memcpy((void*)line.data(), message->payload(), message->len());
+  counter++;
+  if (counter >= INT32_MAX) {
+    counter = 0;
+  }
 
   uint64_t now = Stopwatch::currentMilliSeconds();
 
   if (counter % filterCondon == 0) {
     LinuxMatrix::stream.kafka_send++;
+
+    string line = string(message->len() + 1, '\0');
+    memcpy((void*)line.data(), message->payload(), message->len());
     mapRecords->push_back(MapRecord(line, (double)now));
   }
 };
 
 void ToMap::toMaps() {
   typedef std::shared_ptr<vector<MapRecord>> MapRecords;
-
   std::vector<MapRecords> bats;
+
+  // logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
+  LinuxMatrix::stream.kafka_qps =  mapRecords->size();
 
   int range = this->mapRecords->size() / mapSize;
   int index = -1;

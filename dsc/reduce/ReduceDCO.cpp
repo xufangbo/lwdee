@@ -1,25 +1,63 @@
 #include "ReduceDCO.h"
+#include <fstream>
 #include <memory>
+#include "core/DscConfig.hpp"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
 #include "core/Stopwatch.h"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
 
+void createFile(int index) {
+  auto conf = DscConfig::instance();
+  std::string fileName = conf->outputFile + conf->nodeName + "_reduce_" + std::to_string(index) + ".csv";
+
+  // if (access(fileName.c_str(), 0) == 0) {
+  //   if (remove(fileName.c_str()) == 0) {
+  //     logger_trace("rm %s", fileName.c_str());
+  //   } else {
+  //     logger_error("can't rm %s", fileName.c_str());
+  //   }
+  // }
+
+  std::ofstream f(fileName, std::ios_base::trunc);
+  if (!f.is_open()) {
+    logger_trace("can't open file %s", fileName.c_str());
+  }
+
+ f << "time" << ",";
+
+  f << "index" << ",";
+  f << "c_input" << ",";
+  f << "c_output" << ",";
+  f << "b_delay" << ",";
+  f << "b_sum" << ",";
+  f << "b_size" << ",";
+  f << "t_delay" << ",";
+  f << "t_sum" << ",";
+  f << "t_size" << ",";
+
+  f << std::endl;
+
+  f.flush();
+  f.close();
+}
+
 std::string ReduceDCO::start(std::string a) {
   try {
     LinuxMatrix::start();
-    
+
     logger_info("reduce start");
 
     Stopwatch sw;
     // LinuxMatrix::print();
     input.fromJson(&a);
+    createFile(input.index);
     // LinuxMatrix::print();
 
     LinuxMatrix::stream.reduce_dco++;
 
-    return "success";
+    return "succeed";
   } catch (Exception& ex) {
     logger_error("reduce start failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";

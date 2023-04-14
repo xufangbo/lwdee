@@ -28,7 +28,7 @@ std::string MapDCO::start(std::string a) {
     LinuxMatrix::stream.map_dco++;
     // LinuxMatrix::print();
 
-    return "succeed!";
+    return "succeed";
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());

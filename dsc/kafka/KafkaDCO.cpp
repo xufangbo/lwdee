@@ -28,7 +28,7 @@ std::string KafkaDCO::start(std::string a) {
     JobManager::add(consumer);
     consumer->start(&input);
 
-    LinuxMatrix::stream.kafka_dco++;
+    LinuxMatrix::stream.kafka_index = input.index;
     // LinuxMatrix::print();
     logger_trace("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
