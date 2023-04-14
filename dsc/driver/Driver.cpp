@@ -143,8 +143,7 @@ void Driver::get_ddo(std::string message, int index, size_t size, DCO& dco, DDOI
     auto ddo = dco.wait(ddoId);
     auto bytes = ddo.read();
 
-if (::strcmp(bytes->c_str(), "succeed") == 0) {
-    // if ( *bytes == "success") {
+    if (::strcmp(bytes->c_str(), "succeed") == 0) {
       logger_warn("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddoId.itsId(), bytes->c_str());
     } else {
       logger_error("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddo.ddoId.itsId(), bytes->c_str());
