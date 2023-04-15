@@ -12,9 +12,11 @@
 #include "core/log.hpp"
 #include "driver/Driver.h"
 #include "kafka/KafkaDCO.h"
-#include "map/MapDCO.h"
+#include "map/MapSchedule.hpp"
 #include "matrix/LinuxMatrix.h"
 #include "reduce/ReduceDCO.h"
+#include "server/Leopard.hpp"
+
 
 void logger_init(std::string nodeName);
 void init(int argc, char* argv[]);
@@ -29,10 +31,9 @@ int main(int argc, char* argv[]) {
     Driver().startJob();
   }
 
-  while (true) {
-    sleep(1);
-  }
-
+  TNode* node = NodeConfig::local;
+  Leopard leopard(0);
+  leopard.start(node->ip.c_str(), node->port);
   // jsonTest();
 }
 

@@ -13,7 +13,7 @@ std::string containers[] = {"dsc", "dsc", "dsc", "dsc", "dsc", "dsc"};
 // std::string containers[] = {"dsc1", "dsc2", "dsc3", "dsc4", "dsc5", "dsc6"};
 
 void app_task(std::string nodeName) {
-  string script = string("scp /home/kevin/git/lwdee/build/app root@") + nodeName + ":/home/kevin/git/lwdee/build/";
+  string script = string("scp /home/kevin/git/lwdee/bin/app root@") + nodeName + ":/home/kevin/git/lwdee/build/";
   system(script.c_str());
 }
 

@@ -11,10 +11,8 @@
 #include "core/cjson.hpp"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
-#include "net/BufferStream.hpp"
-#include "server/TcpResponse.hpp"
 
-std::string MapDCO::start(std::string a) {
+int MapDCO::start(std::string a) {
   printf("\n");
   try {
     LinuxMatrix::start();
@@ -29,24 +27,22 @@ std::string MapDCO::start(std::string a) {
     LinuxMatrix::stream.map_dco++;
     // LinuxMatrix::print();
 
-    return "succeed";
+    return input.index;
 
   } catch (Exception& ex) {
     logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
-    return "failed";
+    return -1;
   } catch (std::exception& ex) {
     logger_error("step2 failed,%s", ex.what());
-    return "failed";
+    return-1;
   }
 }
 
-std::string MapDCO::map(std::string a) {
+std::string MapDCO::map(std::shared_ptr<vector<MapRecord>> lines) {
   try {
     // logger_trace("< accept map,%s",a.c_str());
     Stopwatch sw;
-    auto lines = std::make_shared<vector<MapRecord>>();
-    MapInvokeData mapInvokeDta(0,0, lines.get());
-    mapInvokeDta.fromJson(&a);
+   
 
     LinuxMatrix::stream.map_accept += lines->size();
     // LinuxMatrix::print();
@@ -65,43 +61,10 @@ std::string MapDCO::map(std::string a) {
     return "succeed";
 
   } catch (Exception& ex) {
-    logger_error("map failed,%s,%s", ex.getMessage().c_str(),
-                 ex.getStackTrace().c_str());
+    logger_error("map failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
     logger_error("map failed,%s", ex.what());
     return "failed";
   }
-}
-
-void regist_map_start_service() {
-  TcpResponse::regist(ServicePaths::map_start, [](BufferStream* inputStream,
-                                                  BufferStream* outputStream) {
-    // 1. inputStream -> order request parameter
-    auto len = inputStream->get<uint32_t>();
-    auto content = inputStream->getString(len);
-
-    MapDCO().start(content);
-
-    // 3. outputStream
-    std::string message = "succeed";
-    outputStream->put<uint32_t>(message.size());
-    outputStream->put(message);
-  });
-}
-
-void regist_map_invoke_service() {
-  TcpResponse::regist(ServicePaths::map_invoke, [](BufferStream* inputStream,
-                                                   BufferStream* outputStream) {
-    // 1. inputStream -> order request parameter
-    auto len = inputStream->get<uint32_t>();
-    auto content = inputStream->getString(len);
-
-    MapDCO().map(content);
-
-    // 3. outputStream
-    std::string message = "succeed";
-    outputStream->put<uint32_t>(message.size());
-    outputStream->put(message);
-  });
 }

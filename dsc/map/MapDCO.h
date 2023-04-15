@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include <memory>
 #include "ToReduce.hpp"
 
 class MapDCO {
@@ -10,9 +10,7 @@ class MapDCO {
   ToReduce toReduce;
 
  public:
-  std::string start(std::string a);
-  std::string map(std::string a);
+  int start(std::string a);
+  std::string map(std::shared_ptr<vector<MapRecord>> lines);
 };
 
-void regist_map_start_service();
-void regist_map_invoke_service();
