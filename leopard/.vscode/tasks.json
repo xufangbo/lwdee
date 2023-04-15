@@ -1,0 +1,11 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "build",
+            "command": "cmake -B build & cmake --build build",
+            "args": []
+        }
+    ],
+    "version": "2.0.0"
+}

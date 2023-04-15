@@ -1,0 +1,32 @@
+
+server
+======================================================
+Runway.cpp:62 run : socket accept error,(24)Too many open files
+
+client
+======================================================
+U22S -----
+SocketClient.cpp:137 newClient : socket connect error,(111)Connection refused
+SocketClient.cpp:156 newConnect : socket send error,(32)Broken pipe
+
+SocketClient.cpp:153 newClient : socket connect error,(110)Connection timed out      connect方法超过50s，导致程序崩溃
+
+T420 -----
+SocketClient.cpp:137 newClient : socket connect error,(99)Cannot assign requested address
+SocketClient.cpp:135 newClient : socket connect error,(9)Bad file descriptor
+
+K8S ----
+SocketClient.cpp:168 newClient : socket connect error,(99)Cannot assign requested address
+
+
+
+1.两端都有程序崩溃
+2. server端连接为负数
+3. 客户端和服务端的socket都被占满不释放（是操作系统问题，可以自己降下来）
+
+查看客户端connect时间
+
+Thread 2 "client" received signal SIGPIPE, Broken pipe.
+[Switching to Thread 0x7ffff7a20640 (LWP 22259)]
+__libc_send (flags=<optimized out>, len=22, buf=0x7ffff7a1fce0, fd=544) at ../sysdeps/unix/sysv/linux/send.c:28
+28      ../sysdeps/unix/sysv/linux/send.c: No such file or directory.
