@@ -25,8 +25,7 @@ std::string MapDCO::start(std::string a) {
     input.fromJson(&a);
     toReduce.create_dcos(&input);
 
-    logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index,
-                 sw.stop());
+    logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index,sw.stop());
     LinuxMatrix::stream.map_dco++;
     // LinuxMatrix::print();
 
