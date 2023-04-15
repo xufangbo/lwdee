@@ -47,8 +47,6 @@ void SocketScheduler::running() {
   signal(SIGPIPE, SIG_IGN);
 
   while (_running) {
-    // if (!tracing) newConnect();
-
     waits = epoll->wait(100);
     for (int i = 0; i < waits; i++) {
       try {
@@ -98,15 +96,14 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
 void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-  // if (tracing) logger_trace("recv - %s,rc:%d", buf, rc);
+  if (tracing) logger_trace("recv - %s,rc:%d", buf, rc);
 
   auto* inputStream = socket->inputStream();
 
   inputStream->puts(buf, rc);
 
   if (rc == 0) {
-    if (tracing)
-      logger_info("client socket(%d) closed on rc == 0", socket->fd());
+    if (tracing) logger_info("client socket(%d) closed on rc == 0", socket->fd());
     close(socket);
     return;
   }
@@ -125,13 +122,14 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
 }
 
 void SocketScheduler::handleRequest(Socket* socket) {
+  
   auto* inputStream = socket->inputStream();
   inputStream->reset();
   auto total_len = inputStream->get<uint64_t>();
   auto path_len = inputStream->get<uint32_t>();
   std::string path = inputStream->getString(path_len);
 
-  logger_trace("callback %s", path.c_str());
+  logger_trace("recive %s", path.c_str());
 
   auto callback = TcpRequest::find(path);
   if (callback != nullptr) {
@@ -185,6 +183,8 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
 }
 
 void SocketScheduler::send(Socket* socket, void* buffer, size_t len) {
+
+  logger_trace("send");
   Stopwatch sw;
 
   socket->send(buffer, len);

@@ -104,19 +104,18 @@ std::string ReduceDCO::reduce(std::string a) {
 }
 
 void regist_reduce_start_service() {
-  TcpResponse::regist(ServicePaths::reduce_start, [](BufferStream* inputStream,
-                                                  BufferStream* outputStream) {
-    // 1. inputStream -> order request parameter
-    auto len = inputStream->get<uint32_t>();
-    auto content = inputStream->getString(len);
+  TcpResponse::regist( ServicePaths::reduce_start,
+      [](BufferStream* inputStream, BufferStream* outputStream) {
+        // 1. inputStream -> order request parameter
+        auto len = inputStream->get<uint32_t>();
+        auto content = inputStream->getString(len);
 
-    ReduceDCO::start(content);
+        std::string message =ReduceDCO::start(content);
 
-    // 3. outputStream
-    std::string message = "succeed";
-    outputStream->put<uint32_t>(message.size());
-    outputStream->put(message);
-  });
+        // 3. outputStream
+        outputStream->put<uint32_t>(message.size());
+        outputStream->put(message);
+      });
 }
 
 void regist_reduce_invoke_service() {

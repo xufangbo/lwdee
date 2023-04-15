@@ -211,6 +211,8 @@ void Runway::handleRequest(Socket* socket) {
     inputStream->clean();
 
     this->send(socket, outputStream.get());
+
+    logger_debug("response %s", path.c_str());
   }
 }
 

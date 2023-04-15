@@ -39,7 +39,7 @@ void ToReduce::send(vector<ReduceRecord>* words) {
     };
 
     auto json = ReduceInvokeData(input->index,i, &reduceWords->at(i)).toJson();
-    client->invoke(ServicePaths::reduce_innvoke, (void*)json.c_str(), json.size(), callback);
+    client->invoke(ServicePaths::reduce_invoke, (void*)json.c_str(), json.size(), callback);
     // client->wait();    
   }
 }
