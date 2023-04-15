@@ -1,20 +1,42 @@
-# 设置运行此配置文件所需的CMake最低版本
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
-# set the project name and version
-# 设置项目名称和版本
-project(Demo VERSION 1.0.0)
+project(leopard VERSION 3.0.0.0 LANGUAGES CXX C)
 
-# specify the C++ standard
-# 指定C ++标准
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -w -ggdb -std=c++2a")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+# add_compile_options(-std=c++11 -fexec-charset=GBK -finput-charset=UTF-8)
 
-set(CMAKE_BUILD_TYPE "Debug")
-set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -w -g -ggdb")
-# set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -w -g")
-set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+set(EXECUTABLE_OUTPUT_PATH ../bin)
 
-# include(${CMAKE_CURRENT_SOURCE_DIR}/demo.cmake)
-# include(${CMAKE_CURRENT_SOURCE_DIR}/terasort.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/dsc.cmake)
+aux_source_directory(. DIR)
+
+include_directories(.)
+include_directories(./core)
+include_directories(./leopard)
+include_directories(./dsc)
+
+add_subdirectory(leopard)
+add_subdirectory(dsc)
+
+###############################################
+
+add_executable(app dsc/app.cpp dsc/DscDcoFactory.cpp) 
+
+target_link_directories(app  PUBLIC ${PROJECT_SOURCE_DIR}/lib/librdkafka )
+target_link_libraries(app PUBLIC rdkafka++)
+
+list(APPEND EXTRA_LIBS dscore) 
+list(APPEND EXTRA_LIBS dscore) 
+list(APPEND EXTRA_LIBS leopard) 
+list(APPEND EXTRA_LIBS matrix) 
+list(APPEND EXTRA_LIBS kafka) 
+list(APPEND EXTRA_LIBS map) 
+list(APPEND EXTRA_LIBS reduce) 
+list(APPEND EXTRA_LIBS driver)
+target_link_libraries(app PUBLIC ${EXTRA_LIBS})
+
+target_compile_options(app PUBLIC -Wall)
+

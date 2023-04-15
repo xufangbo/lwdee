@@ -4,9 +4,11 @@
 #include "core/DscConfig.hpp"
 #include "core/Exception.hpp"
 #include "core/Partition.h"
-#include "core/Stopwatch.h"
+#include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
+#include "net/BufferStream.hpp"
+#include "server/TcpResponse.hpp"
 
 void createFile(int index) {
   auto conf = DscConfig::instance();
@@ -98,9 +100,36 @@ std::string ReduceDCO::reduce(std::string a) {
   }
 }
 
-ReduceDCO::ReduceDCO() {
-  getFunctionTable()["reduce"] = (PTR)&ReduceDCO::reduce;
-  getFunctionTable()["start"] = (PTR)&ReduceDCO::start;
+
+
+void regist_reduce_start_service() {
+  TcpResponse::regist(ServicePaths::map_start, [](BufferStream* inputStream,
+                                                  BufferStream* outputStream) {
+    // 1. inputStream -> order request parameter
+    auto len = inputStream->get<uint32_t>();
+    auto content = inputStream->getString(len);
+
+    ReduceDCO::start(content);
+
+    // 3. outputStream
+    std::string message = "succeed";
+    outputStream->put<uint32_t>(message.size());
+    outputStream->put(message);
+  });
 }
-ReduceDCO::~ReduceDCO() {
+
+void regist_reduce_invoke_service() {
+  TcpResponse::regist(ServicePaths::map_invoke, [](BufferStream* inputStream,
+                                                   BufferStream* outputStream) {
+    // 1. inputStream -> order request parameter
+    auto len = inputStream->get<uint32_t>();
+    auto content = inputStream->getString(len);
+
+    ReduceDCO::reduce(content);
+
+    // 3. outputStream
+    std::string message = "succeed";
+    outputStream->put<uint32_t>(message.size());
+    outputStream->put(message);
+  });
 }

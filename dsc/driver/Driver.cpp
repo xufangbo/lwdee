@@ -6,11 +6,11 @@
 
 #include "core/Exception.hpp"
 #include "core/Partition.h"
-#include "core/Stopwatch.h"
+#include "core/Stopwatch.hpp"
 #include "core/log.hpp"
-#include "lwdee/DDO.h"
-#include "lwdee/lwdee.h"
 #include "matrix/LinuxMatrix.h"
+#include "client/TcpRequest.hpp"
+#include "client/SocketScheduler.hpp"
 
 void Driver::startJob() {
   try {
@@ -47,7 +47,6 @@ void Driver::start_kafka() {
   logger_info("< start kafka");
   Stopwatch sw;
 
-  std::vector<pair<DCO, DDOId>> kafkaInvokers;
   for (int i = 0; i < conf->partitions.size(); i++) {
     printf("\n");
     logger_info("start kafka %d / %d -----------------", i, conf->partitions.size());
@@ -58,31 +57,26 @@ void Driver::start_kafka() {
     }
     PartitionKafka input(i, conf->group, conf->topic, conf->window, kafka_mapVoxors);
 
-    DCO dco = lwdee::create_dco("KafkaDCO");
-    logger_info("kafka voxorId: %s", dco.voxorId().c_str());
+    auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
+    RequestCallback callback = [](BufferStream* inputStream) {
+      auto len = inputStream->get<uint32_t>();
+      auto content = inputStream->getString(len);
 
-    DDOId ddoId = dco.async("start", input.toJson());
-    logger_info("%s", input.toJson().c_str());
+      logger_info("recive(%d) :  %s", len, content.c_str());
+    };
 
-    kafkaInvokers.push_back(std::make_pair(dco, ddoId));
-  }
-
-  for (int i = 0; i < kafkaInvokers.size(); i++) {
-    auto& kv = kafkaInvokers[i];
-    DCO dco = kv.first;
-    DDOId ddoId = kv.second;
-
-    this->get_ddo("kafka ddo", i, kafkaInvokers.size(), dco, ddoId);
-  }
+  auto json = input.toJson();
+  client->invoke(ServicePaths::kafka_start, (void*)json.c_str(), json.size(), callback);
+  client->wait();
 
   logger_info("> start kafka,eclipse %lf", sw.stop());
+}
 }
 
 void Driver::start_map() {
   logger_debug("< map");
   Stopwatch sw;
 
-  std::vector<pair<DCO, DDOId>> mapInvokers;
   for (int i = 0; i < conf->splitNums1; i++) {
     printf("\n");
     logger_debug("start map %d / %d -----------------", i, conf->splitNums1);
@@ -97,14 +91,18 @@ void Driver::start_map() {
 
     mapInvokers.push_back(std::make_pair(dco, ddoId));
   }
+  
+ auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
+    RequestCallback callback = [](BufferStream* inputStream) {
+      auto len = inputStream->get<uint32_t>();
+      auto content = inputStream->getString(len);
 
-  for (int i = 0; i < mapInvokers.size(); i++) {
-    auto& kv = mapInvokers[i];
-    DCO dco = kv.first;
-    DDOId ddoId = kv.second;
+      logger_info("recive(%d) :  %s", len, content.c_str());
+    };
 
-    this->get_ddo("map ddo", i, mapInvokers.size(), dco, ddoId);
-  }
+  auto json = input.toJson();
+  client->invoke(ServicePaths::map_start, (void*)json.c_str(), json.size(), callback);
+  client->wait();  
 
   logger_debug("> start map,eclipse %lf", sw.stop());
 }
@@ -113,7 +111,6 @@ void Driver::start_reduce() {
   logger_warn("< start reduce");
   Stopwatch sw;
 
-  std::vector<pair<DCO, DDOId>> reduceInvokers;
   for (int i = 0; i < conf->splitNums2; i++) {
     printf("\n");
     logger_warn("start reduce %d / %d -----------------", i, conf->splitNums2);
@@ -128,33 +125,18 @@ void Driver::start_reduce() {
 
     reduceInvokers.push_back(std::make_pair(dco, ddoId));
   }
+  
+ auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
+    RequestCallback callback = [](BufferStream* inputStream) {
+      auto len = inputStream->get<uint32_t>();
+      auto content = inputStream->getString(len);
 
-  for (int i = 0; i < reduceInvokers.size(); i++) {
-    auto& kv = reduceInvokers[i];
-    DCO dco = kv.first;
-    DDOId ddoId = kv.second;
+      logger_info("recive(%d) :  %s", len, content.c_str());
+    };
 
-    this->get_ddo("reduce ddo", i, reduceInvokers.size(), dco, ddoId);
-  }
+  auto json = input.toJson();
+  client->invoke(ServicePaths::reduce_start, (void*)json.c_str(), json.size(), callback);
+  client->wait();  
 
   logger_warn("> start reduce,eclipse %lf", sw.stop());
-}
-
-void Driver::get_ddo(std::string message, int index, size_t size, DCO& dco, DDOId& ddoId) {
-  printf("\n");
-  try {
-    auto ddo = dco.wait(ddoId);
-    auto bytes = ddo.read();
-
-    if (::strcmp(bytes->c_str(), "succeed") == 0) {
-      logger_warn("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddoId.itsId(), bytes->c_str());
-    } else {
-      logger_error("%s %d/%d: dco(%s),ddo(%ld),%s", message.c_str(), index, size, dco.voxorId().c_str(), ddo.ddoId.itsId(), bytes->c_str());
-    }
-
-    // ddo.releaseGlobal();
-  } catch (Exception& ex) {
-    ex.trace(ZONE);
-    throw ex;
-  }
 }

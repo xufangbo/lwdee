@@ -1,17 +1,18 @@
 #pragma once
 
-#include "api/UhconnDco.h"
-#include "core/Partition.h"
 #include "Reducer.hpp"
+#include "core/Partition.h"
 
-class ReduceDCO : public UhconnDco {
- public:
-  ReduceDCO();
-  virtual ~ReduceDCO();
+class ReduceDCO {
 
  private:
-  Reducer reducer;
-  PartitionReduce input;
-  std::string start(std::string a);
-  std::string reduce(std::string a);
+  static Reducer reducer;
+  static PartitionReduce input;
+
+ public:
+  static std::string start(std::string a);
+  static std::string reduce(std::string a);
 };
+
+void regist_reduce_start_service();
+void regist_reduce_invoke_service();

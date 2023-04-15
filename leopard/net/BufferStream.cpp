@@ -1,6 +1,6 @@
 #include "BufferStream.hpp"
 
-BufferStream::BufferStream() { buffer = (byte*)calloc(1, capacity); }
+BufferStream::BufferStream() { buffer = (Byte*)calloc(1, capacity); }
 
 BufferStream::~BufferStream() {
   if (buffer != NULL) {
@@ -9,7 +9,7 @@ BufferStream::~BufferStream() {
   }
 }
 
-void BufferStream::puts(byte* buf, int len) {
+void BufferStream::puts(Byte* buf, int len) {
   size_t t = pos + len;
   if (t < capacity) {
     capacity = t / BUF_UNIT + BUF_UNIT;
@@ -23,14 +23,14 @@ void BufferStream::puts(byte* buf, int len) {
 void BufferStream::get(std::string& str, int len) {
   str.resize(len + 1);
   str[len] = '\0';
-  this->get((byte*)str.c_str(), len);
+  this->get((Byte*)str.c_str(), len);
 }
 std::string BufferStream::getString(int len) {
   std::string str;
   this->get(str, len);
   return str;
 }
-void BufferStream::get(byte* ptr, int len) {
+void BufferStream::get(Byte* ptr, int len) {
   memcpy(ptr, buffer + pos, len);
   pos += len;
 }

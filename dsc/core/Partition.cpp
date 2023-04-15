@@ -1,4 +1,5 @@
 #include "Partition.h"
+
 #include "core/cjson.hpp"
 
 std::string PartitionKafka::toJson() {
@@ -59,7 +60,7 @@ std::string PartitionMap::toJson() {
 
   cJSON_Delete(root);
   free(jsonText);
-  
+
   return rc;
 }
 
@@ -87,7 +88,7 @@ std::string PartitionReduce::toJson() {
 
   cJSON_Delete(root);
   free(jsonText);
-  
+
   return rc;
 }
 
@@ -118,7 +119,7 @@ std::string MapInvokeData::toJson() {
 
   cJSON_Delete(root);
   free(jsonText);
-  
+
   return rc;
 }
 
@@ -141,7 +142,6 @@ void MapInvokeData::fromJson(std::string* json) {
   cJSON_Delete(root);
 }
 
-
 std::string ReduceInvokeData::toJson() {
   cJSON* root = cJSON_CreateObject();
 
@@ -162,7 +162,7 @@ std::string ReduceInvokeData::toJson() {
 
   cJSON_Delete(root);
   free(jsonText);
-  
+
   return rc;
 }
 
@@ -202,7 +202,7 @@ std::string StringsSerializer::toJson(int index, vector<string>* items) {
 
   cJSON_Delete(root);
   free(jsonText);
-  
+
   return rc;
 }
 
@@ -241,6 +241,12 @@ bool ReduceRecord::fromJson(std::string* json) {
   // this->ts = ts_did->valueint;  // 日志数据时间戳不对
 
   cJSON_Delete(root);
-  
+
   return true;
 }
+
+std::string ServicePaths::kafka_start = "dsc.kafka.start";
+std::string ServicePaths::map_start = "dsc.map.start";
+std::string ServicePaths::map_invoke = "dsc.map.invoke";
+std::string ServicePaths::reduce_start = "dsc.reduce.start";
+std::string ServicePaths::reduce_innvoke = "dsc.reduce.innvoke";

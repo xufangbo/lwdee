@@ -2,19 +2,14 @@
 
 #include <vector>
 
-#include "api/UhconnDco.h"
-#include "lwdee/DDO.h"
 #include "core/Partition.h"
 
-class KafkaDCO : public UhconnDco {
- public:
-  KafkaDCO();
-  virtual ~KafkaDCO();
-
+class KafkaDCO {
  private:
- PartitionKafka input;
-  std::string start(std::string a);
+  static PartitionKafka input;
 
  public:
-  static std::vector<DDO> ddos;
+  static std::string start(std::string a);
 };
+
+void regist_kafka_start_service();

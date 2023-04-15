@@ -4,7 +4,7 @@
 #include <regex>
 #include <sstream>
 #include "core/DscConfig.hpp"
-#include "core/Stopwatch.h"
+#include "core/Stopwatch.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
 #include "lwdee/lwdee.h"

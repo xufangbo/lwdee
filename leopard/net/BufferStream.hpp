@@ -9,7 +9,7 @@
 
 #define BUF_UNIT 1024
 
-typedef void byte;
+typedef void Byte;
 
 class BufferStream {
  protected:
@@ -18,7 +18,7 @@ class BufferStream {
   size_t capacity = BUF_UNIT;
 
  public:
-  byte* buffer = NULL;
+  Byte* buffer = NULL;
 
  public:
   BufferStream();
@@ -27,17 +27,17 @@ class BufferStream {
  public:
   template <typename T>
   void put(T v) {
-    this->puts((byte*)&v, sizeof(v));
+    this->puts((Byte*)&v, sizeof(v));
   }
-  void put(std::string& v) { this->puts((byte*)v.data(), v.size()); }
-  void put(const char* v) { this->puts((byte*)v, strlen(v)); }
-  void puts(byte* buf, int len);
+  void put(std::string& v) { this->puts((Byte*)v.data(), v.size()); }
+  void put(const char* v) { this->puts((Byte*)v, strlen(v)); }
+  void puts(Byte* buf, int len);
 
   template <typename T>
   void set(size_t position, T v) {
     memcpy(buffer + position, &v, sizeof(v));
   }
-  void set(size_t position, byte* buf, size_t len) {
+  void set(size_t position, Byte* buf, size_t len) {
     memcpy(buffer + position, buf, len);
   }
 
@@ -45,20 +45,20 @@ class BufferStream {
   template <typename T>
   T get() {
     T v;
-    this->get((byte*)&v, sizeof(v));
+    this->get((Byte*)&v, sizeof(v));
     return v;
   }
   template <typename T>
   void get(T& v) {
-    this->get((byte*)&v, sizeof(v));
+    this->get((Byte*)&v, sizeof(v));
   }
   template <typename T>
   void get(int position, T& v) {
-    memcpy((byte*)&v, buffer + position, sizeof(v));
+    memcpy((Byte*)&v, buffer + position, sizeof(v));
   }
   void get(std::string& str, int len);
   std::string getString(int len);
-  void get(byte* ptr, int len);
+  void get(Byte* ptr, int len);
 
  public:
   void reset() { pos = 0; }

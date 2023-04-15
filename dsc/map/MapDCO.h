@@ -3,16 +3,16 @@
 #include <vector>
 
 #include "ToReduce.hpp"
-#include "api/UhconnDco.h"
 
-class MapDCO : public UhconnDco {
- public:
-  MapDCO();
-  virtual ~MapDCO();
-
+class MapDCO {
  private:
-  PartitionMap input;
-  ToReduce toReduce;
-  std::string start(std::string a);
-  std::string map(std::string a);
+  static PartitionMap input;
+  static ToReduce toReduce;
+
+ public:
+  static std::string start(std::string a);
+  static std::string map(std::string a);
 };
+
+void regist_map_start_service();
+void regist_map_invoke_service();

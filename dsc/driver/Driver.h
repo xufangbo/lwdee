@@ -5,7 +5,6 @@
 
 #include "core/DscConfig.hpp"
 #include "core/Partition.h"
-#include "lwdee/DCO.h"
 
 class Driver {
  private:
@@ -20,5 +19,4 @@ class Driver {
   void start_kafka();
   void start_map();
   void start_reduce();
-  void get_ddo(std::string message, int index, size_t size, DCO& dco, DDOId& ddoId);
 };

@@ -1,12 +1,6 @@
 ﻿
-add_library (core 
-log.cpp
-Exception.cpp
-Partition.cpp
-ByteSpan.cpp
-Stopwatch.cpp
-cjson.cpp
-DscConfig.cpp
-)
+file(GLOB_RECURSE SRC_src "*.cpp")
 
-target_link_libraries(core pthread)
+add_library (dscore ${SRC_src})
+
+target_link_libraries(dscore pthread)
