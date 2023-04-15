@@ -24,12 +24,14 @@ class NodeConfig {
   static int index;
 
  public:
+  static TNode* local;
   static std::vector<TNode> nodes;
   static void readConfig();
   static int nodeCount() { return nodes.size(); }
   static TNode* nextNode();
   static TNode* byNodeId(int id);
   static TNode* byName(std::string name);
+  static void setLocal(std::string name);
   static std::string voxorId(TNode* node, int index);
   static VoxorId voxorId(std::string input);
 };

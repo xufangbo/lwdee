@@ -3,15 +3,16 @@
 // #include "DemoConfig.h"
 // #include "UserDcoFactory.h"
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+
 #include "core/DscConfig.hpp"
+#include "core/NodeConfig.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "driver/Driver.h"
 #include "kafka/KafkaDCO.h"
 #include "map/MapDCO.h"
-#include "core/NodeConfig.hpp"
 #include "matrix/LinuxMatrix.h"
 #include "reduce/ReduceDCO.h"
 
@@ -21,13 +22,10 @@ std::string configFile();
 void regist_services();
 
 int main(int argc, char* argv[]) {
-
   init(argc, argv);
   regist_services();
 
-  auto nodeName = getenv("nodename");
-  auto localNode = NodeConfig::byName(nodeName);
-  if (localNode->nodeId == 1) {
+  if (NodeConfig::local->nodeId == 1) {
     Driver().startJob();
   }
 
@@ -50,6 +48,7 @@ void init(int argc, char* argv[]) {
   }
 
   NodeConfig::readConfig();
+  NodeConfig::setLocal(nodeName);
 
   auto conf = DscConfig::instance();
   conf->readConfig();

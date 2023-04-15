@@ -1,13 +1,15 @@
 #include "NodeConfig.hpp"
 
+#include <string.h>
+
 #include <sstream>
 
 #include "core/Exception.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
-#include <string.h>
 
 std::vector<TNode> NodeConfig::nodes;
+TNode *NodeConfig::local = nullptr;
 int NodeConfig::index = 0;
 
 void NodeConfig::readConfig() {
@@ -46,6 +48,7 @@ void NodeConfig::readConfig() {
   cJSON *node = root->child;
   while (node != NULL) {
     if (node->type != cJSON_Object) {
+      node = node->next;
       continue;
     }
     TNode tnode;
@@ -97,12 +100,14 @@ TNode *NodeConfig::byNodeId(int id) {
   throw Exception("can't find node by id " + std::to_string(id), ZONE);
 }
 
-TNode *NodeConfig::byName(std::string name){
+TNode *NodeConfig::byName(std::string name) {
   for (auto &node : nodes) {
-      if (strcmp(node.name.c_str(),name.c_str())==0) {
-        return &node;
-      }
+    if (strcmp(node.name.c_str(), name.c_str()) == 0) {
+      return &node;
     }
+  }
 
   throw Exception("can't find node by name " + name, ZONE);
 }
+
+void NodeConfig::setLocal(std::string name) { local = byName(name); }
