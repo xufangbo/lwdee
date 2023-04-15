@@ -32,8 +32,7 @@ std::string MapDCO::start(std::string a) {
     return "succeed";
 
   } catch (Exception& ex) {
-    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(),
-                 ex.getStackTrace().c_str());
+    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
     logger_error("step2 failed,%s", ex.what());
@@ -82,7 +81,7 @@ void regist_map_start_service() {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    MapDCO::start(content);
+    MapDCO().start(content);
 
     // 3. outputStream
     std::string message = "succeed";
@@ -98,7 +97,7 @@ void regist_map_invoke_service() {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    MapDCO::map(content);
+    MapDCO().map(content);
 
     // 3. outputStream
     std::string message = "succeed";

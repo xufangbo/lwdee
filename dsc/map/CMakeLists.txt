@@ -5,4 +5,4 @@ Mapper.cpp
 ToReduce.cpp
 )
 
-target_link_libraries(map core)
+target_link_libraries(map core leopard)

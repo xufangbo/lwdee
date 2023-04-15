@@ -45,6 +45,9 @@ void createFile(int index) {
   f.close();
 }
 
+Reducer ReduceDCO::reducer;
+PartitionReduce ReduceDCO::input;
+
 std::string ReduceDCO::start(std::string a) {
   printf("\n");
   try {

@@ -4,4 +4,4 @@ ReduceDCO.cpp
 Reducer.cpp
 )
 
-target_link_libraries(reduce rdkafka++ core)
+target_link_libraries(reduce rdkafka++ core leopard)

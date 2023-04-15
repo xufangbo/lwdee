@@ -13,6 +13,8 @@
 #include "net/BufferStream.hpp"
 #include "server/TcpResponse.hpp"
 
+PartitionKafka KafkaDCO::input;
+
 std::string KafkaDCO::start(std::string a) {
   printf("\n");
   try {
@@ -29,8 +31,7 @@ std::string KafkaDCO::start(std::string a) {
 
     LinuxMatrix::stream.kafka_index = input.index;
     // LinuxMatrix::print();
-    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index,
-                 sw.stop());
+    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
     return "succeed";
 
