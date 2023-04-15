@@ -3,7 +3,8 @@
 // #include "DemoConfig.h"
 // #include "UserDcoFactory.h"
 #include <stdlib.h>
-
+#include <unistd.h>
+#include <string.h>
 #include "core/DscConfig.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
@@ -25,12 +26,13 @@ int main(int argc, char* argv[]) {
   regist_services();
 
   auto nodeName = getenv("nodename");
-  if (localNode->itId() == 1) {
+  auto localNode = NodeConfig::byName(nodeName);
+  if (localNode->nodeId == 1) {
     Driver().startJob();
   }
 
   while (true) {
-    usleep(1000000);
+    sleep(1);
   }
 
   // jsonTest();

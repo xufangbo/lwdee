@@ -4,29 +4,17 @@
 #include <thread>
 #include <vector>
 #include "core/Partition.h"
-#include "lwdee/lwdee.h"
+#include "core/NodeConfig.hpp"
 
 using namespace std;
 
 class ToReduce {
  private:
   PartitionMap* input;
-  std::vector<DCO> reduceDcos;
+  std::vector<VoxorId> reduceDcos;
   std::hash<std::string> _hash;
 
  public:
-  ~ToReduce() {
-    if (ddoIds != nullptr) {
-      delete ddoIds;
-      ddoIds = nullptr;
-    }
-  }
   void create_dcos(PartitionMap* input);
   void send(vector<ReduceRecord>* words);
-
- private:
-  list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();
-  thread releaseThread;
-
-  void releaseDdo();
 };

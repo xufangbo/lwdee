@@ -1,9 +1,14 @@
 #include "NodeConfig.hpp"
 
+#include <sstream>
+
+#include "core/Exception.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
+#include <string.h>
 
 std::vector<TNode> NodeConfig::nodes;
+int NodeConfig::index = 0;
 
 void NodeConfig::readConfig() {
   if (nodes.size() > 0) {
@@ -58,4 +63,46 @@ void NodeConfig::readConfig() {
   }
 
   logger_debug("%d config nodes", nodes.size());
+}
+
+TNode *NodeConfig::nextNode() {
+  index++;
+  if (index >= nodes.size()) {
+    index = 1;
+  }
+
+  return nodes.data() + index;
+}
+
+std::string NodeConfig::voxorId(TNode *node, int index) {
+  return std::to_string(node->nodeId) + " " + std::to_string(index);
+}
+
+VoxorId NodeConfig::voxorId(std::string input) {
+  VoxorId id;
+  std::stringstream out(input);
+  out >> id.nodeId;
+  out >> id.voxorKey;
+
+  return id;
+}
+
+TNode *NodeConfig::byNodeId(int id) {
+  for (auto &node : nodes) {
+    if (node.nodeId == id) {
+      return &node;
+    }
+  }
+
+  throw Exception("can't find node by id " + std::to_string(id), ZONE);
+}
+
+TNode *NodeConfig::byName(std::string name){
+  for (auto &node : nodes) {
+      if (strcmp(node.name.c_str(),name.c_str())==0) {
+        return &node;
+      }
+    }
+
+  throw Exception("can't find node by name " + name, ZONE);
 }

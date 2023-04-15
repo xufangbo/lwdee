@@ -77,7 +77,7 @@ std::string ReduceDCO::reduce(std::string a) {
 
     auto records = std::make_shared<std::vector<ReduceRecord>>();
 
-    ReduceInvokeData reduceInvokeData(0, records.get());
+    ReduceInvokeData reduceInvokeData(0, 0,records.get());
     reduceInvokeData.fromJson(&a);
 
     LinuxMatrix::stream.reduce_accept += records->size();

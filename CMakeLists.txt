@@ -17,18 +17,20 @@ include_directories(.)
 include_directories(./core)
 include_directories(./leopard)
 include_directories(./dsc)
+include_directories(./inc)
 
+add_subdirectory(core)
 add_subdirectory(leopard)
 add_subdirectory(dsc)
 
 ###############################################
 
-add_executable(app dsc/app.cpp dsc/DscDcoFactory.cpp) 
+add_executable(app dsc/app.cpp) 
 
 target_link_directories(app  PUBLIC ${PROJECT_SOURCE_DIR}/lib/librdkafka )
 target_link_libraries(app PUBLIC rdkafka++)
 
-list(APPEND EXTRA_LIBS dscore) 
+list(APPEND EXTRA_LIBS core) 
 list(APPEND EXTRA_LIBS dscore) 
 list(APPEND EXTRA_LIBS leopard) 
 list(APPEND EXTRA_LIBS matrix) 

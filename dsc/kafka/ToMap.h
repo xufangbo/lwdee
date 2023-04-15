@@ -10,7 +10,7 @@
 
 #include <librdkafka/rdkafkacpp.h>
 #include "core/Partition.h"
-#include "lwdee/lwdee.h"
+#include "core/NodeConfig.hpp"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ class ToMap {
   int filterCondon = 100;
   int mapSize = 0;
   PartitionKafka* input;
-  vector<DCO> mapDocs;
+  vector<VoxorId> mapDocs;
   vector<MapRecord>* mapRecords = new vector<MapRecord>();
 
  public:
@@ -36,10 +36,4 @@ class ToMap {
   uint64_t getCurrentWindow();
   void toMaps();
   void toMap(int index,vector<MapRecord>* mapLines);
-
- private:
-  list<pair<DDOId, DCO*>>* ddoIds = new list<pair<DDOId, DCO*>>();
-  thread releaseThread;
-
-  void releaseDdo();
 };

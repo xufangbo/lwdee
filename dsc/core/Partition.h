@@ -70,12 +70,13 @@ struct MapRecord {
 class MapInvokeData {
  public:
   int kafkaIndex;
+  int mapIndex;
   vector<MapRecord>* items = nullptr;
 
  public:
   MapInvokeData() {}
-  MapInvokeData(int kafkaIndex, vector<MapRecord>* items)
-      : kafkaIndex(kafkaIndex), items(items) {}
+  MapInvokeData(int kafkaIndex,int mapIndex, vector<MapRecord>* items)
+      : kafkaIndex(kafkaIndex),mapIndex(mapIndex), items(items) {}
 
   std::string toJson();
   void fromJson(std::string* json);
@@ -91,12 +92,13 @@ struct ReduceRecord {
 class ReduceInvokeData {
  public:
   int mapIndex;
+  int reduceIndex;
   vector<ReduceRecord>* items = nullptr;
 
  public:
   ReduceInvokeData() {}
-  ReduceInvokeData(int mapIndex, vector<ReduceRecord>* items)
-      : mapIndex(mapIndex), items(items) {}
+  ReduceInvokeData(int mapIndex, int reduceIndex,vector<ReduceRecord>* items)
+      : mapIndex(mapIndex),reduceIndex(reduceIndex), items(items) {}
 
   std::string toJson();
   void fromJson(std::string* json);

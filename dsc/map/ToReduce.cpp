@@ -3,18 +3,17 @@
 #include "core/DscConfig.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
-#include "lwdee/lwdee.h"
+#include "client/SocketScheduler.hpp"
+#include "client/TcpRequest.hpp"
+#include "core/NodeConfig.hpp"
 
 void ToReduce::create_dcos(PartitionMap* input) {
   this->input = input;
 
   for (auto& reduceVoxorId : input->reduceVoxors) {
-    DCO dco = lwdee::get_dco(reduceVoxorId);
+    auto dco = NodeConfig::voxorId(reduceVoxorId);
     reduceDcos.push_back(dco);
   }
-
-  releaseThread = std::thread(&ToReduce::releaseDdo, this);
-  releaseThread.detach();
 }
 
 void ToReduce::send(vector<ReduceRecord>* words) {
@@ -28,31 +27,19 @@ void ToReduce::send(vector<ReduceRecord>* words) {
   }
 
   for (int i = 0; i < split; i++) {
-    DCO* dco = reduceDcos.data() + i;
+    VoxorId voxorId = this->reduceDcos[i];
+    TNode* node = NodeConfig::byNodeId(voxorId.nodeId);    
 
-    ReduceInvokeData ReduceInvokeData(input->index, &reduceWords->at(i));
+    auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+    RequestCallback callback = [](BufferStream* inputStream) {
+      auto len = inputStream->get<uint32_t>();
+      auto content = inputStream->getString(len);
 
-    auto jsonText = ReduceInvokeData.toJson();
+      // logger_debug("recive(%d) :  %s", len, content.c_str());
+    };
 
-    auto ddoId = dco->async("reduce", jsonText);
-
-    ddoIds->push_back(std::make_pair(ddoId, dco));
-  }
-}
-
-void ToReduce::releaseDdo() {
-  while (true) {
-    // logger_info("remove wait reduce ddo , %d", ddoIds->size());
-    int size = ddoIds->size();
-    for (int i = 0; i < size - 1; i++) {
-      if (!ddoIds->empty()) {
-        auto i = ddoIds->front();
-        i.second->wait(i.first);
-        DDO(i.first).releaseGlobal();
-        ddoIds->pop_front();
-      }
-    }
-
-    usleep(1000000 / 10);
+    auto json = ReduceInvokeData(input->index,i, &reduceWords->at(i)).toJson();
+    client->invoke(ServicePaths::reduce_innvoke, (void*)json.c_str(), json.size(), callback);
+    // client->wait();    
   }
 }

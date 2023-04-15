@@ -7,7 +7,6 @@
 #include "core/Stopwatch.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
-#include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 
 void Mapper::map(std::vector<MapRecord>* mapRecords, vector<ReduceRecord>* reduceRecords) {

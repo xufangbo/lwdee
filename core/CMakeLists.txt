@@ -1,6 +1,6 @@
 aux_source_directory(. DIR)
 
-file(GLOB_RECURSE SRC_src "core/*.cpp")
+file(GLOB_RECURSE SRC_src "./*.cpp")
 
 add_library (core  ${SRC_src})
 

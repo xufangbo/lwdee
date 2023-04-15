@@ -6,9 +6,12 @@
 #include "core/Stopwatch.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
-#include "lwdee/lwdee.h"
 #include "map/MapDCO.h"
 #include "matrix/LinuxMatrix.h"
+#include "client/SocketScheduler.hpp"
+#include "client/TcpRequest.hpp"
+#include "core/NodeConfig.hpp"
+
 
 ToMap::ToMap() {
 }
@@ -17,11 +20,6 @@ ToMap::~ToMap() {
   if (mapRecords != nullptr) {
     delete mapRecords;
     mapRecords = nullptr;
-  }
-
-  if (ddoIds != nullptr) {
-    delete ddoIds;
-    ddoIds = nullptr;
   }
 }
 
@@ -33,12 +31,9 @@ void ToMap::create_dco(PartitionKafka* input) {
   this->filterCondon = DscConfig::instance()->filterCondon;
 
   for (auto& mapVoxorId : input->mapVoxors) {
-    DCO dco = lwdee::get_dco(mapVoxorId);
+    auto dco = NodeConfig::voxorId(mapVoxorId);
     mapDocs.push_back(dco);
   }
-
-  releaseThread = std::thread(&ToMap::releaseDdo, this);
-  releaseThread.detach();
 }
 
 void ToMap::accept(RdKafka::Message* message) {
@@ -116,34 +111,26 @@ void ToMap::toMaps() {
 }
 
 void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
-  auto dco = this->mapDocs.data() + index;
-  auto jsonText = MapInvokeData(input->index, mapLines).toJson();
+  // auto dco = this->mapDocs.data() + index;
+  VoxorId voxorId = this->mapDocs[index];
+  TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
   // logger_debug("send to map %d lines", mapLines->size());
 
-  DDOId ddoId = dco->async("map", jsonText);
+  auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+  RequestCallback callback = [](BufferStream* inputStream) {
+    auto len = inputStream->get<uint32_t>();
+    auto content = inputStream->getString(len);
 
-  ddoIds->push_back(std::make_pair(ddoId, dco));
+    // logger_debug("recive(%d) :  %s", len, content.c_str());
+  };
+
+  auto json = MapInvokeData(input->index,voxorId.voxorKey, mapLines).toJson();
+  client->invoke(ServicePaths::map_invoke, (void*)json.c_str(), json.size(), callback);
+  // client->wait();
 }
 
 uint64_t ToMap::getCurrentWindow() {
   uint64_t now = Stopwatch::currentMilliSeconds();
   return now + window - (now % window);
-}
-
-void ToMap::releaseDdo() {
-  while (true) {
-    // logger_debug("remove wait map ddo , %d", ddoIds->size());
-    int size = ddoIds->size();
-    for (int i = 0; i < size - 1; i++) {
-      if (!ddoIds->empty()) {
-        auto i = ddoIds->front();
-        i.second->wait(i.first);
-        DDO(i.first).releaseGlobal();
-        ddoIds->pop_front();
-      }
-    }
-
-    usleep(1000000 / 10);
-  }
 }

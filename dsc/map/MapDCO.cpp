@@ -46,7 +46,7 @@ std::string MapDCO::map(std::string a) {
     // logger_trace("< accept map,%s",a.c_str());
     Stopwatch sw;
     auto lines = std::make_shared<vector<MapRecord>>();
-    MapInvokeData mapInvokeDta(0, lines.get());
+    MapInvokeData mapInvokeDta(0,0, lines.get());
     mapInvokeDta.fromJson(&a);
 
     LinuxMatrix::stream.map_accept += lines->size();

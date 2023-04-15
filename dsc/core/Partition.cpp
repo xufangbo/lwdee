@@ -103,6 +103,7 @@ std::string MapInvokeData::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "kafkaIndex", kafkaIndex);
+  cJSON_AddNumberToObject(root, "mapIndex", mapIndex);
 
   cJSON* itemsNode = cJSON_CreateArray();
   cJSON_AddItemToObject(root, "items", itemsNode);
@@ -126,6 +127,7 @@ std::string MapInvokeData::toJson() {
 void MapInvokeData::fromJson(std::string* json) {
   cJSON* root = cJSON_Parse(json->c_str());
   kafkaIndex = cJSON_GetObjectItem(root, "kafkaIndex")->valueint;
+  mapIndex = cJSON_GetObjectItem(root, "mapIndex")->valueint;
 
   cJSON* itemsNode = cJSON_GetObjectItem(root, "items");
   int size = cJSON_GetArraySize(itemsNode);
@@ -146,6 +148,7 @@ std::string ReduceInvokeData::toJson() {
   cJSON* root = cJSON_CreateObject();
 
   cJSON_AddNumberToObject(root, "mapIndex", mapIndex);
+  cJSON_AddNumberToObject(root, "reduceIndex", reduceIndex);
 
   cJSON* itemsNode = cJSON_CreateArray();
   cJSON_AddItemToObject(root, "items", itemsNode);
@@ -169,6 +172,7 @@ std::string ReduceInvokeData::toJson() {
 void ReduceInvokeData::fromJson(std::string* json) {
   cJSON* root = cJSON_Parse(json->c_str());
   mapIndex = cJSON_GetObjectItem(root, "mapIndex")->valueint;
+  reduceIndex = cJSON_GetObjectItem(root, "reduceIndex")->valueint;
 
   cJSON* itemsNode = cJSON_GetObjectItem(root, "items");
   int size = cJSON_GetArraySize(itemsNode);
