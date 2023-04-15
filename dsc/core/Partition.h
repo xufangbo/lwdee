@@ -116,5 +116,5 @@ class ServicePaths {
   static std::string map_start;
   static std::string map_invoke;
   static std::string reduce_start;
-  static std::string reduce_innvoke;
+  static std::string reduce_invoke;
 };

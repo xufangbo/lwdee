@@ -29,8 +29,7 @@ suspend testSuspend(SocketClient* client, int i) {
   auto path = "com.cs.sales.order.save";
 
   logger_debug("send %s", input.c_str());
-  BufferStream* inputStream =
-      co_await client->invoke(path, (void*)input.c_str(), input.size());
+  BufferStream* inputStream = co_await client->invoke(path, (void*)input.c_str(), input.size());
 
   auto len = inputStream->get<uint32_t>();
   auto content = inputStream->getString(len);

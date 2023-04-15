@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "client/SocketScheduler.hpp"
 #include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/Stopwatch.hpp"
@@ -17,7 +18,6 @@
 #include "reduce/ReduceDCO.h"
 #include "server/Leopard.hpp"
 
-
 void logger_init(std::string nodeName);
 void init(int argc, char* argv[]);
 std::string configFile();
@@ -25,16 +25,18 @@ void regist_services();
 
 int main(int argc, char* argv[]) {
   init(argc, argv);
-  regist_services();
 
-  if (NodeConfig::local->nodeId == 1) {
+  TNode* node = NodeConfig::local;
+
+  regist_services();
+  SocketScheduler::start();
+
+  if (node->nodeId == 1) {
     Driver().startJob();
   }
 
-  TNode* node = NodeConfig::local;
   Leopard leopard(0);
   leopard.start(node->ip.c_str(), node->port);
-  // jsonTest();
 }
 
 void init(int argc, char* argv[]) {

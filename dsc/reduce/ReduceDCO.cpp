@@ -103,10 +103,8 @@ std::string ReduceDCO::reduce(std::string a) {
   }
 }
 
-
-
 void regist_reduce_start_service() {
-  TcpResponse::regist(ServicePaths::map_start, [](BufferStream* inputStream,
+  TcpResponse::regist(ServicePaths::reduce_start, [](BufferStream* inputStream,
                                                   BufferStream* outputStream) {
     // 1. inputStream -> order request parameter
     auto len = inputStream->get<uint32_t>();
@@ -122,7 +120,7 @@ void regist_reduce_start_service() {
 }
 
 void regist_reduce_invoke_service() {
-  TcpResponse::regist(ServicePaths::map_invoke, [](BufferStream* inputStream,
+  TcpResponse::regist(ServicePaths::reduce_invoke, [](BufferStream* inputStream,
                                                    BufferStream* outputStream) {
     // 1. inputStream -> order request parameter
     auto len = inputStream->get<uint32_t>();

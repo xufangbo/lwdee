@@ -19,7 +19,7 @@ int SocketScheduler::unhandles = 0;
 std::thread SocketScheduler::tpsThread;
 std::thread SocketScheduler::runningThread;
 std::shared_ptr<Epoll> SocketScheduler::epoll;
-std::map<int, Socket*>* SocketScheduler::clients;
+ClientSockets SocketScheduler::clients;
 
 void SocketScheduler::start() {
   if (_running) {
@@ -28,7 +28,6 @@ void SocketScheduler::start() {
     _running = true;
   }
   epoll = std::make_shared<Epoll>(18000);
-  clients = new std::map<int, Socket*>();
   runningThread = std::thread(&SocketScheduler::running);
   tpsThread = std::thread(&SocketScheduler::tpsJob);
 }
@@ -63,20 +62,18 @@ void SocketScheduler::running() {
         logger_error("%s", ex.what());
       }
     }
-
-    // usleep(1000000 / 100);
+    usleep(1000000 / 1000);
   }
 }
 
 void SocketScheduler::join() { runningThread.join(); }
 
 void SocketScheduler::handleEvent(epoll_event& evt) {
-  auto it = clients->find(evt.data.fd);
-  if (it == clients->end()) {
+  Socket* socket = clients.find(evt.data.fd);
+  if (socket == nullptr) {
     logger_debug("no hint socket %d", evt.data.fd);
     return;
   }
-  Socket* socket = it->second;
 
   if (evt.events & EPOLLIN) {
     recv(socket, &evt);
@@ -154,7 +151,7 @@ void SocketScheduler::close(Socket* socket) {
   epoll->del(socket->fd());
   socket->close();
 
-  clients->erase(socket->fd());
+  clients.remove(socket);
 
   delete socket;
 }
@@ -169,8 +166,7 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
   socket->setNonBlocking();
   // socket->reusePort();
   // logger_debug("connect");
-
-  clients->insert(std::pair<int, Socket*>(socket->fd(), socket));
+  clients.insert(socket);
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {
@@ -203,7 +199,10 @@ void SocketScheduler::send(Socket* socket, void* buffer, size_t len) {
   }
 }
 
-bool SocketScheduler::contains(int fd) { return clients->count(fd) > 0; }
+bool SocketScheduler::contains(int fd) {
+  Socket* socket = clients.find(fd);
+  return socket != nullptr;
+}
 
 void SocketScheduler::tpsJob() {
   // for (;;) {

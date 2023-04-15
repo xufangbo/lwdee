@@ -253,4 +253,4 @@ std::string ServicePaths::kafka_start = "dsc.kafka.start";
 std::string ServicePaths::map_start = "dsc.map.start";
 std::string ServicePaths::map_invoke = "dsc.map.invoke";
 std::string ServicePaths::reduce_start = "dsc.reduce.start";
-std::string ServicePaths::reduce_innvoke = "dsc.reduce.innvoke";
+std::string ServicePaths::reduce_invoke = "dsc.reduce.invoke";

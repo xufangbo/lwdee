@@ -21,8 +21,7 @@ void Driver::startJob() {
     this->conf = DscConfig::instance();
 
     if (conf->partitions.size() > conf->splitNums1) {
-      throw Exception(
-          "kafka partiton cout can't be more than map partitons cout", ZONE);
+      throw Exception( "kafka partiton cout can't be more than map partitons cout", ZONE);
     }
 
     Stopwatch sw;
@@ -98,8 +97,7 @@ void Driver::start_map() {
     };
 
     auto json = input.toJson();
-    client->invoke(ServicePaths::map_start, (void*)json.c_str(), json.size(),
-                   callback);
+    client->invoke(ServicePaths::map_start, (void*)json.c_str(), json.size(), callback);
     client->wait();
   }
 
