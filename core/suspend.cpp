@@ -1,6 +1,8 @@
 
 #include "suspend.hpp"
 
+#ifdef LEOPARD_SUSPEND
+
 await<int> invokeService() {
   auto wait = await<int>([](suspend::SuspendHandler handle, int *p) {
     // *p = 2025;
@@ -32,3 +34,5 @@ suspend test() {
 
 //   return 0;
 // }
+
+#endif

@@ -115,19 +115,19 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
   VoxorId voxorId = this->mapDocs[index];
   TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
-  // logger_debug("send to map %d lines", mapLines->size());
+  logger_debug("send to map %d lines", mapLines->size());
 
   auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
   RequestCallback callback = [](BufferStream* inputStream) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    // logger_debug("recive(%d) :  %s", len, content.c_str());
+    logger_debug("recive(%d) :  %s", len, content.c_str());
   };
 
   auto json = MapInvokeData(input->index,voxorId.voxorKey, mapLines).toJson();
   client->invoke(ServicePaths::map_invoke, (void*)json.c_str(), json.size(), callback);
-  // client->wait();
+  client->wait();
 }
 
 uint64_t ToMap::getCurrentWindow() {

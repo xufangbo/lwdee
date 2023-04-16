@@ -24,7 +24,10 @@
 
 #define MAX_EPOLLSIZE (384 * 1024)
 
+#ifdef LEOPARD_SUSPEND
 suspend testSuspend(SocketClient* client, int i) ;
+#endif
+
 void testCallback(SocketClient* client, int i) ;
 
 int main(int argc, char** argv) {
@@ -61,6 +64,7 @@ int main(int argc, char** argv) {
   return 0;
 }
 
+#ifdef LEOPARD_SUSPEND
 suspend testSuspend(SocketClient* client, int i) {
   std::string input = "green green green " + std::to_string(i);
   auto path = "com.cs.sales.order.save";
@@ -73,6 +77,7 @@ suspend testSuspend(SocketClient* client, int i) {
 
   logger_info("recive(%d) :  %s", len, content.c_str());
 }
+#endif
 
 void testCallback(SocketClient* client, int i) {
   std::string input = "green green green ";

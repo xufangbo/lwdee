@@ -98,8 +98,8 @@ void Driver::start_map() {
 
     auto json = input.toJson();
     client->invoke(ServicePaths::map_start, (void*)json.c_str(), json.size(), callback);
-    // client->wait();
-    sleep(1);
+    client->wait();
+    // sleep(1);
   }
 
   logger_debug("> start map,eclipse %lf", sw.stop());
@@ -127,8 +127,8 @@ void Driver::start_reduce() {
 
     auto json = input.toJson();
     client->invoke(ServicePaths::reduce_start, (void*)json.c_str(), json.size(),  callback);
-    // client->wait();
-    sleep(1);
+    client->wait();
+    // sleep(1);
   }
 
   logger_warn("> start reduce,eclipse %lf", sw.stop());

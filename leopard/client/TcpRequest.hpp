@@ -10,6 +10,7 @@
 typedef std::function<void(BufferStream*)> RequestInvoke;
 typedef std::function<void(BufferStream*)> RequestCallback;
 
+#ifdef LEOPARD_SUSPEND
 struct SuspendCallback {
   suspend::SuspendHandler handle;
   BufferStream** returnValue;
@@ -18,19 +19,25 @@ struct SuspendCallback {
     handle.resume();
   }
 };
+#endif
 
 class TcpRequest {
  private:
- /**
-  * 这里的key应该为messageId
- */
+  /**
+   * 这里的key应该为messageId
+   */
   static std::map<const std::string, RequestCallback> requestCallbacks;
-  static std::map<const std::string, SuspendCallback> suspendCallbacks;
 
  public:
   static void regist(const std::string& path, RequestCallback responseFunction);
   static RequestCallback* find(const std::string path);
 
+#ifdef LEOPARD_SUSPEND
+ private:
+  static std::map<const std::string, SuspendCallback> suspendCallbacks;
+
+ public:
   static void registSuspend(const std::string& path, SuspendCallback suspendCallback);
   static SuspendCallback* findSuspend(const std::string path);
+#endif
 };

@@ -15,7 +15,9 @@ class SocketClient {
   SocketClient(Socket* socket) : _socket(socket){};
   void invoke(std::string path, RequestInvoke request, RequestCallback callback);
   void invoke(std::string path, void* buffer,int len, RequestCallback callback);
+  #ifdef LEOPARD_SUSPEND
   await<BufferStream*> invoke(std::string path, void* buffer,int len);
+  #endif
   void wait();
   Socket* socket();
 };

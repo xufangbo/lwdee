@@ -10,9 +10,9 @@
     "window": 20,
     "isMatrix":1,
     "filterCondon": 1,
-    "partitions": [0,1,2],
-    "splitNums1": 3,
-    "splitNums2": 2,
+    "partitions": [1],
+    "splitNums1": 1,
+    "splitNums2": 1,
     "workers" :[
         { "name": "node1", "ip": "127.0.0.1" },
         { "name": "node2", "ip": "127.0.0.1" },

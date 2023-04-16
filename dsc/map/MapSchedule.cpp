@@ -1,5 +1,6 @@
 #include "MapSchedule.hpp"
 
+#include "core/log.hpp"
 #include "core/Exception.hpp"
 #include "net/BufferStream.hpp"
 #include "server/TcpResponse.hpp"
@@ -48,11 +49,16 @@ void regist_map_invoke_service() {
     mapInvokeDta.fromJson(&content);
 
     auto mapdco = MapSchedule::get(mapInvokeDta.mapIndex);
+    if(mapdco==nullptr){
+      logger_error("mapdco is null");
+    }
     mapdco->map(lines);
 
     // 3. outputStream
     std::string message = "succeed";
     outputStream->put<uint32_t>(message.size());
     outputStream->put(message);
+
+    logger_debug("execute map.invoke service");
   });
 }

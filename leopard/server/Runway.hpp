@@ -30,6 +30,7 @@ class Runway {
   void io(epoll_event* evt);
   void recv(Socket* socket, epoll_event* evt);
   void handleRequest(Socket* socket);
+  void doHandle(Socket* socket);
   void send(Socket* socket,BufferStream *outStream);
   void close(Socket* socket);
 

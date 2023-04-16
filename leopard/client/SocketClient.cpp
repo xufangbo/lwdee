@@ -23,6 +23,7 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 }
 
 void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+  logger_trace("< invoke %s",path.c_str());
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();
@@ -38,6 +39,7 @@ void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallba
   SocketScheduler::send(_socket, outputStream->buffer, outputStream->size());
 }
 
+#ifdef LEOPARD_SUSPEND
 // error: invalid new-expression of abstract class type ‘BufferStream’
 await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int len) {
   Socket* socket = this->_socket;
@@ -65,6 +67,7 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
   });
   return waiter;
 }
+#endif
 
 void SocketClient::wait() {
   int fd = this->_socket->fd();

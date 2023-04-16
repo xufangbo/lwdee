@@ -186,19 +186,29 @@ void Runway::recv(Socket* socket, epoll_event* evt) {
 }
 
 void Runway::handleRequest(Socket* socket) {
+  try{
+    this->doHandle(socket);
+  }catch(Exception &ex){
+    logger_error("%s %s",ex.getMessage().c_str(),ex.getStackTrace().c_str());
+  }catch(std::exception &ex){
+    logger_error("%s",ex.what());
+  }
+}
+void Runway::doHandle(Socket* socket) {
   auto* inputStream = socket->inputStream();
   inputStream->reset();
   auto total_len = inputStream->get<uint64_t>();
   auto path_len = inputStream->get<uint32_t>();
   std::string path = inputStream->getString(path_len);
 
-  logger_debug("accept %s", path.c_str());
+  logger_debug("< accept %s", path.c_str());
 
   auto fun = TcpResponse::find(path);
   if (fun == nullptr) {
-    logger_error("can't hint path %s", path.c_str());
+    logger_error("> response can't hint path %s", path.c_str());
     inputStream->clean();
   } else {
+    
     auto protocal = ProtocalFactory::getProtocal().get();
     auto outputStream = ProtocalFactory::createStream();
 
@@ -212,7 +222,7 @@ void Runway::handleRequest(Socket* socket) {
 
     this->send(socket, outputStream.get());
 
-    logger_debug("response %s", path.c_str());
+    logger_debug("> response %s", path.c_str());
   }
 }
 

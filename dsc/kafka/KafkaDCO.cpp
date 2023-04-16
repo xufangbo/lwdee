@@ -36,8 +36,7 @@ std::string KafkaDCO::start(std::string a) {
     return "succeed";
 
   } catch (Exception& ex) {
-    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(),
-                 ex.getStackTrace().c_str());
+    logger_error("step2 failed,%s,%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     return "failed";
   } catch (std::exception& ex) {
     logger_error("step2 failed,%s", ex.what());
@@ -46,18 +45,16 @@ std::string KafkaDCO::start(std::string a) {
 }
 
 void regist_kafka_start_service() {
-  TcpResponse::regist(
-      ServicePaths::kafka_start,
-      [](BufferStream* inputStream, BufferStream* outputStream) {
-        // 1. inputStream -> order request parameter
-        auto len = inputStream->get<uint32_t>();
-        auto content = inputStream->getString(len);
+  TcpResponse::regist(ServicePaths::kafka_start, [](BufferStream* inputStream, BufferStream* outputStream) {
+    // 1. inputStream -> order request parameter
+    auto len = inputStream->get<uint32_t>();
+    auto content = inputStream->getString(len);
 
-        KafkaDCO::start(content);
+    KafkaDCO::start(content);
 
-        // 3. outputStream
-        std::string message = "succeed";
-        outputStream->put<uint32_t>(message.size());
-        outputStream->put(message);
-      });
+    // 3. outputStream
+    std::string message = "succeed";
+    outputStream->put<uint32_t>(message.size());
+    outputStream->put(message);
+  });
 }

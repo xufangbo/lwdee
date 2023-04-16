@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef LEOPARD_SUSPEND
+
 #include <chrono>
 #include <coroutine>
 #include <functional>
@@ -40,3 +42,4 @@ struct await {
   }
   T await_resume() { return returnValue; }
 };
+#endif

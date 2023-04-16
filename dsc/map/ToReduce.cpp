@@ -34,12 +34,11 @@ void ToReduce::send(vector<ReduceRecord>* words) {
     RequestCallback callback = [](BufferStream* inputStream) {
       auto len = inputStream->get<uint32_t>();
       auto content = inputStream->getString(len);
-
       // logger_debug("recive(%d) :  %s", len, content.c_str());
     };
 
     auto json = ReduceInvokeData(input->index,i, &reduceWords->at(i)).toJson();
     client->invoke(ServicePaths::reduce_invoke, (void*)json.c_str(), json.size(), callback);
-    // client->wait();    
+    client->wait();    
   }
 }

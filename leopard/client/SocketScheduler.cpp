@@ -64,10 +64,11 @@ void SocketScheduler::running() {
   }
 }
 
-void SocketScheduler::join() { runningThread.join(); }
+void SocketScheduler::join() {
+  runningThread.join();
+}
 
 void SocketScheduler::handleEvent(epoll_event& evt) {
-
   Socket* socket = clients.find(evt.data.fd);
   if (socket == nullptr) {
     logger_debug("no hint socket %d", evt.data.fd);
@@ -78,7 +79,8 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
     // if (tracing) logger_trace("EPOLLIN OUT do nothing");
     recv(socket, &evt);
   } else if (evt.events & EPOLLOUT) {
-    if (tracing) logger_trace("EPOLL OUT do nothing");
+    if (tracing)
+      logger_trace("EPOLL OUT do nothing");
   } else if (evt.events & EPOLLHUP) {
     logger_info("close client: EPOLLHUP %d", socket->fd());
     close(socket);
@@ -96,14 +98,16 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
 void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-  if (tracing) logger_trace("recv - %s,rc:%d", buf, rc);
+  if (tracing)
+    logger_trace("recv - %s,rc:%d", buf, rc);
 
   auto* inputStream = socket->inputStream();
 
   inputStream->puts(buf, rc);
 
   if (rc == 0) {
-    if (tracing) logger_info("client socket(%d) closed on rc == 0", socket->fd());
+    if (tracing)
+      logger_info("client socket(%d) closed on rc == 0", socket->fd());
     close(socket);
     return;
   }
@@ -122,14 +126,13 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
 }
 
 void SocketScheduler::handleRequest(Socket* socket) {
-  
   auto* inputStream = socket->inputStream();
   inputStream->reset();
   auto total_len = inputStream->get<uint64_t>();
   auto path_len = inputStream->get<uint32_t>();
   std::string path = inputStream->getString(path_len);
 
-  logger_trace("recive %s", path.c_str());
+  logger_trace("> recive %s", path.c_str());
 
   auto callback = TcpRequest::find(path);
   if (callback != nullptr) {
@@ -137,12 +140,14 @@ void SocketScheduler::handleRequest(Socket* socket) {
     return;
   }
 
+#ifdef LEOPARD_SUSPEND
   auto suspend = TcpRequest::findSuspend(path);
   if (suspend != nullptr) {
     suspend->callback(inputStream);
-  } else {
-    logger_error("can't hint path %s", path.c_str());
+    return;
   }
+#endif
+  logger_error("can't hint path %s", path.c_str());
 }
 
 void SocketScheduler::close(Socket* socket) {
@@ -183,8 +188,6 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
 }
 
 void SocketScheduler::send(Socket* socket, void* buffer, size_t len) {
-
-  logger_trace("send");
   Stopwatch sw;
 
   socket->send(buffer, len);
