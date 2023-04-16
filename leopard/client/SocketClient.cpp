@@ -19,7 +19,7 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  SocketScheduler::send(_socket, outputStream->buffer, outputStream->size());
+  SocketScheduler::send(_socket, outputStream);
 }
 
 void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
@@ -38,7 +38,7 @@ void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  SocketScheduler::send(_socket, outputStream->buffer, outputStream->size());
+  SocketScheduler::send(_socket, outputStream);
 }
 
 #ifdef LEOPARD_SUSPEND

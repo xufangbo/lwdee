@@ -30,10 +30,12 @@ void Leopard::start(std::string ip, int port) {
   this->ip = ip;
   this->port = port;
 
+  sendQueue.start();
+
   logger_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
 
   for (int i = 0; i < corenums; i++) {
-    auto runway = new Runway();
+    auto runway = new Runway(&sendQueue);
     runway->start(ip, port, i + 1);
 
     runways.push_back(runway);
@@ -59,9 +61,14 @@ void Leopard::tpsJob() {
   for (;;) {
     sleep(1);
 
-    int sockets =std::accumulate(runways.begin(), runways.end(), 0,[](int x, Runway *r) { return x + r->sockets(); });
-    int tps = std::accumulate(runways.begin(), runways.end(), 0,[](int x, Runway *r) { return x + r->tps(); });
-    int waits =std::accumulate(runways.begin(), runways.end(), 0,[](int x, Runway *r) { return x + r->waits(); });
+    int sockets =
+        std::accumulate(runways.begin(), runways.end(), 0,
+                        [](int x, Runway *r) { return x + r->sockets(); });
+    int tps = std::accumulate(runways.begin(), runways.end(), 0,
+                              [](int x, Runway *r) { return x + r->tps(); });
+    int waits =
+        std::accumulate(runways.begin(), runways.end(), 0,
+                        [](int x, Runway *r) { return x + r->waits(); });
 
     // logger_trace("sockets:%4d,TPS:%4d,epoll wait:%4d",sockets, tps, waits);
   }

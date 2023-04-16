@@ -1,18 +1,3 @@
-// #include <arpa/inet.h>
-// #include <errno.h>
-// #include <fcntl.h>
-// #include <netdb.h>
-// #include <netinet/tcp.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <sys/epoll.h>
-// #include <sys/socket.h>
-// #include <sys/time.h>
-// #include <sys/types.h>
-
-// #include <thread>
-
 #include "SocketClient.hpp"
 #include "SocketScheduler.hpp"
 #include "core/Exception.hpp"
@@ -29,6 +14,7 @@ suspend testSuspend(SocketClient* client, int i) ;
 #endif
 
 void testCallback(SocketClient* client, int i) ;
+void testBigDataCallback(SocketClient* client, int i) ;
 
 int main(int argc, char** argv) {
   
@@ -44,7 +30,8 @@ int main(int argc, char** argv) {
     try {
       auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
 
-      testCallback(client.get(), i);
+      // testCallback(client.get(), i);
+      testBigDataCallback(client.get(), i);
 
       // sleep(1);
 
@@ -57,8 +44,7 @@ int main(int argc, char** argv) {
     usleep(1000000 / 100);
   }
 
-  SocketScheduler::join();
-  // sleep(10);
+  sleep(20);
 
   return 0;
 }
@@ -93,6 +79,27 @@ void testCallback(SocketClient* client, int i) {
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
   client->wait();
+}
+
+void testBigDataCallback(SocketClient* client, int i) {
+  std::string input = "green green !";
+  for (int i = 0; i < 50000;i++){
+    input += "green green !";
+  }
+  input += std::to_string(i);
+  logger_debug("send %s", input.c_str());
+
+  RequestCallback callback = [](BufferStream* inputStream) {
+    auto len = inputStream->get<uint32_t>();
+    auto content = inputStream->getString(len);
+
+    logger_info("recive(%d) :  %s", len, content.c_str());
+  };
+
+  client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
+
+  auto time = client->wait();
+  logger_info("%d eclipse %lfs",i, time * 1.0 / 1000);
 }
 
 // client->invoke(

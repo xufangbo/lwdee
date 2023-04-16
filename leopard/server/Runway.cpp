@@ -10,8 +10,9 @@
 
 #define BUFFER_SIZE 1024
 
-Runway::Runway() {
+Runway::Runway(SendTaskQueue* sendQueue) {
   this->epoll = new Epoll(1000);
+  this->sendQueue = sendQueue;
 }
 Runway::~Runway() {
   if (epoll != nullptr) {
@@ -194,7 +195,8 @@ void Runway::doHandle(Socket* socket) {
 #ifdef LEOPARD_TRACING
   auto time = Stopwatch::currentMilliSeconds() - header->time;
   if (time > 1000) {
-    logger_trace("< accept %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
+    logger_trace("< accept %s , too long %lfs", path.c_str(),
+                 time * 1.0 / 1000);
   } else {
     logger_trace("< accept %s", path.c_str());
   }
@@ -213,25 +215,13 @@ void Runway::doHandle(Socket* socket) {
 
     protocal->setLength(outputStream.get());
 
-    inputStream->clean();
+    sendQueue->push(socket, outputStream);
 
-    this->send(socket, outputStream.get());
+    inputStream->clean();
 
 #ifdef LEOPARD_TRACING
     logger_debug("> response %s", path.c_str());
 #endif
-  }
-}
-
-void Runway::send(Socket* socket, BufferStream* outStream) {
-  // std::string response = "blue1 blue2 blue3 !";
-  // if (tracing) logger_debug("send - %s", response.c_str());
-
-  int rc = socket->send(outStream->buffer, outStream->size());
-  if (rc == -1 && errno == EAGAIN) {
-    logger_info("send EAGAIN error");
-    // send 函数中的size变量大小超过了tcp_sendspace的值
-    // epollOut = false;
   }
 }
 
@@ -249,14 +239,8 @@ int Runway::tps() {
   return tmp;
 }
 
-int Runway::waits() {
-  return _waits;
-}
+int Runway::waits() { return _waits; }
 
-int Runway::sockets() {
-  return clients.size();
-}
+int Runway::sockets() { return clients.size(); }
 
-void Runway::join() {
-  thread.join();
-}
+void Runway::join() { thread.join(); }

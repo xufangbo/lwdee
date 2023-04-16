@@ -15,11 +15,9 @@ bool SocketScheduler::_running = false;
 bool SocketScheduler::isET = true;
 int SocketScheduler::waits = 0;
 int SocketScheduler::tps = 0;
-int SocketScheduler::unhandles = 0;
-std::thread SocketScheduler::tpsThread;
-std::thread SocketScheduler::runningThread;
 std::shared_ptr<Epoll> SocketScheduler::epoll;
 Sockets SocketScheduler::clients;
+SendTaskQueue SocketScheduler::sendQueue;
 
 void SocketScheduler::start() {
   if (_running) {
@@ -28,8 +26,14 @@ void SocketScheduler::start() {
     _running = true;
   }
   epoll = std::make_shared<Epoll>(18000);
-  runningThread = std::thread(&SocketScheduler::running);
-  tpsThread = std::thread(&SocketScheduler::tpsJob);
+  
+  std::thread t_running(&SocketScheduler::running);
+  std::thread t_tps(&SocketScheduler::tpsJob);
+
+  t_running.detach();
+  t_tps.detach();
+
+  sendQueue.start();
 }
 
 void SocketScheduler::stop() {
@@ -62,10 +66,6 @@ void SocketScheduler::running() {
     }
     usleep(1000000 / 1000);
   }
-}
-
-void SocketScheduler::join() {
-  runningThread.join();
 }
 
 void SocketScheduler::handleEvent(epoll_event& evt) {
@@ -118,7 +118,6 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   }
 
   if (inputStream->isEnd()) {
-    unhandles--;
 
     handleRequest(socket);
 
@@ -142,7 +141,8 @@ void SocketScheduler::handleRequest(Socket* socket) {
 #ifdef LEOPARD_TRACING
   auto time = Stopwatch::currentMilliSeconds() - header->time;
   if (time > 1000) {
-    logger_trace("> recive %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
+    logger_trace("> recive %s , too long %lfs", path.c_str(),
+                 time * 1.0 / 1000);
   } else {
     logger_trace("> recive %s", path.c_str());
   }
@@ -182,8 +182,9 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
   socket->connect(ip, port);
   socket->setNonBlocking();
   socket->reusePort();
-  socket->setSendBuf();
-  // logger_debug("connect");
+  socket->setSendBuf(1048576);
+  logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
+  logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
   clients.insert(socket);
 
   auto eclapse = sw.stop();
@@ -202,36 +203,8 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
   return client;
 }
 
-void SocketScheduler::send(Socket* socket, void* buffer, size_t len) {
-  Stopwatch sw;
-
-  int rc = 0;
-  while (rc < len) {
-    len = len - rc;
-    rc = socket->send(buffer + rc, len);
-    if (rc == -1) {
-      //  Resource temporarily unavailable
-      // https://blog.csdn.net/xclshwd/article/details/102985388
-      // https://blog.csdn.net/yangguosb/article/details/80070730
-      // https://blog.csdn.net/qq_25518029/article/details/119952665
-      logger_trace("rc = -1 : %s", strerror(errno));
-    } else if (rc == len) {
-      // logger_info("send finished %d", len);
-    } else {
-      logger_error("数据未发送完 %d / %d,接着发剩下%d字节", rc, len, len - rc);
-    }
-
-    usleep(1000000 / 100);
-  }
-
-  unhandles++;
-
-  // epoll->mod(&evt, clientfd,EPOLLIN | EPOLLET | EPOLLONESHOT | EPOLLRDHUP |
-  // EPOLLHUP);
-  auto eclapse = sw.stop();
-  if (eclapse > 1) {
-    logger_debug("long time to send: %lfs", eclapse);
-  }
+void SocketScheduler::send(Socket* socket, BufferStreamPtr outputStream) {
+  sendQueue.push(socket, outputStream);
 }
 
 bool SocketScheduler::contains(int fd) {

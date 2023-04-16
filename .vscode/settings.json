@@ -91,7 +91,8 @@
         "io_context": "cpp",
         "netfwd": "cpp",
         "socket": "cpp",
-        "timer": "cpp"
+        "timer": "cpp",
+        "queue": "cpp"
     },
     "diffEditor.wordWrap": "off",
     "editor.wordWrapColumn": 1000,

@@ -13,6 +13,7 @@ Socket::Socket() {
     throw SocketException("socket create error", errno, ZONE);
   }
   this->_inputStream = ProtocalFactory::createStream();
+  // this->_outputStream = ProtocalFactory::createStream();
 }
 
 Socket::Socket(int fd)
@@ -260,19 +261,23 @@ bool isClosed() {
   // if (ret = -1 && error == ENOTCONN)  // 说明连接已经关闭
 }
 
-void Socket::setSendBuf() {
-
-  int sendbuf = 4194304;
-  int len = sizeof(sendbuf);
-  setsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
-  getsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, (socklen_t*)&len);
+void Socket::setSendBuf(int size) {
+  setsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size));
 
 }
-void Socket::setReciveBuf() {
+void Socket::setReciveBuf(int size) {
+  setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size));
+}
 
-  int recvbuf = 6291456;
+int Socket::getSendBuf() {
+  int sendbuf = 0;
+  int len = sizeof(sendbuf);
+  getsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, (socklen_t*)&len);
+  return sendbuf;
+}
+int Socket::getReciveBuf() {
+  int recvbuf = 0;
   int len = sizeof(recvbuf);
-  setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, sizeof(recvbuf));
   getsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, (socklen_t*)&len);
-  
+  return recvbuf;
 }

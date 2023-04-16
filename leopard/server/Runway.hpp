@@ -7,6 +7,7 @@
 #include "net/Epoll.hpp"
 #include "net/Socket.h"
 #include "net/Sockets.hpp"
+#include "net/SendTask.hpp"
 
 class Runway {
  private:
@@ -23,6 +24,7 @@ class Runway {
 
  private:
   Sockets clients;
+  SendTaskQueue* sendQueue;
 
  private:
   void run();
@@ -31,11 +33,10 @@ class Runway {
   void recv(Socket* socket, epoll_event* evt);
   void handleRequest(Socket* socket);
   void doHandle(Socket* socket);
-  void send(Socket* socket,BufferStream *outStream);
   void close(Socket* socket);
 
  public:
-  Runway();
+  Runway(SendTaskQueue *sendQueue);
   ~Runway();
   int waits();
   int sockets();

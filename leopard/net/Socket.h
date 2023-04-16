@@ -9,6 +9,7 @@ class Socket {
  private:
   int _fd;
   BufferStreamPtr _inputStream;
+  // BufferStreamPtr _outputStream;
 
  public:
   Socket();
@@ -17,6 +18,7 @@ class Socket {
 
   int& fd() { return _fd; }
   BufferStream *inputStream() { return _inputStream.get(); }
+  // BufferStream *outputStream() { return _outputStream.get(); }
 
   void bind(const char* ip, int port);
 
@@ -92,10 +94,11 @@ class Socket {
   int getError();
   /**
    * @brief 设置句柄非阻塞
-   *
    */
   void setNonBlocking();
   void reusePort();
-  void setSendBuf();
-  void setReciveBuf();
+  void setSendBuf(int size);
+  void setReciveBuf(int size);
+  int getSendBuf();
+  int getReciveBuf();
 };
