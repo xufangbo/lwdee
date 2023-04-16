@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 project(leopard VERSION 3.0.0.0 LANGUAGES CXX C)
 
-
 set(CMAKE_CXX_STANDARD 11)
 # set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -23,8 +22,6 @@ aux_source_directory(. DIR)
 include_directories(.)
 include_directories(./core)
 include_directories(./leopard)
-include_directories(./dsc)
-include_directories(./inc)
 
 add_subdirectory(core)
 add_subdirectory(leopard)

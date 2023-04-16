@@ -1,3 +1,6 @@
+include_directories(./dsc)
+include_directories(./inc)
+
 add_subdirectory(dsc)
 
 add_executable(app dsc/app.cpp) 
