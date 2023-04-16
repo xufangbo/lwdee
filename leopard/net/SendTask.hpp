@@ -1,33 +1,37 @@
 #pragma once
 
-#include <mutex>
 #include <list>
+#include <mutex>
+#include <vector>
 
 #include "Socket.h"
 
 class SendTask {
  private:
+  bool _finished = false;
   uint64_t pos = 0;
-
- public:
   Socket *socket;
   BufferStreamPtr outputStream;
+
+ private:
+  inline void *buffer() { return outputStream->buffer + pos; }
+  inline uint64_t leftover() { return outputStream->size() - pos; }
+  inline void moveon(int size) { pos += size; }
 
  public:
   SendTask(Socket *socket, BufferStreamPtr outputStream)
       : socket(socket), outputStream(outputStream) {}
 
-  bool finished() { return pos >= outputStream->size(); }
-  void *buffer() { return outputStream->buffer + pos; }
-  uint64_t leftover() { return outputStream->size() - pos; }
-  void moveon(int size) { pos += size; }
+  void send();
+  bool finished() { return this->_finished; }
 };
 
 class SendTaskQueue {
  private:
   bool running = false;
   std::mutex mut;
-  std::list<SendTask*> list;
+  std::list<SendTask *> list;
+  std::vector<SendTask *> removes;
 
  private:
   void run();

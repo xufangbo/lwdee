@@ -1,9 +1,21 @@
 #include "SendTask.hpp"
 
-#include <vector>
 #include <thread>
+#include <vector>
 
 #include "core/log.hpp"
+
+void SendTask::send() {
+  int rc = socket->send(buffer(), leftover());
+
+  if (rc == leftover()) {
+    _finished = true;
+  } else if (rc == -1) {
+  } else {
+    moveon(rc);
+    logger_trace("send %ld / %ld", leftover(), outputStream->size());
+  }
+}
 
 void SendTaskQueue::push(Socket *socket, BufferStreamPtr outputStream) {
   //   mut.lock();
@@ -27,28 +39,20 @@ void SendTaskQueue::run() {
       usleep(1000);
       continue;
     }
-
-    std::vector<SendTask *> removes;
-
+    
     for (auto it = list.begin(); it != list.end(); it++) {
       SendTask *task = *it;
-      auto outputStream = task->outputStream;
-
-      int rc = task->socket->send(task->buffer(), task->leftover());
-
-      if (rc == task->leftover()) {
+      task->send();
+      if (task->finished()) {
         removes.push_back(task);
-        // logger_trace("send finished");
-      } else if (rc == -1) {
-      } else {
-        task->moveon(rc);
-        logger_trace("send %ld / %ld", task->leftover(), task->outputStream->size());
       }
     }
 
-    for(SendTask * task : removes){
+    for (SendTask *task : removes) {
       list.remove(task);
       delete task;
     }
+
+    removes.clear();
   }
 }
