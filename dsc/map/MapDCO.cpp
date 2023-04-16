@@ -22,7 +22,7 @@ int MapDCO::start(std::string a) {
     input.fromJson(&a);
     toReduce.create_dcos(&input);
 
-    logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index,sw.stop());
+    logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index, sw.stop());
     LinuxMatrix::stream.map_dco++;
 
     return input.index;
@@ -32,15 +32,16 @@ int MapDCO::start(std::string a) {
     return -1;
   } catch (std::exception& ex) {
     logger_error("step2 failed,%s", ex.what());
-    return-1;
+    return -1;
   }
 }
 
 std::string MapDCO::map(std::shared_ptr<vector<MapRecord>> lines) {
   try {
-    // logger_trace("< accept map,%s",a.c_str());
+    logger_trace("accept map,%d lines", lines->size());
+    
     Stopwatch sw;
-   
+
     LinuxMatrix::stream.map_accept += lines->size();
 
     auto words = std::make_shared<vector<ReduceRecord>>();

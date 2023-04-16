@@ -1,7 +1,7 @@
 #include "BufferStream.hpp"
 
 BufferStream::BufferStream() {
-  buffer = (Byte*)calloc(1, capacity);
+  buffer = (Byte*)malloc(capacity);
 }
 
 BufferStream::~BufferStream() {
@@ -19,12 +19,19 @@ void BufferStream::reset() {
 void BufferStream::puts(Byte* buf, int len) {
   size_t t = pos + len;
   if (t > capacity) {
+    // int old = capacity;
     capacity = BUF_UNIT * (t / BUF_UNIT) + BUF_UNIT;
     buffer = realloc(buffer, capacity);
+
+    // printf("BufferStream realloc %d -> %d\n", old, capacity);
   }
   memcpy(buffer + pos, buf, len);
+
+  // int old = pos;
   pos += len;
   _size = pos;
+
+  // printf("BufferStream pos %d -> %d len: %d\n", old, pos, len);
 }
 
 void BufferStream::get(std::string& str, int len) {

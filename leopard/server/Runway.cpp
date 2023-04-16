@@ -162,7 +162,7 @@ void Runway::recv(Socket* socket, epoll_event* evt) {
     this->close(socket);
   } else if (inputStream->isEnd()) {
 #ifdef LEOPARD_TRACING
-    logger_debug("%s", inputStream->buffer);
+    // logger_debug("%s", inputStream->buffer);
 #endif
 
     std::thread t(&Runway::handleRequest, this, socket);

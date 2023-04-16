@@ -74,7 +74,6 @@ std::string ReduceDCO::start(std::string a) {
 
 std::string ReduceDCO::reduce(std::string a) {
   try {
-    // logger_debug("< accept reduce ");
     Stopwatch sw;
 
     auto records = std::make_shared<std::vector<ReduceRecord>>();
@@ -85,7 +84,7 @@ std::string ReduceDCO::reduce(std::string a) {
     LinuxMatrix::stream.reduce_accept += records->size();
     reducer.accept(records.get(), &input);
 
-    // logger_debug("accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
+    logger_debug("< accept reduce, %d records, (map-%02d, reduce-%02d),eclapse:%lfs", records->size(), reduceInvokeData.mapIndex, input.index, sw.stop());
     // logger_debug("accept reduce");
 
     records->clear();

@@ -53,7 +53,7 @@ void Driver::start_kafka() {
     TNode* node = NodeConfig::nextNode();
 
     printf("\n");
-    logger_info("start kafka %d / %d ----------------- to %s", i, conf->partitions.size(),node->name.c_str());
+    logger_info("start kafka %d / %d ----------------- to %s,%s:%d", i, conf->partitions.size(),node->name.c_str(),node->ip.c_str(),node->port);
     
     std::vector<string> kafka_mapVoxors;
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
@@ -70,6 +70,7 @@ void Driver::start_kafka() {
     };
 
     auto json = input.toJson();
+    printf("%s",json.c_str());
     client->invoke(ServicePaths::kafka_start, (void*)json.c_str(), json.size(), callback);
     client->wait();
 
@@ -84,7 +85,7 @@ void Driver::start_map() {
   for (int i = 0; i < conf->splitNums1; i++) {
     TNode* node = NodeConfig::nextNode();
     printf("\n");
-    logger_debug("start map %d / %d ----------------- to %s", i, conf->splitNums1,node->name.c_str());
+    logger_debug("start map %d / %d ----------------- to %s,%s:%d", i, conf->splitNums1,node->name.c_str(),node->ip.c_str(),node->port);
 
     mapVoxorIds.push_back(NodeConfig::voxorId(node, i));
 
@@ -99,6 +100,7 @@ void Driver::start_map() {
     };
 
     auto json = input.toJson();
+    printf("%s",json.c_str());
     client->invoke(ServicePaths::map_start, (void*)json.c_str(), json.size(), callback);
     client->wait();
     // sleep(1);
@@ -114,7 +116,7 @@ void Driver::start_reduce() {
   for (int i = 0; i < conf->splitNums2; i++) {
     TNode* node = NodeConfig::nextNode();
     printf("\n");
-    logger_warn("start reduce %d / %d ----------------- to %s", i, conf->splitNums2,node->name.c_str());
+    logger_warn("start reduce %d / %d ----------------- to %s,%s:%d", i, conf->splitNums2,node->name.c_str(),node->ip.c_str(),node->port);
     
     reduceVoxorIds.push_back(NodeConfig::voxorId(node, i));
 
@@ -129,6 +131,7 @@ void Driver::start_reduce() {
     };
 
     auto json = input.toJson();
+    printf("%s",json.c_str());
     client->invoke(ServicePaths::reduce_start, (void*)json.c_str(), json.size(),  callback);
     client->wait();
     // sleep(1);

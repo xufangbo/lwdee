@@ -36,4 +36,5 @@ class ToMap {
   uint64_t getCurrentWindow();
   void toMaps();
   void toMap(int index,vector<MapRecord>* mapLines);
+  void doToMap(int index,vector<MapRecord>* mapLines,VoxorId voxorId,TNode* node);
 };

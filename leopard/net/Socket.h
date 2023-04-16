@@ -96,4 +96,6 @@ class Socket {
    */
   void setNonBlocking();
   void reusePort();
+  void setSendBuf();
+  void setReciveBuf();
 };

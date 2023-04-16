@@ -76,7 +76,9 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
   }
 
   if (evt.events & EPOLLIN) {
-    // if (tracing) logger_trace("EPOLLIN OUT do nothing");
+#ifdef LEOPARD_TRACING
+    logger_trace("EPOLL IN do nothing");
+#endif
     recv(socket, &evt);
   } else if (evt.events & EPOLLOUT) {
 #ifdef LEOPARD_TRACING
@@ -100,7 +102,7 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
 #ifdef LEOPARD_TRACING
-  logger_trace("recv - %s,rc:%d", buf, rc);
+  // logger_trace("recv - %s,rc:%d", buf, rc);
 #endif
 
   auto* inputStream = socket->inputStream();
@@ -179,7 +181,8 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
 
   socket->connect(ip, port);
   socket->setNonBlocking();
-  // socket->reusePort();
+  socket->reusePort();
+  socket->setSendBuf();
   // logger_debug("connect");
   clients.insert(socket);
 
@@ -202,7 +205,24 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
 void SocketScheduler::send(Socket* socket, void* buffer, size_t len) {
   Stopwatch sw;
 
-  socket->send(buffer, len);
+  int rc = 0;
+  while (rc < len) {
+    len = len - rc;
+    rc = socket->send(buffer + rc, len);
+    if (rc == -1) {
+      //  Resource temporarily unavailable
+      // https://blog.csdn.net/xclshwd/article/details/102985388
+      // https://blog.csdn.net/yangguosb/article/details/80070730
+      // https://blog.csdn.net/qq_25518029/article/details/119952665
+      logger_trace("rc = -1 : %s", strerror(errno));
+    } else if (rc == len) {
+      // logger_info("send finished %d", len);
+    } else {
+      logger_error("数据未发送完 %d / %d,接着发剩下%d字节", rc, len, len - rc);
+    }
+
+    usleep(1000000 / 100);
+  }
 
   unhandles++;
 

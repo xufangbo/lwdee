@@ -41,5 +41,6 @@ void ToReduce::send(vector<ReduceRecord>* words) {
     client->invoke(ServicePaths::reduce_invoke, (void*)json.c_str(), json.size(), callback);
     // auto waitTime = client->wait();
     // logger_trace("wait reduce time %lf", waitTime);
+    logger_trace("%d / %d send to reduce %s:%d %d records",i,split,node->name.c_str(),voxorId.voxorKey,reduceWords->at(i).size());
   }
 }

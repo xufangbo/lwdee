@@ -16,7 +16,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -w -ggdb")
 # add_compile_definitions(LEOPARD_SUSPEND)
 # add_compile_definitions(LEOPARD_TRACING)
 
-# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 aux_source_directory(. DIR)
 

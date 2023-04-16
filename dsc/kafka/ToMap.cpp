@@ -1,17 +1,16 @@
 #include "ToMap.h"
 
 #include <time.h>
+#include "client/SocketScheduler.hpp"
+#include "client/TcpRequest.hpp"
 #include "core/DscConfig.hpp"
 #include "core/Exception.hpp"
+#include "core/NodeConfig.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/cjson.hpp"
 #include "core/log.hpp"
 #include "map/MapDCO.h"
 #include "matrix/LinuxMatrix.h"
-#include "client/SocketScheduler.hpp"
-#include "client/TcpRequest.hpp"
-#include "core/NodeConfig.hpp"
-
 
 ToMap::ToMap() {
 }
@@ -80,7 +79,7 @@ void ToMap::toMaps() {
   std::vector<MapRecords> bats;
 
   // logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
-  LinuxMatrix::stream.kafka_qps =  mapRecords->size();
+  LinuxMatrix::stream.kafka_qps = mapRecords->size();
 
   int range = this->mapRecords->size() / mapSize;
   int index = -1;
@@ -111,11 +110,47 @@ void ToMap::toMaps() {
 }
 
 void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
+  if (mapLines->size() <= 0) {
+    logger_debug(" map 0 lines");
+    return;
+  }
+  
   // return;
   VoxorId voxorId = this->mapDocs[index];
   TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
-  logger_debug("send to map %d lines", mapLines->size());
+  logger_debug("send to map %s:%d %d lines", node->name.c_str(), voxorId.voxorKey, mapLines->size());
+
+  int SPLIT = 600;
+
+  if (mapLines->size() <= SPLIT) {
+    this->doToMap(index, mapLines, voxorId, node);
+    return;
+  }
+
+  int count = mapLines->size() / SPLIT;
+  for (int i = 0; i < count + 1; i++) {
+    std::vector<MapRecord> lines;
+    for (int x = 0; x < SPLIT; x++) {
+      int index = i * SPLIT + x;
+      if (index >= mapLines->size()) {
+        break;
+      }
+      lines.push_back(mapLines->at(index));
+    }
+    logger_trace("sub map %d / %d : %d", i, i, (count + 1), lines.size());
+
+    this->doToMap(index, &lines, voxorId, node);
+    usleep(1000000 / 100);
+  }
+}
+
+void ToMap::doToMap(int index, vector<MapRecord>* mapLines, VoxorId voxorId, TNode* node) {
+  if (mapLines->size() <= 0) {
+    return;
+  }
+
+  // logger_debug("send to map %s:%d %d lines", node->name.c_str(), voxorId.voxorKey, mapLines->size());
 
   auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
   RequestCallback callback = [](BufferStream* inputStream) {
@@ -125,10 +160,10 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
     // logger_debug("recive(%d) :  %s", len, content.c_str());
   };
 
-  auto json = MapInvokeData(input->index,voxorId.voxorKey, mapLines).toJson();
+  auto json = MapInvokeData(input->index, voxorId.voxorKey, mapLines).toJson();
   client->invoke(ServicePaths::map_invoke, (void*)json.c_str(), json.size(), callback);
   // auto waitTime = client->wait();
-  // logger_trace("wait map time %lf",waitTime);
+  // logger_trace("wait map time %lf", waitTime);
 }
 
 uint64_t ToMap::getCurrentWindow() {

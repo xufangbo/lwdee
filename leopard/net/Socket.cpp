@@ -15,7 +15,8 @@ Socket::Socket() {
   this->_inputStream = ProtocalFactory::createStream();
 }
 
-Socket::Socket(int fd) : _fd(fd) {
+Socket::Socket(int fd)
+    : _fd(fd) {
   this->_inputStream = ProtocalFactory::createStream();
 }
 
@@ -105,7 +106,9 @@ ssize_t Socket::read(void* buf, size_t len) {
  * 每次send
  * 6byte数据，则recv每次收到的数据可能为6byte，12byte，18byte，这是随机的，编程的时候注意正确的处理。
  */
-ssize_t Socket::write(void* buf, size_t len) { return ::write(_fd, buf, len); }
+ssize_t Socket::write(void* buf, size_t len) {
+  return ::write(_fd, buf, len);
+}
 
 // https://blog.csdn.net/dyzhen/article/details/84992576
 // read(sockfd, buff, buff_size);
@@ -197,8 +200,7 @@ ssize_t Socket::send(void* buf, size_t len) {
  * 而换过来如果你在udp当中也使用recv，那么就不知道该回复给谁了，如果你不需要回复的话，也是可以使用的。
  * 另外就是对于tcp是已经知道对端的，就没必要每次接收还多收一个地址，没有意义，要取地址信息，在accept当中取得就可以加以记录了。
  */
-ssize_t Socket::recvfrom(void* buf, size_t len, int flags,
-                         struct sockaddr* addr, socklen_t* addr_len) {
+ssize_t Socket::recvfrom(void* buf, size_t len, int flags, struct sockaddr* addr, socklen_t* addr_len) {
   int rc = ::recvfrom(_fd, buf, sizeof(buf), flags, addr, addr_len);
   if (rc == -1) {
     throw SocketException("socket recvfrom error", errno, ZONE);
@@ -256,4 +258,21 @@ bool isClosed() {
   // 已经server端已经关闭句柄。
   // int ret = getpeername(sockfd, addr, addrlen);
   // if (ret = -1 && error == ENOTCONN)  // 说明连接已经关闭
+}
+
+void Socket::setSendBuf() {
+
+  int sendbuf = 4194304;
+  int len = sizeof(sendbuf);
+  setsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, sizeof(sendbuf));
+  getsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &sendbuf, (socklen_t*)&len);
+
+}
+void Socket::setReciveBuf() {
+
+  int recvbuf = 6291456;
+  int len = sizeof(recvbuf);
+  setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, sizeof(recvbuf));
+  getsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &recvbuf, (socklen_t*)&len);
+  
 }

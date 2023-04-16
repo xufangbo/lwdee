@@ -12,16 +12,24 @@ std::string nodes[] = {"k8s-master", "k8s-node01", "k8s-node02", "k8s-node03", "
 std::string containers[] = {"dsc", "dsc", "dsc", "dsc", "dsc", "dsc"};
 // std::string containers[] = {"dsc1", "dsc2", "dsc3", "dsc4", "dsc5", "dsc6"};
 
+void log_task(std::string nodeName) {
+  string script = string("scp /home/kevin/git/lwdee/config/log.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
+  system(script.c_str());
+}
+
 void app_task(std::string nodeName) {
   string script = string("scp /home/kevin/git/lwdee/bin/app root@") + nodeName + ":/home/kevin/git/lwdee/build/";
   system(script.c_str());
 }
 
 void config_task(std::string nodeName) {
-  string script = string("scp /home/kevin/git/lwdee/config/dsc.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
+  string script = string("scp /home/kevin/git/lwdee/config/dsc_k8s.json root@") + nodeName + ":/home/kevin/git/lwdee/config/dsc.json";
   system(script.c_str());
 
-  script = string("scp /home/kevin/git/lwdee/config/conf.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
+  script = string("scp /home/kevin/git/lwdee/config/conf_k8s.json root@") + nodeName + ":/home/kevin/git/lwdee/config/conf.json";
+  system(script.c_str());
+
+  script = string("scp /home/kevin/git/lwdee/config/log.json root@") + nodeName + ":/home/kevin/git/lwdee/config/";
   system(script.c_str());
 }
 
@@ -46,7 +54,7 @@ void rm_task(std::string nodeName, string container) {
   system(script.c_str());
 }
 
-void log_task(std::string nodeName, string container) {
+void rmlog_task(std::string nodeName, string container) {
   string script = string("ssh root@") + nodeName + " \"rm -rf /home/kevin/git/lwdee/log/*\"";
   system(script.c_str());
 }
@@ -107,7 +115,7 @@ int main(int argv, char** argc) {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(config_task, nodes[i]);
     }
-  }else if (par == "stop") {
+  } else if (par == "stop") {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(stop_task, nodes[i], containers[i]);
     }
@@ -124,9 +132,13 @@ int main(int argv, char** argc) {
     for (int i = 0; i < len; i++) {
       ts[i] = thread(rm_task, nodes[i], containers[i]);
     }
+  } else if (par == "rmlog") {
+    for (int i = 0; i < len; i++) {
+      ts[i] = thread(rmlog_task, nodes[i], containers[i]);
+    }
   } else if (par == "log") {
     for (int i = 0; i < len; i++) {
-      ts[i] = thread(log_task, nodes[i], containers[i]);
+      ts[i] = thread(log_task, nodes[i]);
     }
   } else if (par == "ps") {
     for (int i = 0; i < len; i++) {

@@ -74,7 +74,7 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 double SocketClient::wait() {
   Stopwatch sw;
   int fd = this->_socket->fd();
-  for (int i = 0; i < 100 * 60; i++) {
+  for (int i = 0; i < 100 * 20; i++) {
     bool ok = SocketScheduler::contains(fd);
     if (!ok) {
       return sw.stop();

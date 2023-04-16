@@ -1,0 +1,304 @@
+{
+  "node_amount": 6,
+  "port": 500,
+  "node1": {
+    "nodeId": 1,
+    "ip": "10.180.98.130",
+    "dataPort": 5001,
+    "msgPort": 5011,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  },
+  "node2": {
+    "nodeId": 2,
+    "ip": "10.180.98.131",
+    "dataPort": 5002,
+    "msgPort": 5012,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  },
+  "node3": {
+    "nodeId": 3,
+    "ip": "10.180.98.132",
+    "dataPort": 5003,
+    "msgPort": 5013,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  },
+  "node4": {
+    "nodeId": 4,
+    "ip": "10.180.98.133",
+    "dataPort": 5004,
+    "msgPort": 5014,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  },
+  "node5": {
+    "nodeId": 5,
+    "ip": "10.180.98.134",
+    "dataPort": 5005,
+    "msgPort": 5015,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  },
+  "node6": {
+    "nodeId": 6,
+    "ip": "10.180.98.135",
+    "dataPort": 5006,
+    "msgPort": 5016,
+    "routeInfo": [
+      {
+        "worker": "k8s-master",
+        "nid": 1,
+        "ip": "10.180.98.130",
+        "dport": 5001,
+        "mport": 5011
+      },
+      {
+        "worker": "k8s-node01",
+        "nid": 2,
+        "ip": "10.180.98.131",
+        "dport": 5002,
+        "mport": 5012
+      },
+      {
+        "worker": "k8s-node02",
+        "nid": 3,
+        "ip": "10.180.98.132",
+        "dport": 5003,
+        "mport": 5013
+      },
+      {
+        "worker": "k8s-node03",
+        "nid": 4,
+        "ip": "10.180.98.133",
+        "dport": 5004,
+        "mport": 5014
+      },
+      {
+        "worker": "k8s-node04",
+        "nid": 5,
+        "ip": "10.180.98.134",
+        "dport": 5005,
+        "mport": 5015
+      },
+      {
+        "worker": "k8s-node05",
+        "nid": 6,
+        "ip": "10.180.98.135",
+        "dport": 5006,
+        "mport": 5016
+      }
+    ]
+  }
+}

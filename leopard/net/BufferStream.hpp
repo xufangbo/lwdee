@@ -7,7 +7,7 @@
 #include <memory>
 #include <sstream>
 
-#define BUF_UNIT 1024
+#define BUF_UNIT 102400
 
 typedef void Byte;
 

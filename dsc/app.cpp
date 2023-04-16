@@ -38,7 +38,8 @@ int main(int argc, char* argv[]) {
     }
   } else {
     Leopard leopard(0);
-    leopard.start(node->ip.c_str(), node->port);
+    leopard.start("0.0.0.0", node->port);
+    // leopard.start(node->ip.c_str(), node->port);
   }
 }
 
