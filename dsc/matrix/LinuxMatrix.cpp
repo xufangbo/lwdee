@@ -152,16 +152,18 @@ void createFile(std::string fileName) {
 }
 
 void LinuxMatrix::start() {
-  auto conf = DscConfig::instance();
-  fileName = conf->outputFile + conf->nodeName + "_qps.csv";
-
   mut.lock();
   if (is_running) {
+    mut.unlock();
     return;
+  } else {
+    is_running = true;
+    auto conf = DscConfig::instance();
+    fileName = conf->outputFile + conf->nodeName + "_qps.csv";
+    createFile(fileName);
+
+    mut.unlock();
   }
-  is_running = true;
-  createFile(fileName);
-  mut.unlock();
 
   cpu_bottom = cpu_top = cpu_usage();
   ram_bottom = ram_top = ram_info().used;

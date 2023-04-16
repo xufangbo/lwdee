@@ -13,11 +13,10 @@
 #include "matrix/LinuxMatrix.h"
 
 int MapDCO::start(std::string a) {
-  printf("\n");
   try {
     LinuxMatrix::start();
 
-    logger_trace("accept map sart");
+    logger_info("accept map sart");
     Stopwatch sw;
 
     input.fromJson(&a);
@@ -25,7 +24,6 @@ int MapDCO::start(std::string a) {
 
     logger_trace("> accept map sart,partition : %d,eclipse %lf", input.index,sw.stop());
     LinuxMatrix::stream.map_dco++;
-    // LinuxMatrix::print();
 
     return input.index;
 
@@ -43,17 +41,14 @@ std::string MapDCO::map(std::shared_ptr<vector<MapRecord>> lines) {
     // logger_trace("< accept map,%s",a.c_str());
     Stopwatch sw;
    
-
     LinuxMatrix::stream.map_accept += lines->size();
-    // LinuxMatrix::print();
 
     auto words = std::make_shared<vector<ReduceRecord>>();
     Mapper::map(lines.get(), words.get());
 
     toReduce.send(words.get());
 
-    // logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs",
-    // lines->size(), mapInvokeDta.kafkaIndex, input.index, sw.stop());
+    // logger_trace("accept map, %d lines, (kafka-%02d,map-%02d),eclapse:%lfs", lines->size(), mapInvokeDta.kafkaIndex, input.index, sw.stop());
 
     lines->clear();
     words->clear();

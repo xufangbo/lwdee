@@ -79,7 +79,7 @@ void ToMap::toMaps() {
   typedef std::shared_ptr<vector<MapRecord>> MapRecords;
   std::vector<MapRecords> bats;
 
-  logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
+  // logger_debug("kafka partition %d QPS: %d", this->input->index, mapRecords->size());
   LinuxMatrix::stream.kafka_qps =  mapRecords->size();
 
   int range = this->mapRecords->size() / mapSize;
@@ -111,7 +111,7 @@ void ToMap::toMaps() {
 }
 
 void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
-  // auto dco = this->mapDocs.data() + index;
+  // return;
   VoxorId voxorId = this->mapDocs[index];
   TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
@@ -127,7 +127,8 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
 
   auto json = MapInvokeData(input->index,voxorId.voxorKey, mapLines).toJson();
   client->invoke(ServicePaths::map_invoke, (void*)json.c_str(), json.size(), callback);
-  client->wait();
+  // auto waitTime = client->wait();
+  // logger_trace("wait map time %lf",waitTime);
 }
 
 uint64_t ToMap::getCurrentWindow() {

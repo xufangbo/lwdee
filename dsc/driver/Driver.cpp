@@ -49,10 +49,12 @@ void Driver::start_kafka() {
   Stopwatch sw;
 
   for (int i = 0; i < conf->partitions.size(); i++) {
-    printf("\n");
-    logger_info("start kafka %d / %d -----------------", i, conf->partitions.size());
+
     TNode* node = NodeConfig::nextNode();
 
+    printf("\n");
+    logger_info("start kafka %d / %d ----------------- to %s", i, conf->partitions.size(),node->name.c_str());
+    
     std::vector<string> kafka_mapVoxors;
     for (int m = i; m < conf->splitNums1; m = m + conf->partitions.size()) {
       kafka_mapVoxors.push_back(mapVoxorIds[m]);
@@ -80,10 +82,10 @@ void Driver::start_map() {
   Stopwatch sw;
 
   for (int i = 0; i < conf->splitNums1; i++) {
-    printf("\n");
-    logger_debug("start map %d / %d -----------------", i, conf->splitNums1);
-
     TNode* node = NodeConfig::nextNode();
+    printf("\n");
+    logger_debug("start map %d / %d ----------------- to %s", i, conf->splitNums1,node->name.c_str());
+
     mapVoxorIds.push_back(NodeConfig::voxorId(node, i));
 
     PartitionMap input(i, reduceVoxorIds);
@@ -110,9 +112,10 @@ void Driver::start_reduce() {
   Stopwatch sw;
 
   for (int i = 0; i < conf->splitNums2; i++) {
-    printf("\n");
-    logger_warn("start reduce %d / %d -----------------", i, conf->splitNums2);
     TNode* node = NodeConfig::nextNode();
+    printf("\n");
+    logger_warn("start reduce %d / %d ----------------- to %s", i, conf->splitNums2,node->name.c_str());
+    
     reduceVoxorIds.push_back(NodeConfig::voxorId(node, i));
 
     PartitionReduce input(i);

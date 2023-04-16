@@ -16,11 +16,10 @@
 PartitionKafka KafkaDCO::input;
 
 std::string KafkaDCO::start(std::string a) {
-  printf("\n");
   try {
     LinuxMatrix::start();
 
-    logger_trace("kafka dco accept ");
+    logger_info("accept kafka start");
     Stopwatch sw;
 
     input.fromJson(&a);
@@ -31,7 +30,7 @@ std::string KafkaDCO::start(std::string a) {
 
     LinuxMatrix::stream.kafka_index = input.index;
     // LinuxMatrix::print();
-    logger_trace("> accept start ,partition : %d,eclipse %lf", input.index, sw.stop());
+    logger_trace("> accept kafka start ,partition : %d,eclipse %lf", input.index, sw.stop());
 
     return "succeed";
 

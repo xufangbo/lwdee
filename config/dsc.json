@@ -9,7 +9,7 @@
     "outTopic":"xx",
     "window": 20,
     "isMatrix":1,
-    "filterCondon": 100,
+    "filterCondon": 10,
     "partitions": [0,1,2],
     "splitNums1": 3,
     "splitNums2": 2,

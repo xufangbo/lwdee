@@ -1,11 +1,11 @@
 #include "ToReduce.hpp"
 
-#include "core/DscConfig.hpp"
-#include "core/cjson.hpp"
-#include "core/log.hpp"
 #include "client/SocketScheduler.hpp"
 #include "client/TcpRequest.hpp"
+#include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
+#include "core/cjson.hpp"
+#include "core/log.hpp"
 
 void ToReduce::create_dcos(PartitionMap* input) {
   this->input = input;
@@ -28,7 +28,7 @@ void ToReduce::send(vector<ReduceRecord>* words) {
 
   for (int i = 0; i < split; i++) {
     VoxorId voxorId = this->reduceDcos[i];
-    TNode* node = NodeConfig::byNodeId(voxorId.nodeId);    
+    TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
     auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
     RequestCallback callback = [](BufferStream* inputStream) {
@@ -37,8 +37,9 @@ void ToReduce::send(vector<ReduceRecord>* words) {
       // logger_debug("recive(%d) :  %s", len, content.c_str());
     };
 
-    auto json = ReduceInvokeData(input->index,i, &reduceWords->at(i)).toJson();
+    auto json = ReduceInvokeData(input->index, i, &reduceWords->at(i)).toJson();
     client->invoke(ServicePaths::reduce_invoke, (void*)json.c_str(), json.size(), callback);
-    client->wait();    
+    // auto waitTime = client->wait();
+    // logger_trace("wait reduce time %lf", waitTime);
   }
 }

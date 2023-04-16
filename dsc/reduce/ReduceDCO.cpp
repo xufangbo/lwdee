@@ -49,11 +49,10 @@ Reducer ReduceDCO::reducer;
 PartitionReduce ReduceDCO::input;
 
 std::string ReduceDCO::start(std::string a) {
-  printf("\n");
   try {
     LinuxMatrix::start();
 
-    logger_info("reduce start");
+    logger_info("accept reduce start");
 
     Stopwatch sw;
     // LinuxMatrix::print();

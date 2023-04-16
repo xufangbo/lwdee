@@ -18,6 +18,11 @@ class SocketClient {
   #ifdef LEOPARD_SUSPEND
   await<BufferStream*> invoke(std::string path, void* buffer,int len);
   #endif
-  void wait();
+  /**
+   * @brief 等待调用返回
+   * 
+   * @return 等待时间 
+   */
+  double wait();
   Socket* socket();
 };
