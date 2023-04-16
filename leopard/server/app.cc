@@ -7,10 +7,8 @@
 #include "Leopard.hpp"
 #include "order.hpp"
 
-void init_logger(std::string nodeName);
-
 int main() {
-  init_logger("leopard");
+  read_log_config("server");
   LeopardConfig::instance()->readConfig();
   auto ip = LeopardConfig::instance()->ip;
   // auto ip = "0.0.0.0";
@@ -19,23 +17,4 @@ int main() {
 
   Leopard leopard(LeopardConfig::instance()->procnums);
   leopard.start(ip, LeopardConfig::instance()->port);
-
-  
-}
-
-void init_logger(std::string nodeName) {
-  LogOption option;
-  option.initalized = false;
-  option.level = log_trace;
-  strcpy(option.path, "./log");
-  strcpy(option.name, nodeName.c_str());
-  option.is_color = true;
-  option.days = 10;
-  option.writeFile = true;
-
-  if (logger_initialize(option) != 0) {
-    printf("log initialize error\n");
-  } else {
-    logger_info("-- app starting ... ");
-  }
 }

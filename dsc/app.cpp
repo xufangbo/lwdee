@@ -58,30 +58,12 @@ void init(int argc, char* argv[]) {
   conf->nodeName = nodeName;
 
   if (conf->name == "local") {
-    logger_init(nodeName);
+    read_log_config(nodeName.c_str());
   } else {
-    logger_init("dsc");
+    read_log_config("dsc");
   }
 
   logger_warn("this is %s", nodeName.c_str());
-}
-
-void logger_init(std::string nodeName) {
-  LogOption option;
-  option.initalized = false;
-  option.level = log_trace;
-  strcpy(option.fileMode, "w+");
-  strcpy(option.path, "./log");
-  strcpy(option.name, nodeName.c_str());
-  option.is_color = true;
-  option.days = 10;
-  option.writeFile = true;
-
-  if (logger_initialize(option) != 0) {
-    printf("log initialize error\n");
-  } else {
-    logger_info("-- app starting ... ");
-  }
 }
 
 void regist_services() {

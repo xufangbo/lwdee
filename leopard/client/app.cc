@@ -54,10 +54,9 @@ void testCallback(SocketClient* client, int i) {
   // client->wait();
 }
 
-void init_logger(std::string nodeName);
-
 int main(int argc, char** argv) {
-  init_logger("client");
+  
+  read_log_config("client");
 
   auto* conf = LeopardConfig::instance();
   conf->readConfig();
@@ -88,23 +87,6 @@ int main(int argc, char** argv) {
   // sleep(10);
 
   return 0;
-}
-
-void init_logger(std::string nodeName) {
-  LogOption option;
-  option.initalized = false;
-  option.level = log_debug;
-  strcpy(option.path, "./log");
-  strcpy(option.name, nodeName.c_str());
-  option.is_color = true;
-  option.days = 10;
-  option.writeFile = true;
-
-  if (logger_initialize(option) != 0) {
-    printf("log initialize error");
-  } else {
-    logger_info("-- app starting ... ");
-  }
 }
 
 // client->invoke(

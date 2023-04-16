@@ -60,6 +60,9 @@ typedef struct
 /* 执行日志 */
 void logger(LogLevel level, const char *function, const char *file, int line, const char *fromat, ...);
 
+/* 通过配置文件设置 */
+void read_log_config(const char* name);
+
 /* 设置日志配置 */
 int logger_initialize(LogOption option);
 

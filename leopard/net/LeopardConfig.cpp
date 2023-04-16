@@ -40,6 +40,8 @@ void LeopardConfig::readConfig() {
   _instance.port = cJSON_GetObjectItem(node, "port")->valueint;
   _instance.procnums = cJSON_GetObjectItem(node, "procnums")->valueint;
 
+  cJSON_Delete(node);
+
   // logger_debug("%s:%d %d", ip.c_str(),  _instance.port, _instance.procnums);
 }
 
