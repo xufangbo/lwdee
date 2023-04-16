@@ -24,6 +24,43 @@
 
 #define MAX_EPOLLSIZE (384 * 1024)
 
+suspend testSuspend(SocketClient* client, int i) ;
+void testCallback(SocketClient* client, int i) ;
+
+int main(int argc, char** argv) {
+  
+  read_log_config("client");
+
+  auto* conf = LeopardConfig::instance();
+  conf->readConfig();
+  logger_trace("%s:%d", conf->ip.c_str(), conf->port);
+
+  SocketScheduler::start();
+
+  for (int i = 0; i < 10; i++) {
+    SocketScheduler::tracing = false;
+    try {
+      auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
+
+      testCallback(client.get(), i);
+
+      // sleep(1);
+
+    } catch (Exception& ex) {
+      logger_warn("%s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
+
+    usleep(1000000 / 100);
+  }
+
+  SocketScheduler::join();
+  // sleep(10);
+
+  return 0;
+}
+
 suspend testSuspend(SocketClient* client, int i) {
   std::string input = "green green green " + std::to_string(i);
   auto path = "com.cs.sales.order.save";
@@ -51,42 +88,7 @@ void testCallback(SocketClient* client, int i) {
 
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  // client->wait();
-}
-
-int main(int argc, char** argv) {
-  
-  read_log_config("client");
-
-  auto* conf = LeopardConfig::instance();
-  conf->readConfig();
-  logger_trace("%s:%d", conf->ip.c_str(), conf->port);
-
-  SocketScheduler::start();
-
-  for (int i = 0; i < 1; i++) {
-    // SocketClient::tracing = true;
-
-    try {
-      auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
-
-      testCallback(client.get(), i);
-
-      // sleep(1);
-
-    } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
-    }
-
-    usleep(1000000 / 100);
-  }
-
-  SocketScheduler::join();
-  // sleep(10);
-
-  return 0;
+  client->wait();
 }
 
 // client->invoke(

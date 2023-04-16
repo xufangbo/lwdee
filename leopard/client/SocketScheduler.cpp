@@ -12,7 +12,7 @@
 
 bool SocketScheduler::_running = false;
 bool SocketScheduler::isET = true;
-bool SocketScheduler::tracing = true;
+bool SocketScheduler::tracing = false;
 int SocketScheduler::waits = 0;
 int SocketScheduler::tps = 0;
 int SocketScheduler::unhandles = 0;
@@ -67,6 +67,7 @@ void SocketScheduler::running() {
 void SocketScheduler::join() { runningThread.join(); }
 
 void SocketScheduler::handleEvent(epoll_event& evt) {
+
   Socket* socket = clients.find(evt.data.fd);
   if (socket == nullptr) {
     logger_debug("no hint socket %d", evt.data.fd);
@@ -74,6 +75,7 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
   }
 
   if (evt.events & EPOLLIN) {
+    // if (tracing) logger_trace("EPOLLIN OUT do nothing");
     recv(socket, &evt);
   } else if (evt.events & EPOLLOUT) {
     if (tracing) logger_trace("EPOLL OUT do nothing");
@@ -85,9 +87,7 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
     close(socket);
   } else if (evt.events & EPOLLERR) {
     logger_debug("close client : EPOLLERR %d", evt.data.fd);
-
     close(socket);
-
   } else {
     logger_warn("unkonw epoll events : %d", evt.events);
   }

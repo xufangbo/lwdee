@@ -1,45 +1,13 @@
 #pragma
 
-#include <algorithm>
-#include <map>
 #include <memory>
-#include <mutex>
 #include <thread>
 
 #include "SocketClient.hpp"
 #include "TcpRequest.hpp"
 #include "net/Epoll.hpp"
 #include "net/Socket.h"
-
-class ClientSockets {
- private:
-  std::mutex mut;
-  std::vector<Socket*>* sockets = new std::vector<Socket*>();
-
- public:
-  void insert(Socket* s) {
-    mut.lock();
-    sockets->push_back(s);
-    mut.unlock();
-  }
-  Socket* find(int fd){
-     mut.lock();
-     auto it = std::find_if(sockets->begin(), sockets->end(),[&fd](Socket* i) { return i->fd() == fd; });
-    if (it != sockets->end()) {
-      return *it;
-    }
-    mut.unlock();
-    return nullptr;
-  }
-  void remove(Socket* s) {
-     mut.lock();
-    auto it = std::find_if(sockets->begin(), sockets->end(),[s](Socket* i) { return i == s; });
-    if (it != sockets->end()) {
-      sockets->erase(it);
-    }
-    mut.unlock();
-  }
-};
+#include "ClientSockets.hpp"
 
 class SocketScheduler {
  private:

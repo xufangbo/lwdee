@@ -7,8 +7,7 @@
 #include "net/LeopardProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 
-void SocketClient::invoke(std::string path, RequestInvoke request,
-                          RequestCallback callback) {
+void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();
@@ -23,8 +22,7 @@ void SocketClient::invoke(std::string path, RequestInvoke request,
   SocketScheduler::send(_socket, outputStream->buffer, outputStream->size());
 }
 
-void SocketClient::invoke(std::string path, void* buffer, int len,
-                          RequestCallback callback) {
+void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();
@@ -41,12 +39,9 @@ void SocketClient::invoke(std::string path, void* buffer, int len,
 }
 
 // error: invalid new-expression of abstract class type ‘BufferStream’
-await<BufferStream*> SocketClient::invoke(std::string path, void* buffer,
-                                          int len) {
+await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int len) {
   Socket* socket = this->_socket;
-  auto waiter = await<BufferStream*>([&path, len, buffer, &socket](
-                                         suspend::SuspendHandler handle,
-                                         BufferStream** returnValue) {
+  auto waiter = await<BufferStream*>([&path, len, buffer, &socket](suspend::SuspendHandler handle, BufferStream** returnValue) {
     logger_warn(path.c_str());
     char* str = (char*)buffer;
     logger_warn(str);
@@ -83,4 +78,6 @@ void SocketClient::wait() {
   throw Exception("timeout", ZONE);
 }
 
-Socket* SocketClient::socket() { return this->_socket; }
+Socket* SocketClient::socket() {
+  return this->_socket;
+}
