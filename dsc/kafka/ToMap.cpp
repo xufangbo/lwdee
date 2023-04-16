@@ -122,7 +122,7 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_debug("recive(%d) :  %s", len, content.c_str());
+    // logger_debug("recive(%d) :  %s", len, content.c_str());
   };
 
   auto json = MapInvokeData(input->index,voxorId.voxorKey, mapLines).toJson();

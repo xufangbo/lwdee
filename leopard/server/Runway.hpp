@@ -20,7 +20,6 @@ class Runway {
   int _waits = 0;
   bool isET = true;
   bool epollOut = true;
-  bool tracing = false;
 
  private:
   Sockets clients;

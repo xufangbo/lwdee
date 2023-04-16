@@ -59,6 +59,6 @@ void regist_map_invoke_service() {
     outputStream->put<uint32_t>(message.size());
     outputStream->put(message);
 
-    logger_debug("execute map.invoke service");
+    // logger_debug("execute map.invoke service");
   });
 }

@@ -23,7 +23,9 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 }
 
 void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
-  logger_trace("< invoke %s",path.c_str());
+#ifdef LEOPARD_TRACING
+  logger_trace("< invoke %s", path.c_str());
+#endif
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();

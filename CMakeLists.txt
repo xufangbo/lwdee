@@ -13,7 +13,8 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -w -ggdb")
 # SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -w -ggdb -std=c++2a")
 # add_compile_options(-std=c++11 -fexec-charset=GBK -finput-charset=UTF-8)
 
-# add_compile_definitions(LEOPARD_SUSPEND) # 设置宏
+# add_compile_definitions(LEOPARD_SUSPEND)
+# add_compile_definitions(LEOPARD_TRACING)
 
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 

@@ -21,9 +21,6 @@ class SocketScheduler {
   static std::thread runningThread;
   static bool isET;
 
- public:
-  static bool tracing;
-
  private:
   static void close(Socket* socket);
   static void tpsJob();

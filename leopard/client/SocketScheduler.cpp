@@ -7,12 +7,12 @@
 #include "core/log.hpp"
 #include "net/LeopardConfig.hpp"
 #include "net/LeopardProtocal.hpp"
+#include "net/ProtocalFactory.hpp"
 
 #define BUFFER_SIZE 1024
 
 bool SocketScheduler::_running = false;
 bool SocketScheduler::isET = true;
-bool SocketScheduler::tracing = false;
 int SocketScheduler::waits = 0;
 int SocketScheduler::tps = 0;
 int SocketScheduler::unhandles = 0;
@@ -79,8 +79,9 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
     // if (tracing) logger_trace("EPOLLIN OUT do nothing");
     recv(socket, &evt);
   } else if (evt.events & EPOLLOUT) {
-    if (tracing)
-      logger_trace("EPOLL OUT do nothing");
+#ifdef LEOPARD_TRACING
+    logger_trace("EPOLL OUT do nothing");
+#endif
   } else if (evt.events & EPOLLHUP) {
     logger_info("close client: EPOLLHUP %d", socket->fd());
     close(socket);
@@ -98,16 +99,18 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
 void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-  if (tracing)
-    logger_trace("recv - %s,rc:%d", buf, rc);
+#ifdef LEOPARD_TRACING
+  logger_trace("recv - %s,rc:%d", buf, rc);
+#endif
 
   auto* inputStream = socket->inputStream();
 
   inputStream->puts(buf, rc);
 
   if (rc == 0) {
-    if (tracing)
-      logger_info("client socket(%d) closed on rc == 0", socket->fd());
+#ifdef LEOPARD_TRACING
+    logger_info("client socket(%d) closed on rc == 0", socket->fd());
+#endif
     close(socket);
     return;
   }
@@ -126,13 +129,22 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
 }
 
 void SocketScheduler::handleRequest(Socket* socket) {
+  auto protocal = ProtocalFactory::getProtocal();
+
   auto* inputStream = socket->inputStream();
   inputStream->reset();
-  auto total_len = inputStream->get<uint64_t>();
-  auto path_len = inputStream->get<uint32_t>();
-  std::string path = inputStream->getString(path_len);
 
-  logger_trace("> recive %s", path.c_str());
+  auto header = protocal->getHeader(inputStream);
+  auto path = header->path;
+
+#ifdef LEOPARD_TRACING
+  auto time = Stopwatch::currentMilliSeconds() - header->time;
+  if (time > 1000) {
+    logger_trace("> recive %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
+  } else {
+    logger_trace("> recive %s", path.c_str());
+  }
+#endif
 
   auto callback = TcpRequest::find(path);
   if (callback != nullptr) {

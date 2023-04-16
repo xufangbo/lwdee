@@ -41,7 +41,6 @@ int main(int argc, char** argv) {
   SocketScheduler::start();
 
   for (int i = 0; i < 10; i++) {
-    SocketScheduler::tracing = false;
     try {
       auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
 

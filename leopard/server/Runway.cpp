@@ -2,6 +2,7 @@
 
 #include "TcpResponse.hpp"
 #include "core/Exception.hpp"
+#include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "net/LeopardProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
@@ -102,7 +103,9 @@ void Runway::accept(epoll_event* evt) {
 
     _tps++;
 
-    if (tracing) logger_trace("socket accept %d", client_fd);
+#ifdef LEOPARD_TRACING
+    logger_trace("socket accept %d", client_fd);
+#endif
   } else if (evt->events & EPOLLIN) {
     logger_warn("server socket  EPOLLOUT");
   } else {
@@ -153,14 +156,14 @@ void Runway::recv(Socket* socket, epoll_event* evt) {
   inputStream->puts(buf, rc);
 
   if (rc == 0) {  // 对方socket close
-    if (tracing) {
-      logger_trace("client socket(%d) closed by read.rc = 0", socket->fd());
-    }
+#ifdef LEOPARD_TRACING
+    logger_trace("client socket(%d) closed by read.rc = 0", socket->fd());
+#endif
     this->close(socket);
   } else if (inputStream->isEnd()) {
-    if (tracing) {
-      logger_debug("%s", inputStream->buffer);
-    }
+#ifdef LEOPARD_TRACING
+    logger_debug("%s", inputStream->buffer);
+#endif
 
     std::thread t(&Runway::handleRequest, this, socket);
     t.detach();
@@ -171,30 +174,37 @@ void Runway::recv(Socket* socket, epoll_event* evt) {
 }
 
 void Runway::handleRequest(Socket* socket) {
-  try{
+  try {
     this->doHandle(socket);
-  }catch(Exception &ex){
-    logger_error("%s %s",ex.getMessage().c_str(),ex.getStackTrace().c_str());
-  }catch(std::exception &ex){
-    logger_error("%s",ex.what());
+  } catch (Exception& ex) {
+    logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+  } catch (std::exception& ex) {
+    logger_error("%s", ex.what());
   }
 }
 void Runway::doHandle(Socket* socket) {
+  auto protocal = ProtocalFactory::getProtocal();
+
   auto* inputStream = socket->inputStream();
   inputStream->reset();
-  auto total_len = inputStream->get<uint64_t>();
-  auto path_len = inputStream->get<uint32_t>();
-  std::string path = inputStream->getString(path_len);
 
-  logger_debug("< accept %s", path.c_str());
+  auto header = protocal->getHeader(inputStream);
+  auto path = header->path;
+
+#ifdef LEOPARD_TRACING
+  auto time = Stopwatch::currentMilliSeconds() - header->time;
+  if (time > 1000) {
+    logger_trace("< accept %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
+  } else {
+    logger_trace("< accept %s", path.c_str());
+  }
+#endif
 
   auto fun = TcpResponse::find(path);
   if (fun == nullptr) {
-    logger_error("> response can't hint path %s", path.c_str());
+    logger_error("> response can't hint path: %s", path.c_str());
     inputStream->clean();
   } else {
-    
-    auto protocal = ProtocalFactory::getProtocal().get();
     auto outputStream = ProtocalFactory::createStream();
 
     protocal->setHeader(outputStream.get(), path);
@@ -207,7 +217,9 @@ void Runway::doHandle(Socket* socket) {
 
     this->send(socket, outputStream.get());
 
+#ifdef LEOPARD_TRACING
     logger_debug("> response %s", path.c_str());
+#endif
   }
 }
 
@@ -237,8 +249,14 @@ int Runway::tps() {
   return tmp;
 }
 
-int Runway::waits() { return _waits; }
+int Runway::waits() {
+  return _waits;
+}
 
-int Runway::sockets() { return clients.size(); }
+int Runway::sockets() {
+  return clients.size();
+}
 
-void Runway::join() { thread.join(); }
+void Runway::join() {
+  thread.join();
+}

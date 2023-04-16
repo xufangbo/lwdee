@@ -33,10 +33,13 @@ int main(int argc, char* argv[]) {
 
   if (node->nodeId == 1) {
     Driver().startJob();
+    while (true) {
+      sleep(10);
+    }
+  } else {
+    Leopard leopard(0);
+    leopard.start(node->ip.c_str(), node->port);
   }
-
-  Leopard leopard(0);
-  leopard.start(node->ip.c_str(), node->port);
 }
 
 void init(int argc, char* argv[]) {
