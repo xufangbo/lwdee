@@ -70,10 +70,11 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 #endif
 
 void SocketClient::wait() {
+  
   int fd = this->_socket->fd();
-  for (int i = 0; i < 100 * 10; i++) {
-    bool connected = SocketScheduler::contains(fd);
-    if (!connected) {
+  for (int i = 0; i < 100 * 30; i++) {
+    bool ok = SocketScheduler::contains(fd);
+    if (!ok) {
       return;
     }
     usleep(1000000 / 100);

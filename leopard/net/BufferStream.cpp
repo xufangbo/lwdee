@@ -1,6 +1,8 @@
 #include "BufferStream.hpp"
 
-BufferStream::BufferStream() { buffer = (Byte*)calloc(1, capacity); }
+BufferStream::BufferStream() {
+  buffer = (Byte*)calloc(1, capacity);
+}
 
 BufferStream::~BufferStream() {
   if (buffer != NULL) {
@@ -9,10 +11,15 @@ BufferStream::~BufferStream() {
   }
 }
 
+void BufferStream::reset() {
+  pos = 0;
+  _size = 0;
+}
+
 void BufferStream::puts(Byte* buf, int len) {
   size_t t = pos + len;
-  if (t < capacity) {
-    capacity = t / BUF_UNIT + BUF_UNIT;
+  if (t > capacity) {
+    capacity = BUF_UNIT * (t / BUF_UNIT) + BUF_UNIT;
     buffer = realloc(buffer, capacity);
   }
   memcpy(buffer + pos, buf, len);

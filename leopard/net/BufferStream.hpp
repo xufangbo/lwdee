@@ -61,7 +61,7 @@ class BufferStream {
   void get(Byte* ptr, int len);
 
  public:
-  void reset() { pos = 0; }
+  void reset();
   void clean();
 
   virtual bool isEnd() = 0;

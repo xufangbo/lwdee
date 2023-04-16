@@ -11,25 +11,11 @@
 
 Runway::Runway() {
   this->epoll = new Epoll(1000);
-  clients = new std::map<int, Socket*>();
 }
 Runway::~Runway() {
   if (epoll != nullptr) {
     delete epoll;
     epoll = nullptr;
-  }
-
-  if (clients != nullptr) {
-    for (auto& i : *clients) {
-      if (i.second != nullptr) {
-        delete i.second;
-        i.second = nullptr;
-      }
-    }
-    clients->clear();
-
-    delete clients;
-    clients = nullptr;
   }
 }
 
@@ -54,7 +40,7 @@ void Runway::run() {
 
     epoll->add(this->server->fd(), isET ? (EPOLLIN | EPOLLET) : EPOLLIN);
 
-    logger_info("server socket fd - %d : %d", index, server->fd());
+    logger_trace("server socket fd - %d : %d", index, server->fd());
 
   } catch (EpollException& ex) {
     logger_error("%s", ex.getMessage().c_str());
@@ -104,7 +90,7 @@ void Runway::accept(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd);
-    clients->insert(std::pair<int, Socket*>(client_fd, client));
+    clients.insert(client);
 
     client->setNonBlocking();
 
@@ -125,12 +111,11 @@ void Runway::accept(epoll_event* evt) {
 }
 
 void Runway::io(epoll_event* evt) {
-  auto it = clients->find(evt->data.fd);
-  if (it == clients->end()) {
+  auto socket = clients.find(evt->data.fd);
+  if (socket == nullptr) {
     logger_debug("no hint socket %d", evt->data.fd);
     return;
   }
-  Socket* socket = it->second;
 
   if (evt->events & EPOLLIN) {
     this->recv(socket, evt);
@@ -242,7 +227,7 @@ void Runway::close(Socket* socket) {
   epoll->del(socket->fd());
   socket->close();
 
-  clients->erase(socket->fd());
+  clients.remove(socket);
   delete socket;
 }
 
@@ -254,6 +239,6 @@ int Runway::tps() {
 
 int Runway::waits() { return _waits; }
 
-int Runway::sockets() { return clients->size(); }
+int Runway::sockets() { return clients.size(); }
 
 void Runway::join() { thread.join(); }

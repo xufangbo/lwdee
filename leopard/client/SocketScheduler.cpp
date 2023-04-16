@@ -19,7 +19,7 @@ int SocketScheduler::unhandles = 0;
 std::thread SocketScheduler::tpsThread;
 std::thread SocketScheduler::runningThread;
 std::shared_ptr<Epoll> SocketScheduler::epoll;
-ClientSockets SocketScheduler::clients;
+Sockets SocketScheduler::clients;
 
 void SocketScheduler::start() {
   if (_running) {

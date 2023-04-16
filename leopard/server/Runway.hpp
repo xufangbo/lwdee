@@ -6,6 +6,7 @@
 
 #include "net/Epoll.hpp"
 #include "net/Socket.h"
+#include "net/Sockets.hpp"
 
 class Runway {
  private:
@@ -22,7 +23,7 @@ class Runway {
   bool tracing = false;
 
  private:
-  std::map<int,Socket*>* clients = nullptr;
+  Sockets clients;
 
  private:
   void run();

@@ -7,11 +7,11 @@
 #include "TcpRequest.hpp"
 #include "net/Epoll.hpp"
 #include "net/Socket.h"
-#include "ClientSockets.hpp"
+#include "net/Sockets.hpp"
 
 class SocketScheduler {
  private:
-  static ClientSockets clients;
+  static Sockets clients;
   static std::shared_ptr<Epoll> epoll;
   static bool _running;
   static int waits;
