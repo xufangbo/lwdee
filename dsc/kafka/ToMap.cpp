@@ -138,7 +138,7 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
       }
       lines.push_back(mapLines->at(index));
     }
-    logger_trace("sub map %d / %d : %d", i, i, (count + 1), lines.size());
+    logger_trace("sub map %d : %d", i,  lines.size());
 
     this->doToMap(index, &lines, voxorId, node);
     usleep(1000000 / 100);

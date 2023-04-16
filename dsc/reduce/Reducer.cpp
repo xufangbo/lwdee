@@ -1,16 +1,18 @@
 #include "Reducer.hpp"
 #include <algorithm>
 #include <fstream>
+#include <iomanip>
 #include <memory>
 #include "core/DscConfig.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
-#include <iomanip>
 
 Reducer::Reducer() {
   auto conf = DscConfig::instance();
   this->window = conf->window * 1000;
   this->currentWindowTs = this->getCurrentWindow();
+
+  logger_warn("reduce window : %ds", conf->window);
 
   this->sum = 0;
   this->count = 0;
@@ -89,8 +91,7 @@ void Reducer::accept(std::vector<ReduceRecord>* b_records, PartitionReduce* inpu
     uint64_t t_sum = this->sum;
     uint64_t t_size = this->count;
 
-    if (b_size > 0 &&  t_size > 0) {
-      
+    if (b_size > 0 && t_size > 0) {
       auto b_delay = ((int64_t)b_sum) * 1.0 / b_size / 1000;
       auto t_delay = (t_sum / t_size) * 1.0 / 1000;
 
