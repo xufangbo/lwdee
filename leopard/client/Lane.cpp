@@ -6,24 +6,29 @@
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "net/LeopardConfig.hpp"
+#include "net/log.hpp"
 
 Lane::Lane(int id, bool* running, SendTaskQueue* sendQueue)
     : IRunway(id, running, sendQueue) {
 }
 
 void Lane::start() {
-  std::thread(&Lane::run, this).detach();
+  thread = std::thread(&Lane::run, this);
 }
 
-ProtocalHeaderPtr Lane::doHandle(Socket* socket) {
-  auto header = IRunway::doHandle(socket);
+void Lane::acceptEvent(epoll_event* evt) {
+  IRunway::acceptRecive(evt);
+}
+
+void Lane::doAcceptRequest(Socket* socket) {
+
+  auto header = this->parseRequest(socket);
 
   auto* inputStream = socket->inputStream();
 
   auto callback = TcpRequest::find(header->path);
   if (callback != nullptr) {
     (*callback)(inputStream);
-    return header;
   }
 
 #ifdef LEOPARD_SUSPEND
@@ -34,8 +39,6 @@ ProtocalHeaderPtr Lane::doHandle(Socket* socket) {
   }
 #endif
   logger_error("can't hint path %s", header->path.c_str());
-
-  return header;
 }
 
 Socket* Lane::create(const char* ip, int port) {
@@ -53,7 +56,7 @@ Socket* Lane::create(const char* ip, int port) {
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {
-    logger_warn("long time to connect: %lfs", eclapse);
+    leopard_warn("long time to connect: %lfs", eclapse);
   }
 
   uint32_t events = EPOLLIN;

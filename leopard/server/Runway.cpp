@@ -5,6 +5,7 @@
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "net/ProtocalFactory.hpp"
+#include "net/log.hpp"
 #include "sys/sysinfo.h"
 
 Runway::Runway(int id, bool* running, SendTaskQueue* sendQueue)
@@ -40,15 +41,15 @@ void Runway::run() {
   IRunway::run();
 }
 
-void Runway::handleEvent(epoll_event* evt) {
+void Runway::acceptEvent(epoll_event* evt) {
   if (evt->data.fd == server->fd()) {
-    this->accept(evt);
+    this->acceptSocket(evt);
   } else {
-    IRunway::handleEvent(evt);
+    IRunway::acceptRecive(evt);
   }
 }
 
-void Runway::accept(epoll_event* evt) {
+void Runway::acceptSocket(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     int client_fd = server->accept();
 
@@ -63,18 +64,17 @@ void Runway::accept(epoll_event* evt) {
 
     epoll->add(client_fd, isET ? (events | EPOLLET) : events);
 
-#ifdef LEOPARD_TRACING
-    logger_trace("socket accept %d", client_fd);
-#endif
+    leopard_trace("socket accept %d", client_fd);
+
   } else if (evt->events & EPOLLIN) {
-    logger_warn("server socket  EPOLLOUT");
+    leopard_info("server socket  EPOLLOUT");
   } else {
-    logger_warn("server socket  unkown event %d", evt->events);
+    leopard_info("server socket  unkown event %d", evt->events);
   }
 }
 
-ProtocalHeaderPtr Runway::doHandle(Socket* socket) {
-  auto header = IRunway::doHandle(socket);
+void Runway::doAcceptRequest(Socket* socket) {
+  auto header = this->parseRequest(socket);
 
   auto* inputStream = socket->inputStream();
 
@@ -96,14 +96,7 @@ ProtocalHeaderPtr Runway::doHandle(Socket* socket) {
 
     inputStream->clean();
 
-#ifdef LEOPARD_TRACING
-    logger_debug("> response %s", header->path.c_str());
-#endif
+    leopard_debug("> response %s", header->path.c_str());
   }
-
-  return header;
 }
 
-void Runway::join() {
-  thread.join();
-}

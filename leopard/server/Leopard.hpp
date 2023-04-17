@@ -12,4 +12,5 @@ class Leopard : public IRunwayContainer<Runway> {
  public:
   Leopard(int corenums = 0);
   void start(std::string ip, int port);
+  void join();
 };

@@ -3,6 +3,7 @@
 #include <signal.h>
 #include "core/log.hpp"
 #include "sys/sysinfo.h"
+#include "net/log.hpp"
 
 Leopard::Leopard(int corenums)
     : corenums(corenums) {
@@ -17,11 +18,12 @@ void Leopard::start(std::string ip, int port) {
 
   this->ip = ip;
   this->port = port;
+  this->running = true;
 
-  logger_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
+  leopard_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
 
   sendQueue.start(&running);
-  
+
   std::thread tps(&Leopard::qpsJob, this);
   tps.detach();
 
@@ -31,6 +33,9 @@ void Leopard::start(std::string ip, int port) {
 
     runways.push_back(runway);
   }
+}
+
+void Leopard::join() {
   for (auto runway : runways) {
     runway->join();
   }

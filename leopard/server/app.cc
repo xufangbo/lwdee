@@ -1,10 +1,7 @@
 #include <iostream>
-#include "net/Epoll.hpp"
-#include "core/Exception.hpp"
-#include "net/LeopardConfig.hpp"
-#include "net/Socket.hpp"
-#include "core/log.hpp"
 #include "Leopard.hpp"
+#include "core/log.hpp"
+#include "net/LeopardConfig.hpp"
 #include "order.hpp"
 
 int main() {
@@ -17,4 +14,5 @@ int main() {
 
   Leopard leopard(LeopardConfig::instance()->procnums);
   leopard.start(ip, LeopardConfig::instance()->port);
+  leopard.join();
 }

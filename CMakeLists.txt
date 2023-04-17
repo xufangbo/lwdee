@@ -26,5 +26,5 @@ include_directories(./leopard)
 add_subdirectory(core)
 add_subdirectory(leopard)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/dsc.cmake)
+# include(${CMAKE_CURRENT_SOURCE_DIR}/dsc.cmake)
 

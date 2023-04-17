@@ -1,5 +1,5 @@
-#include "SocketClient.hpp"
 #include "Antelope.hpp"
+#include "SocketClient.hpp"
 #include "core/Exception.hpp"
 #include "core/log.hpp"
 #include "core/suspend.hpp"
@@ -10,14 +10,13 @@
 #define MAX_EPOLLSIZE (384 * 1024)
 
 #ifdef LEOPARD_SUSPEND
-suspend testSuspend(SocketClient* client, int i) ;
+suspend testSuspend(SocketClient* client, int i);
 #endif
 
-void testCallback(SocketClient* client, int i) ;
-void testBigDataCallback(SocketClient* client, int i) ;
+void testCallback(SocketClient* client, int i);
+void testBigDataCallback(SocketClient* client, int i);
 
 int main(int argc, char** argv) {
-  
   read_log_config("client");
 
   auto* conf = LeopardConfig::instance();
@@ -30,10 +29,8 @@ int main(int argc, char** argv) {
     try {
       auto client = SocketClient::create(conf->ip.c_str(), conf->port);
 
-      // testCallback(client.get(), i);
-      testBigDataCallback(client.get(), i);
-
-      // sleep(1);
+      testCallback(client.get(), i);
+      // testBigDataCallback(client.get(), i);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -83,7 +80,7 @@ void testCallback(SocketClient* client, int i) {
 
 void testBigDataCallback(SocketClient* client, int i) {
   std::string input = "green green !";
-  for (int i = 0; i < 50000;i++){
+  for (int i = 0; i < 50000; i++) {
     input += "green green !";
   }
   input += std::to_string(i);
@@ -99,7 +96,7 @@ void testBigDataCallback(SocketClient* client, int i) {
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
   auto time = client->wait();
-  logger_info("%d eclipse %lfs",i, time * 1.0 / 1000);
+  logger_info("%d eclipse %lfs", i, time * 1.0 / 1000);
 }
 
 // client->invoke(

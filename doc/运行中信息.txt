@@ -13,4 +13,4 @@ malloc(): smallbin double linked list corrupted
 
 socket异常时的退出处理
 2023-04-17 09:19:59,187 [error] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:62 running : socket recv error,(104)Connection reset by peer
-2023-04-17 09:19:59,187 [debug] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:74 handleEvent : no hint socket 113
+2023-04-17 09:19:59,187 [debug] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:74 acceptXXX : no hint socket 113
