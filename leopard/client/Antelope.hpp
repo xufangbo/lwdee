@@ -1,11 +1,10 @@
 #pragma
 
-#include "IRunwayContainer.hpp"
 #include "Lane.hpp"
+#include "net/IRunwayContainer.hpp"
 
 class Antelope : public IRunwayContainer<Lane> {
  private:
-  Antelope() {}
   ~Antelope();
 
  public:

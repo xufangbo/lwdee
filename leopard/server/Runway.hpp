@@ -16,15 +16,17 @@ class Runway : public IRunway {
   std::string ip;
   int port;
   std::shared_ptr<Socket> server;
+  std::thread thread;
 
  private:
+  void run() override;
   void accept(epoll_event* evt);
+  void handleEvent(epoll_event* evt) override;
+  ProtocalHeaderPtr doHandle(Socket* socket) override;
 
  public:
   Runway(int id, bool* running, SendTaskQueue* sendQueue);
-  ~Runway();
   void start(std::string ip, int port);
-  void handleEvent(int i);
   void join();
 
  public:

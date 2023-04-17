@@ -15,6 +15,7 @@
 class Lane : public IRunway {
  private:
   void handleEvent(epoll_event& evt);
+  ProtocalHeaderPtr doHandle(Socket* socket) override;
 
  public:
   Lane(int id, bool* running, SendTaskQueue* sendQueue);

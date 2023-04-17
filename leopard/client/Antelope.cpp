@@ -2,22 +2,17 @@
 
 #include <signal.h>
 
-#include "core/Exception.hpp"
-#include "core/Stopwatch.hpp"
-#include "core/log.hpp"
-#include "net/LeopardConfig.hpp"
-#include "net/LeopardProtocal.hpp"
-#include "net/ProtocalFactory.hpp"
+#include "Lane.hpp"
 
 #define BUFFER_SIZE 1024
 
 Antelope Antelope::instance;
 
 Antelope::~Antelope() {
-  for (int i = 0; i < lanes.size(); i++) {
-    delete lanes[i];
+  for (int i = 0; i < runways.size(); i++) {
+    delete runways[i];
   }
-  lanes.clear();
+  runways.clear();
 }
 
 void Antelope::start() {
@@ -28,17 +23,13 @@ void Antelope::start() {
 
   sendQueue.start();
   for (int i = 0; i < 1; i++) {
-    lanes.push_back(new Lane());
+    auto lane = new Lane(i + 1, &running, &sendQueue);
+    runways.push_back(lane);
   }
 
   running = true;
 }
 
 SocketClientPtr Antelope::create(const char* ip, int port) {
-}
-
-void Antelope::tpsJob() {
-  while (running) {
-    sleep(1);
-  }
+  return nullptr;
 }

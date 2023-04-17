@@ -1,11 +1,7 @@
 #include "Leopard.hpp"
 
 #include <signal.h>
-#include <numeric>
-#include "core/Exception.hpp"
 #include "core/log.hpp"
-#include "net/Epoll.hpp"
-#include "net/Socket.hpp"
 #include "sys/sysinfo.h"
 
 Leopard::Leopard(int corenums)
@@ -29,9 +25,11 @@ void Leopard::start(std::string ip, int port) {
   this->ip = ip;
   this->port = port;
 
-  sendQueue.start();
-
   logger_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
+
+  sendQueue.start();
+  std::thread tps(&Leopard::qpsJob, this);
+  tps.detach();
 
   for (int i = 0; i < corenums; i++) {
     auto runway = new Runway(i + 1, &running, &sendQueue);
@@ -39,35 +37,7 @@ void Leopard::start(std::string ip, int port) {
 
     runways.push_back(runway);
   }
-
-  std::thread tps(&Leopard::tpsJob, this);
-  tps.detach();
-
   for (auto runway : runways) {
     runway->join();
-  }
-}
-
-/**
- * TPS统计，系统每秒钟能够处理的业务数量
- * 是一种业务概念，不是一种标准，不同的业务人员统计口径可能不一样
- * 比如可能指的是每秒钟能保存成功的订单数
- * 这里指的是一秒钟RPC请求处理的个数
- *
- * QPS
- */
-void Leopard::tpsJob() {
-  while (running) {
-    sleep(1);
-
-    Qps qps(0);
-
-    qps.accepts = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->accepts; });
-    qps.closes = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->closes; });
-    qps.inputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->inputs; });
-    qps.outputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->outputs; });
-    int waitings = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->waitings(); });
-
-    // logger_trace("sockets:%4d,TPS:%4d,epoll wait:%4d",sockets, tps, waits);
   }
 }
