@@ -6,6 +6,7 @@ class ProtocalHeader {
  public:
   uint64_t totalLength;
   uint64_t time;
+  uint32_t elapsed;
   uint32_t pathLength;
   std::string path;
 

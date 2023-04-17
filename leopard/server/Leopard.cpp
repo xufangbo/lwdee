@@ -1,16 +1,15 @@
 #include "Leopard.hpp"
 
 #include <signal.h>
-
 #include <numeric>
-
 #include "core/Exception.hpp"
 #include "core/log.hpp"
 #include "net/Epoll.hpp"
-#include "net/Socket.h"
+#include "net/Socket.hpp"
 #include "sys/sysinfo.h"
 
-Leopard::Leopard(int corenums) : corenums(corenums) {
+Leopard::Leopard(int corenums)
+    : corenums(corenums) {
   if (corenums <= 0) {
     this->corenums = get_nprocs();  // get_nprocs_conf();
   }
@@ -35,18 +34,18 @@ void Leopard::start(std::string ip, int port) {
   logger_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
 
   for (int i = 0; i < corenums; i++) {
-    auto runway = new Runway(&sendQueue);
-    runway->start(ip, port, i + 1);
+    auto runway = new Runway(i + 1, &running, &sendQueue);
+    runway->start(ip, port);
 
     runways.push_back(runway);
   }
 
-  tpsThread = std::thread(&Leopard::tpsJob, this);
+  std::thread tps(&Leopard::tpsJob, this);
+  tps.detach();
 
   for (auto runway : runways) {
     runway->join();
   }
-  tpsThread.join();
 }
 
 /**
@@ -58,17 +57,16 @@ void Leopard::start(std::string ip, int port) {
  * QPS
  */
 void Leopard::tpsJob() {
-  for (;;) {
+  while (running) {
     sleep(1);
 
-    int sockets =
-        std::accumulate(runways.begin(), runways.end(), 0,
-                        [](int x, Runway *r) { return x + r->sockets(); });
-    int tps = std::accumulate(runways.begin(), runways.end(), 0,
-                              [](int x, Runway *r) { return x + r->tps(); });
-    int waits =
-        std::accumulate(runways.begin(), runways.end(), 0,
-                        [](int x, Runway *r) { return x + r->waits(); });
+    Qps qps(0);
+
+    qps.accepts = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->accepts; });
+    qps.closes = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->closes; });
+    qps.inputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->inputs; });
+    qps.outputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->outputs; });
+    int waitings = std::accumulate(runways.begin(), runways.end(), 0, [](int x, Runway* r) { return x + r->qps()->waitings(); });
 
     // logger_trace("sockets:%4d,TPS:%4d,epoll wait:%4d",sockets, tps, waits);
   }

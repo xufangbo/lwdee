@@ -1,4 +1,4 @@
-#include "Socket.h"
+#include "Socket.hpp"
 
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -7,18 +7,25 @@
 #include "net/ProtocalFactory.hpp"
 #include "string.h"
 
-Socket::Socket() {
+Socket::Socket(Qps* qps)
+    : qps(qps) {
   _fd = ::socket(AF_INET, SOCK_STREAM, 0);  // AF_INET -> PF_INET
   if (-1 == _fd) {
     throw SocketException("socket create error", errno, ZONE);
   }
   this->_inputStream = ProtocalFactory::createStream();
-  // this->_outputStream = ProtocalFactory::createStream();
+
+  this->qps->accepts++;
 }
 
-Socket::Socket(int fd)
-    : _fd(fd) {
+Socket::Socket(int fd, Qps* qps)
+    : _fd(fd), qps(qps) {
   this->_inputStream = ProtocalFactory::createStream();
+  this->qps->accepts++;
+}
+
+void Socket::onSend() {
+  this->qps->outputs++;
 }
 
 void Socket::bind(const char* ip, int port) {
@@ -175,25 +182,19 @@ ssize_t Socket::recv(void* buf, size_t len, int flags) {
 }
 
 /**
- * send()函数发送的时候，不一定能够全部发送出去，所以要检查send()函数的返回值
+ * send()函数非阻塞发送的时候，不一定能够全部发送出去，所以要检查send()函数的返回值
  * 当返回值小于len的时候，表明缓冲区中仍然有部分数据没有发送成功，这是需要重新发送剩余部分
  *
- * 如果返回-1，表示错误
+ * EINTR: Interrupted system call，在send和reci中意义不同，在send中表示这个系统调用被中断了
+ * EAGAIN: 资源限制/不满足条件，导致返回值为EAGAIN,其实就是写缓冲区满了，下次再试
+ * EWOULDBLOCK: 是EAGAIN的别名，在不同的操作系统下，有的有EAGAIN有的有EWOULDBLOCK，LINUX是两个宏都有
  */
 
 ssize_t Socket::send(void* buf, size_t len) {
   // 当应用程序在socket中设置O_NONBLOCK属性后，如果发送缓存被占满，send就会返回EAGAIN或EWOULDBLOCK的错误。
   // 在将socket设置O_NONBLOCK属性后，通过socket发送一个100K大小的数据，
   // 第一次成功发送了13140数据，之后继续发送并未成功，errno数值为EAGAIN错误。
-  int rc = ::send(_fd, buf, len, 0);
-  if (rc == -1) {
-    if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
-      return rc;
-    } else {
-      throw SocketException("socket send error", errno, ZONE);
-    }
-  }
-  return rc;
+  return ::send(_fd, buf, len, 0);
 }
 
 /**
@@ -214,6 +215,7 @@ void Socket::close() {
   if (rc == -1) {
     throw SocketException("socket close error", errno, ZONE);
   }
+  this->qps->closes++;
 }
 
 void Socket::shutdown(int how) {
@@ -263,7 +265,6 @@ bool isClosed() {
 
 void Socket::setSendBuf(int size) {
   setsockopt(_fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size));
-
 }
 void Socket::setReciveBuf(int size) {
   setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size));

@@ -1,0 +1,16 @@
+
+  
+2023-04-17 08:49:34,522 [debug] [140480083895872] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:186 newClient : default sendbufer 425984
+2023-04-17 08:49:34,522 [debug] [140480083895872] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:187 newClient : default revibufer 367360
+
+
+60 map - 30 reduce时出现如下异常
+2023-04-17 09:18:55,894 [trace] [140628428056128] /home/kevin/git/lwdee/dsc/map/ToReduce.cpp:44 send : 27 / 30 send to reduce node4:27 186 records
+malloc(): smallbin double linked list corrupted
+
+可能是栈空间不足，可以使用`ulimit -s  1024000`命令设置
+也可能是日志组件出的问题，日志文件需要做成队列模式，
+
+socket异常时的退出处理
+2023-04-17 09:19:59,187 [error] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:62 running : socket recv error,(104)Connection reset by peer
+2023-04-17 09:19:59,187 [debug] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:74 handleEvent : no hint socket 113

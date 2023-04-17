@@ -1,7 +1,7 @@
-#include "SocketScheduler.hpp"
+#include "Lane.hpp"
 
 #include <signal.h>
-
+#include <thread>
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
@@ -11,47 +11,26 @@
 
 #define BUFFER_SIZE 1024
 
-bool SocketScheduler::_running = false;
-bool SocketScheduler::isET = true;
-int SocketScheduler::waits = 0;
-int SocketScheduler::tps = 0;
-std::shared_ptr<Epoll> SocketScheduler::epoll;
-Sockets SocketScheduler::clients;
-SendTaskQueue SocketScheduler::sendQueue;
-
-void SocketScheduler::start() {
-  if (_running) {
-    return;
-  } else {
-    _running = true;
-  }
-  epoll = std::make_shared<Epoll>(18000);
-  
-  std::thread t_running(&SocketScheduler::running);
-  std::thread t_tps(&SocketScheduler::tpsJob);
-
-  t_running.detach();
-  t_tps.detach();
-
-  sendQueue.start();
+Lane::Lane(int id,bool *running, SendTaskQueue* sendQueue)
+    : _qps(id),running(running), sendQueue(sendQueue) {
+  this->epoll =std::make_shared<Epoll>(18000);
+  this->_qps.waitings = [this]() { return this->sockets.size(); };
 }
 
-void SocketScheduler::stop() {
-  if (_running) {
-    // runningThread.stop();
-    // tpsThread.stop();
-    // epoll.reset();
-  }
-
-  _running = false;
+void Lane::start() {
+  std::thread(&Lane::run,this).detach();
 }
 
-void SocketScheduler::running() {
+void Lane::stop() {
+  running = false;
+}
+
+void Lane::run() {
   // https://blog.csdn.net/weixin_33196646/article/details/116730365
   signal(SIGPIPE, SIG_IGN);
 
-  while (_running) {
-    waits = epoll->wait(100);
+  while (running) {
+    int waits = epoll->wait(100);
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -64,12 +43,11 @@ void SocketScheduler::running() {
         logger_error("%s", ex.what());
       }
     }
-    usleep(1000000 / 1000);
   }
 }
 
-void SocketScheduler::handleEvent(epoll_event& evt) {
-  Socket* socket = clients.find(evt.data.fd);
+void Lane::handleEvent(epoll_event& evt) {
+  Socket* socket = sockets.find(evt.data.fd);
   if (socket == nullptr) {
     logger_debug("no hint socket %d", evt.data.fd);
     return;
@@ -98,7 +76,7 @@ void SocketScheduler::handleEvent(epoll_event& evt) {
   }
 }
 
-void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
+void Lane::recv(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
 #ifdef LEOPARD_TRACING
@@ -118,9 +96,9 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   }
 
   if (inputStream->isEnd()) {
+    this->_qps.inputs++;
 
     handleRequest(socket);
-
     inputStream->clean();
     close(socket);
 
@@ -129,7 +107,7 @@ void SocketScheduler::recv(Socket* socket, epoll_event* evt) {
   }
 }
 
-void SocketScheduler::handleRequest(Socket* socket) {
+void Lane::handleRequest(Socket* socket) {
   auto protocal = ProtocalFactory::getProtocal();
 
   auto* inputStream = socket->inputStream();
@@ -138,11 +116,12 @@ void SocketScheduler::handleRequest(Socket* socket) {
   auto header = protocal->getHeader(inputStream);
   auto path = header->path;
 
+  this->_qps.time(header->elapsed);
+
 #ifdef LEOPARD_TRACING
   auto time = Stopwatch::currentMilliSeconds() - header->time;
   if (time > 1000) {
-    logger_trace("> recive %s , too long %lfs", path.c_str(),
-                 time * 1.0 / 1000);
+    logger_trace("> recive %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
   } else {
     logger_trace("> recive %s", path.c_str());
   }
@@ -164,28 +143,26 @@ void SocketScheduler::handleRequest(Socket* socket) {
   logger_error("can't hint path %s", path.c_str());
 }
 
-void SocketScheduler::close(Socket* socket) {
+void Lane::close(Socket* socket) {
   epoll->del(socket->fd());
   socket->close();
 
-  clients.remove(socket);
-
+  sockets.remove(socket);
   delete socket;
 }
 
-SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
+Socket* Lane::create(const char* ip, int port) {
   Stopwatch sw;
 
-  Socket* socket = new Socket();
-  SocketClientPtr client = std::make_shared<SocketClient>(socket);
+  Socket* socket = new Socket(&_qps);
 
   socket->connect(ip, port);
   socket->setNonBlocking();
   socket->reusePort();
   socket->setSendBuf(1048576);
-  logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
-  logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
-  clients.insert(socket);
+  // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
+  // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
+  sockets.insert(socket);
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {
@@ -198,25 +175,14 @@ SocketClientPtr SocketScheduler::newClient(const char* ip, int port) {
 
   epoll->add(socket->fd(), isET ? (events | EPOLLET) : events);
 
-  tps++;
-
-  return client;
+  return socket;
 }
 
-void SocketScheduler::send(Socket* socket, BufferStreamPtr outputStream) {
-  sendQueue.push(socket, outputStream);
+void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
+  sendQueue->push(socket, outputStream);
 }
 
-bool SocketScheduler::contains(int fd) {
-  Socket* socket = clients.find(fd);
+bool Lane::contains(int fd) {
+  Socket* socket = sockets.find(fd);
   return socket != nullptr;
-}
-
-void SocketScheduler::tpsJob() {
-  // for (;;) {
-  //   sleep(1);
-  //   logger_trace("sockets:%4d,unhandles:%4d,TPS:%4d,epoll wait:%4d",
-  //                clients->size(), unhandles, tps, epoll->wait(0));
-  //   tps = 0;
-  // }
 }

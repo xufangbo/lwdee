@@ -5,7 +5,7 @@
 #include "core/suspend.hpp"
 #include "net/Epoll.hpp"
 #include "net/LeopardConfig.hpp"
-#include "net/Socket.h"
+#include "net/Socket.hpp"
 
 #define MAX_EPOLLSIZE (384 * 1024)
 

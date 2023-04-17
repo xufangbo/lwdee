@@ -42,3 +42,7 @@
   }
 
   
+
+  
+2023-04-17 08:49:34,522 [debug] [140480083895872] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:186 newClient : default sendbufer 425984
+2023-04-17 08:49:34,522 [debug] [140480083895872] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:187 newClient : default revibufer 367360

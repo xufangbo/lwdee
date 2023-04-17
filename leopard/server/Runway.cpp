@@ -10,10 +10,12 @@
 
 #define BUFFER_SIZE 1024
 
-Runway::Runway(SendTaskQueue* sendQueue) {
+Runway::Runway(int id,bool *running,SendTaskQueue* sendQueue)
+    : _qps(id),running(running), sendQueue(sendQueue) {
   this->epoll = new Epoll(1000);
-  this->sendQueue = sendQueue;
+  this->_qps.waitings = [this]() { return this->sockets.size(); };
 }
+
 Runway::~Runway() {
   if (epoll != nullptr) {
     delete epoll;
@@ -21,10 +23,9 @@ Runway::~Runway() {
   }
 }
 
-void Runway::start(std::string ip, int port, int index) {
+void Runway::start(std::string ip, int port) {
   this->ip = ip;
   this->port = port;
-  this->index = index;
 
   this->thread = std::thread(&Runway::run, this);
 }
@@ -58,8 +59,8 @@ void Runway::run() {
    * 比如可能指的是每秒钟能保存成功的订单数
    * 这里指的是一秒钟RPC请求处理的个数
    */
-  while (1) {
-    _waits = epoll->wait(-1);  // 如果没有请求进来，这里会卡住
+  while (*running) {
+    int _waits = epoll->wait(-1);  // 如果没有请求进来，这里会卡住
     for (int i = 0; i < _waits; i++) {
       try {
         handleEvent(i);
@@ -91,8 +92,8 @@ void Runway::accept(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     int client_fd = server->accept();
 
-    Socket* client = new Socket(client_fd);
-    clients.insert(client);
+    Socket* client = new Socket(client_fd, &_qps);
+    sockets.insert(client);
 
     client->setNonBlocking();
 
@@ -101,8 +102,6 @@ void Runway::accept(epoll_event* evt) {
     events |= (EPOLLRDHUP | EPOLLHUP);
 
     epoll->add(client_fd, isET ? (events | EPOLLET) : events);
-
-    _tps++;
 
 #ifdef LEOPARD_TRACING
     logger_trace("socket accept %d", client_fd);
@@ -115,7 +114,7 @@ void Runway::accept(epoll_event* evt) {
 }
 
 void Runway::io(epoll_event* evt) {
-  auto socket = clients.find(evt->data.fd);
+  auto socket = sockets.find(evt->data.fd);
   if (socket == nullptr) {
     logger_debug("no hint socket %d", evt->data.fd);
     return;
@@ -166,6 +165,7 @@ void Runway::recv(Socket* socket, epoll_event* evt) {
     // logger_debug("%s", inputStream->buffer);
 #endif
 
+    this->_qps.inputs++;
     std::thread t(&Runway::handleRequest, this, socket);
     t.detach();
 
@@ -191,6 +191,8 @@ void Runway::doHandle(Socket* socket) {
 
   auto header = protocal->getHeader(inputStream);
   auto path = header->path;
+
+  this->_qps.time(header->elapsed);
 
 #ifdef LEOPARD_TRACING
   auto time = Stopwatch::currentMilliSeconds() - header->time;
@@ -229,18 +231,15 @@ void Runway::close(Socket* socket) {
   epoll->del(socket->fd());
   socket->close();
 
-  clients.remove(socket);
+  sockets.remove(socket);
+
   delete socket;
 }
 
-int Runway::tps() {
-  int tmp = _tps;
-  _tps = 0;
-  return tmp;
+Qps* Runway::qps() {
+  return &_qps;
 }
 
-int Runway::waits() { return _waits; }
-
-int Runway::sockets() { return clients.size(); }
-
-void Runway::join() { thread.join(); }
+void Runway::join() {
+  thread.join();
+}

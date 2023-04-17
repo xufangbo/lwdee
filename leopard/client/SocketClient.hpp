@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TcpRequest.hpp"
-#include "net/Socket.h"
+#include "net/Socket.hpp"
 #include "core/suspend.hpp"
 
 class SocketClient;

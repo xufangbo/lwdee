@@ -11,8 +11,8 @@
     "isMatrix":1,
     "filterCondon": 1,
     "partitions": [0,1,2],
-    "splitNums1": 7,
-    "splitNums2": 5,
+    "splitNums1": 60,
+    "splitNums2": 30,
     "workers" :[
         { "name": "k8s-master", "ip": "10.180.98.130" },
         { "name": "k8s-node01", "ip": "10.180.98.131" },

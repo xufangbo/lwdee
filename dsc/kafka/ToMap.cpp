@@ -121,32 +121,7 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
 
   logger_debug("send to map %s:%d %d lines", node->name.c_str(), voxorId.voxorKey, mapLines->size());
 
-  int SPLIT = 600;
-
-  if (mapLines->size() <= SPLIT) {
-    this->doToMap(index, mapLines, voxorId, node);
-    return;
-  }
-
-  int count = mapLines->size() / SPLIT;
-  for (int i = 0; i < count + 1; i++) {
-    std::vector<MapRecord> lines;
-    for (int x = 0; x < SPLIT; x++) {
-      int index = i * SPLIT + x;
-      if (index >= mapLines->size()) {
-        break;
-      }
-      lines.push_back(mapLines->at(index));
-    }
-    logger_trace("sub map %d : %d", i,  lines.size());
-
-    this->doToMap(index, &lines, voxorId, node);
-    usleep(1000000 / 100);
-  }
-}
-
-void ToMap::doToMap(int index, vector<MapRecord>* mapLines, VoxorId voxorId, TNode* node) {
-  if (mapLines->size() <= 0) {
+   if (mapLines->size() <= 0) {
     return;
   }
 

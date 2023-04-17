@@ -19,8 +19,9 @@ ProtocalHeaderPtr DefaultProtocal::getHeader(BufferStream* inputStream) {
 
   header->totalLength = inputStream->get<uint64_t>();
   header->time = inputStream->get<uint64_t>();
+  header->elapsed = Stopwatch::currentMilliSeconds() - header->time;
   header->pathLength = inputStream->get<uint32_t>();
   header->path = inputStream->getString(header->pathLength);
-
+  
   return header;
 }

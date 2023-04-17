@@ -53,14 +53,14 @@ void get_cpuoccupy(cpu_occupy_t* cpust) {
 double get_sysCpuUsage() {
   cpu_occupy_t cpu_stat1;
   cpu_occupy_t cpu_stat2;
-  double cpu;
+
   get_cpuoccupy((cpu_occupy_t*)&cpu_stat1);
   sleep(1);
   // 第二次获取cpu使用情况
   get_cpuoccupy((cpu_occupy_t*)&cpu_stat2);
 
   // 计算cpu使用率
-  cpu = cal_cpuoccupy((cpu_occupy_t*)&cpu_stat1, (cpu_occupy_t*)&cpu_stat2);
+    double cpu = cal_cpuoccupy((cpu_occupy_t*)&cpu_stat1, (cpu_occupy_t*)&cpu_stat2);
 
   return cpu;
 }

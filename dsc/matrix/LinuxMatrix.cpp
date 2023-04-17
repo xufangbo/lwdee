@@ -51,25 +51,6 @@ void LinuxMatrix::collect(double cpu, RamInfo& ram) {
 
 bool color_change = true;
 void LinuxMatrix::print() {
-  // int d1 = stream.kafka_index;
-  // uint64_t d2 = stream.kafka_send;
-  // uint64_t d3 = stream.kafka_qps;
-
-  // int d4 = stream.map_dco;
-  // uint64_t d5 = stream.map_accept;
-
-  // int d6 = stream.reduce_dco;
-  // uint64_t d7 = stream.reduce_accept;
-
-  // if (color_change) {
-  //   logger_trace("CPU(%.2f%%-%.2f%%=%.2f%%),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
-  //   logger_trace("kafkas(%d: %lld / %lld) maps(%d / %lld) reducs(%d / %lld)", d1, d2, d3, d4, d5, d6, d7);
-  // } else {
-  //   logger_info("CPU(%.2f%%-%.2f%%=%.2f%%),RAM(%ldM-%ldM=%ldM),avai:%ldM,used:%ldM,free:%ldM ", cpu_bottom, cpu_top, cpu_top - cpu_bottom, cpu, ram_bottom, ram_top, ram_top - ram_bottom, ram.available, (ram.total - ram.available), ram.free);
-  //   logger_info("kafkas(%d: %lld / %lld) maps(%d / %lld) reducs(%d / %lld)", d1, d2, d3, d4, d5, d6, d7);
-  // }
-  // printf("\n");
-  // color_change = !color_change;
 
   std::ofstream f(fileName, std::ios_base::app);
   if (!f.is_open()) {
@@ -168,8 +149,11 @@ void LinuxMatrix::start() {
   cpu_bottom = cpu_top = cpu_usage();
   ram_bottom = ram_top = ram_info().used;
 
-  auto t1 = new std::thread(matrix);
-  auto t2 = new std::thread(print_task);
+  std::thread t1(matrix);
+  t1.detach();
+
+  std::thread t2(print_task);
+  t2.detach();
 }
 
 double LinuxMatrix::cpu_usage() {

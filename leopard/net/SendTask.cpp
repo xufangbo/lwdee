@@ -2,31 +2,37 @@
 
 #include <thread>
 #include <vector>
-
 #include "core/log.hpp"
 
-void SendTask::send() {
+bool SendTask::send() {
   int rc = socket->send(buffer(), leftover());
 
   if (rc == leftover()) {
     _finished = true;
+    socket->onSend();
   } else if (rc == -1) {
+    if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
+      // do nothing
+    } else {
+      logger_error("socket send error(%d)%s", errno, strerror(errno));
+      return false;
+    }
   } else {
     moveon(rc);
-    logger_trace("send %ld / %ld", leftover(), outputStream->size());
+  }
+  return true;
+}
+
+SendTaskQueue::~SendTaskQueue() {
+  while (!list.empty()) {
+    auto task = list.back();
+    delete task;
+    list.pop_back();
   }
 }
 
-void SendTaskQueue::push(Socket *socket, BufferStreamPtr outputStream) {
-  //   mut.lock();
-
-  // logger_info("< push");
-
+void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
   list.emplace_back(new SendTask(socket, outputStream));
-  // list.emplace(std::move(&task));
-
-  // logger_info("> push");
-  //   mut.unlock();
 }
 void SendTaskQueue::start() {
   std::thread t(&SendTaskQueue::run, this);
@@ -34,25 +40,33 @@ void SendTaskQueue::start() {
 }
 
 void SendTaskQueue::run() {
-  while (true) {
-    if (list.empty()) {
-      usleep(1000);
-      continue;
+  while (*running) {
+    try {
+      this->doRun();
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
     }
-    
-    for (auto it = list.begin(); it != list.end(); it++) {
-      SendTask *task = *it;
-      task->send();
-      if (task->finished()) {
-        removes.push_back(task);
-      }
-    }
-
-    for (SendTask *task : removes) {
-      list.remove(task);
-      delete task;
-    }
-
-    removes.clear();
   }
+}
+
+void SendTaskQueue::doRun() {
+  if (list.empty()) {
+    usleep(1000);
+    return;
+  }
+
+  for (auto it = list.begin(); it != list.end(); it++) {
+    SendTask* task = *it;
+    task->send();
+    if (task->finished()) {
+      removes.push_back(task);
+    }
+  }
+
+  for (SendTask* task : removes) {
+    list.remove(task);
+    delete task;
+  }
+
+  removes.clear();
 }

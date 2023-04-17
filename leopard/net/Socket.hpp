@@ -4,17 +4,24 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include "BufferStream.hpp"
+#include "Qps.hpp"
 
 class Socket {
  private:
   int _fd;
   BufferStreamPtr _inputStream;
-  // BufferStreamPtr _outputStream;
+  Qps *qps = nullptr;
 
  public:
-  Socket();
+  Socket( Qps* qps);
 
-  Socket(int fd);
+  Socket(int fd,Qps *qps);
+
+  /**
+   * @brief 数据发送完成事件
+   * 主要是更新qps.outputs
+   */
+  void onSend();
 
   int& fd() { return _fd; }
   BufferStream *inputStream() { return _inputStream.get(); }
