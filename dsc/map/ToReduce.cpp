@@ -1,6 +1,6 @@
 #include "ToReduce.hpp"
 
-#include "client/SocketScheduler.hpp"
+#include "client/SocketClient.hpp"
 #include "client/TcpRequest.hpp"
 #include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
@@ -30,7 +30,7 @@ void ToReduce::send(vector<ReduceRecord>* words) {
     VoxorId voxorId = this->reduceDcos[i];
     TNode* node = NodeConfig::byNodeId(voxorId.nodeId);
 
-    auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+    auto client = SocketClient::create(node->ip.c_str(), node->port);
     RequestCallback callback = [](BufferStream* inputStream) {
       auto len = inputStream->get<uint32_t>();
       auto content = inputStream->getString(len);

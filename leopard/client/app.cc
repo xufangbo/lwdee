@@ -1,5 +1,5 @@
 #include "SocketClient.hpp"
-#include "SocketScheduler.hpp"
+#include "Antelope.hpp"
 #include "core/Exception.hpp"
 #include "core/log.hpp"
 #include "core/suspend.hpp"
@@ -24,11 +24,11 @@ int main(int argc, char** argv) {
   conf->readConfig();
   logger_trace("%s:%d", conf->ip.c_str(), conf->port);
 
-  SocketScheduler::start();
+  Antelope::instance.start();
 
   for (int i = 0; i < 10; i++) {
     try {
-      auto client = SocketScheduler::newClient(conf->ip.c_str(), conf->port);
+      auto client = SocketClient::create(conf->ip.c_str(), conf->port);
 
       // testCallback(client.get(), i);
       testBigDataCallback(client.get(), i);

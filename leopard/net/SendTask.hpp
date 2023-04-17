@@ -58,9 +58,7 @@ class SendTaskQueue {
   void doRun();
 
  public:
-  SendTaskQueue(bool* running)
-      : running(running) {}
   ~SendTaskQueue();
   void push(Socket* socket, BufferStreamPtr outputStream);
-  void start();
+  void start(bool* running );
 };

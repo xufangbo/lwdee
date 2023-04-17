@@ -11,13 +11,6 @@ Leopard::Leopard(int corenums)
   }
 }
 
-Leopard::~Leopard() {
-  for (int i = 0; i < corenums; i++) {
-    delete runways[i];
-  }
-  runways.clear();
-}
-
 void Leopard::start(std::string ip, int port) {
   // https://blog.csdn.net/weixin_33196646/article/details/116730365
   signal(SIGPIPE, SIG_IGN);
@@ -27,7 +20,8 @@ void Leopard::start(std::string ip, int port) {
 
   logger_info("%s:%d,corenums:%d", ip.c_str(), port, corenums);
 
-  sendQueue.start();
+  sendQueue.start(&running);
+  
   std::thread tps(&Leopard::qpsJob, this);
   tps.detach();
 

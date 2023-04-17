@@ -1,12 +1,10 @@
 #include <iostream>
 
-// #include "DemoConfig.h"
-// #include "UserDcoFactory.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "client/SocketScheduler.hpp"
+#include "client/Antelope.hpp"
 #include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/Stopwatch.hpp"
@@ -29,7 +27,7 @@ int main(int argc, char* argv[]) {
   TNode* node = NodeConfig::local;
 
   regist_services();
-  SocketScheduler::start();
+  Antelope::instance.start();
 
   if (node->nodeId == 1) {
     Driver().startJob();

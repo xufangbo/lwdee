@@ -1,16 +1,19 @@
 #pragma
 
 #include "Lane.hpp"
+#include "SocketClient.hpp"
 #include "net/IRunwayContainer.hpp"
 
 class Antelope : public IRunwayContainer<Lane> {
  private:
-  ~Antelope();
-
- public:
-  void start();
-  SocketClientPtr create(const char* ip, int port);
+  Antelope() {}
 
  public:
   static Antelope instance;
+
+ public:
+  void start();
+  Socket* create(const char* ip, int port);
+  void send(Socket* socket, BufferStreamPtr outputStream);
+  bool contains(int fd);
 };

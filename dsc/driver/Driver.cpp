@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 
-#include "client/SocketScheduler.hpp"
+#include "client/SocketClient.hpp"
 #include "client/TcpRequest.hpp"
 #include "core/Exception.hpp"
 #include "core/NodeConfig.hpp"
@@ -61,7 +61,7 @@ void Driver::start_kafka() {
     }
     PartitionKafka input(i, conf->group, conf->topic, conf->window, kafka_mapVoxors);
 
-    auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+    auto client = SocketClient::create(node->ip.c_str(), node->port);
     RequestCallback callback = [](BufferStream* inputStream) {
       auto len = inputStream->get<uint32_t>();
       auto content = inputStream->getString(len);
@@ -91,7 +91,7 @@ void Driver::start_map() {
 
     PartitionMap input(i, reduceVoxorIds);
 
-    auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+    auto client = SocketClient::create(node->ip.c_str(), node->port);
     RequestCallback callback = [](BufferStream* inputStream) {
       auto len = inputStream->get<uint32_t>();
       auto content = inputStream->getString(len);
@@ -122,7 +122,7 @@ void Driver::start_reduce() {
 
     PartitionReduce input(i);
 
-    auto client = SocketScheduler::newClient(node->ip.c_str(), node->port);
+    auto client = SocketClient::create(node->ip.c_str(), node->port);
     RequestCallback callback = [](BufferStream* inputStream) {
       auto len = inputStream->get<uint32_t>();
       auto content = inputStream->getString(len);

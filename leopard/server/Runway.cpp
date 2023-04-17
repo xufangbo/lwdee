@@ -20,7 +20,7 @@ void Runway::start(std::string ip, int port) {
 
 void Runway::run() {
   try {
-    this->server = std::make_shared<Socket>();
+    this->server = std::make_shared<Socket>(&_qps);
 
     this->server->reusePort();
     this->server->setNonBlocking();
@@ -28,8 +28,6 @@ void Runway::run() {
     this->server->listen();
 
     epoll->add(this->server->fd(), isET ? (EPOLLIN | EPOLLET) : EPOLLIN);
-
-    logger_trace("server socket fd - %d : %d", index, server->fd());
 
   } catch (EpollException& ex) {
     logger_error("%s", ex.getMessage().c_str());

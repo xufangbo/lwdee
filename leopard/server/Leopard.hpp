@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IRunwayContainer.hpp"
 #include "Runway.hpp"
+#include "net/IRunwayContainer.hpp"
 
 class Leopard : public IRunwayContainer<Runway> {
  private:
@@ -11,6 +11,5 @@ class Leopard : public IRunwayContainer<Runway> {
 
  public:
   Leopard(int corenums = 0);
-  ~Leopard();
   void start(std::string ip, int port);
 };

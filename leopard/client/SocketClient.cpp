@@ -1,6 +1,6 @@
 #include "SocketClient.hpp"
 
-#include "SocketScheduler.hpp"
+#include "Antelope.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
@@ -19,7 +19,7 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  SocketScheduler::send(_socket, outputStream);
+  Antelope::instance.send(_socket, outputStream);
 }
 
 void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
@@ -38,7 +38,7 @@ void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  SocketScheduler::send(_socket, outputStream);
+  Antelope::instance.send(_socket, outputStream);
 }
 
 #ifdef LEOPARD_SUSPEND
@@ -65,17 +65,17 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 
     protocal->setLength(outputStream.get());
 
-    SocketScheduler::send(socket, outputStream->buffer, outputStream->size());
+    Antelope::send(socket, outputStream->buffer, outputStream->size());
   });
   return waiter;
 }
 #endif
 
-double SocketClient::wait() {
+double SocketClient::wait(int timeout) {
   Stopwatch sw;
   int fd = this->_socket->fd();
-  for (int i = 0; i < 100 * 20; i++) {
-    bool ok = SocketScheduler::contains(fd);
+  for (int i = 0; i < 100 * timeout; i++) {
+    bool ok = Antelope::instance.contains(fd);
     if (!ok) {
       return sw.stop();
     }
@@ -86,4 +86,10 @@ double SocketClient::wait() {
 
 Socket* SocketClient::socket() {
   return this->_socket;
+}
+
+SocketClientPtr SocketClient::create(const char* ip, int port) {
+  Socket* socket = Antelope::instance.create(ip, port);
+  auto client = std::make_shared<SocketClient>(socket);
+  return client;
 }

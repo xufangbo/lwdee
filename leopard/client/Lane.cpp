@@ -23,7 +23,7 @@ ProtocalHeaderPtr Lane::doHandle(Socket* socket) {
   auto callback = TcpRequest::find(header->path);
   if (callback != nullptr) {
     (*callback)(inputStream);
-    return;
+    return header;
   }
 
 #ifdef LEOPARD_SUSPEND

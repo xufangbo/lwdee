@@ -34,7 +34,8 @@ SendTaskQueue::~SendTaskQueue() {
 void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
   list.emplace_back(new SendTask(socket, outputStream));
 }
-void SendTaskQueue::start() {
+void SendTaskQueue::start(bool* running ) {
+  this->running = running;
   std::thread t(&SendTaskQueue::run, this);
   t.detach();
 }

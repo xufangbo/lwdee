@@ -36,4 +36,5 @@ class IRunway {
   IRunway(int id, bool* running, SendTaskQueue* sendQueue);
   void stop();
   Qps* qps();
+  size_t size(){return sockets.size();}
 };
