@@ -15,6 +15,8 @@ void Antelope::start() {
     return;
   }
 
+  running = true;
+
   sendQueue.start(&running);
   for (int i = 0; i < 1; i++) {
     auto lane = new Lane(i + 1, &running, &sendQueue);

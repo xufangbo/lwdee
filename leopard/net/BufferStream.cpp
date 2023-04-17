@@ -40,8 +40,8 @@ void BufferStream::get(std::string& str, int len) {
   this->get((Byte*)str.c_str(), len);
 }
 std::string BufferStream::getString(int len) {
-  std::string str;
-  this->get(str, len);
+  std::string str(len,'\0');
+  this->get((Byte*)str.data(), len);
   return str;
 }
 void BufferStream::get(Byte* ptr, int len) {

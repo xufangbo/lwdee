@@ -3,7 +3,7 @@
 #include "Antelope.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
-#include "core/log.hpp"
+#include "net/log.hpp"
 #include "net/LeopardProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 
@@ -23,9 +23,7 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 }
 
 void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
-#ifdef LEOPARD_TRACING
-  logger_trace("< invoke %s", path.c_str());
-#endif
+  leopard_debug("< invoke %s", path.c_str());
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();

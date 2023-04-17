@@ -29,6 +29,7 @@ void Lane::doAcceptRequest(Socket* socket) {
   auto callback = TcpRequest::find(header->path);
   if (callback != nullptr) {
     (*callback)(inputStream);
+    return;
   }
 
 #ifdef LEOPARD_SUSPEND

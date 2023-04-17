@@ -66,16 +66,16 @@ void testCallback(SocketClient* client, int i) {
   input += std::to_string(i);
   logger_debug("send %s", input.c_str());
 
-  RequestCallback callback = [](BufferStream* inputStream) {
+  RequestCallback callback = [i](BufferStream* inputStream) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive(%d) :  %s", len, content.c_str());
+    logger_info("recive - %d :  (%d)%s", i, len, content.c_str());
   };
 
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  client->wait();
+  // client->wait();
 }
 
 void testBigDataCallback(SocketClient* client, int i) {
@@ -86,11 +86,11 @@ void testBigDataCallback(SocketClient* client, int i) {
   input += std::to_string(i);
   logger_debug("send %s", input.c_str());
 
-  RequestCallback callback = [](BufferStream* inputStream) {
+  RequestCallback callback = [i](BufferStream* inputStream) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive(%d) :  %s", len, content.c_str());
+    logger_info("recive - %d :  (%d)%s", i, len, content.c_str());
   };
 
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
