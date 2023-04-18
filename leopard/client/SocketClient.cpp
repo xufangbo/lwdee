@@ -53,6 +53,37 @@ SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, Reque
   return waiter;
 }
 
+void SocketClient::wait() {
+  for (ClientSocket* socket : this->sockets) {
+    socket->wait();
+  }
+}
+void SocketClient::close() {
+  for (ClientSocket* socket : this->sockets) {
+    socket->close();
+  }
+}
+
+ClientSocket* SocketClient::next() {
+  int i = this->index % this->parallel;
+  ClientSocket* socket = this->sockets[i];
+  this->index = (i + 1);
+
+  // leopard_debug("sockeet index %d",i);
+  return socket;
+}
+
+SocketClientPtr SocketClient::create(const char* ip, int port, int parallel) {
+  std::vector<ClientSocket*> sockets;
+  for (int i = 0; i < parallel; i++) {
+    ClientSocket* socket = Antelope::instance.create(ip, port);
+    sockets.push_back(socket);
+  }
+
+  auto client = std::make_shared<SocketClient>(sockets);
+  return client;
+}
+
 #ifdef LEOPARD_SUSPEND
 // error: invalid new-expression of abstract class type ‘BufferStream’
 await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int len) {
@@ -83,29 +114,3 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
   return waiter;
 }
 #endif
-
-void SocketClient::close() {
-  for (ClientSocket* socket : this->sockets) {
-    socket->close();
-  }
-}
-
-ClientSocket* SocketClient::next() {
-  int i = this->index % this->parallel;
-  ClientSocket* socket = this->sockets[i];
-  this->index = (i + 1);
-
-  // leopard_debug("sockeet index %d",i);
-  return socket;
-}
-
-SocketClientPtr SocketClient::create(const char* ip, int port, int parallel) {
-  std::vector<ClientSocket*> sockets;
-  for (int i = 0; i < 10; i++) {
-    ClientSocket* socket = Antelope::instance.create(ip, port);
-    sockets.push_back(socket);
-  }
-
-  auto client = std::make_shared<SocketClient>(sockets);
-  return client;
-}

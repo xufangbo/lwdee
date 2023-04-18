@@ -20,19 +20,27 @@ void Lane::acceptEvent(epoll_event* evt) {
   IRunway::acceptRecive(evt);
 }
 
-void Lane::doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) {
+void Lane::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   ClientSocket* clientSocket = (ClientSocket*)(socket);
-  auto waiter = clientSocket->popWaiter();
 
   auto header = this->parseRequest(inputStream.get());
 
   auto callback = TcpRequest::find(header->path);
+
+  WaitStatus waitStatus = WaitStatus::waiting;
   if (callback != nullptr) {
     (*callback)(inputStream.get());
-    waiter->notify(WaitStatus::succeed);
+    waitStatus = WaitStatus::succeed;
   } else {
-    waiter->notify(WaitStatus::nohint);
+    waitStatus = WaitStatus::nohint;
     logger_error("can't hint path %s", header->path.c_str());
+  }
+
+  auto waiter = clientSocket->popWaiter();
+  if (waiter == nullptr || waiter.use_count() == 0 ) {
+    logger_error("waiter is null");
+  } else {
+    waiter->notify(waitStatus);
   }
 
 #ifdef LEOPARD_SUSPEND

@@ -14,11 +14,14 @@ suspend testSuspend(SocketClient* client, int i);
 #endif
 
 void testLongConnection(SocketClient* client, int i);
-void testCallback(SocketClient* client, int i, bool closed = true);
-void testBigDataCallback(SocketClient* client, int i, bool closed = true);
+void testCallback(SocketClient* client, int i);
+void testBigDataCallback(SocketClient* client, int i);
 
 int responseIndex = 0;
 int main(int argc, char** argv) {
+  for (int i = 0; i < 20; i++) {
+    printf("\n");
+  }
   read_log_config("client");
 
   auto* conf = LeopardConfig::instance();
@@ -28,31 +31,37 @@ int main(int argc, char** argv) {
   Antelope::instance.start();
 
   responseIndex = 0;
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1; i++) {
     logger_trace("----------------------------");
     try {
-      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
+      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 10);
 
-      // testLongConnection(client.get(), i);
-      testCallback(client.get(), i);
+      testLongConnection(client.get(), i);
+      // testCallback(client.get(), i);
       // testBigDataCallback(client.get(), i);
+
+      // client->wait();
+      // client->close();
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
       logger_error("%s", ex.what());
     }
-
-    usleep(1000000 / 100);
   }
-
-  // sleep(20);
   Antelope::instance.join();
 
   return 0;
 }
 
-void testCallback(SocketClient* client, int i, bool closed) {
+void testLongConnection(SocketClient* client, int i) {
+  for (int i = 0; i < 10000; i++) {
+    logger_debug("---------");
+    testCallback(client, i);
+  }
+}
+
+void testCallback(SocketClient* client, int i) {
   std::string input = "green green green " + std::to_string(i);
   logger_debug("send %s", input.c_str());
 
@@ -68,13 +77,9 @@ void testCallback(SocketClient* client, int i, bool closed) {
 
   auto time = waiter->wait();
   logger_info("%d eclipse %.3lfs", i, time);
-
-  if (closed) {
-    client->close();
-  }
 }
 
-void testBigDataCallback(SocketClient* client, int i, bool closed) {
+void testBigDataCallback(SocketClient* client, int i) {
   std::string input = "green green !";
   for (int i = 0; i < 50000; i++) {
     input += "green green !";
@@ -94,18 +99,6 @@ void testBigDataCallback(SocketClient* client, int i, bool closed) {
 
   auto time = waiter->wait();
   logger_info("%d eclipse %.3lfs", i, time);
-
-  if (closed) {
-    client->close();
-  }
-}
-
-void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 100; i++) {
-    logger_debug("---------");
-    testCallback(client, i, false);
-  }
-  // client->close();
 }
 
 #ifdef LEOPARD_SUSPEND

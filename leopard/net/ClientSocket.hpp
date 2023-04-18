@@ -51,13 +51,9 @@ class ClientSocket : public Socket {
   ClientSocket(Qps* qps)
       : Socket(qps) {}
 
-  void pushWaiter(SocketWaiter waiter) {
-    waiters.push(waiter);
-  }
+  void pushWaiter(SocketWaiter waiter);
 
-  SocketWaiter popWaiter() {
-    SocketWaiter waiter = waiters.front();
-    waiters.pop();
-    return waiter;
-  }
+  SocketWaiter popWaiter();
+
+  void wait();
 };

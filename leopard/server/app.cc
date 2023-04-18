@@ -5,6 +5,10 @@
 #include "order.hpp"
 
 int main() {
+  for (int i = 0; i < 20; i++) {
+    printf("\n");
+  }
+
   read_log_config("server");
   LeopardConfig::instance()->readConfig();
   auto ip = LeopardConfig::instance()->ip;

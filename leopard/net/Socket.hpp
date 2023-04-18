@@ -7,7 +7,7 @@
 #include "Qps.hpp"
 
 class Socket {
- private:
+ protected:
   int _fd;
   BufferStreamPtr _inputStream;
   Qps *qps = nullptr;

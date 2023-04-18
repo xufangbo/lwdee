@@ -32,6 +32,7 @@ class SocketClient {
   await<BufferStream*> invoke(std::string path, void* buffer, int len);
 #endif
   void close();
+  void wait();
 
  private:
   ClientSocket* next();
