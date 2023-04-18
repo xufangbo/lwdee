@@ -63,8 +63,8 @@ void testCallback(SocketClient* client, int i, bool closed) {
 
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  // auto time = waiter->wait();
-  // logger_info("%d eclipse %.3lfs", i, time);
+  auto time = waiter->wait();
+  logger_info("%d eclipse %.3lfs", i, time);
 
   if (closed) {
     client->close();
@@ -97,7 +97,7 @@ void testBigDataCallback(SocketClient* client, int i, bool closed) {
 }
 
 void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 3; i++) {
     logger_debug("---------");
     testCallback(client, i, false);
   }

@@ -21,7 +21,7 @@ class Runway : public IRunway {
   void run() override;
   void acceptSocket(epoll_event* evt);  
   void acceptEvent(epoll_event* evt) override;
-  void doAcceptRequest(Socket* socket) override;
+  void doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) override;
 
  public:
   Runway(int id, bool* running, SendTaskQueue* sendQueue);

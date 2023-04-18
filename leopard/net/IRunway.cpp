@@ -82,16 +82,18 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
     this->close(socket);
   } else if (inputStream->isEnd()) {
     this->_qps.inputs++;
-    std::thread t(&IRunway::acceptRequest, this, socket);
+
+    auto pickedStream = inputStream->pick();
+    std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
     t.detach();
   } else {
     epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
   }
 }
 
-void IRunway::acceptRequest(Socket* socket) {
+void IRunway::acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   try {
-    this->doAcceptRequest(socket);
+    this->doAcceptRequest(socket, inputStream);
   } catch (Exception& ex) {
     logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {
@@ -99,8 +101,7 @@ void IRunway::acceptRequest(Socket* socket) {
   }
 }
 
-ProtocalHeaderPtr IRunway::parseRequest(Socket* socket) {
-  auto* inputStream = socket->inputStream();
+ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   inputStream->moveToHead();
 
   auto protocal = ProtocalFactory::getProtocal();

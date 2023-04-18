@@ -67,16 +67,14 @@ void Runway::acceptSocket(epoll_event* evt) {
     leopard_trace("socket accept %d", client_fd);
 
   } else if (evt->events & EPOLLIN) {
-    leopard_info("server socket  EPOLLOUT");
+    leopard_info("server socket EPOLLOUT");
   } else {
-    leopard_info("server socket  unkown event %d", evt->events);
+    leopard_info("server socket unkown event %d", evt->events);
   }
 }
 
-void Runway::doAcceptRequest(Socket* socket) {
-  auto header = this->parseRequest(socket);
-
-  auto* inputStream = socket->inputStream();
+void Runway::doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) {
+  auto header = this->parseRequest(inputStream.get());
 
   auto fun = TcpResponse::find(header->path);
   if (fun == nullptr) {
@@ -87,7 +85,7 @@ void Runway::doAcceptRequest(Socket* socket) {
     auto protocal = ProtocalFactory::getProtocal();
     protocal->setHeader(outputStream.get(), header->path);
 
-    (*fun)(inputStream, outputStream.get());
+    (*fun)(inputStream.get(), outputStream.get());
 
     protocal->setLength(outputStream.get());
 
@@ -95,6 +93,4 @@ void Runway::doAcceptRequest(Socket* socket) {
 
     leopard_debug("> response %s", header->path.c_str());
   }
-
-  inputStream->next();
 }

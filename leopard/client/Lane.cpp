@@ -20,16 +20,15 @@ void Lane::acceptEvent(epoll_event* evt) {
   IRunway::acceptRecive(evt);
 }
 
-void Lane::doAcceptRequest(Socket* socket) {
+void Lane::doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) {
   ClientSocket* clientSocket = (ClientSocket*)(socket);
   auto waiter = clientSocket->popWaiter();
 
-  auto header = this->parseRequest(socket);
-  auto* inputStream = socket->inputStream();
+  auto header = this->parseRequest(inputStream.get());
 
   auto callback = TcpRequest::find(header->path);
   if (callback != nullptr) {
-    (*callback)(inputStream);
+    (*callback)(inputStream.get());
     waiter->notify(WaitStatus::succeed);
   } else {
     waiter->notify(WaitStatus::nohint);
@@ -43,8 +42,6 @@ void Lane::doAcceptRequest(Socket* socket) {
     return;
   }
 #endif
-
-  inputStream->next();
 }
 
 ClientSocket* Lane::create(const char* ip, int port) {

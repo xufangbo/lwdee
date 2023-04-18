@@ -11,7 +11,17 @@
 
 typedef void byte;
 
-class DefaultStream: public BufferStream {
+class DefaultStream : public BufferStream {
+ public:
   bool isEnd() override;
   size_t currentSize() override;
+
+ public:
+  DefaultStream()
+      : BufferStream() {}
+  DefaultStream(size_t len)
+      : BufferStream(len) {}
+
+ private:
+  std::shared_ptr<BufferStream> newInstance(size_t len);
 };

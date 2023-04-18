@@ -30,9 +30,9 @@ class IRunway {
   virtual void acceptEvent(epoll_event* evt) = 0;
   void acceptRecive(epoll_event* evt);
   void doAcceptRecive(Socket* socket, epoll_event* evt);
-  void acceptRequest(Socket* socket);
-  virtual void doAcceptRequest(Socket* socket) = 0;
-  ProtocalHeaderPtr parseRequest(Socket* socket);
+  void acceptRequest(Socket* socket,BufferStreamPtr inputStream);
+  virtual void doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) = 0;
+  ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
   void close(Socket* socket);
 
  public:

@@ -1,7 +1,15 @@
 #include "BufferStream.hpp"
 
+#include "log.hpp"
+
 BufferStream::BufferStream() {
   buffer = (Byte*)malloc(capacity);
+}
+
+BufferStream::BufferStream(size_t len) {
+  buffer = (Byte*)malloc(len);
+  _size = capacity = len;
+  pos = 0;
 }
 
 BufferStream::~BufferStream() {
@@ -11,16 +19,30 @@ BufferStream::~BufferStream() {
   }
 }
 
-void BufferStream::moveToHead() {
-  pos = 0;
-}
+BufferStreamPtr BufferStream::pick() {
+  leopard_trace("< pick");
 
-void BufferStream::next() {
-  size_t currentLen = this->currentSize();
+  size_t pickedLen = this->currentSize();
+  auto picked = this->newInstance(pickedLen);
+  picked->puts(this->buffer, pickedLen);
 
-  this->pos = this->_size - currentLen;
-  this->_size = this->pos;
-  memcpy(buffer + currentLen, buffer, this->_size);
+  size_t leftLen = this->_size - pickedLen;
+  Byte* left = (Byte*)malloc(leftLen);
+  memcpy(left, buffer + pickedLen, leftLen);
+
+  size_t newLen = leftLen > BUF_UNIT ? leftLen : BUF_UNIT;
+  buffer = realloc(buffer, newLen);
+  this->pos = 0;
+  this->_size = 0;
+  this->capacity = newLen;
+
+  this->puts(left, leftLen);
+
+  free(left);
+
+  leopard_trace("> pick,(%d)%s - (%d)%s", pickedLen, picked->buffer, _size, buffer);
+
+  return picked;
 }
 
 void BufferStream::puts(Byte* buf, int len) {
@@ -39,6 +61,10 @@ void BufferStream::puts(Byte* buf, int len) {
   _size = pos;
 
   // printf("BufferStream pos %d -> %d len: %d\n", old, pos, len);
+}
+
+void BufferStream::moveToHead() {
+  pos = 0;
 }
 
 void BufferStream::get(std::string& str, int len) {

@@ -15,7 +15,7 @@ void registService() {
         logger_info("accept (%d) :  %s", len, content.c_str());
 
         // 2. sale order business
-        sleep(1);
+        // sleep(1);
 
         // 3. outputStream
         std::string message = "sales order persist succeed!";

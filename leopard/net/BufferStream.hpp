@@ -7,7 +7,7 @@
 #include <memory>
 #include <sstream>
 
-#define BUF_UNIT 102400
+#define BUF_UNIT 4096
 
 typedef void Byte;
 
@@ -22,7 +22,11 @@ class BufferStream {
 
  public:
   BufferStream();
+  BufferStream(size_t len);
   ~BufferStream();
+
+ protected:
+  virtual std::shared_ptr<BufferStream> newInstance(size_t len) = 0;
 
  public:
   template <typename T>
@@ -65,7 +69,7 @@ class BufferStream {
 
   virtual bool isEnd() = 0;
   virtual size_t currentSize() = 0;
-  void next();
+  std::shared_ptr<BufferStream> pick();
 
  public:
   size_t size() { return _size; }
