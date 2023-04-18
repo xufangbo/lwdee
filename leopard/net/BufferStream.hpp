@@ -61,10 +61,11 @@ class BufferStream {
   void get(Byte* ptr, int len);
 
  public:
-  void reset();
-  void clean();
+  void moveToHead();
 
   virtual bool isEnd() = 0;
+  virtual size_t currentSize() = 0;
+  void next();
 
  public:
   size_t size() { return _size; }

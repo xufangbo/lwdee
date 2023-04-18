@@ -81,7 +81,6 @@ void Runway::doAcceptRequest(Socket* socket) {
   auto fun = TcpResponse::find(header->path);
   if (fun == nullptr) {
     logger_error("can't hint path: %s", header->path.c_str());
-    inputStream->clean();
   } else {
     auto outputStream = ProtocalFactory::createStream();
 
@@ -94,9 +93,8 @@ void Runway::doAcceptRequest(Socket* socket) {
 
     sendQueue->push(socket, outputStream);
 
-    inputStream->clean();
-
     leopard_debug("> response %s", header->path.c_str());
   }
-}
 
+  inputStream->next();
+}

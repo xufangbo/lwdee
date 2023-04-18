@@ -13,8 +13,9 @@
 suspend testSuspend(SocketClient* client, int i);
 #endif
 
-void testCallback(SocketClient* client, int i);
-void testBigDataCallback(SocketClient* client, int i);
+void testLongConnection(SocketClient* client, int i);
+void testCallback(SocketClient* client, int i, bool closed = true);
+void testBigDataCallback(SocketClient* client, int i, bool closed = true);
 
 int main(int argc, char** argv) {
   read_log_config("client");
@@ -25,12 +26,13 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1; i++) {
     logger_trace("----------------------------");
     try {
       auto client = SocketClient::create(conf->ip.c_str(), conf->port);
 
-      testCallback(client.get(), i);
+      testLongConnection(client.get(), i);
+      // testCallback(client.get(), i);
       // testBigDataCallback(client.get(), i);
 
     } catch (Exception& ex) {
@@ -48,9 +50,8 @@ int main(int argc, char** argv) {
   return 0;
 }
 
-void testCallback(SocketClient* client, int i) {
-  std::string input = "green green green ";
-  input += std::to_string(i);
+void testCallback(SocketClient* client, int i, bool closed) {
+  std::string input = "green green green " + std::to_string(i);
   logger_debug("send %s", input.c_str());
 
   RequestCallback callback = [i](BufferStream* inputStream) {
@@ -62,11 +63,15 @@ void testCallback(SocketClient* client, int i) {
 
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  auto time = waiter->wait();
-  logger_info("%d eclipse %.3lfs", i, time);
+  // auto time = waiter->wait();
+  // logger_info("%d eclipse %.3lfs", i, time);
+
+  if (closed) {
+    client->close();
+  }
 }
 
-void testBigDataCallback(SocketClient* client, int i) {
+void testBigDataCallback(SocketClient* client, int i, bool closed) {
   std::string input = "green green !";
   for (int i = 0; i < 50000; i++) {
     input += "green green !";
@@ -85,6 +90,17 @@ void testBigDataCallback(SocketClient* client, int i) {
 
   auto time = waiter->wait();
   logger_info("%d eclipse %.3lfs", i, time);
+
+  if (closed) {
+    client->close();
+  }
+}
+
+void testLongConnection(SocketClient* client, int i) {
+  for (int i = 0; i < 10; i++) {
+    logger_debug("---------");
+    testCallback(client, i, false);
+  }
 }
 
 #ifdef LEOPARD_SUSPEND

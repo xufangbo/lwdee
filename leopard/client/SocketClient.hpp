@@ -16,12 +16,15 @@ class SocketClient {
  public:
   SocketClient(ClientSocket* socket)
       : socket(socket){};
+
+ public:
+  static SocketClientPtr create(const char* ip, int port);
+
+ public:
   SocketWaiter invoke(std::string path, RequestInvoke request, RequestCallback callback);
   SocketWaiter invoke(std::string path, void* buffer, int len, RequestCallback callback);
 #ifdef LEOPARD_SUSPEND
   await<BufferStream*> invoke(std::string path, void* buffer, int len);
 #endif
-
- public:
-  static SocketClientPtr create(const char* ip, int port);
+  void close();
 };

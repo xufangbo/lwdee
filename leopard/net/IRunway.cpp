@@ -17,7 +17,9 @@ IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
 
 void IRunway::run() {
   while (*running) {
+    // leopard_debug("< wait...");
     int waits = epoll->wait(100);
+    // leopard_debug("> wait");
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -70,12 +72,13 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
     throw ex;
   }
 
-  // leopard_trace("recv - %s,rc:%d", buf, rc);
+  leopard_trace("recv - %s,rc:%d", buf, rc);
 
   auto* inputStream = socket->inputStream();
   inputStream->puts(buf, rc);
 
   if (rc == 0) {
+    leopard_warn("recv closed");
     this->close(socket);
   } else if (inputStream->isEnd()) {
     this->_qps.inputs++;
@@ -98,7 +101,7 @@ void IRunway::acceptRequest(Socket* socket) {
 
 ProtocalHeaderPtr IRunway::parseRequest(Socket* socket) {
   auto* inputStream = socket->inputStream();
-  inputStream->reset();
+  inputStream->moveToHead();
 
   auto protocal = ProtocalFactory::getProtocal();
   auto header = protocal->getHeader(inputStream);

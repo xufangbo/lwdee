@@ -80,6 +80,9 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 }
 #endif
 
+void SocketClient::close() {
+  this->socket->close();
+}
 
 SocketClientPtr SocketClient::create(const char* ip, int port) {
   ClientSocket* socket = Antelope::instance.create(ip, port);

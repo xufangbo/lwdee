@@ -12,6 +12,6 @@
 typedef void byte;
 
 class DefaultStream: public BufferStream {
-
   bool isEnd() override;
+  size_t currentSize() override;
 };

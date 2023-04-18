@@ -11,9 +11,16 @@ BufferStream::~BufferStream() {
   }
 }
 
-void BufferStream::reset() {
+void BufferStream::moveToHead() {
   pos = 0;
-  _size = 0;
+}
+
+void BufferStream::next() {
+  size_t currentLen = this->currentSize();
+
+  this->pos = this->_size - currentLen;
+  this->_size = this->pos;
+  memcpy(buffer + currentLen, buffer, this->_size);
 }
 
 void BufferStream::puts(Byte* buf, int len) {
@@ -40,18 +47,13 @@ void BufferStream::get(std::string& str, int len) {
   this->get((Byte*)str.c_str(), len);
 }
 std::string BufferStream::getString(int len) {
-  std::string str(len,'\0');
+  std::string str(len, '\0');
   this->get((Byte*)str.data(), len);
   return str;
 }
 void BufferStream::get(Byte* ptr, int len) {
   memcpy(ptr, buffer + pos, len);
   pos += len;
-}
-
-void BufferStream::clean() {
-  memset(buffer, pos, '\0');
-  pos = 0;
 }
 
 std::string BufferStream::toHex() {

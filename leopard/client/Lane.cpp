@@ -43,6 +43,8 @@ void Lane::doAcceptRequest(Socket* socket) {
     return;
   }
 #endif
+
+  inputStream->next();
 }
 
 ClientSocket* Lane::create(const char* ip, int port) {
@@ -52,8 +54,8 @@ ClientSocket* Lane::create(const char* ip, int port) {
 
   socket->connect(ip, port);
   socket->setNonBlocking();
-  socket->reusePort();
-  socket->setSendBuf(1048576);
+  // socket->reusePort();
+  // socket->setSendBuf(1048576);
   // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
   // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
   sockets.insert(socket);
