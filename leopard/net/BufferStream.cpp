@@ -59,9 +59,8 @@ void BufferStream::get(Byte* ptr, int len) {
 std::string BufferStream::toHex() {
   std::stringstream out;
   char* str = (char*)buffer;
-  for (int i = 0; i < size(); i++) {
-    out << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
-        << (int)str[i];
+  for (int i = 0; i < _size; i++) {
+    out << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << (int)str[i];
   }
   out << "  ";
 
