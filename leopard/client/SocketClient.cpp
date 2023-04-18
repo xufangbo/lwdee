@@ -3,11 +3,14 @@
 #include "Antelope.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
-#include "net/log.hpp"
 #include "net/LeopardProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
+#include "net/log.hpp"
 
-void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
+SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
+  SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
+  this->socket->pushWaiter(waiter);
+
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();
@@ -19,10 +22,15 @@ void SocketClient::invoke(std::string path, RequestInvoke request, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  Antelope::instance.send(_socket, outputStream);
+  Antelope::instance.send(this->socket, outputStream);
+
+  return waiter;
 }
 
-void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+  SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
+  this->socket->pushWaiter(waiter);
+
   leopard_debug("< invoke %s", path.c_str());
   TcpRequest::regist(path, callback);
 
@@ -36,13 +44,15 @@ void SocketClient::invoke(std::string path, void* buffer, int len, RequestCallba
 
   protocal->setLength(outputStream.get());
 
-  Antelope::instance.send(_socket, outputStream);
+  Antelope::instance.send(this->socket, outputStream);
+
+  return waiter;
 }
 
 #ifdef LEOPARD_SUSPEND
 // error: invalid new-expression of abstract class type ‘BufferStream’
 await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int len) {
-  Socket* socket = this->_socket;
+  Socket* socket = this->this->socket;
   auto waiter = await<BufferStream*>([&path, len, buffer, &socket](suspend::SuspendHandler handle, BufferStream** returnValue) {
     logger_warn(path.c_str());
     char* str = (char*)buffer;
@@ -63,31 +73,16 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 
     protocal->setLength(outputStream.get());
 
-    Antelope::send(socket, outputStream->buffer, outputStream->size());
+    task = new SendTask(this->socket, outputStream);
+    Antelope::instance.send(task);
   });
   return waiter;
 }
 #endif
 
-double SocketClient::wait(int timeout) {
-  Stopwatch sw;
-  int fd = this->_socket->fd();
-  for (int i = 0; i < 100 * timeout; i++) {
-    bool ok = Antelope::instance.contains(fd);
-    if (!ok) {
-      return sw.stop();
-    }
-    usleep(1000000 / 100);
-  }
-  throw Exception("timeout", ZONE);
-}
-
-Socket* SocketClient::socket() {
-  return this->_socket;
-}
 
 SocketClientPtr SocketClient::create(const char* ip, int port) {
-  Socket* socket = Antelope::instance.create(ip, port);
+  ClientSocket* socket = Antelope::instance.create(ip, port);
   auto client = std::make_shared<SocketClient>(socket);
   return client;
 }

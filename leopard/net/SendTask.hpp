@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Socket.hpp"
+#include "Stopwatch.hpp"
 
 class SendTask {
  private:
@@ -12,6 +13,9 @@ class SendTask {
   uint64_t pos = 0;
   Socket* socket;
   BufferStreamPtr outputStream;
+
+ private:
+  uint64_t start = 0;
 
  private:
   /**
@@ -31,7 +35,8 @@ class SendTask {
 
  public:
   SendTask(Socket* socket, BufferStreamPtr outputStream)
-      : socket(socket), outputStream(outputStream) {}
+      : socket(socket), outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {
+  }
 
   /**
    * @brief 是否正常发送
@@ -59,6 +64,7 @@ class SendTaskQueue {
 
  public:
   ~SendTaskQueue();
-  void push(Socket* socket, BufferStreamPtr outputStream);
-  void start(bool* running );
+  void push(Socket* socket,BufferStreamPtr outputStream);
+  void push(SendTask *task);
+  void start(bool* running);
 };

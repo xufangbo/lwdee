@@ -81,7 +81,6 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
     this->_qps.inputs++;
     std::thread t(&IRunway::acceptRequest, this, socket);
     t.detach();
-
   } else {
     epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
   }
@@ -106,13 +105,6 @@ ProtocalHeaderPtr IRunway::parseRequest(Socket* socket) {
   auto path = header->path;
 
   this->_qps.time(header->elapsed);
-
-  auto time = Stopwatch::currentMilliSeconds() - header->time;
-  if (time > 1000) {
-    leopard_info("accept %s , too long %lfs", path.c_str(), time * 1.0 / 1000);
-  } else {
-    leopard_trace("accept %s", path.c_str());
-  }
 
   return header;
 }

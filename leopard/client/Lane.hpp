@@ -6,6 +6,7 @@
 #include "SocketClient.hpp"
 #include "TcpRequest.hpp"
 #include "net/IRunway.hpp"
+#include "net/ClientSocket.hpp"
 
 class Lane : public IRunway {
  private:
@@ -14,7 +15,7 @@ class Lane : public IRunway {
 
  public:
   Lane(int id, bool* running, SendTaskQueue* sendQueue);
-  Socket* create(const char* ip, int port);
+  ClientSocket* create(const char* ip, int port);
   void send(Socket* socket, BufferStreamPtr outputStream);
   void start();
   bool contains(int fd);

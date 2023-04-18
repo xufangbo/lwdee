@@ -22,7 +22,7 @@ class IRunwayContainer {
 
   void join() {
     for (auto i : runways) {
-      i.join();
+      i->join();
     }
   }
 

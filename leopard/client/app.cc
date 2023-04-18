@@ -29,8 +29,8 @@ int main(int argc, char** argv) {
     try {
       auto client = SocketClient::create(conf->ip.c_str(), conf->port);
 
-      testCallback(client.get(), i);
-      // testBigDataCallback(client.get(), i);
+      // testCallback(client.get(), i);
+      testBigDataCallback(client.get(), i);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -41,7 +41,8 @@ int main(int argc, char** argv) {
     usleep(1000000 / 100);
   }
 
-  sleep(20);
+  // sleep(20);
+  Antelope::instance.join();
 
   return 0;
 }
@@ -70,7 +71,7 @@ void testCallback(SocketClient* client, int i) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive - %d :  (%d)%s", i, len, content.c_str());
+    logger_info("recive-%d:  (%d)%s", i, len, content.c_str());
   };
 
   client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
@@ -90,12 +91,12 @@ void testBigDataCallback(SocketClient* client, int i) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive - %d :  (%d)%s", i, len, content.c_str());
+    logger_info("recive-%d:  (%d)%s", i, len, content.c_str());
   };
 
-  client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
+  auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  auto time = client->wait();
+  auto time = waiter->wait();
   logger_info("%d eclipse %lfs", i, time * 1.0 / 1000);
 }
 

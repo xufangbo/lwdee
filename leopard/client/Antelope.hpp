@@ -13,7 +13,7 @@ class Antelope : public IRunwayContainer<Lane> {
 
  public:
   void start();
-  Socket* create(const char* ip, int port);
+  ClientSocket* create(const char* ip, int port);
   void send(Socket* socket, BufferStreamPtr outputStream);
-  bool contains(int fd);
+  // bool contains(int fd);
 };

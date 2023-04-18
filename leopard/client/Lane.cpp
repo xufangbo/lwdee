@@ -21,15 +21,19 @@ void Lane::acceptEvent(epoll_event* evt) {
 }
 
 void Lane::doAcceptRequest(Socket* socket) {
+  ClientSocket* clientSocket = (ClientSocket*)(socket);
+  auto waiter = clientSocket->popWaiter();
 
   auto header = this->parseRequest(socket);
-
   auto* inputStream = socket->inputStream();
 
   auto callback = TcpRequest::find(header->path);
   if (callback != nullptr) {
     (*callback)(inputStream);
-    return;
+    waiter->notify(WaitStatus::succeed);
+  } else {
+    waiter->notify(WaitStatus::nohint);
+    logger_error("can't hint path %s", header->path.c_str());
   }
 
 #ifdef LEOPARD_SUSPEND
@@ -39,13 +43,12 @@ void Lane::doAcceptRequest(Socket* socket) {
     return;
   }
 #endif
-  logger_error("can't hint path %s", header->path.c_str());
 }
 
-Socket* Lane::create(const char* ip, int port) {
+ClientSocket* Lane::create(const char* ip, int port) {
   Stopwatch sw;
 
-  Socket* socket = new Socket(&_qps);
+  ClientSocket* socket = new ClientSocket(&_qps);
 
   socket->connect(ip, port);
   socket->setNonBlocking();

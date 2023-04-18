@@ -27,6 +27,11 @@ uint64_t Stopwatch::currentMilliSeconds() {
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
+float Stopwatch::elapsed(uint64_t start) {
+  uint32_t elapsed = Stopwatch::currentMilliSeconds() - start;
+  return elapsed * 1.0 / 1000;
+}
+
 // long Stopwatch::currentTs() {
 
 //   time_t t = time(NULL);

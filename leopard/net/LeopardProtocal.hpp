@@ -6,13 +6,15 @@ class ProtocalHeader {
  public:
   uint64_t totalLength;
   uint64_t time;
-  uint32_t elapsed;
   uint32_t pathLength;
   std::string path;
 
   int headerSize() {
     return sizeof(totalLength) + sizeof(time) + sizeof(pathLength) + path.size();
   }
+
+ public:
+  float elapsed;
 };
 
 typedef std::shared_ptr<ProtocalHeader> ProtocalHeaderPtr;
