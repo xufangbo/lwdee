@@ -4,6 +4,7 @@
 #include <mutex>
 #include <vector>
 
+#include "Qps.hpp"
 #include "SendTask.hpp"
 
 class SendTaskQueue {
@@ -12,7 +13,8 @@ class SendTaskQueue {
   bool* running = nullptr;
   std::list<SendTask*> list;
   std::vector<SendTask*> removes;
-  std::mutex mut;
+  Qps _qps;
+  // std::mutex mut;
 
  private:
   void run();
@@ -20,10 +22,15 @@ class SendTaskQueue {
 
  public:
   SendTaskQueue(int id)
-      : id(id) {}
+      : id(id), _qps(id) {
+    this->_qps.waitings = [this]() { return 0; };
+  }
   ~SendTaskQueue();
   void push(Socket* socket, BufferStreamPtr outputStream);
   void push(SendTask* task);
   void start(bool* running);
   void remove();
+  Qps* qps() {
+    return &_qps;
+  }
 };
