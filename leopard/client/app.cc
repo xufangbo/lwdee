@@ -31,14 +31,14 @@ int main(int argc, char** argv) {
   Antelope::instance.start();
 
   responseIndex = 0;
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 1; i++) {
     logger_trace("----------------------------");
     try {
       auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
 
-      // testLongConnection(client.get(), i);
+      testLongConnection(client.get(), i);
       // testCallback(client.get(), i);
-      testBigDataCallback(client.get(), i);
+      // testBigDataCallback(client.get(), i);
 
       // client->wait();
       // client->close();

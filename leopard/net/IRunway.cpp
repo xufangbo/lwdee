@@ -82,7 +82,6 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
     this->close(socket);
   } else if (inputStream->isEnd()) {
     this->_qps.inputs++;
-
     auto pickedStream = inputStream->pick();
     std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
     t.detach();
@@ -108,7 +107,7 @@ ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   auto header = protocal->getHeader(inputStream);
   auto path = header->path;
 
-  this->_qps.time(header->tx1_rx1());
+  this->_qps.time(header->rec1_sen1());
 
   return header;
 }

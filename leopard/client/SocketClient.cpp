@@ -18,7 +18,7 @@ SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, Reque
   auto protocal = ProtocalFactory::getProtocal();
   auto outputStream = ProtocalFactory::createStream();
 
-  protocal->setHeader(outputStream.get(), path);
+  protocal->setHeader(outputStream.get(), path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
 
   request(outputStream.get());
 
@@ -41,7 +41,7 @@ SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, Reque
   auto protocal = ProtocalFactory::getProtocal();
   auto outputStream = ProtocalFactory::createStream();
 
-  protocal->setHeader(outputStream.get(), path);
+  protocal->setHeader(outputStream.get(), path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
 
   outputStream->put<uint32_t>(len);
   outputStream->puts(buffer, len);

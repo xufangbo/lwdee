@@ -78,12 +78,15 @@ void Runway::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
     logger_error("can't hint path: %s", header->path.c_str());
   } else {
     auto outputStream = ProtocalFactory::createStream();
-
     auto protocal = ProtocalFactory::getProtocal();
-    protocal->setHeader(outputStream.get(), header->path);
+
+    uint32_t rec1 = Stopwatch::currentMilliSeconds() - header->sen1;
+    protocal->setHeader(outputStream.get(), header->path, header->sen1, rec1, 0, 0);
 
     (*fun)(inputStream.get(), outputStream.get());
 
+    uint32_t sen2 = Stopwatch::currentMilliSeconds() - header->sen1;
+    protocal->setsen2(outputStream.get(), sen2);
     protocal->setLength(outputStream.get());
 
     sendQueue->push(socket, outputStream);

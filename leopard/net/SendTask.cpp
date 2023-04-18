@@ -33,14 +33,14 @@ bool Bullet::send(Socket* socket) {
 
 bool SendTask::send() {
   while (!this->bullets.empty()) {
-    logger_warn("< enter bullet send, %d", this->bullets.size());
+    // logger_warn("< enter bullet send, %d", this->bullets.size());
     auto bullet = this->bullets.front();
     bool sended = bullet->send(this->socket);
     if (!sended) {
       return false;
     }
     this->bullets.pop_front();
-    logger_warn("> enter bullet send, %d", this->bullets.size());
+    // logger_warn("> enter bullet send, %d", this->bullets.size());
   }
 
   _finished = true;

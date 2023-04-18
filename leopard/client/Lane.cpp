@@ -24,6 +24,9 @@ void Lane::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   ClientSocket* clientSocket = (ClientSocket*)(socket);
 
   auto header = this->parseRequest(inputStream.get());
+  header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
+
+  leopard_warn(header->to_string().c_str());
 
   auto callback = TcpRequest::find(header->path);
 
@@ -37,7 +40,7 @@ void Lane::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   }
 
   auto waiter = clientSocket->popWaiter();
-  if (waiter == nullptr || waiter.use_count() == 0 ) {
+  if (waiter == nullptr || waiter.use_count() == 0) {
     logger_error("waiter is null");
   } else {
     waiter->notify(waitStatus);

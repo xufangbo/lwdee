@@ -5,8 +5,7 @@
 #include "protocal/DefaultProtocal.hpp"
 #include "protocal/DefaultStream.hpp"
 
-LeopardProtocalPtr ProtocalFactory::protocal =
-    std::make_shared<DefaultProtocal>();
+LeopardProtocalPtr ProtocalFactory::protocal = std::make_shared<DefaultProtocal>();
 
 std::shared_ptr<LeopardProtocal> ProtocalFactory::getProtocal() {
   return protocal;
