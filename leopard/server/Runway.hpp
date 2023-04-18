@@ -19,13 +19,13 @@ class Runway : public IRunway {
 
  private:
   void run() override;
-  void acceptSocket(epoll_event* evt);  
+  void acceptSocket(epoll_event* evt);
   void acceptEvent(epoll_event* evt) override;
-  void doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) override;
+  void doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) override;
 
  public:
-  Runway(int id, bool* running, SendTaskQueue* sendQueue);
-  void start(std::string ip, int port);  
+  Runway(int id, bool* running, SendTaskQueue* sendQueue, std::string ip, int port);
+  void start();
 
  public:
   Qps* qps();

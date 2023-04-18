@@ -10,7 +10,7 @@ class Leopard : public IRunwayContainer<Runway> {
   int port;
 
  public:
-  Leopard(int corenums = 0);
-  void start(std::string ip, int port);
-  void join();
+  Leopard(std::string ip, int port);
+
+  void newInstance(int id, bool* running, SendTaskQueue* sendQueue) override;
 };

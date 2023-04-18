@@ -16,7 +16,7 @@ int main() {
 
   registService();
 
-  Leopard leopard(LeopardConfig::instance()->procnums);
-  leopard.start(ip, LeopardConfig::instance()->port);
+  Leopard leopard(ip, LeopardConfig::instance()->port);
+  leopard.start(1,1);
   leopard.join();
 }

@@ -9,23 +9,9 @@
 
 Antelope Antelope::instance;
 
-void Antelope::start() {
-  signal(SIGPIPE, SIG_IGN);
-  if (running) {
-    return;
-  }
-
-  running = true;
-
-  sendQueue.start(&running);
-  for (int i = 0; i < 1; i++) {
-    auto lane = new Lane(i + 1, &running, &sendQueue);
-    lane->start();
-    
-    runways.push_back(lane);
-  }
-
-  running = true;
+void Antelope::newInstance(int id, bool* running, SendTaskQueue* sendQueue) {
+  auto runway = new Lane(id, running, sendQueue);
+  this->runways.push_back(runway);
 }
 
 ClientSocket* Antelope::create(const char* ip, int port) {
@@ -46,12 +32,3 @@ void Antelope::send(Socket* socket, BufferStreamPtr outputStream) {
 
   (*it)->send(socket, outputStream);
 }
-
-// bool Antelope::contains(int fd) {
-//   for (auto it : runways) {
-//     if (it->contains(fd)) {
-//       return true;
-//     }
-//   }
-//   return false;
-// }

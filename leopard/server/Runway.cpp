@@ -8,14 +8,11 @@
 #include "net/log.hpp"
 #include "sys/sysinfo.h"
 
-Runway::Runway(int id, bool* running, SendTaskQueue* sendQueue)
-    : IRunway(id, running, sendQueue) {
+Runway::Runway(int id, bool* running, SendTaskQueue* sendQueue, std::string ip, int port)
+    : IRunway(id, running, sendQueue), ip(ip), port(port) {
 }
 
-void Runway::start(std::string ip, int port) {
-  this->ip = ip;
-  this->port = port;
-
+void Runway::start() {
   this->thread = std::thread(&Runway::run, this);
 }
 
@@ -73,7 +70,7 @@ void Runway::acceptSocket(epoll_event* evt) {
   }
 }
 
-void Runway::doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) {
+void Runway::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   auto header = this->parseRequest(inputStream.get());
 
   auto fun = TcpResponse::find(header->path);

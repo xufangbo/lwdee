@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
   for (int i = 0; i < 1; i++) {
     logger_trace("----------------------------");
     try {
-      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 10);
+      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
 
       testLongConnection(client.get(), i);
       // testCallback(client.get(), i);
@@ -55,10 +55,11 @@ int main(int argc, char** argv) {
 }
 
 void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 1000; i++) {
     logger_debug("---------");
     testCallback(client, i);
-  }
+    testBigDataCallback(client, i);
+    }
 }
 
 void testCallback(SocketClient* client, int i) {
@@ -97,8 +98,8 @@ void testBigDataCallback(SocketClient* client, int i) {
 
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  auto time = waiter->wait();
-  logger_info("%d eclipse %.3lfs", i, time);
+  // auto time = waiter->wait();
+  // logger_info("%d eclipse %.3lfs", i, time);
 }
 
 #ifdef LEOPARD_SUSPEND
