@@ -53,8 +53,10 @@ typedef std::list<BulletPtr> BulletList;
 class SendTask {
  private:
   bool _finished = false;
-  Socket* socket;
   BulletList bullets;
+
+ public:
+  Socket* socket;
 
  public:
   SendTask(Socket* socket, BufferStreamPtr outputStream)

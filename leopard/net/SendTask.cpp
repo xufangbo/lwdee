@@ -12,17 +12,17 @@ bool Bullet::send(Socket* socket) {
     socket->onSend();
 
     auto elapsed = Stopwatch::elapsed(this->start);
-    // leopard_trace("send finished,elapsed: %.3fs", elapsed);
+    leopard_trace("send finished,elapsed: %.3fs", elapsed);
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       // do nothing
-      // leopard_trace("EAGAIN");
+      leopard_trace("EAGAIN");
     } else {
       logger_error("socket send error(%d)%s", errno, strerror(errno));
       return false;
     }
   } else {
-    // leopard_trace("move on to %ld/%ld", outputStream->size(), leftover());
+    leopard_trace("move on to %ld/%ld", outputStream->size(), leftover());
     moveon(rc);
   }
   return true;
@@ -35,7 +35,6 @@ bool SendTask::send() {
     if (!sended) {
       return false;
     }
-
     this->bullets.pop_front();
   }
 

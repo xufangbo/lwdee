@@ -5,6 +5,7 @@
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "net/log.hpp"
+#include <algorithm>
 
 SendTaskQueue::~SendTaskQueue() {
   while (!list.empty()) {
@@ -15,8 +16,14 @@ SendTaskQueue::~SendTaskQueue() {
 }
 
 void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
-  // leopard_trace("accept socket task");
-  list.emplace_back(new SendTask(socket, outputStream));
+  auto it = std::find_if(list.begin(), list.end(), [&socket](SendTask* i) { return i->socket == socket; });
+  if (it == list.end()) {
+    // leopard_trace("new SendTask");
+    list.emplace_back(new SendTask(socket, outputStream));
+  } else {
+    // leopard_trace("push to SendTask");
+    (*it)->push(outputStream);
+  }
 }
 
 void SendTaskQueue::start(bool* running) {
@@ -49,6 +56,10 @@ void SendTaskQueue::doRun() {
     }
   }
 
+  this->remove();
+}
+
+void SendTaskQueue::remove() {
   for (SendTask* task : removes) {
     list.remove(task);
     delete task;

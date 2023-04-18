@@ -21,4 +21,5 @@ class SendTaskQueue {
   void push(Socket* socket, BufferStreamPtr outputStream);
   void push(SendTask* task);
   void start(bool* running);
+  void remove();
 };
