@@ -108,7 +108,7 @@ ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   auto header = protocal->getHeader(inputStream);
   auto path = header->path;
 
-  this->_qps.time(header->elapsed);
+  this->_qps.time(header->tx1_rx1());
 
   return header;
 }
