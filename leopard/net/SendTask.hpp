@@ -45,6 +45,9 @@ class Bullet {
   bool finished() {
     return this->_finished;
   }
+
+ private:
+  static std::atomic<int> cout;
 };
 
 typedef std::shared_ptr<Bullet> BulletPtr;

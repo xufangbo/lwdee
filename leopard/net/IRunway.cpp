@@ -72,7 +72,7 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
     throw ex;
   }
 
-  leopard_trace("recv - %s,rc:%d", buf, rc);
+  // leopard_trace("recv - %s,rc:%d", buf, rc);
 
   auto* inputStream = socket->inputStream();
   inputStream->puts(buf, rc);

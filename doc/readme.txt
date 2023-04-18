@@ -1,0 +1,1 @@
+bullet list should wait 1ms ,why ?

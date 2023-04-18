@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include "TcpRequest.hpp"
 #include "core/suspend.hpp"
 #include "net/ClientSocket.hpp"
@@ -11,14 +12,18 @@ typedef std::shared_ptr<SocketClient> SocketClientPtr;
 
 class SocketClient {
  private:
-  ClientSocket* socket;
+  int parallel = 1;
+  std::atomic<uint32_t> index;
+  std::vector<ClientSocket*> sockets;
 
  public:
-  SocketClient(ClientSocket* socket)
-      : socket(socket){};
+  SocketClient(std::vector<ClientSocket*> sockets)
+      : sockets(sockets), parallel(sockets.size()) {
+    this->index = 0;
+  }
 
  public:
-  static SocketClientPtr create(const char* ip, int port);
+  static SocketClientPtr create(const char* ip, int port, int parallel = 1);
 
  public:
   SocketWaiter invoke(std::string path, RequestInvoke request, RequestCallback callback);
@@ -27,4 +32,7 @@ class SocketClient {
   await<BufferStream*> invoke(std::string path, void* buffer, int len);
 #endif
   void close();
+
+ private:
+  ClientSocket* next();
 };

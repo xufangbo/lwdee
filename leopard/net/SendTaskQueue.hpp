@@ -11,6 +11,7 @@ class SendTaskQueue {
   bool* running = nullptr;
   std::list<SendTask*> list;
   std::vector<SendTask*> removes;
+  std::mutex mut;
 
  private:
   void run();

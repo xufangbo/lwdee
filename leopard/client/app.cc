@@ -17,6 +17,7 @@ void testLongConnection(SocketClient* client, int i);
 void testCallback(SocketClient* client, int i, bool closed = true);
 void testBigDataCallback(SocketClient* client, int i, bool closed = true);
 
+int responseIndex = 0;
 int main(int argc, char** argv) {
   read_log_config("client");
 
@@ -26,13 +27,14 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-  for (int i = 0; i < 1; i++) {
+  responseIndex = 0;
+  for (int i = 0; i < 10; i++) {
     logger_trace("----------------------------");
     try {
-      auto client = SocketClient::create(conf->ip.c_str(), conf->port);
+      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
 
-      testLongConnection(client.get(), i);
-      // testCallback(client.get(), i);
+      // testLongConnection(client.get(), i);
+      testCallback(client.get(), i);
       // testBigDataCallback(client.get(), i);
 
     } catch (Exception& ex) {
@@ -55,16 +57,17 @@ void testCallback(SocketClient* client, int i, bool closed) {
   logger_debug("send %s", input.c_str());
 
   RequestCallback callback = [i](BufferStream* inputStream) {
+    responseIndex++;
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive-%d:  (%d)%s", i, len, content.c_str());
+    logger_info("recive-%d:  (%d)%s", responseIndex, len, content.c_str());
   };
 
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  // auto time = waiter->wait();
-  // logger_info("%d eclipse %.3lfs", i, time);
+  auto time = waiter->wait();
+  logger_info("%d eclipse %.3lfs", i, time);
 
   if (closed) {
     client->close();
@@ -80,10 +83,11 @@ void testBigDataCallback(SocketClient* client, int i, bool closed) {
   logger_debug("send %s", input.c_str());
 
   RequestCallback callback = [i](BufferStream* inputStream) {
+    responseIndex++;
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("recive-%d:  (%d)%s", i, len, content.c_str());
+    logger_info("recive-%d:  (%d)%s", responseIndex, len, content.c_str());
   };
 
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
@@ -97,11 +101,11 @@ void testBigDataCallback(SocketClient* client, int i, bool closed) {
 }
 
 void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 100; i++) {
     logger_debug("---------");
     testCallback(client, i, false);
   }
-  client->close();
+  // client->close();
 }
 
 #ifdef LEOPARD_SUSPEND

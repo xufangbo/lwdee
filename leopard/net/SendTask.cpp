@@ -4,6 +4,8 @@
 #include "core/log.hpp"
 #include "net/log.hpp"
 
+std::atomic<int> Bullet::cout(0);
+
 bool Bullet::send(Socket* socket) {
   int rc = socket->send(buffer(), leftover());
 
@@ -12,7 +14,8 @@ bool Bullet::send(Socket* socket) {
     socket->onSend();
 
     auto elapsed = Stopwatch::elapsed(this->start);
-    leopard_trace("send finished,elapsed: %.3fs", elapsed);
+    Bullet::cout ++;
+    leopard_info("send finished,elapsed: %.3fs,count: %d", elapsed,Bullet::cout.load());
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       // do nothing
@@ -29,13 +32,15 @@ bool Bullet::send(Socket* socket) {
 }
 
 bool SendTask::send() {
-  if (!this->bullets.empty()) {
+  while (!this->bullets.empty()) {
+    logger_warn("< enter bullet send, %d", this->bullets.size());
     auto bullet = this->bullets.front();
     bool sended = bullet->send(this->socket);
     if (!sended) {
       return false;
     }
     this->bullets.pop_front();
+    logger_warn("> enter bullet send, %d", this->bullets.size());
   }
 
   _finished = true;

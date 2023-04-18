@@ -8,8 +8,10 @@
 #include "net/log.hpp"
 
 SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
+  ClientSocket* socket = this->next();
+
   SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
-  this->socket->pushWaiter(waiter);
+  socket->pushWaiter(waiter);
 
   TcpRequest::regist(path, callback);
 
@@ -22,14 +24,16 @@ SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, Reque
 
   protocal->setLength(outputStream.get());
 
-  Antelope::instance.send(this->socket, outputStream);
+  Antelope::instance.send(socket, outputStream);
 
   return waiter;
 }
 
 SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+  ClientSocket* socket = this->next();
+
   SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
-  this->socket->pushWaiter(waiter);
+  socket->pushWaiter(waiter);
 
   leopard_debug("< invoke %s", path.c_str());
   TcpRequest::regist(path, callback);
@@ -44,7 +48,7 @@ SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, Reque
 
   protocal->setLength(outputStream.get());
 
-  Antelope::instance.send(this->socket, outputStream);
+  Antelope::instance.send(socket, outputStream);
 
   return waiter;
 }
@@ -81,11 +85,27 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 #endif
 
 void SocketClient::close() {
-  this->socket->close();
+  for (ClientSocket* socket : this->sockets) {
+    socket->close();
+  }
 }
 
-SocketClientPtr SocketClient::create(const char* ip, int port) {
-  ClientSocket* socket = Antelope::instance.create(ip, port);
-  auto client = std::make_shared<SocketClient>(socket);
+ClientSocket* SocketClient::next() {
+  int i = this->index % this->parallel;
+  ClientSocket* socket = this->sockets[i];
+  this->index = (i + 1);
+
+  // leopard_debug("sockeet index %d",i);
+  return socket;
+}
+
+SocketClientPtr SocketClient::create(const char* ip, int port, int parallel) {
+  std::vector<ClientSocket*> sockets;
+  for (int i = 0; i < 10; i++) {
+    ClientSocket* socket = Antelope::instance.create(ip, port);
+    sockets.push_back(socket);
+  }
+
+  auto client = std::make_shared<SocketClient>(sockets);
   return client;
 }
