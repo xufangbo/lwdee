@@ -1,17 +1,14 @@
 #pragma once
 
 #include <list>
-#include <mutex>
-#include <vector>
-
+#include <memory>
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
 
-class SendTask {
+class Bullet {
  private:
   bool _finished = false;
   uint64_t pos = 0;
-  Socket* socket;
   BufferStreamPtr outputStream;
 
  private:
@@ -34,8 +31,40 @@ class SendTask {
   inline void moveon(int size) { pos += size; }
 
  public:
+  Bullet(BufferStreamPtr outputStream)
+      : outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {}
+
+  /**
+   * @brief 是否正常发送
+   *
+   * @return true 正常发送，即使没有发送完下次还可以接着发送
+   * @return false send返回-1且errno不为EAGAIN或EINTR，socket需要被清理
+   */
+  bool send(Socket* socket);
+
+  bool finished() {
+    return this->_finished;
+  }
+};
+
+typedef std::shared_ptr<Bullet> BulletPtr;
+typedef std::list<BulletPtr> BulletList;
+
+class SendTask {
+ private:
+  bool _finished = false;
+  Socket* socket;
+  BulletList bullets;
+
+ public:
   SendTask(Socket* socket, BufferStreamPtr outputStream)
-      : socket(socket), outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {
+      : socket(socket) {
+    this->push(outputStream);
+  }
+
+  void push(BufferStreamPtr outputStream) {
+    auto bullet = std::make_shared<Bullet>(outputStream);
+    bullets.push_back(bullet);
   }
 
   /**
@@ -46,25 +75,7 @@ class SendTask {
    */
   bool send();
 
-  /**
-   * @brief 是否已经发送完成
-   */
-  bool finished() { return this->_finished; }
-};
-
-class SendTaskQueue {
- private:
-  bool* running = nullptr;
-  std::list<SendTask*> list;
-  std::vector<SendTask*> removes;
-
- private:
-  void run();
-  void doRun();
-
- public:
-  ~SendTaskQueue();
-  void push(Socket* socket,BufferStreamPtr outputStream);
-  void push(SendTask *task);
-  void start(bool* running);
+  bool finished() {
+    return this->_finished;
+  }
 };
