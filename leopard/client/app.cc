@@ -26,11 +26,12 @@ int main(int argc, char** argv) {
   Antelope::instance.start();
 
   for (int i = 0; i < 10; i++) {
+    logger_trace("----------------------------");
     try {
       auto client = SocketClient::create(conf->ip.c_str(), conf->port);
 
-      // testCallback(client.get(), i);
-      testBigDataCallback(client.get(), i);
+      testCallback(client.get(), i);
+      // testBigDataCallback(client.get(), i);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -47,21 +48,6 @@ int main(int argc, char** argv) {
   return 0;
 }
 
-#ifdef LEOPARD_SUSPEND
-suspend testSuspend(SocketClient* client, int i) {
-  std::string input = "green green green " + std::to_string(i);
-  auto path = "com.cs.sales.order.save";
-
-  logger_debug("send %s", input.c_str());
-  BufferStream* inputStream = co_await client->invoke(path, (void*)input.c_str(), input.size());
-
-  auto len = inputStream->get<uint32_t>();
-  auto content = inputStream->getString(len);
-
-  logger_info("recive(%d) :  %s", len, content.c_str());
-}
-#endif
-
 void testCallback(SocketClient* client, int i) {
   std::string input = "green green green ";
   input += std::to_string(i);
@@ -74,9 +60,10 @@ void testCallback(SocketClient* client, int i) {
     logger_info("recive-%d:  (%d)%s", i, len, content.c_str());
   };
 
-  client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
+  auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-  // client->wait();
+  auto time = waiter->wait();
+  logger_info("%d eclipse %.3lfs", i, time);
 }
 
 void testBigDataCallback(SocketClient* client, int i) {
@@ -97,8 +84,23 @@ void testBigDataCallback(SocketClient* client, int i) {
   auto waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
   auto time = waiter->wait();
-  logger_info("%d eclipse %lfs", i, time * 1.0 / 1000);
+  logger_info("%d eclipse %.3lfs", i, time);
 }
+
+#ifdef LEOPARD_SUSPEND
+suspend testSuspend(SocketClient* client, int i) {
+  std::string input = "green green green " + std::to_string(i);
+  auto path = "com.cs.sales.order.save";
+
+  logger_debug("send %s", input.c_str());
+  BufferStream* inputStream = co_await client->invoke(path, (void*)input.c_str(), input.size());
+
+  auto len = inputStream->get<uint32_t>();
+  auto content = inputStream->getString(len);
+
+  logger_info("recive(%d) :  %s", len, content.c_str());
+}
+#endif
 
 // client->invoke(
 //     "com.cs.sales.order.save",

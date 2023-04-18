@@ -14,7 +14,7 @@ bool SendTask::send() {
     socket->onSend();
 
     auto elapsed = Stopwatch::elapsed(this->start);
-    leopard_trace("send finished,elapsed: %.3fs", elapsed);
+    // leopard_trace("send finished,elapsed: %.3fs", elapsed);
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       // do nothing
@@ -39,7 +39,7 @@ SendTaskQueue::~SendTaskQueue() {
 }
 
 void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
-  leopard_trace("accept socket task");
+  // leopard_trace("accept socket task");
   list.emplace_back(new SendTask(socket, outputStream));
 }
 

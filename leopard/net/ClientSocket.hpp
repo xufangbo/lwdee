@@ -19,7 +19,7 @@ class SocketWaiter_t {
 
  public:
   void notify(WaitStatus status) {
-    status = status;
+    this->status = status;
   }
 
   double wait(int timeout = 20) {
@@ -30,8 +30,7 @@ class SocketWaiter_t {
       } else if (status == WaitStatus::timeout) {
         sw.stop();
         throw Exception("timeout", ZONE);
-      }
-      if (status == WaitStatus::nohint) {
+      } else if (status == WaitStatus::nohint) {
         return sw.stop();
         throw Exception("nohint", ZONE);
       } else {
