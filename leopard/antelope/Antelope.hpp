@@ -6,7 +6,9 @@
 
 class Antelope : public IRunwayContainer<Lane> {
  private:
-  Antelope() {}
+  Antelope() {
+    this->server = false;
+  }
   void newInstance(int id, bool* running, SendTaskQueue* sendQueue) override ;
 
  public:

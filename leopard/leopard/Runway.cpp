@@ -70,7 +70,7 @@ void Runway::acceptSocket(epoll_event* evt) {
   }
 }
 
-void Runway::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
+void Runway::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   auto header = this->parseRequest(inputStream.get());
 
   auto fun = TcpResponse::find(header->path);

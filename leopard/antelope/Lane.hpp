@@ -11,7 +11,7 @@
 class Lane : public IRunway {
  private:
   void acceptEvent(epoll_event* evt) override;
-  void doAcceptRequest(Socket* socket,BufferStreamPtr inputStream) override;
+  void __acceptRequest(Socket* socket,BufferStreamPtr inputStream) override;
 
  public:
   Lane(int id, bool* running, SendTaskQueue* sendQueue);

@@ -8,8 +8,8 @@ make install
 安装完之后复制so文件到项目中会有引用个错误，所以需要使用下面的脚本复制到/usr/local/lib下
 
 cd /home/kevin/tmp/librdkafka
-sudo cp -rf ./* /usr/local/lib/
-ls /usr/local/lib/
+sudo cp -rf ./* /usr/lib/
+ls /usr/lib/
 
 kafka 部署好了，在 10.180.98.131,132,133 上，订阅端口是9092，
 你找个手册参考一下相关命令和使用的方式哈。创建了一个topic ：test。可以手工自己发送消息上去。

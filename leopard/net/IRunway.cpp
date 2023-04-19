@@ -43,7 +43,7 @@ void IRunway::acceptRecive(epoll_event* evt) {
   }
 
   if (evt->events & EPOLLIN) {
-    this->doAcceptRecive(socket, evt);
+    this->__acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
     epollOut = true;
     // logger_trace("EPOLL OUT do nothing");
@@ -61,7 +61,7 @@ void IRunway::acceptRecive(epoll_event* evt) {
   }
 }
 
-void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
+void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
   char buf[BUFFER_SIZE] = {0};
   int rc = 0;
   try {
@@ -92,7 +92,7 @@ void IRunway::doAcceptRecive(Socket* socket, epoll_event* evt) {
 
 void IRunway::acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   try {
-    this->doAcceptRequest(socket, inputStream);
+    this->__acceptRequest(socket, inputStream);
   } catch (Exception& ex) {
     logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {

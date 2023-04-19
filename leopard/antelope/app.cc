@@ -19,7 +19,7 @@ void testBigDataCallback(SocketClient* client, int i);
 
 int responseIndex = 0;
 int main(int argc, char** argv) {
-  for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < 30; i++) {
     printf("\n");
   }
   read_log_config("client");

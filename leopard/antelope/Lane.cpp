@@ -20,7 +20,7 @@ void Lane::acceptEvent(epoll_event* evt) {
   IRunway::acceptRecive(evt);
 }
 
-void Lane::doAcceptRequest(Socket* socket, BufferStreamPtr inputStream) {
+void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   ClientSocket* clientSocket = (ClientSocket*)(socket);
 
   auto header = this->parseRequest(inputStream.get());

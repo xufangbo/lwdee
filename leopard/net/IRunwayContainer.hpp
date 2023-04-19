@@ -1,17 +1,19 @@
 #pragma once
 
 #include <signal.h>
-#include <numeric>
+#include <sys/sysinfo.h>
 #include "IRunway.hpp"
+#include "Matrix.hpp"
 #include "log.hpp"
-#include "sys/sysinfo.h"
 
 template <class T>
 class IRunwayContainer {
  protected:
+  bool server = false;
   bool running = false;
   std::vector<T*> runways;
   std::vector<SendTaskQueue*> sends;
+  Matrix matrix;
 
  public:
   ~IRunwayContainer() {
@@ -29,7 +31,6 @@ class IRunwayContainer {
     // if (corenums <= 0) {
     //   this->corenums = get_nprocs();  // get_nprocs_conf();
     // }
-
     // https://blog.csdn.net/weixin_33196646/article/details/116730365
     signal(SIGPIPE, SIG_IGN);
     if (running) {
@@ -56,8 +57,11 @@ class IRunwayContainer {
       runway->start();
     }
 
-    std::thread tps(&IRunwayContainer::qpsJob, this);
-    tps.detach();
+    std::vector<Qps*> qps;
+    for (auto runway : runways) {
+      qps.push_back(runway->qps());
+    }
+    matrix.start(&running, this->server ? "leopard.csv" : "antelope.csv", qps);
   }
 
   void stop() { this->running = false; }
@@ -70,20 +74,4 @@ class IRunwayContainer {
 
  protected:
   virtual void newInstance(int id, bool* running, SendTaskQueue* sendQueue) = 0;
-
-  void qpsJob() {
-    while (running) {
-      sleep(1);
-
-      Qps qps(0);
-
-      qps.accepts = std::accumulate(runways.begin(), runways.end(), 0, [](int x, IRunway* r) { return x + r->qps()->accepts; });
-      qps.closes = std::accumulate(runways.begin(), runways.end(), 0, [](int x, IRunway* r) { return x + r->qps()->closes; });
-      qps.inputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, IRunway* r) { return x + r->qps()->inputs; });
-      qps.outputs = std::accumulate(runways.begin(), runways.end(), 0, [](int x, IRunway* r) { return x + r->qps()->outputs; });
-      int waitings = std::accumulate(runways.begin(), runways.end(), 0, [](int x, IRunway* r) { return x + r->qps()->waitings(); });
-
-      // logger_trace("sockets:%4d,TPS:%4d,epoll wait:%4d",sockets, tps, waits);
-    }
-  }
 };
