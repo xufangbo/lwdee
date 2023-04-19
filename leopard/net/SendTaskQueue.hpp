@@ -14,7 +14,7 @@ class SendTaskQueue {
   std::list<SendTask*> list;
   std::vector<SendTask*> removes;
   Qps _qps;
-  // std::mutex mut;
+  std::mutex mut;
 
  private:
   void run();

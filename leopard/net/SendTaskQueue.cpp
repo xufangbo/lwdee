@@ -16,7 +16,7 @@ SendTaskQueue::~SendTaskQueue() {
 }
 
 void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
-  // std::lock_guard<std::mutex> lock(mut);
+  std::lock_guard<std::mutex> lock(mut);
 
   auto it = std::find_if(list.begin(), list.end(), [&socket](SendTask* i) { return i->socket == socket; });
 
@@ -63,7 +63,7 @@ void SendTaskQueue::doRun() {
 }
 
 void SendTaskQueue::remove() {
-  // std::lock_guard<std::mutex> lock(mut);
+  std::lock_guard<std::mutex> lock(mut);
 
   for (SendTask* task : removes) {
     list.remove(task);

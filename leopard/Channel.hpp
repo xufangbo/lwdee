@@ -3,5 +3,5 @@
 class Channel {
  private:
  public:
- void execute(){}
+  void execute() {}
 };

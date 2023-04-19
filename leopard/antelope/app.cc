@@ -21,9 +21,10 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-
-  test_1000_small_short_sync(conf->ip, conf->port);
+  // test_1000_small_short_sync(conf->ip, conf->port);
   // test_1000_small_short_async(conf->ip, conf->port);
+  // test_1000_large_short_sync(conf->ip, conf->port);
+  test_1000_large_short_async(conf->ip, conf->port);
   Antelope::instance.join();
 
   return 0;
