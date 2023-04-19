@@ -36,6 +36,7 @@ void IRunway::run() {
 }
 
 void IRunway::acceptRecive(epoll_event* evt) {
+  // logger_trace("acceptRecive % 4d %x %d", evt->data.fd, evt->events, evt->events);
   auto socket = sockets.find(evt->data.fd);
   if (socket == nullptr) {
     logger_error("no hint socket %d", evt->data.fd);
@@ -45,7 +46,6 @@ void IRunway::acceptRecive(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     this->__acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
-    epollOut = true;
     // logger_trace("EPOLL OUT do nothing");
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", socket->fd());
@@ -74,19 +74,25 @@ void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
 
   // leopard_trace("recv - %s,rc:%d", buf, rc);
 
-  auto* inputStream = socket->inputStream();
-  inputStream->puts(buf, rc);
-
-  if (rc == 0) {
+  if (rc > 0) {
+    auto* inputStream = socket->inputStream();
+    inputStream->puts(buf, rc);
+    if (inputStream->isEnd()) {
+      this->_qps.recvs++;
+      auto pickedStream = inputStream->pick();
+      std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
+      t.detach();
+    } else {
+      // epoll not changed
+    }
+  } else if (rc == -1) {
+    logger_debug("rc == -1");
+    epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
+  } else if (rc == 0) {
     // leopard_warn("recv closed");
     this->close(socket);
-  } else if (inputStream->isEnd()) {
-    this->_qps.recvs++;
-    auto pickedStream = inputStream->pick();
-    std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
-    t.detach();
   } else {
-    epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
+    logger_error("rc of recv < -1 ?");
   }
 }
 

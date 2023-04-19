@@ -17,8 +17,7 @@ class IRunway {
  protected:
   std::thread thread;
   std::shared_ptr<Epoll> epoll;
-  bool isET = true;
-  bool epollOut = true;
+  bool isET = false;
 
  protected:
   Sockets sockets;

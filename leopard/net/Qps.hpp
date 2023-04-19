@@ -3,6 +3,7 @@
 #include <atomic>
 #include <functional>
 #include <vector>
+#include <iostream>
 
 struct Qps {
   int id;
