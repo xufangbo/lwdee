@@ -6,6 +6,10 @@
 
 #include "net/Socket.hpp"
 
+struct SocketBox{
+
+};
+
 class Sockets {
  private:
   std::mutex mut;
@@ -20,8 +24,15 @@ class Sockets {
     }
   }
   void insert(Socket* s);
+
+  /**
+   * @brief used by IRunway::acceptRecive(epoll_event* evt)
+   */
   Socket* find(int fd);
+
   void remove(Socket* s);
+
   size_t size() { return sockets->size(); };
+  
   void clear() { sockets->clear(); }
 };
