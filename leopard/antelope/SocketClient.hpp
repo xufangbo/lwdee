@@ -14,6 +14,7 @@ class SocketClient {
  private:
   int parallel = 1;
   std::atomic<uint32_t> index;
+  std::atomic<uint32_t> waitId = 0;
   std::vector<ClientSocket*> sockets;
 
  public:

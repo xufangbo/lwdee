@@ -78,7 +78,7 @@ void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
   inputStream->puts(buf, rc);
 
   if (rc == 0) {
-    leopard_warn("recv closed");
+    // leopard_warn("recv closed");
     this->close(socket);
   } else if (inputStream->isEnd()) {
     this->_qps.inputs++;

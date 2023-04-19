@@ -7,10 +7,20 @@
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
+SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+  RequestInvoke request = [buffer, len](BufferStream* outputStream) {
+    outputStream->put<uint32_t>(len);
+    outputStream->puts(buffer, len);
+  };
+
+  return invoke(path, request, callback);
+}
+
 SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
   ClientSocket* socket = this->next();
 
-  SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
+  this->waitId++;
+  SocketWaiter waiter = std::make_shared<SocketWaiter_t>(this->waitId.load());
   socket->pushWaiter(waiter);
 
   TcpRequest::regist(path, callback);
@@ -29,30 +39,6 @@ SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, Reque
   return waiter;
 }
 
-SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
-  ClientSocket* socket = this->next();
-
-  SocketWaiter waiter = std::make_shared<SocketWaiter_t>();
-  socket->pushWaiter(waiter);
-
-  leopard_debug("< invoke %s", path.c_str());
-  TcpRequest::regist(path, callback);
-
-  auto protocal = ProtocalFactory::getProtocal();
-  auto outputStream = ProtocalFactory::createStream();
-
-  protocal->setHeader(outputStream.get(), path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
-
-  outputStream->put<uint32_t>(len);
-  outputStream->puts(buffer, len);
-
-  protocal->setLength(outputStream.get());
-
-  Antelope::instance.send(socket, outputStream);
-
-  return waiter;
-}
-
 void SocketClient::wait() {
   for (ClientSocket* socket : this->sockets) {
     socket->wait();
@@ -60,7 +46,7 @@ void SocketClient::wait() {
 }
 void SocketClient::close() {
   for (ClientSocket* socket : this->sockets) {
-    socket->close();
+    socket->getLan()->close(socket->fd());
   }
 }
 
@@ -69,7 +55,6 @@ ClientSocket* SocketClient::next() {
   ClientSocket* socket = this->sockets[i];
   this->index = (i + 1);
 
-  // leopard_debug("sockeet index %d",i);
   return socket;
 }
 

@@ -13,11 +13,46 @@
 suspend testSuspend(SocketClient* client, int i);
 #endif
 
+int responseIndex = 0;
+
 void testLongConnection(SocketClient* client, int i);
 void testCallback(SocketClient* client, int i);
 void testBigDataCallback(SocketClient* client, int i);
 
-int responseIndex = 0;
+void test_1000_small_short_wait(std::string ip, int port) {
+  Stopwatch sw;
+  for (int i = 0; i < 1000; i++) {
+    try {
+      auto client = SocketClient::create(ip.c_str(), port, 1);
+
+      std::string input = "green green green " + std::to_string(i);
+      logger_debug("send %s", input.c_str());
+
+      RequestCallback callback = [i](BufferStream* inputStream) {
+        responseIndex++;
+        auto len = inputStream->get<uint32_t>();
+        auto content = inputStream->getString(len);
+
+        logger_debug("recive-%d:  (%d)%s", responseIndex, len, content.c_str());
+      };
+
+      SocketWaiter waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
+
+      auto time = waiter->wait();
+      logger_info("wait %d eclipse %.3lfs ---------------------------------------", i, time);
+
+      client->close();
+
+    } catch (Exception& ex) {
+      logger_warn("%s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
+  }
+
+  logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
+}
+
 int main(int argc, char** argv) {
   for (int i = 0; i < 30; i++) {
     printf("\n");
@@ -30,36 +65,38 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-  responseIndex = 0;
-  for (int i = 0; i < 1; i++) {
-    logger_trace("----------------------------");
-    try {
-      auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
+  // responseIndex = 0;
+  // for (int i = 0; i < 1000; i++) {
+  //   logger_trace("----------------------------");
+  //   try {
+  //     auto client = SocketClient::create(conf->ip.c_str(), conf->port, 1);
 
-      testLongConnection(client.get(), i);
-      // testCallback(client.get(), i);
-      // testBigDataCallback(client.get(), i);
+  //     // testLongConnection(client.get(), i);
+  //     testCallback(client.get(), i);
+  //     // testBigDataCallback(client.get(), i);
 
-      // client->wait();
-      // client->close();
+  //     // client->wait();
+  //     // client->close();
 
-    } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
-    }
-  }
+  //   } catch (Exception& ex) {
+  //     logger_warn("%s", ex.getMessage().c_str());
+  //   } catch (std::exception& ex) {
+  //     logger_error("%s", ex.what());
+  //   }
+  // }
+
+  test_1000_small_short_wait(conf->ip, conf->port);
   Antelope::instance.join();
 
   return 0;
 }
 
 void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1000; i++) {
     logger_debug("---------");
     // testCallback(client, i);
     testBigDataCallback(client, i);
-    }
+  }
 }
 
 void testCallback(SocketClient* client, int i) {

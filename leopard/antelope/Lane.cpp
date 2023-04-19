@@ -26,7 +26,7 @@ void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
   auto header = this->parseRequest(inputStream.get());
   header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
 
-  leopard_warn(header->to_string().c_str());
+  leopard_trace(header->to_string().c_str());
 
   auto callback = TcpRequest::find(header->path);
 
@@ -58,7 +58,8 @@ void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
 ClientSocket* Lane::create(const char* ip, int port) {
   Stopwatch sw;
 
-  ClientSocket* socket = new ClientSocket(&_qps);
+  ClientSocket* socket = new ClientSocket(this, &_qps);
+  leopard_warn("new client socket fd : %d", socket->fd());
 
   socket->connect(ip, port);
   socket->setNonBlocking();
@@ -86,7 +87,18 @@ void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
   sendQueue->push(socket, outputStream);
 }
 
-bool Lane::contains(int fd) {
+void Lane::close(int fd) {
   Socket* socket = sockets.find(fd);
-  return socket != nullptr;
+  if (socket != nullptr) {
+    this->epoll->del(fd);
+    this->sockets.remove(socket);
+    socket->close();
+  } else {
+    logger_error("can't find fd %d", fd);
+  }
 }
+
+// bool Lane::contains(int fd) {
+//   Socket* socket = sockets.find(fd);
+//   return socket != nullptr;
+// }

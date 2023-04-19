@@ -18,5 +18,6 @@ class Lane : public IRunway {
   ClientSocket* create(const char* ip, int port);
   void send(Socket* socket, BufferStreamPtr outputStream);
   void start();
-  bool contains(int fd);
+  // bool contains(int fd);
+  void close(int fd);
 };

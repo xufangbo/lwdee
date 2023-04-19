@@ -15,12 +15,18 @@ enum class WaitStatus : uint8_t {
 
 class SocketWaiter_t {
  private:
+  uint32_t id;
   WaitStatus status = WaitStatus::waiting;
 
  public:
+  SocketWaiter_t(uint32_t id)
+      : id(id) {}
+
   void notify(WaitStatus status) {
     this->status = status;
   }
+
+  uint32_t getId() { return id; }
 
   double wait(int timeout = 20) {
     Stopwatch sw;
@@ -43,13 +49,17 @@ class SocketWaiter_t {
 
 typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
 
+class Lane;
 class ClientSocket : public Socket {
  private:
   std::queue<SocketWaiter> waiters;
+  Lane* lane = nullptr;
 
  public:
-  ClientSocket(Qps* qps)
-      : Socket(qps) {}
+  ClientSocket(Lane* lane, Qps* qps)
+      : lane(lane), Socket(qps) {}
+
+  Lane* getLan() { return lane; }
 
   void pushWaiter(SocketWaiter waiter);
 

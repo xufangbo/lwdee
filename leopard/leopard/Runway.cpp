@@ -49,6 +49,7 @@ void Runway::acceptEvent(epoll_event* evt) {
 void Runway::acceptSocket(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     int client_fd = server->accept();
+    _qps.accepts ++;
 
     Socket* client = new Socket(client_fd, &_qps);
     sockets.insert(client);

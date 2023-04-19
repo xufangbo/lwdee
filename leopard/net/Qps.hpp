@@ -6,7 +6,7 @@
 
 struct Qps {
   int id;
-  std::atomic<uint32_t> accepts;       // 1
+  std::atomic<uint32_t> accepts = 0;   // 1
   std::atomic<uint32_t> closes;        // 2
   std::atomic<uint32_t> inputs;        // 3
   std::function<uint32_t()> waitings;  // 5

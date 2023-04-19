@@ -61,7 +61,7 @@ class IRunwayContainer {
     for (auto runway : runways) {
       qps.push_back(runway->qps());
     }
-    matrix.start(&running, this->server ? "leopard.csv" : "antelope.csv", qps);
+    matrix.start(&running, this->server ? "leopard" : "antelope", qps);
   }
 
   void stop() { this->running = false; }

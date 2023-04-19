@@ -2,7 +2,7 @@
 
 void ClientSocket::pushWaiter(SocketWaiter waiter) {
   waiters.push(waiter);
-  // printf("< put waiter %d / %d\n", waiters.size(), _fd);
+  printf("< put waiter %d / %d\n", waiter->getId(), _fd);
 }
 
 SocketWaiter ClientSocket::popWaiter() {
@@ -12,7 +12,7 @@ SocketWaiter ClientSocket::popWaiter() {
   }
   SocketWaiter waiter = waiters.front();
   waiters.pop();
-  // printf("> pop waiter %d / %d\n", waiters.size(), _fd);
+  printf("> pop waiter %d / %d\n",waiter->getId(), _fd);
   return waiter;
 }
 

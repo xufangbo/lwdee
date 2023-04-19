@@ -24,15 +24,12 @@ class ProtocalHeader {
 
   std::string to_string() {
     std::stringstream s;
-    s << "sen1: " << this->sen1;
-    s << ",rec1: " << this->rec1;
-    s << ",sen2: " << this->sen2;
-    s << ",rec2: " << this->rec2 << std::endl;
-
-    s << "rec1_sen1: " << this->rec1_sen1();
-    s << ",rec2_sen2: " << this->rec2_sen2();
-    s << ",sen2_rec1: " << this->sen2_rec1();
-    s << ",rec2_sen1: " << this->rec2_sen1();
+    s << "( " << this->sen1 << " -> " << this->rec1 << " -> " << this->sen2 << " -> " << this->rec2 << " )";
+    s << " <==> " << std::setiosflags(std::ios::fixed);
+    s << "( " << std::setprecision(3) << this->rec1_sen1()
+      << " + " << std::setprecision(3) << this->sen2_rec1()
+      << " + " << std::setprecision(3) << this->rec2_sen2()
+      << " = " << std::setprecision(3) << this->rec2_sen1() << " )";
 
     return s.str();
   }

@@ -19,23 +19,48 @@ void Matrix::start(bool* running, std::string fileName, std::vector<Qps*> qpses)
     std::filesystem::create_directory(dirPath);
   }
 
-  std::fstream f(fileName, std::ios_base::trunc);
+  this->__start(',');
+  this->__start('|');
+
+  std::thread t(&Matrix::run, this);
+  t.detach();
+}
+
+void Matrix::__start(char split) {
+  std::string file = fileName + (split == ',' ? ".csv" : ".md");
+  std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
-    logger_error("can't open file %s", fileName.c_str());
+    logger_error("can't open file %s", file.c_str());
   }
 
+  if (split == '|') {
+    f << "|";
+  }
+
+  f << "time" << split;
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
     for (std::string& i : tmp) {
-      f << i << ",";
+      f << i << split;
     }
   }
   f << std::endl;
 
-  f.close();
+  // -----------------------
+  if (split == '|') {
+    f << "|-|";
+    for (Qps* qps : qpses) {
+      auto tmp = qps->header();
+      for (std::string& i : tmp) {
+        f << '-' << split;
+      }
+    }
+    f << std::endl;
+  }
+  // -----------------------
 
-  std::thread t(&Matrix::run, this);
-  t.detach();
+  f.flush();
+  f.close();
 }
 
 void Matrix::run() {
@@ -53,18 +78,36 @@ void Matrix::write() {
   // qps.outputs = std::accumulate(qpses.begin(), qpses.end(), 0, [](int x, Qps* r) { return x +r->outputs; });
   // int waitings = std::accumulate(qpses.begin(), qpses.end(), 0, [](int x, Qps* r) { return x +r->waitings(); });
 
-  std::fstream f(fileName, std::ios_base::app);
-  if (!f.is_open()) {
-    logger_error("can't open file %s", fileName.c_str());
+  this->__write(',');
+  this->__write('|');
+
+  for (Qps* qps : qpses) {
+    auto tmp = qps->data();
+    qps->reset();
   }
+}
+
+void Matrix::__write(char split) {
+  std::string file = fileName + (split == ',' ? ".csv" : ".md");
+  std::ofstream f(file, std::ios_base::app);
+  if (!f.is_open()) {
+    logger_error("can't open file %s", file.c_str());
+  }
+
+  char time[25];
+  date_millsecond(time, 25);
+  time[19] = ' ';
+
+  f << time << split;
 
   for (Qps* qps : qpses) {
     auto tmp = qps->data();
     for (std::string& i : tmp) {
-      f << i << ",";
+      f << i << split;
     }
   }
   f << std::endl;
 
+  f.flush();
   f.close();
 }
