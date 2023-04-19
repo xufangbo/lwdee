@@ -8,8 +8,8 @@ struct Qps {
   int id;
   std::atomic<uint32_t> opens = 0;     // 1
   std::atomic<uint32_t> closes;        // 2
-  std::atomic<uint32_t> inputs;        // 3
-  std::atomic<uint32_t> outputs;       // 4
+  std::atomic<uint32_t> recvs;        // 3
+  std::atomic<uint32_t> sends;       // 4
   std::function<uint32_t()> waitings;  // 5
 
   std::atomic<uint32_t> trans_min;  // 6

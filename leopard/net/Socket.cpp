@@ -25,7 +25,7 @@ Socket::Socket(int fd, Qps* qps)
 }
 
 void Socket::onSend() {
-  this->qps->outputs++;
+  this->qps->sends++;
 }
 
 void Socket::bind(const char* ip, int port) {

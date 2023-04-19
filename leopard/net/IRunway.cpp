@@ -81,7 +81,7 @@ void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
     // leopard_warn("recv closed");
     this->close(socket);
   } else if (inputStream->isEnd()) {
-    this->_qps.inputs++;
+    this->_qps.recvs++;
     auto pickedStream = inputStream->pick();
     std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
     t.detach();

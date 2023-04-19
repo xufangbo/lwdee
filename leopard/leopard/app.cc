@@ -17,6 +17,6 @@ int main() {
   registService();
 
   Leopard leopard(ip, LeopardConfig::instance()->port);
-  leopard.start(1,1);
+  leopard.start(2, 2);
   leopard.join();
 }
