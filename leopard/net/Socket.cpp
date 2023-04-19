@@ -15,13 +15,13 @@ Socket::Socket(Qps* qps)
   }
   this->_inputStream = ProtocalFactory::createStream();
 
-  this->qps->accepts++;
+  this->qps->opens++;
 }
 
 Socket::Socket(int fd, Qps* qps)
     : _fd(fd), qps(qps) {
   this->_inputStream = ProtocalFactory::createStream();
-  this->qps->accepts++;
+  this->qps->opens++;
 }
 
 void Socket::onSend() {

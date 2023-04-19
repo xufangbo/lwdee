@@ -15,7 +15,7 @@ bool Bullet::send(Socket* socket) {
 
     auto elapsed = Stopwatch::elapsed(this->start);
     Bullet::cout ++;
-    leopard_info("send finished,elapsed: %.3fs,count: %d", elapsed,Bullet::cout.load());
+    leopard_info("send finished,elapsed: %.3fs,count: [ %d ]", elapsed,Bullet::cout.load());
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       // do nothing

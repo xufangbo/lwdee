@@ -59,7 +59,7 @@ ClientSocket* Lane::create(const char* ip, int port) {
   Stopwatch sw;
 
   ClientSocket* socket = new ClientSocket(this, &_qps);
-  leopard_warn("new client socket fd : %d", socket->fd());
+  // leopard_warn("new client socket fd : %d", socket->fd());
 
   socket->connect(ip, port);
   socket->setNonBlocking();
