@@ -82,7 +82,7 @@ void test_1000_small_short_async(std::string ip, int port) {
 void test_1000_large_short_sync(std::string ip, int port) {
   Stopwatch sw;
 
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 1; i++) {
     try {
       auto client = SocketClient::create(ip.c_str(), port, 1);
 

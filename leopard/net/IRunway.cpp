@@ -13,7 +13,7 @@ IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
     : _qps(id), running(running), sendQueue(sendQueue) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->sockets.size(); };
-  // this->isET = true;
+  this->isET = true;
 }
 
 void IRunway::run() {
@@ -63,38 +63,42 @@ void IRunway::acceptRecive(epoll_event* evt) {
 }
 
 void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
-  char buf[BUFFER_SIZE] = {0};
   int rc = 0;
-  try {
-    rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-  } catch (SocketException& ex) {
-    ex.trace(ZONE);
-    this->close(socket);
-    throw ex;
-  }
+  do {
+    char buf[BUFFER_SIZE] = {0};
 
-  // leopard_trace("recv - %s,rc:%d", buf, rc);
-
-  if (rc > 0) {
-    auto* inputStream = socket->inputStream();
-    inputStream->puts(buf, rc);
-    if (inputStream->isEnd()) {
-      this->_qps.recvs++;
-      auto pickedStream = inputStream->pick();
-      std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
-      t.detach();
-    } else {
-      // epoll not changed
+    try {
+      rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
+      // logger_trace("rc %d", rc);
+    } catch (SocketException& ex) {
+      ex.trace(ZONE);
+      this->close(socket);
+      throw ex;
     }
-  } else if (rc == -1) {
-    logger_debug("rc == -1");
-    epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
-  } else if (rc == 0) {
-    // leopard_warn("recv closed");
-    this->close(socket);
-  } else {
-    logger_error("rc of recv < -1 ?");
-  }
+
+    // leopard_trace("recv - rc:%d,%s", rc, buf);
+
+    if (rc > 0) {
+      auto* inputStream = socket->inputStream();
+      inputStream->puts(buf, rc);
+      if (inputStream->isEnd()) {
+        this->_qps.recvs++;
+        auto pickedStream = inputStream->pick();
+        std::thread t(&IRunway::acceptRequest, this, socket, pickedStream);
+        t.detach();
+      } else {
+        // epoll not changed
+      }
+    } else if (rc == -1) {
+      logger_debug("rc == -1");
+      epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
+    } else if (rc == 0) {
+      // leopard_warn("recv closed");
+      this->close(socket);
+    } else {
+      logger_error("rc of recv < -1 ?");
+    }
+  } while (rc > 0);
 }
 
 void IRunway::acceptRequest(Socket* socket, BufferStreamPtr inputStream) {

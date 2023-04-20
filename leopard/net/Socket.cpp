@@ -171,6 +171,8 @@ ssize_t Socket::recv(void* buf, size_t len, int flags) {
       // EINTR即errno为4，错误描述Interrupted system call
       return rc;
     } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
+      // EAGAIN:表示无数据可读，缓冲区已经为空，Resource temporarily unavailable
+
       // EAGAIN的意思是：E_again,要再次发送
       // 在VxWorks和Windows上，EAGAIN的名字叫做EWOULDBLOCK
       return rc;
