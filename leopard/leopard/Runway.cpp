@@ -89,7 +89,9 @@ void Runway::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
     protocal->setsen2(outputStream.get(), sen2);
     protocal->setLength(outputStream.get());
 
-    sendQueue->push(socket, outputStream);
+    // sendQueue->push(socket, outputStream);
+    this->addSendTask(socket,outputStream);
+   
 
     leopard_debug("> response %s", header->path.c_str());
   }

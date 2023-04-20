@@ -41,16 +41,17 @@ class IRunwayContainer {
 
     leopard_info("%d/%d", p1, p2);
 
-    for (int i = 0; i < p2; i++) {
-      auto sendQueue = new SendTaskQueue(i + 1);
-      sendQueue->start(&running);
+    // for (int i = 0; i < p2; i++) {
+    //   auto sendQueue = new SendTaskQueue(i + 1);
+    //   sendQueue->start(&running);
 
-      sends.push_back(sendQueue);
-    }
+    //   sends.push_back(sendQueue);
+    // }
 
     for (int i = 0; i < p1; i++) {
-      auto sendQueue = sends[i % sends.size()];
-      this->newInstance(i + 1, &running, sendQueue);
+      // auto sendQueue = sends[i % sends.size()];
+      // this->newInstance(i + 1, &running, sendQueue);
+      this->newInstance(i + 1, &running, nullptr);
     }
 
     for (auto runway : this->runways) {

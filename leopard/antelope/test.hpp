@@ -1,7 +1,19 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
 #include "SocketClient.hpp"
+
+std::string input_small(int i) ;
+std::string input_large(int i);
+
+// RequestCallback callback;
+
+typedef std::function<std::string(int i)> InputType;
+
+void test_sync(int testSize, InputType inputType, std::string ip, int port);
+void test_async(int testSize, InputType inputType, std::string ip, int port) ;
+
 
 /**
  *

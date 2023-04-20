@@ -17,14 +17,20 @@ int main(int argc, char** argv) {
 
   auto* conf = LeopardConfig::instance();
   conf->readConfig();
+  auto ip = conf->ip;
+  auto port = conf->port;
   logger_trace("%s:%d", conf->ip.c_str(), conf->port);
 
   Antelope::instance.start();
 
-  // test_1000_small_short_sync(conf->ip, conf->port);
-  // test_1000_small_short_async(conf->ip, conf->port);
-  // test_1000_large_short_sync(conf->ip, conf->port);
-  test_1000_large_short_async(conf->ip, conf->port);
+  test_sync(1, input_small, ip, port);
+
+  // test_sync(1000, input_small, ip, port);
+  // test_sync(1000, input_large, ip, port);
+
+  // test_async(1000, input_small, ip, port);
+  // test_async(1000, input_small, ip, port);
+
   Antelope::instance.join();
 
   return 0;

@@ -84,7 +84,8 @@ ClientSocket* Lane::create(const char* ip, int port) {
 }
 
 void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
-  sendQueue->push(socket, outputStream);
+  // sendQueue->push(socket, outputStream);
+  this->addSendTask(socket,outputStream);
 }
 
 void Lane::close(int fd) {

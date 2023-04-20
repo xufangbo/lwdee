@@ -14,8 +14,8 @@ bool Bullet::send(Socket* socket) {
     socket->onSend();
 
     auto elapsed = Stopwatch::elapsed(this->start);
-    Bullet::cout ++;
-    leopard_info("send finished,elapsed: %.3fs,count: [ %d ]", elapsed,Bullet::cout.load());
+    Bullet::cout++;
+    leopard_info("send finished,elapsed: %.3fs,count: [ %d ]", elapsed, Bullet::cout.load());
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       // do nothing
@@ -33,14 +33,11 @@ bool Bullet::send(Socket* socket) {
 
 bool SendTask::send() {
   while (!this->bullets.empty()) {
-    // logger_warn("< enter bullet send, %d", this->bullets.size());
     auto bullet = this->bullets.front();
-    bool sended = bullet->send(this->socket);
-    if (!sended) {
+    if (!bullet->send(this->socket)) {
       return false;
     }
     this->bullets.pop_front();
-    // logger_warn("> enter bullet send, %d", this->bullets.size());
   }
 
   _finished = true;
