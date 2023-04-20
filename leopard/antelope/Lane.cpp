@@ -67,7 +67,7 @@ ClientSocket* Lane::create(const char* ip, int port) {
   // socket->setSendBuf(1048576);
   // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
   // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
-  sockets[socket->fd()] = std::make_shared<SendTask>(socket);
+  sockets->insert(socket);
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {

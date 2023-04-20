@@ -1,34 +1,64 @@
 #include "Sockets.hpp"
 
-void Sockets::insert(Socket* s) {
-  // mut.lock();
-  sockets->push_back(s);
-  // mut.unlock();
-}
-Socket* Sockets::find(int fd) {
-  //  mut.lock();
-  // auto it = std::find_if(sockets->begin(), sockets->end(), [&fd](Socket* i) { return i->fd() == fd; });
-  // if (it != sockets->end()) {
-  //   return *it;
-  // }
+#include <thread>
 
-  for (Socket* socket : *sockets) {
-    if(socket == nullptr){
-      printf("socket is removed?");
-      return nullptr;
-    }
-    if (socket->fd() == fd) {
-      return socket;
-    }
-  }
-  // mut.unlock();
-  return nullptr;
+#include "log.hpp"
+
+SendTask* Sockets::insert(Socket* s) {
+  auto task = std::make_shared<SendTask>(s);
+  sockets[s->fd()] = task;
+  return task.get();
 }
-void Sockets::remove(Socket* s) {
+
+SendTask* Sockets::find(int fd) {
+  auto it = sockets.find(fd);
+  if (it == sockets.end()) {
+    return nullptr;
+  } else {
+    return it->second.get();
+  }
+}
+void Sockets::remove(int fd) {
   //  mut.lock();
-  auto it = std::find_if(sockets->begin(), sockets->end(), [s](Socket* i) { return i == s; });
-  if (it != sockets->end()) {
-    sockets->erase(it);
+  auto it = sockets.find(fd);
+  if (it != sockets.end()) {
+    sockets.erase(fd);
   }
   // mut.unlock();
+}
+
+void Sockets::pushBullet(Socket* socket, BufferStreamPtr outputStream) {
+  auto task = this->find(socket->fd());
+  if (task == nullptr) {
+    task = this->insert(socket);
+  }
+  task->push(outputStream);
+}
+
+void Sockets::start(bool* running) {
+
+  this->running = running;
+
+  std::thread t(&Sockets::run, this);
+  t.detach();
+}
+
+void Sockets::run() {
+  while (*running) {
+    try {
+      this->__run();
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
+  }
+}
+
+void Sockets::__run() {
+  // std::lock_guard lock(sktlock);
+  for (auto it : sockets) {
+    auto sender = it.second;
+    if (sender != nullptr) {  // && sender->socket->sendEnabled
+      sender->send();
+    }
+  }
 }

@@ -12,13 +12,19 @@
 IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
     : _qps(id), running(running), sendQueue(sendQueue) {
   this->epoll = std::make_shared<Epoll>(1800);
-  this->_qps.waitings = [this]() { return this->sockets.size(); };
-  this->isET = true;
+  this->_qps.waitings = [this]() { return this->sockets->size(); };
+  this->isET = false;
+}
+
+IRunway::~IRunway() {
+  if (sockets != nullptr) {
+    delete sockets;
+    sockets = nullptr;
+  }
 }
 
 void IRunway::run() {
-  std::thread t(&IRunway::send, this);
-  t.detach();
+  this->sockets->start(running);
 
   while (*running) {
     // this->send();
@@ -40,21 +46,21 @@ void IRunway::run() {
 
 void IRunway::__acceptEvent(epoll_event* evt) {
   // sktlock.lock();
-  auto it = sockets.find(evt->data.fd);
+  auto connection = sockets->find(evt->data.fd);
   // sktlock.unlock();
-  if (it == sockets.end()) {
+  if (connection == nullptr) {
     logger_error("can't find socket %d", evt->data.fd);
     return;
   }
-  if (it->second->socket == nullptr) {
+  if (connection->socket == nullptr) {
     logger_error("socket is null %d", evt->data.fd);
     return;
   }
-  if (it->second->closed) {
+  if (connection->closed) {
     logger_error("socket has closed %d", evt->data.fd);
     return;
   }
-  auto socket = it->second->socket;
+  auto socket = connection->socket;
 
   if (evt->events & EPOLLIN) {
     this->acceptRecive(socket, evt);
@@ -136,44 +142,15 @@ ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   return header;
 }
 
-void IRunway::send() {
-  while (running) {
-    try {
-      this->__send();
-    } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
-    }
-  }
-}
-
-void IRunway::__send() {
-  std::lock_guard lock(sktlock);
-  for (auto it : sockets) {
-    auto sender = it.second;
-    if (sender != nullptr) {  // && sender->socket->sendEnabled
-      sender->send();
-    }
-  }
-}
-
 void IRunway::acceptSend(Socket* socket) {
   // socket->sendEnabled = true;
 }
 
 void IRunway::addSendTask(Socket* socket, BufferStreamPtr outputStream) {
-  std::lock_guard lock(sktlock);
-  auto it = sockets.find(socket->fd());
-  if (it == sockets.end()) {
-    auto task = std::make_shared<SendTask>(socket, outputStream);
-    sockets[socket->fd()] = task;
-  } else {
-    auto task = it->second;
-    task->push(outputStream);
-  }
+  this->sockets->pushBullet(socket, outputStream);
 }
 
 void IRunway::close(Socket* socket) {
-
   // leopard_warn("close socket %d",socket->fd());
 
   epoll->del(socket->fd());
@@ -181,8 +158,7 @@ void IRunway::close(Socket* socket) {
 
   socket->sendEnabled = false;
 
-  std::lock_guard lock(sktlock);
-  sockets.erase(socket->fd());
+  sockets->remove(socket->fd());
 
   delete socket;
 }

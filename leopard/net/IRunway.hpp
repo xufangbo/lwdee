@@ -22,7 +22,7 @@ class IRunway {
 
  protected:
   std::mutex sktlock;
-  std::map<int, std::shared_ptr<SendTask>> sockets;  //
+  Sockets* sockets = new Sockets();
   SendTaskQueue* sendQueue;
   Qps _qps;
 
@@ -34,16 +34,15 @@ class IRunway {
   void acceptRequest(Socket* socket, BufferStreamPtr inputStream);
   virtual void __acceptRequest(Socket* socket, BufferStreamPtr inputStream) = 0;
   ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
-  
-  void send();
-  void __send();
+
   void acceptSend(Socket* socket);
   void addSendTask(Socket* socket, BufferStreamPtr outputStream);
 
  public:
   IRunway(int id, bool* running, SendTaskQueue* sendQueue);
+  ~IRunway() ;
   void close(Socket* socket);
   Qps* qps();
   void join();
-  size_t size() { return sockets.size(); }
+  size_t size() { return sockets->size(); }
 };

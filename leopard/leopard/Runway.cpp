@@ -51,8 +51,7 @@ void Runway::acceptSocket(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd, &_qps);
-    auto task = std::make_shared<SendTask>(client);
-    sockets[client_fd] = task;
+    sockets->insert(client);
 
     client->setNonBlocking();
 

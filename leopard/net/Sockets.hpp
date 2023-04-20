@@ -1,38 +1,32 @@
 #pragma once
 
 #include <algorithm>
+#include <map>
+#include <memory>
 #include <mutex>
 #include <vector>
 
-#include "net/Socket.hpp"
-
-struct SocketBox{
-
-};
+#include "SendTask.hpp"
+#include "Socket.hpp"
 
 class Sockets {
  private:
   std::mutex mut;
-  std::vector<Socket*>* sockets = new std::vector<Socket*>();
+  std::map<int, std::shared_ptr<SendTask>> sockets;
+  // std::vector<std::shared_ptr<SendTask>> sockets;
+
+ private:
+  bool* running;
+  void run();
+  void __run();
 
  public:
-  ~Sockets() {
-    if (sockets != nullptr) {
-      sockets->clear();
-      delete sockets;
-      sockets = nullptr;
-    }
-  }
-  void insert(Socket* s);
+  void start(bool* running);
+  SendTask* insert(Socket* s);
+  SendTask* find(int fd);
+  void pushBullet(Socket* socket, BufferStreamPtr outputStream);
+  void remove(int fd);
 
-  /**
-   * @brief used by IRunway::__acceptEvent(epoll_event* evt)
-   */
-  Socket* find(int fd);
-
-  void remove(Socket* s);
-
-  size_t size() { return sockets->size(); };
-  
-  void clear() { sockets->clear(); }
+  size_t size() { return sockets.size(); };
+  void clear() { sockets.clear(); }
 };
