@@ -3,24 +3,27 @@
 #include <map>
 #include <memory>
 #include <thread>
+#include "Connection.hpp"
+#include "Connections.hpp"
 #include "Epoll.hpp"
 #include "LeopardProtocal.hpp"
 #include "Qps.hpp"
-#include "Connection.hpp"
-#include "Connections.hpp"
+
+#define BUFFER_SIZE 1024
 
 class IRunway {
  protected:
   int id;
   bool* running = nullptr;
+  char buf[BUFFER_SIZE] = {0};
 
  protected:
   std::thread thread;
   std::shared_ptr<Epoll> epoll;
   bool isET = false;
+  bool isEOUT = false;
 
  protected:
-  std::mutex sktlock;
   Connections* connections = new Connections(&_qps);
   Qps _qps;
 
@@ -38,7 +41,7 @@ class IRunway {
 
  public:
   IRunway(int id, bool* running);
-  ~IRunway() ;
+  ~IRunway();
   void close(Connection* connection);
   Qps* qps();
   void join();

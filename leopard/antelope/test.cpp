@@ -17,16 +17,16 @@ std::string path = "com.cs.sales.order.save";
 
 std::string input_small(int i) {
   std::string input = std::to_string(i) + " green green green ";
-  // logger_debug("send %s", input.c_str());
+  logger_debug("send [%i]", i+1);
   return input;
 }
 
 std::string input_large(int i) {
   std::string input = std::to_string(i) + " green green green ";
   for (int i = 0; i < 50000; i++) {
-    input += "green green !";
+    input += "green---!";
   }
-  logger_debug("send %s", input.c_str());
+  logger_debug("send [%i]", i+1);
   return input;
 }
 
@@ -40,7 +40,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   s >> index;
 
   // logger_trace("recive [%d]", index);
-  printf("recive [%d / %d]\n", responseIndex.load(), index);
+  printf("callback recive [%d / %d]\n", responseIndex.load(), index);
 };
 
 typedef std::function<std::string(int i)> InputType;

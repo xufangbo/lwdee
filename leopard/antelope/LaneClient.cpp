@@ -37,13 +37,14 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
 
   protocal->setLength(outputStream.get());
 
+  // connection->push(outputStream);
   Antelope::instance.send(connection, outputStream);
 
   return waiter;
 }
 
 void LaneClient::wait() {
-  for(auto waiter : waiters){
+  for (auto waiter : waiters) {
     waiter->wait();
   }
 }

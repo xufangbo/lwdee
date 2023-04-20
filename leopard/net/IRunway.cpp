@@ -7,13 +7,12 @@
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
-#define BUFFER_SIZE 1024
-
 IRunway::IRunway(int id, bool* running)
-    : _qps(id), running(running){
+    : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->connections->size(); };
   this->isET = false;
+  this->isEOUT = false;
 }
 
 IRunway::~IRunway() {
@@ -27,7 +26,6 @@ void IRunway::run() {
   this->connections->start(running);
 
   while (*running) {
-    // this->send();
     int waits = epoll->wait(100);
     for (int i = 0; i < waits; i++) {
       try {
@@ -45,9 +43,8 @@ void IRunway::run() {
 }
 
 void IRunway::__acceptEvent(epoll_event* evt) {
-  // sktlock.lock();
+  logger_debug("__acceptEvent");
   auto connection = connections->find(evt->data.fd);
-  // sktlock.unlock();
   if (connection == nullptr) {
     logger_error("can't find socket %d", evt->data.fd);
     return;
@@ -66,7 +63,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
     this->acceptRecive(connection, evt);
   } else if (evt->events & EPOLLOUT) {
     this->acceptSend(connection);
-    // logger_trace("EPOLL OUT do nothing %d", connection->socket->fd());
+    logger_trace("EPOLL OUT  %d", connection->socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", connection->socket->fd());
     this->close(connection);
@@ -82,13 +79,14 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 }
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
+  printf("< --------------\n");
   int rc = 0;
-  do {
-    char buf[BUFFER_SIZE] = {0};
 
+  do {
+    auto socket = connection->socket;
     try {
-      rc = connection->socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-      // logger_trace("rc %d", rc);
+      rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
+      printf("rc-%d ", rc);
     } catch (SocketException& ex) {
       ex.trace(ZONE);
       this->close(connection);
@@ -98,7 +96,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     // leopard_trace("recv - rc:%d,%s", rc, buf);
 
     if (rc > 0) {
-      auto* inputStream = connection->socket->inputStream();
+      auto* inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
       if (inputStream->isEnd()) {
         this->_qps.recvs++;
@@ -106,18 +104,34 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       } else {
-        epoll->mod(evt, connection->socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN | EPOLLOUT));
+        uint32_t events = EPOLLIN;
+        if (isEOUT) {
+          events |= EPOLLOUT;
+        }
+        if (isET) {
+          events |= EPOLLET;
+        }
+        epoll->mod(evt, socket->fd(), events);
       }
     } else if (rc == -1) {
       // logger_debug("rc == -1");
-      epoll->mod(evt, connection->socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN | EPOLLOUT));
+      uint32_t events = EPOLLIN;
+      if (isEOUT) {
+        events |= EPOLLOUT;
+      }
+      if (isET) {
+        events |= EPOLLET;
+      }
+      epoll->mod(evt, socket->fd(), events);
     } else if (rc == 0) {
-      // leopard_warn("recv closed");
+      printf("recv closed %d", socket->fd());
       this->close(connection);
     } else {
       logger_error("rc of recv < -1 ?");
     }
   } while (rc > 0);
+
+  printf("\n> --------------\n");
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStreamPtr inputStream) {

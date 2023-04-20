@@ -8,7 +8,7 @@
 #include "net/log.hpp"
 #include "sys/sysinfo.h"
 
-Runway::Runway(int id, bool* running,  std::string ip, int port)
+Runway::Runway(int id, bool* running, std::string ip, int port)
     : IRunway(id, running), ip(ip), port(port) {
 }
 
@@ -51,15 +51,21 @@ void Runway::acceptSocket(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd, &_qps);
+    client->setReciveBuf(BUFFER_SIZE);
+
     connections->insert(client);
 
     client->setNonBlocking();
 
     uint32_t events = EPOLLIN;
-    events |= EPOLLOUT;
     events |= (EPOLLRDHUP | EPOLLHUP);
-
-    epoll->add(client_fd, isET ? (events | EPOLLET) : events);
+    if (isEOUT) {
+      events |= EPOLLOUT;
+    }
+    if (isET) {
+      events |= EPOLLET;
+    }
+    epoll->add(client_fd, events);
 
     // leopard_trace("socket accept %d", client_fd);
 

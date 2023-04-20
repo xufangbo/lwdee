@@ -75,8 +75,13 @@ Connection* Lane::create(const char* ip, int port) {
   }
 
   uint32_t events = EPOLLIN;
-  events |= EPOLLOUT;
   events |= (EPOLLRDHUP | EPOLLHUP);
+  if (isEOUT) {
+    events |= EPOLLOUT;
+  }
+  if (isET) {
+    events |= EPOLLET;
+  }
 
   epoll->add(socket->fd(), isET ? (events | EPOLLET) : events);
 
