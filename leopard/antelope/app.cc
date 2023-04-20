@@ -24,12 +24,12 @@ int main(int argc, char** argv) {
   Antelope::instance.start();
 
   // test_short_sync(1, input_small, ip, port);
-  test_short_async(1, input_large, ip, port);
+  // test_short_async(1, input_large, ip, port); // 68.9s so slowly
 
   // test_short_sync(1000, input_small, ip, port);  // ET: 11.41s  LT: 27.055
   // test_short_sync(1000, input_large, ip, port);    // ET: 131.306s LT: 166.388
 
-  // test_short_async(1000, input_small, ip, port);  // ET:失败     LT: 0.771s -21 区别在于IRunway::__acceptEvent是否加锁
+  test_short_async(1000, input_small, ip, port);  // ET:失败     LT: 0.771s -21 区别在于IRunway::__acceptEvent是否加锁
   // test_short_async(1000, input_large, ip, port);  // ET:失败     LT: 0.771s
 
   // test_long_sync(1000, input_small, 1, ip, port); // 3s

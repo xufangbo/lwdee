@@ -3,7 +3,7 @@
 
 Epoll::Epoll(int maxSize)
     : max_event_size(maxSize), _events(new epoll_event[maxSize]) {
-  fd_epoll = epoll_create(5);
+  fd_epoll = epoll_create(maxSize);
   if (fd_epoll == -1) {
     throw EpollException("epoll create error", errno, ZONE);
   }

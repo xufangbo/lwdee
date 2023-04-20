@@ -26,7 +26,7 @@ void IRunway::run() {
   this->connections->start(running);
 
   while (*running) {
-    int waits = epoll->wait(100);
+    int waits = epoll->wait(1000);
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -63,7 +63,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
     this->acceptRecive(connection, evt);
   } else if (evt->events & EPOLLOUT) {
     this->acceptSend(connection);
-    logger_trace("EPOLL OUT  %d", connection->socket->fd());
+    // logger_trace("EPOLL OUT  %d", connection->socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", connection->socket->fd());
     this->close(connection);
@@ -87,7 +87,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     auto socket = connection->socket;
     try {
       rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-      printf("rc-%d ", rc);
+      // printf("rc-%d ", rc);
     } catch (SocketException& ex) {
       ex.trace(ZONE);
       this->close(connection);
@@ -118,7 +118,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  printf("\n> --------------\n");
+  // printf("\n> --------------\n");
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
