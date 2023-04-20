@@ -61,7 +61,7 @@ void Runway::acceptSocket(epoll_event* evt) {
 
     epoll->add(client_fd, isET ? (events | EPOLLET) : events);
 
-    leopard_trace("socket accept %d", client_fd);
+    // leopard_trace("socket accept %d", client_fd);
 
   } else if (evt->events & EPOLLIN) {
     leopard_info("server socket EPOLLOUT");
@@ -92,6 +92,6 @@ void Runway::__acceptRequest(Connection* connection, BufferStreamPtr inputStream
     // sendQueue->push(socket, outputStream);
     this->addSendTask(connection, outputStream);
 
-    leopard_debug("> response %s", header->path.c_str());
+    // leopard_debug("> response %s", header->path.c_str());
   }
 }

@@ -1,5 +1,7 @@
 #include "test.hpp"
 
+#include <atomic>
+#include <sstream>
 #include "Antelope.hpp"
 #include "LaneClient.hpp"
 #include "LaneClients.hpp"
@@ -10,21 +12,20 @@
 #include "net/LeopardConfig.hpp"
 #include "net/Socket.hpp"
 
-int responseIndex = 0;
+std::atomic<int> responseIndex = 0;
 std::string path = "com.cs.sales.order.save";
 
 std::string input_small(int i) {
-  std::string input = "green green green " + std::to_string(i);
-  logger_debug("send %s", input.c_str());
+  std::string input = std::to_string(i) + " green green green ";
+  // logger_debug("send %s", input.c_str());
   return input;
 }
 
 std::string input_large(int i) {
-  std::string input = "green green !";
+  std::string input = std::to_string(i) + " green green green ";
   for (int i = 0; i < 50000; i++) {
     input += "green green !";
   }
-  input += std::to_string(i);
   logger_debug("send %s", input.c_str());
   return input;
 }
@@ -32,9 +33,14 @@ std::string input_large(int i) {
 RequestCallback callback = [](BufferStream* inputStream) {
   responseIndex++;
   auto len = inputStream->get<uint32_t>();
-  auto content = inputStream->getString(len);
+  // auto content = inputStream->getString(len);
 
-  logger_debug("recive-%d:  (%d)%s", responseIndex, len, content.c_str());
+  std::istringstream s(inputStream->getString(len));
+  int index;
+  s >> index;
+
+  // logger_trace("recive [%d]", index);
+  printf("recive [%d / %d]\n", responseIndex.load(), index);
 };
 
 typedef std::function<std::string(int i)> InputType;
@@ -49,7 +55,7 @@ void test_short_sync(int testSize, InputType inputType, std::string ip, int port
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
       auto time = waiter->wait();
-      logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
+      // logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
 
       client->close();
 
