@@ -15,20 +15,20 @@ void Antelope::newInstance(int id, bool* running, SendTaskQueue* sendQueue) {
 }
 
 ClientSocket* Antelope::create(const char* ip, int port) {
-  auto it = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
-  if (it == runways.end()) {
+  auto runway = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
+  if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
   }
 
-  ClientSocket* skt = (*it)->create(ip, port);
+  ClientSocket* skt = (*runway)->create(ip, port);
   return skt;
 }
 
 void Antelope::send(Socket* socket, BufferStreamPtr outputStream) {
-  auto it = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
-  if (it == runways.end()) {
+  auto runway = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
+  if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
   }
 
-  (*it)->send(socket, outputStream);
+  (*runway)->send(socket, outputStream);
 }
