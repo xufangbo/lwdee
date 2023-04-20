@@ -11,7 +11,7 @@ IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->connections->size(); };
-  this->isET = false;
+  this->isET = true;
   this->isEOUT = false;
 }
 
@@ -43,7 +43,7 @@ void IRunway::run() {
 }
 
 void IRunway::__acceptEvent(epoll_event* evt) {
-  logger_debug("__acceptEvent");
+  // logger_debug("__acceptEvent");
   auto connection = connections->find(evt->data.fd);
   if (connection == nullptr) {
     logger_error("can't find socket %d", evt->data.fd);
@@ -79,14 +79,14 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 }
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
-  printf("< --------------\n");
+  // printf("< --------------\n");
   int rc = 0;
 
   do {
     auto socket = connection->socket;
     try {
       rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-      printf("rc-%d ", rc);
+      // printf("rc-%d ", rc);
     } catch (SocketException& ex) {
       ex.trace(ZONE);
       this->close(connection);
@@ -131,7 +131,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  printf("\n> --------------\n");
+  // printf("\n> --------------\n");
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStreamPtr inputStream) {

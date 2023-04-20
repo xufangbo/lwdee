@@ -2,7 +2,7 @@
 
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
-#include "net/log.hpp"
+#include "log.hpp"
 
 Connection::Connection(Socket* socket)
     : socket(socket) {
@@ -14,12 +14,14 @@ Connection::Connection(Socket* socket, BufferStreamPtr outputStream)
 }
 
 void Connection::push(BufferStreamPtr outputStream) {
+  // leopard_trace("-");
   auto bullet = std::make_shared<Bullet>(outputStream);
   bullets.push_back(bullet);
 }
 
 bool Connection::send() {
   while (!this->bullets.empty()) {
+    // leopard_trace("-");
     auto bullet = this->bullets.front();
     if (!bullet->send(this->socket)) {
       return false;

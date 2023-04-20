@@ -22,6 +22,7 @@ class Connections {
   std::mutex mut_task;
   std::list<Connection*> tasks;
   std::vector<Connection*> removedTasks;
+  // bool isTask(Connection *connection);
 
   // std::queue<Socket*> adds;
   // std::queue<int> removes;

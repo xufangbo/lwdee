@@ -8,7 +8,7 @@
 #define lock  //
 
 // #define lock_tasks std::lock_guard lock_tasks(mut_task)
-#define lock_tasks //
+#define lock_tasks  //
 
 Connection* Connections::insert(Socket* s) {
   auto task = std::make_shared<Connection>(s);
@@ -34,9 +34,21 @@ void Connections::remove(int fd) {
   }
 }
 
+void Connections::run() {
+  while (*running) {
+    try {
+      this->__run();
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
+  }
+}
+
 void Connections::__run() {
   if (tasks.empty()) {
-    usleep(1000);
+    usleep(1000 * 10);
+    // printf("-");
+    fflush(stdout);
     return;
   }
 
@@ -52,13 +64,11 @@ void Connections::__run() {
 }
 
 void Connections::pushBullet(Connection* connection, BufferStreamPtr outputStream) {
-  lock_tasks;
+  connection->push(outputStream);
   auto it = std::find_if(tasks.begin(), tasks.end(), [&connection](Connection* i) { return i == connection; });
   if (it == tasks.end()) {
     tasks.emplace_back(connection);
   }
-
-  connection->push(outputStream);
 }
 
 void Connections::removeTasks() {
@@ -75,16 +85,6 @@ void Connections::start(bool* running) {
 
   std::thread t(&Connections::run, this);
   t.detach();
-}
-
-void Connections::run() {
-  while (*running) {
-    try {
-      this->__run();
-    } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
-    }
-  }
 }
 
 size_t Connections::size() {

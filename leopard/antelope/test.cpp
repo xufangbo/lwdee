@@ -16,17 +16,17 @@ std::atomic<int> responseIndex = 0;
 std::string path = "com.cs.sales.order.save";
 
 std::string input_small(int i) {
-  std::string input = std::to_string(i) + " green green green ";
-  logger_debug("send [%i]", i+1);
+  std::string input = std::to_string(i + 1) + " green green green ";
+  // logger_debug("send [%i]", i + 1);
   return input;
 }
 
 std::string input_large(int i) {
-  std::string input = std::to_string(i) + " green green green ";
-  for (int i = 0; i < 50000; i++) {
+  std::string input = std::to_string(i + 1) + " green green green ";
+  for (int x = 0; x < 50000; x++) {
     input += "green---!";
   }
-  logger_debug("send [%i]", i+1);
+  // logger_debug("send [%i]", i + 1);
   return input;
 }
 
