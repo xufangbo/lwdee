@@ -18,7 +18,8 @@ SocketWaiter SocketClient::invoke(std::string path, void* buffer, int len, Reque
 }
 
 SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
-  ClientSocket* socket = this->next();
+  Connection* connection = this->next();
+  ClientSocket* socket = (ClientSocket*)connection->socket;
 
   this->waitId++;
   SocketWaiter waiter = std::make_shared<SocketWaiter_t>(this->waitId.load());
@@ -35,38 +36,40 @@ SocketWaiter SocketClient::invoke(std::string path, RequestInvoke request, Reque
 
   protocal->setLength(outputStream.get());
 
-  Antelope::instance.send(socket, outputStream);
+  Antelope::instance.send(connection, outputStream);
 
   return waiter;
 }
 
 void SocketClient::wait() {
-  for (ClientSocket* socket : this->sockets) {
+  for (Connection* connection : this->connections) {
+    ClientSocket* socket = (ClientSocket*)connection->socket;
     socket->wait();
   }
 }
 void SocketClient::close() {
-  for (ClientSocket* socket : this->sockets) {
-    socket->getLane()->close(socket);
+  for (Connection* connection : this->connections) {
+    ClientSocket* socket = (ClientSocket*)connection->socket;
+    socket->getLane()->close(connection);
   }
 }
 
-ClientSocket* SocketClient::next() {
+Connection* SocketClient::next() {
   int i = this->index % this->parallel;
-  ClientSocket* socket = this->sockets[i];
+  Connection* socket = this->connections[i];
   this->index = (i + 1);
 
   return socket;
 }
 
 SocketClientPtr SocketClient::create(const char* ip, int port, int parallel) {
-  std::vector<ClientSocket*> sockets;
+  std::vector<Connection*> connections;
   for (int i = 0; i < parallel; i++) {
-    ClientSocket* socket = Antelope::instance.create(ip, port);
-    sockets.push_back(socket);
+    Connection* connection = Antelope::instance.create(ip, port);
+    connections.push_back(connection);
   }
 
-  auto client = std::make_shared<SocketClient>(sockets);
+  auto client = std::make_shared<SocketClient>(connections);
   return client;
 }
 
@@ -94,7 +97,7 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
 
     protocal->setLength(outputStream.get());
 
-    task = new SendTask(this->socket, outputStream);
+    task = new Connection(this->socket, outputStream);
     Antelope::instance.send(task);
   });
   return waiter;
@@ -109,21 +112,6 @@ SocketClientPtr SocketClients::create(const char* ip, int port) {
 
 void SocketClients::wait() {
   SocketWaiter waiter;
-  // for (int i = 0; i < clients.size(); i++) {
-  //   auto client = this->clients[i];
-  //   try {
-  //     for (auto socket : client->getSockets()) {
-  //       while ((waiter = socket->popWaiter()) != nullptr) {
-  //         printf("\nwait %d\n\n", i);
-  //         waiter->wait();
-  //       }
-  //     }
-  //   } catch (Exception& ex) {
-  //     logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
-  //   } catch (std::exception& ex) {
-  //     logger_error("[%d] - %s", (i + 1), ex.what());
-  //   }
-  // }
 
   for (int i = 0; i < waiters.size(); i++) {
     auto waiter = this->waiters[i];

@@ -48,7 +48,7 @@ void test_sync(int testSize, InputType inputType, std::string ip, int port) {
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
       auto time = waiter->wait();
-      logger_info("wait %d eclipse %.3lfs ---------------------------------------", i, time);
+      logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
 
       client->close();
 

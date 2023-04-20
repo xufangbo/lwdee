@@ -6,9 +6,8 @@
 #include "Epoll.hpp"
 #include "LeopardProtocal.hpp"
 #include "Qps.hpp"
-#include "SendTaskQueue.hpp"
-#include "Socket.hpp"
-#include "Sockets.hpp"
+#include "Connection.hpp"
+#include "Connections.hpp"
 
 class IRunway {
  protected:
@@ -22,27 +21,26 @@ class IRunway {
 
  protected:
   std::mutex sktlock;
-  Sockets* sockets = new Sockets();
-  SendTaskQueue* sendQueue;
+  Connections* connections = new Connections(&_qps);
   Qps _qps;
 
  protected:
   virtual void run();
   virtual void acceptEvent(epoll_event* evt) = 0;
   void __acceptEvent(epoll_event* evt);
-  void acceptRecive(Socket* socket, epoll_event* evt);
-  void acceptRequest(Socket* socket, BufferStreamPtr inputStream);
-  virtual void __acceptRequest(Socket* socket, BufferStreamPtr inputStream) = 0;
+  void acceptRecive(Connection* connection, epoll_event* evt);
+  void acceptRequest(Connection* connection, BufferStreamPtr inputStream);
+  virtual void __acceptRequest(Connection* connection, BufferStreamPtr inputStream) = 0;
   ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
 
-  void acceptSend(Socket* socket);
-  void addSendTask(Socket* socket, BufferStreamPtr outputStream);
+  void acceptSend(Connection* connection);
+  void addSendTask(Connection* connection, BufferStreamPtr outputStream);
 
  public:
-  IRunway(int id, bool* running, SendTaskQueue* sendQueue);
+  IRunway(int id, bool* running);
   ~IRunway() ;
-  void close(Socket* socket);
+  void close(Connection* connection);
   Qps* qps();
   void join();
-  size_t size() { return sockets->size(); }
+  size_t size() { return connections->size(); }
 };

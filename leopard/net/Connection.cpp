@@ -1,4 +1,4 @@
-#include "SendTask.hpp"
+#include "Connection.hpp"
 
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
@@ -31,7 +31,7 @@ bool Bullet::send(Socket* socket) {
   return true;
 }
 
-bool SendTask::send() {
+bool Connection::send() {
   while (!this->bullets.empty()) {
     auto bullet = this->bullets.front();
     if (!bullet->send(this->socket)) {

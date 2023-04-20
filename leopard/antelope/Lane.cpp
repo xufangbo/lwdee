@@ -8,8 +8,8 @@
 #include "net/LeopardConfig.hpp"
 #include "net/log.hpp"
 
-Lane::Lane(int id, bool* running, SendTaskQueue* sendQueue)
-    : IRunway(id, running, sendQueue) {
+Lane::Lane(int id, bool* running)
+    : IRunway(id, running) {
 }
 
 void Lane::start() {
@@ -20,8 +20,8 @@ void Lane::acceptEvent(epoll_event* evt) {
   IRunway::__acceptEvent(evt);
 }
 
-void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
-  ClientSocket* clientSocket = (ClientSocket*)(socket);
+void Lane::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
+  ClientSocket* clientSocket = (ClientSocket*)(connection->socket);
 
   auto header = this->parseRequest(inputStream.get());
   header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
@@ -55,11 +55,11 @@ void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
 #endif
 }
 
-ClientSocket* Lane::create(const char* ip, int port) {
+Connection* Lane::create(const char* ip, int port) {
   Stopwatch sw;
 
   ClientSocket* socket = new ClientSocket(this, &_qps);
-  // leopard_warn("new client socket fd : %d", socket->fd());
+  // leopard_warn("new client socket fd : %d", connection->socket->fd());
 
   socket->connect(ip, port);
   socket->setNonBlocking();
@@ -67,7 +67,7 @@ ClientSocket* Lane::create(const char* ip, int port) {
   // socket->setSendBuf(1048576);
   // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
   // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
-  sockets->insert(socket);
+  auto connection = connections->insert(socket);
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {
@@ -80,17 +80,17 @@ ClientSocket* Lane::create(const char* ip, int port) {
 
   epoll->add(socket->fd(), isET ? (events | EPOLLET) : events);
 
-  return socket;
+  return connection;
 }
 
-void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
+void Lane::send(Connection* connection, BufferStreamPtr outputStream) {
   // sendQueue->push(socket, outputStream);
-  this->addSendTask(socket, outputStream);
+  this->addSendTask(connection, outputStream);
 }
 
 // void Lane::close(int fd) {
-//   auto it = sockets.find(fd);
-//   if (it == sockets.end()) {
+//   auto it = connections.find(fd);
+//   if (it == connections.end()) {
 //     logger_error("can't find fd %d", fd);
 //     return;
 //   }
@@ -107,6 +107,6 @@ void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
 // }
 
 // bool Lane::contains(int fd) {
-//   Socket* socket = sockets.find(fd);
+//   Connection* connection = connections.find(fd);
 //   return socket != nullptr;
 // }

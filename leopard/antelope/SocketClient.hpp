@@ -4,7 +4,7 @@
 #include "TcpRequest.hpp"
 #include "core/suspend.hpp"
 #include "net/ClientSocket.hpp"
-#include "net/SendTask.hpp"
+#include "net/Connection.hpp"
 #include "net/Socket.hpp"
 
 class SocketClient;
@@ -15,11 +15,11 @@ class SocketClient {
   int parallel = 1;
   std::atomic<uint32_t> index;
   std::atomic<uint32_t> waitId = 0;
-  std::vector<ClientSocket*> sockets;
+  std::vector<Connection*> connections;
 
  public:
-  SocketClient(std::vector<ClientSocket*> sockets)
-      : sockets(sockets), parallel(sockets.size()) {
+  SocketClient(std::vector<Connection*> connections)
+      : connections(connections), parallel(connections.size()) {
     this->index = 0;
   }
 
@@ -34,10 +34,10 @@ class SocketClient {
 #endif
   void close();
   void wait();
-  std::vector<ClientSocket*>& getSockets() { return sockets; }
+  std::vector<Connection*>& getSockets() { return connections; }
 
  private:
-  ClientSocket* next();
+  Connection* next();
 };
 
 class SocketClients {

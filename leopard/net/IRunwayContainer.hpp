@@ -12,7 +12,6 @@ class IRunwayContainer {
   bool server = false;
   bool running = false;
   std::vector<T*> runways;
-  std::vector<SendTaskQueue*> sends;
   Metrix matrix;
 
  public:
@@ -21,11 +20,6 @@ class IRunwayContainer {
       delete runways[i];
     }
     runways.clear();
-
-    for (int i = 0; i < sends.size(); i++) {
-      delete sends[i];
-    }
-    sends.clear();
   }
   void start(int p1 = 1, int p2 = 1) {
     // if (corenums <= 0) {
@@ -41,17 +35,10 @@ class IRunwayContainer {
 
     leopard_info("%d/%d", p1, p2);
 
-    // for (int i = 0; i < p2; i++) {
-    //   auto sendQueue = new SendTaskQueue(i + 1);
-    //   sendQueue->start(&running);
-
-    //   sends.push_back(sendQueue);
-    // }
-
     for (int i = 0; i < p1; i++) {
       // auto sendQueue = sends[i % sends.size()];
       // this->newInstance(i + 1, &running, sendQueue);
-      this->newInstance(i + 1, &running, nullptr);
+      this->newInstance(i + 1, &running);
     }
 
     for (auto runway : this->runways) {
@@ -74,5 +61,5 @@ class IRunwayContainer {
   }
 
  protected:
-  virtual void newInstance(int id, bool* running, SendTaskQueue* sendQueue) = 0;
+  virtual void newInstance(int id, bool* running) = 0;
 };

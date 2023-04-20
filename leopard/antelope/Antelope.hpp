@@ -9,12 +9,12 @@ class Antelope : public IRunwayContainer<Lane> {
   Antelope() {
     this->server = false;
   }
-  void newInstance(int id, bool* running, SendTaskQueue* sendQueue) override ;
+  void newInstance(int id, bool* running) override;
 
  public:
   static Antelope instance;
 
  public:
-  ClientSocket* create(const char* ip, int port);
-  void send(Socket* socket, BufferStreamPtr outputStream);
+  Connection* create(const char* ip, int port);
+  void send(Connection* connection, BufferStreamPtr outputStream);
 };

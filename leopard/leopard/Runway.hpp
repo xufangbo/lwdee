@@ -7,9 +7,9 @@
 #include "net/Epoll.hpp"
 #include "net/IRunway.hpp"
 #include "net/Qps.hpp"
-#include "net/SendTask.hpp"
-#include "net/Socket.hpp"
-#include "net/Sockets.hpp"
+#include "net/Connection.hpp"
+#include "net/Connection.hpp"
+#include "net/Connections.hpp"
 
 class Runway : public IRunway {
  private:
@@ -21,10 +21,10 @@ class Runway : public IRunway {
   void run() override;
   void acceptSocket(epoll_event* evt);
   void acceptEvent(epoll_event* evt) override;
-  void __acceptRequest(Socket* socket, BufferStreamPtr inputStream) override;
+  void __acceptRequest(Connection* connection, BufferStreamPtr inputStream) override;
 
  public:
-  Runway(int id, bool* running, SendTaskQueue* sendQueue, std::string ip, int port);
+  Runway(int id, bool* running, std::string ip, int port);
   void start();
 
 };

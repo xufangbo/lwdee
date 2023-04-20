@@ -8,8 +8,8 @@
 #include "net/log.hpp"
 #include "sys/sysinfo.h"
 
-Runway::Runway(int id, bool* running, SendTaskQueue* sendQueue, std::string ip, int port)
-    : IRunway(id, running, sendQueue), ip(ip), port(port) {
+Runway::Runway(int id, bool* running,  std::string ip, int port)
+    : IRunway(id, running), ip(ip), port(port) {
 }
 
 void Runway::start() {
@@ -51,7 +51,7 @@ void Runway::acceptSocket(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd, &_qps);
-    sockets->insert(client);
+    connections->insert(client);
 
     client->setNonBlocking();
 
@@ -70,7 +70,7 @@ void Runway::acceptSocket(epoll_event* evt) {
   }
 }
 
-void Runway::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
+void Runway::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
   auto header = this->parseRequest(inputStream.get());
 
   auto fun = TcpResponse::find(header->path);
@@ -90,7 +90,7 @@ void Runway::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
     protocal->setLength(outputStream.get());
 
     // sendQueue->push(socket, outputStream);
-    this->addSendTask(socket, outputStream);
+    this->addSendTask(connection, outputStream);
 
     leopard_debug("> response %s", header->path.c_str());
   }

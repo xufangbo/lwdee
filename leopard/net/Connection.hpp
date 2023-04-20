@@ -53,7 +53,7 @@ class Bullet {
 typedef std::shared_ptr<Bullet> BulletPtr;
 typedef std::list<BulletPtr> BulletList;
 
-class SendTask {
+class Connection {
  private:
   bool _finished = false;
   BulletList bullets;
@@ -64,10 +64,10 @@ class SendTask {
  public:
   bool closed = false;
   
-  SendTask(Socket* socket)
+  Connection(Socket* socket)
       : socket(socket) {
   }
-  SendTask(Socket* socket, BufferStreamPtr outputStream)
+  Connection(Socket* socket, BufferStreamPtr outputStream)
       : socket(socket) {
     this->push(outputStream);
   }

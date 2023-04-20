@@ -8,7 +8,7 @@ Leopard::Leopard(std::string ip, int port)
   this->server = true;
 }
 
-void Leopard::newInstance(int id, bool* running, SendTaskQueue* sendQueue) {
-  auto runway = new Runway(id, running, sendQueue, ip, port);
+void Leopard::newInstance(int id, bool* running) {
+  auto runway = new Runway(id, running, ip, port);
   this->runways.push_back(runway);
 }

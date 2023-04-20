@@ -9,26 +9,26 @@
 
 Antelope Antelope::instance;
 
-void Antelope::newInstance(int id, bool* running, SendTaskQueue* sendQueue) {
-  auto runway = new Lane(id, running, sendQueue);
+void Antelope::newInstance(int id, bool* running) {
+  auto runway = new Lane(id, running);
   this->runways.push_back(runway);
 }
 
-ClientSocket* Antelope::create(const char* ip, int port) {
+Connection* Antelope::create(const char* ip, int port) {
   auto runway = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
   if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
   }
 
-  ClientSocket* skt = (*runway)->create(ip, port);
+  Connection* skt = (*runway)->create(ip, port);
   return skt;
 }
 
-void Antelope::send(Socket* socket, BufferStreamPtr outputStream) {
+void Antelope::send(Connection* connection, BufferStreamPtr outputStream) {
   auto runway = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
   if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
   }
 
-  (*runway)->send(socket, outputStream);
+  (*runway)->send(connection, outputStream);
 }

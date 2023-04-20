@@ -12,5 +12,5 @@ class Leopard : public IRunwayContainer<Runway> {
  public:
   Leopard(std::string ip, int port);
 
-  void newInstance(int id, bool* running, SendTaskQueue* sendQueue) override;
+  void newInstance(int id, bool* running) override;
 };
