@@ -7,8 +7,8 @@
 // #define lock std::lock_guard lock(mut)
 #define lock  //
 
-// #define lock_tasks std::lock_guard lock_tasks(mut_task)
-#define lock_tasks //
+#define lock_tasks std::lock_guard lock_tasks(mut_task)
+// #define lock_tasks //
 
 Connection* Connections::insert(Socket* s) {
   auto task = std::make_shared<Connection>(s);

@@ -26,7 +26,7 @@ void Lane::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) 
   auto header = this->parseRequest(inputStream.get());
   header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
 
-  leopard_trace(header->to_string().c_str());
+  // leopard_trace(header->to_string().c_str());
 
   auto callback = TcpRequest::find(header->path);
 

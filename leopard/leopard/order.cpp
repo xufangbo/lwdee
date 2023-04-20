@@ -10,7 +10,7 @@ void registService() {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);
 
-    logger_info("accept (%d) :  %s", len, content.c_str());
+    // logger_info("accept (%d) :  %s", len, content.c_str());
 
     // 2. sale order business
     // sleep(1);

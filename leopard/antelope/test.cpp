@@ -1,7 +1,8 @@
 #include "test.hpp"
 
 #include "Antelope.hpp"
-#include "SocketClient.hpp"
+#include "LaneClient.hpp"
+#include "LaneClients.hpp"
 #include "core/Exception.hpp"
 #include "core/log.hpp"
 #include "core/suspend.hpp"
@@ -38,11 +39,11 @@ RequestCallback callback = [](BufferStream* inputStream) {
 
 typedef std::function<std::string(int i)> InputType;
 
-void test_sync(int testSize, InputType inputType, std::string ip, int port) {
+void test_short_sync(int testSize, InputType inputType, std::string ip, int port) {
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
-      auto client = SocketClient::create(ip.c_str(), port, 1);
+      auto client = LaneClient::create(ip.c_str(), port);
 
       auto input = inputType(i);
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
@@ -61,18 +62,16 @@ void test_sync(int testSize, InputType inputType, std::string ip, int port) {
 
   logger_info("elapsed %.3lf", sw.stop());
 }
-void test_async(int testSize, InputType inputType, std::string ip, int port) {
+void test_short_async(int testSize, InputType inputType, std::string ip, int port) {
   Stopwatch sw;
 
-  SocketClients clients;
+  LaneClients clients;
   for (int i = 0; i < testSize; i++) {
     try {
       auto client = clients.create(ip.c_str(), port);
 
       auto input = inputType(i);
-      SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
-
-      clients.waiters.push_back(waiter);
+      client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -82,31 +81,51 @@ void test_async(int testSize, InputType inputType, std::string ip, int port) {
   }
 
   clients.wait();
-  // clients.close();
+  clients.close();
 
   logger_info("elapsed %.3lf", sw.stop());
 }
 
-void test_1000_small_short_sync(std::string ip, int port) {
-  test_sync(1000, input_small, ip, port);
-}
+void test_long_sync(int testSize, InputType inputType, int parallel, std::string ip, int port) {
+  Stopwatch sw;
 
-void test_1000_small_short_async(std::string ip, int port) {
-  test_async(1000, input_small, ip, port);
-}
-
-void test_1000_large_short_sync(std::string ip, int port) {
-  test_sync(1000, input_large, ip, port);
-}
-
-void test_1000_large_short_async(std::string ip, int port) {
-  test_async(1000, input_small, ip, port);
-}
-
-void testLongConnection(SocketClient* client, int i) {
-  for (int i = 0; i < 1000; i++) {
-    logger_debug("---------");
-    // testCallback(client, i);
-    // testBigDataCallback(client, i);
+  auto client = LaneClient::create(ip.c_str(), port, parallel);
+  for (int i = 0; i < testSize; i++) {
+    try {
+      auto input = inputType(i);
+      client->invoke(path, (void*)input.c_str(), input.size(), callback);
+    } catch (Exception& ex) {
+      logger_warn("%s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
   }
+
+  client->wait();
+  client->close();
+
+  logger_info("elapsed %.3lf", sw.stop());
+}
+void test_long_async(int testSize, InputType inputType, int parallel, std::string ip, int port) {
+  Stopwatch sw;
+
+  LaneClients clients;
+  for (int i = 0; i < testSize; i++) {
+    try {
+      auto client = clients.create(ip.c_str(), port);
+
+      auto input = inputType(i);
+      client->invoke(path, (void*)input.c_str(), input.size(), callback);
+
+    } catch (Exception& ex) {
+      logger_warn("%s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
+  }
+
+  clients.wait();
+  clients.close();
+
+  logger_info("elapsed %.3lf", sw.stop());
 }

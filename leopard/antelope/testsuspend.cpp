@@ -1,7 +1,7 @@
 #include "testsuspend.hpp"
 
 #ifdef LEOPARD_SUSPEND
-suspend testSuspend(SocketClient* client, int i) {
+suspend testSuspend(LaneClient* client, int i) {
   std::string input = "green green green " + std::to_string(i);
   auto path = "com.cs.sales.order.save";
 

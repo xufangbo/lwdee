@@ -3,7 +3,7 @@
 #include <atomic>
 #include <memory>
 #include <thread>
-#include "SocketClient.hpp"
+#include "LaneClient.hpp"
 #include "TcpRequest.hpp"
 #include "net/IRunway.hpp"
 #include "net/Connection.hpp"

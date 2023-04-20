@@ -28,23 +28,7 @@ class SocketWaiter_t {
 
   uint32_t getId() { return id; }
 
-  double wait(int timeout = 20) {
-    Stopwatch sw;
-    for (int i = 0; i < 100 * timeout; i++) {
-      if (status == WaitStatus::succeed) {
-        return sw.stop();
-      } else if (status == WaitStatus::timeout) {
-        sw.stop();
-        throw Exception("timeout", ZONE);
-      } else if (status == WaitStatus::nohint) {
-        return sw.stop();
-        throw Exception("nohint", ZONE);
-      } else {
-        usleep(1000000 / 100);
-      }
-    }
-    throw Exception("timeout", ZONE);
-  }
+  double wait(int timeout = 30);
 };
 
 typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
@@ -65,5 +49,5 @@ class ClientSocket : public Socket {
 
   SocketWaiter popWaiter();
 
-  void wait();
+  // void wait();
 };

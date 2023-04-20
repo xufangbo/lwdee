@@ -1,7 +1,7 @@
 #pragma
 
 #include "Lane.hpp"
-#include "SocketClient.hpp"
+#include "LaneClient.hpp"
 #include "net/IRunwayContainer.hpp"
 
 class Antelope : public IRunwayContainer<Lane> {

@@ -1,7 +1,7 @@
 #include "ToMap.h"
 
 #include <time.h>
-#include "client/SocketClient.hpp"
+#include "client/LaneClient.hpp"
 #include "client/TcpRequest.hpp"
 #include "core/DscConfig.hpp"
 #include "core/Exception.hpp"
@@ -127,7 +127,7 @@ void ToMap::toMap(int index, vector<MapRecord>* mapLines) {
 
   // logger_debug("send to map %s:%d %d lines", node->name.c_str(), voxorId.voxorKey, mapLines->size());
 
-  auto client = SocketClient::create(node->ip.c_str(), node->port);
+  auto client = LaneClient::create(node->ip.c_str(), node->port);
   RequestCallback callback = [](BufferStream* inputStream) {
     auto len = inputStream->get<uint32_t>();
     auto content = inputStream->getString(len);

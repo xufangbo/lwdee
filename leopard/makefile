@@ -16,7 +16,7 @@ SRCS+=cjson.cpp
 app : ${SRCS}
 	g++ -o $@ $^ ${LDFLAGS} ${LIFLAGS} -g -ggdb -w
 
-client : client.cpp Socket.cpp Exception.cpp LeopardConfig.cpp log.cpp cjson.cpp Epoll.cpp SocketClient.cpp
+client : client.cpp Socket.cpp Exception.cpp LeopardConfig.cpp log.cpp cjson.cpp Epoll.cpp LaneClient.cpp
 	g++ -o $@ $^ ${LDFLAGS} ${LIFLAGS} -g -ggdb -w
 
 clean:

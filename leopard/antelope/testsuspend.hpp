@@ -1,6 +1,6 @@
 #pragma once
 
 #ifdef LEOPARD_SUSPEND
-suspend testSuspend(SocketClient* client, int i);
+suspend testSuspend(LaneClient* client, int i);
 #endif
 

@@ -7,24 +7,25 @@
 #include "net/Connection.hpp"
 #include "net/Socket.hpp"
 
-class SocketClient;
-typedef std::shared_ptr<SocketClient> SocketClientPtr;
+class LaneClient;
+typedef std::shared_ptr<LaneClient> LaneClientPtr;
 
-class SocketClient {
+class LaneClient {
  private:
   int parallel = 1;
   std::atomic<uint32_t> index;
   std::atomic<uint32_t> waitId = 0;
   std::vector<Connection*> connections;
+  std::vector<SocketWaiter> waiters;
 
  public:
-  SocketClient(std::vector<Connection*> connections)
+  LaneClient(std::vector<Connection*> connections)
       : connections(connections), parallel(connections.size()) {
     this->index = 0;
   }
 
  public:
-  static SocketClientPtr create(const char* ip, int port, int parallel = 1);
+  static LaneClientPtr create(const char* ip, int port, int parallel = 1);
 
  public:
   SocketWaiter invoke(std::string path, RequestInvoke request, RequestCallback callback);
@@ -38,15 +39,4 @@ class SocketClient {
 
  private:
   Connection* next();
-};
-
-class SocketClients {
- public:
-  std::vector<SocketClientPtr> clients;
-  std::vector<SocketWaiter> waiters;
-
- public:
-  SocketClientPtr create(const char* ip, int port);
-  void wait();
-  void close();
 };

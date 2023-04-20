@@ -6,17 +6,17 @@ Runway.cpp:62 run : socket accept error,(24)Too many open files
 client
 ======================================================
 U22S -----
-SocketClient.cpp:137 newClient : socket connect error,(111)Connection refused
-SocketClient.cpp:156 newConnect : socket send error,(32)Broken pipe
+LaneClient.cpp:137 newClient : socket connect error,(111)Connection refused
+LaneClient.cpp:156 newConnect : socket send error,(32)Broken pipe
 
-SocketClient.cpp:153 newClient : socket connect error,(110)Connection timed out      connect方法超过50s，导致程序崩溃
+LaneClient.cpp:153 newClient : socket connect error,(110)Connection timed out      connect方法超过50s，导致程序崩溃
 
 T420 -----
-SocketClient.cpp:137 newClient : socket connect error,(99)Cannot assign requested address
-SocketClient.cpp:135 newClient : socket connect error,(9)Bad file descriptor
+LaneClient.cpp:137 newClient : socket connect error,(99)Cannot assign requested address
+LaneClient.cpp:135 newClient : socket connect error,(9)Bad file descriptor
 
 K8S ----
-SocketClient.cpp:168 newClient : socket connect error,(99)Cannot assign requested address
+LaneClient.cpp:168 newClient : socket connect error,(99)Cannot assign requested address
 
 
 
