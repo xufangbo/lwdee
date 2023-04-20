@@ -19,5 +19,5 @@ class Lane : public IRunway {
   void send(Socket* socket, BufferStreamPtr outputStream);
   void start();
   // bool contains(int fd);
-  void close(int fd);
+  // void close(int fd);
 };

@@ -47,7 +47,7 @@ void SocketClient::wait() {
 }
 void SocketClient::close() {
   for (ClientSocket* socket : this->sockets) {
-    socket->getLan()->close(socket->fd());
+    socket->getLane()->close(socket);
   }
 }
 

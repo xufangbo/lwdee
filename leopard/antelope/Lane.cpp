@@ -67,7 +67,7 @@ ClientSocket* Lane::create(const char* ip, int port) {
   // socket->setSendBuf(1048576);
   // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
   // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
-  sockets.insert(socket);
+  sockets[socket->fd()] = std::make_shared<SendTask>(socket);
 
   auto eclapse = sw.stop();
   if (eclapse > 1) {
@@ -85,19 +85,26 @@ ClientSocket* Lane::create(const char* ip, int port) {
 
 void Lane::send(Socket* socket, BufferStreamPtr outputStream) {
   // sendQueue->push(socket, outputStream);
-  this->addSendTask(socket,outputStream);
+  this->addSendTask(socket, outputStream);
 }
 
-void Lane::close(int fd) {
-  Socket* socket = sockets.find(fd);
-  if (socket != nullptr) {
-    this->epoll->del(fd);
-    this->sockets.remove(socket);
-    socket->close();
-  } else {
-    logger_error("can't find fd %d", fd);
-  }
-}
+// void Lane::close(int fd) {
+//   auto it = sockets.find(fd);
+//   if (it == sockets.end()) {
+//     logger_error("can't find fd %d", fd);
+//     return;
+//   }
+
+//   if (it->second->socket == nullptr) {
+//     logger_error("socket is null %d", fd);
+//   }
+
+//   if (it->second->closed) {
+//     logger_error("socket has closed %d", fd);
+//   }
+
+//   IRunway::close(it->second->socket);
+// }
 
 // bool Lane::contains(int fd) {
 //   Socket* socket = sockets.find(fd);

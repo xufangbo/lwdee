@@ -17,8 +17,8 @@ bool Bullet::send(Socket* socket) {
     Bullet::cout++;
     leopard_info("send finished,elapsed: %.3fs,count: [ %d ]", elapsed, Bullet::cout.load());
   } else if (rc == -1) {
+    socket->sendEnabled = false;
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
-      // do nothing
       leopard_trace("EAGAIN");
     } else {
       logger_error("socket send error(%d)%s", errno, strerror(errno));

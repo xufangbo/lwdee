@@ -59,7 +59,7 @@ class ClientSocket : public Socket {
   ClientSocket(Lane* lane, Qps* qps)
       : lane(lane), Socket(qps) {}
 
-  Lane* getLan() { return lane; }
+  Lane* getLane() { return lane; }
 
   void pushWaiter(SocketWaiter waiter);
 

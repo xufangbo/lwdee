@@ -23,13 +23,13 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-  test_sync(1, input_small, ip, port);
+  // test_sync(1, input_small, ip, port);
 
-  // test_sync(1000, input_small, ip, port);
-  // test_sync(1000, input_large, ip, port);
+  // test_sync(1000, input_small, ip, port);  // ET: 11.41s  LT: 25.055
+  // test_sync(1000, input_large, ip, port);    // ET: 131.306s LT: 166.388
 
-  // test_async(1000, input_small, ip, port);
-  // test_async(1000, input_small, ip, port);
+  test_async(1000, input_small, ip, port);  // ET:失败     LT: 0.771s -21 区别在于IRunway::__acceptEvent是否加锁
+  // test_async(1000, input_small, ip, port);  // ET:失败     LT: 0.771s
 
   Antelope::instance.join();
 

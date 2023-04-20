@@ -51,7 +51,8 @@ void Runway::acceptSocket(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd, &_qps);
-    sockets.insert(client);
+    auto task = std::make_shared<SendTask>(client);
+    sockets[client_fd] = task;
 
     client->setNonBlocking();
 
@@ -90,8 +91,7 @@ void Runway::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {
     protocal->setLength(outputStream.get());
 
     // sendQueue->push(socket, outputStream);
-    this->addSendTask(socket,outputStream);
-   
+    this->addSendTask(socket, outputStream);
 
     leopard_debug("> response %s", header->path.c_str());
   }

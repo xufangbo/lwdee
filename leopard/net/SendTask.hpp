@@ -62,6 +62,11 @@ class SendTask {
   Socket* socket;
 
  public:
+  bool closed = false;
+  
+  SendTask(Socket* socket)
+      : socket(socket) {
+  }
   SendTask(Socket* socket, BufferStreamPtr outputStream)
       : socket(socket) {
     this->push(outputStream);

@@ -21,8 +21,8 @@ class IRunway {
   bool isET = false;
 
  protected:
-  Sockets sockets;
-  std::map<int, std::shared_ptr<SendTask>> sendTasks;  //
+  std::mutex sktlock;
+  std::map<int, std::shared_ptr<SendTask>> sockets;  //
   SendTaskQueue* sendQueue;
   Qps _qps;
 
@@ -34,12 +34,15 @@ class IRunway {
   void acceptRequest(Socket* socket, BufferStreamPtr inputStream);
   virtual void __acceptRequest(Socket* socket, BufferStreamPtr inputStream) = 0;
   ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
-  void close(Socket* socket);
-  void acceptSend(Socket* socket, epoll_event* evt);
+  
+  void send();
+  void __send();
+  void acceptSend(Socket* socket);
   void addSendTask(Socket* socket, BufferStreamPtr outputStream);
 
  public:
   IRunway(int id, bool* running, SendTaskQueue* sendQueue);
+  void close(Socket* socket);
   Qps* qps();
   void join();
   size_t size() { return sockets.size(); }

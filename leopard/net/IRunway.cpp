@@ -13,11 +13,15 @@ IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
     : _qps(id), running(running), sendQueue(sendQueue) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->sockets.size(); };
-  this->isET = false;
+  this->isET = true;
 }
 
 void IRunway::run() {
+  std::thread t(&IRunway::send, this);
+  t.detach();
+
   while (*running) {
+    // this->send();
     int waits = epoll->wait(100);
     for (int i = 0; i < waits; i++) {
       try {
@@ -35,17 +39,27 @@ void IRunway::run() {
 }
 
 void IRunway::__acceptEvent(epoll_event* evt) {
-  // logger_trace("__acceptEvent % 4d %x %d", evt->data.fd, evt->events, evt->events);
-  auto socket = sockets.find(evt->data.fd);
-  if (socket == nullptr) {
-    logger_error("no hint socket %d", evt->data.fd);
+  // sktlock.lock();
+  auto it = sockets.find(evt->data.fd);
+  // sktlock.unlock();
+  if (it == sockets.end()) {
+    logger_error("can't find socket %d", evt->data.fd);
     return;
   }
+  if (it->second->socket == nullptr) {
+    logger_error("socket is null %d", evt->data.fd);
+    return;
+  }
+  if (it->second->closed) {
+    logger_error("socket has closed %d", evt->data.fd);
+    return;
+  }
+  auto socket = it->second->socket;
 
   if (evt->events & EPOLLIN) {
     this->acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
-    this->acceptSend(socket, evt);
+    this->acceptSend(socket);
     // logger_trace("EPOLL OUT do nothing %d", socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", socket->fd());
@@ -89,7 +103,7 @@ void IRunway::acceptRecive(Socket* socket, epoll_event* evt) {
         epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN | EPOLLOUT));
       }
     } else if (rc == -1) {
-      logger_debug("rc == -1");
+      // logger_debug("rc == -1");
       epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN | EPOLLOUT));
     } else if (rc == 0) {
       // leopard_warn("recv closed");
@@ -122,26 +136,36 @@ ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   return header;
 }
 
-void IRunway::acceptSend(Socket* socket, epoll_event* evt) {
-  
-  auto it = sendTasks.find(socket->fd());
-  if (it == sendTasks.end()) {
-    return;
+void IRunway::send() {
+  while (running) {
+    try {
+      this->__send();
+    } catch (std::exception& ex) {
+      logger_error("%s", ex.what());
+    }
   }
-  leopard_trace("< send");
-  auto task = it->second;
-  bool finished = task->send();
-  if (finished) {
-    sendTasks.erase(socket->fd());
+}
+
+void IRunway::__send() {
+  std::lock_guard lock(sktlock);
+  for (auto it : sockets) {
+    auto sender = it.second;
+    if (sender != nullptr) {  // && sender->socket->sendEnabled
+      sender->send();
+    }
   }
-  leopard_trace("> send");
+}
+
+void IRunway::acceptSend(Socket* socket) {
+  // socket->sendEnabled = true;
 }
 
 void IRunway::addSendTask(Socket* socket, BufferStreamPtr outputStream) {
-  auto it = sendTasks.find(socket->fd());
-  if (it == sendTasks.end()) {
+  std::lock_guard lock(sktlock);
+  auto it = sockets.find(socket->fd());
+  if (it == sockets.end()) {
     auto task = std::make_shared<SendTask>(socket, outputStream);
-    sendTasks[socket->fd()] = task;
+    sockets[socket->fd()] = task;
   } else {
     auto task = it->second;
     task->push(outputStream);
@@ -149,10 +173,17 @@ void IRunway::addSendTask(Socket* socket, BufferStreamPtr outputStream) {
 }
 
 void IRunway::close(Socket* socket) {
+
+  // leopard_warn("close socket %d",socket->fd());
+
   epoll->del(socket->fd());
   socket->close();
 
-  sockets.remove(socket);
+  socket->sendEnabled = false;
+
+  std::lock_guard lock(sktlock);
+  sockets.erase(socket->fd());
+
   delete socket;
 }
 

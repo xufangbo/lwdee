@@ -82,7 +82,7 @@ void test_async(int testSize, InputType inputType, std::string ip, int port) {
   }
 
   clients.wait();
-  clients.close();
+  // clients.close();
 
   logger_info("elapsed %.3lf", sw.stop());
 }
