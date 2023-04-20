@@ -46,7 +46,7 @@ void IRunway::acceptRecive(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     this->__acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
-    // logger_trace("EPOLL OUT do nothing");
+    logger_trace("EPOLL OUT do nothing %d", socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", socket->fd());
     this->close(socket);

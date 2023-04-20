@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Qps.hpp"
 
-class Matrix {
+class Metrix {
  private:
   bool* running = nullptr;
   std::string fileName;

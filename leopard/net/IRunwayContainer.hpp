@@ -3,7 +3,7 @@
 #include <signal.h>
 #include <sys/sysinfo.h>
 #include "IRunway.hpp"
-#include "Matrix.hpp"
+#include "Metrix.hpp"
 #include "log.hpp"
 
 template <class T>
@@ -13,7 +13,7 @@ class IRunwayContainer {
   bool running = false;
   std::vector<T*> runways;
   std::vector<SendTaskQueue*> sends;
-  Matrix matrix;
+  Metrix matrix;
 
  public:
   ~IRunwayContainer() {

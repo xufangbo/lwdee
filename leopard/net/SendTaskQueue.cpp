@@ -21,10 +21,8 @@ void SendTaskQueue::push(Socket* socket, BufferStreamPtr outputStream) {
   auto it = std::find_if(list.begin(), list.end(), [&socket](SendTask* i) { return i->socket == socket; });
 
   if (it == list.end()) {
-    // leopard_trace("new SendTask");
     list.emplace_back(new SendTask(socket, outputStream));
   } else {
-    // leopard_trace("push to SendTask");
     (*it)->push(outputStream);
   }
 }

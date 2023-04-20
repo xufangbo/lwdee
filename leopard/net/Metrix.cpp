@@ -1,4 +1,4 @@
-#include "Matrix.hpp"
+#include "Metrix.hpp"
 
 #include <unistd.h>
 #include <filesystem>
@@ -7,7 +7,7 @@
 #include <thread>
 #include "core/log.hpp"
 
-void Matrix::start(bool* running, std::string fileName, std::vector<Qps*> qpses) {
+void Metrix::start(bool* running, std::string fileName, std::vector<Qps*> qpses) {
   this->running = running;
   this->qpses = qpses;
 
@@ -22,21 +22,33 @@ void Matrix::start(bool* running, std::string fileName, std::vector<Qps*> qpses)
   this->__start(',');
   this->__start('|');
 
-  std::thread t(&Matrix::run, this);
+  std::thread t(&Metrix::run, this);
   t.detach();
 }
 
-void Matrix::__start(char split) {
+void Metrix::__start(char split) {
   std::string file = fileName + (split == ',' ? ".csv" : ".md");
   std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
     logger_error("can't open file %s", file.c_str());
   }
 
+  // if (split == '|') {
+  //   f << "|";
+  // }
+  // f << " " << split;
+  // for (int i = 0; i < qpses.size(); i++) {
+  //   Qps* qps = qpses[i];
+  //   auto tmp = qps->header();
+  //   for (std::string& item : tmp) {
+  //     f << (i + 1) << split;
+  //   }
+  // }
+  // f << std::endl;
+
   if (split == '|') {
     f << "|";
   }
-
   f << "time" << split;
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
@@ -63,14 +75,14 @@ void Matrix::__start(char split) {
   f.close();
 }
 
-void Matrix::run() {
+void Metrix::run() {
   while (*running) {
     this->write();
     sleep(1);
   }
 }
 
-void Matrix::write() {
+void Metrix::write() {
   // Qps qps(0);
   // qps.accepts = std::accumulate(qpses.begin(), qpses.end(), 0, [](int x, Qps* r) { return x +r->accepts; });
   // qps.closes = std::accumulate(qpses.begin(), qpses.end(), 0, [](int x, Qps* r) { return x +r->closes; });
@@ -87,7 +99,7 @@ void Matrix::write() {
   }
 }
 
-void Matrix::__write(char split) {
+void Metrix::__write(char split) {
   std::string file = fileName + (split == ',' ? ".csv" : ".md");
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
