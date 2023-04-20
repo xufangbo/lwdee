@@ -15,7 +15,7 @@ void test_short_sync(int testSize, InputType inputType, std::string ip, int port
 void test_short_async(int testSize, InputType inputType, std::string ip, int port);
 
 void test_long_sync(int testSize, InputType inputType,int parallel, std::string ip, int port);
-void test_long_async(int testSize, InputType inputType,int parallel, std::string ip, int port);
+// void test_long_async(int testSize, InputType inputType,int parallel, std::string ip, int port);
 
 /**
  *

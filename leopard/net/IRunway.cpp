@@ -80,7 +80,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
   // printf("< --------------\n");
-  logger_trace("--------------");
+  // logger_trace("--------------");
   int rc = 0;
 
   do {
@@ -111,7 +111,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       // logger_debug("rc == -1");
       // epoll->mod(evt, socket->fd(), gererateEnvents());
     } else if (rc == 0) {
-      printf("recv closed %d", socket->fd());
+      // printf("recv closed %d", socket->fd());
       this->close(connection);
     } else {
       logger_error("rc of recv < -1 ?");

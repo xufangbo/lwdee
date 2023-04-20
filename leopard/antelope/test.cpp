@@ -86,8 +86,8 @@ void test_short_async(int testSize, InputType inputType, std::string ip, int por
     }
   }
 
-  // clients.wait();
-  // clients.close();
+  clients.wait();
+  clients.close();
 
   logger_info("elapsed %.3lf", sw.stop());
 }
@@ -112,26 +112,26 @@ void test_long_sync(int testSize, InputType inputType, int parallel, std::string
 
   logger_info("elapsed %.3lf", sw.stop());
 }
-void test_long_async(int testSize, InputType inputType, int parallel, std::string ip, int port) {
-  Stopwatch sw;
+// void test_long_async(int testSize, InputType inputType, int parallel, std::string ip, int port) {
+//   Stopwatch sw;
 
-  LaneClients clients;
-  for (int i = 0; i < testSize; i++) {
-    try {
-      auto client = clients.create(ip.c_str(), port);
+//   LaneClients clients;
+//   for (int i = 0; i < testSize; i++) {
+//     try {
+//       auto client = clients.create(ip.c_str(), port);
 
-      auto input = inputType(i);
-      client->invoke(path, (void*)input.c_str(), input.size(), callback);
+//       auto input = inputType(i);
+//       client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
-    } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
-    }
-  }
+//     } catch (Exception& ex) {
+//       logger_warn("%s", ex.getMessage().c_str());
+//     } catch (std::exception& ex) {
+//       logger_error("%s", ex.what());
+//     }
+//   }
 
-  clients.wait();
-  clients.close();
+//   clients.wait();
+//   clients.close();
 
-  logger_info("elapsed %.3lf", sw.stop());
-}
+//   logger_info("elapsed %.3lf", sw.stop());
+// }
