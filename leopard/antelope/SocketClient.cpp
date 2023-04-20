@@ -109,29 +109,44 @@ SocketClientPtr SocketClients::create(const char* ip, int port) {
 
 void SocketClients::wait() {
   SocketWaiter waiter;
-  for (auto client : this->clients) {
+  // for (int i = 0; i < clients.size(); i++) {
+  //   auto client = this->clients[i];
+  //   try {
+  //     for (auto socket : client->getSockets()) {
+  //       while ((waiter = socket->popWaiter()) != nullptr) {
+  //         printf("\nwait %d\n\n", i);
+  //         waiter->wait();
+  //       }
+  //     }
+  //   } catch (Exception& ex) {
+  //     logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
+  //   } catch (std::exception& ex) {
+  //     logger_error("[%d] - %s", (i + 1), ex.what());
+  //   }
+  // }
+
+  for (int i = 0; i < waiters.size(); i++) {
+    auto waiter = this->waiters[i];
     try {
-      for (auto socket : client->getSockets()) {
-        while ((waiter = socket->popWaiter()) != nullptr) {
-          waiter->wait();
-        }
-      }
+      // printf("\nwait %d\n\n", i);
+      waiter->wait();
     } catch (Exception& ex) {
-      logger_warn(" %s", ex.getMessage().c_str());
+      logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error(" %s", ex.what());
+      logger_error("[%d] - %s", (i + 1), ex.what());
     }
   }
 }
 
 void SocketClients::close() {
-  for (auto client : this->clients) {
+  for (int i = 0; i < clients.size(); i++) {
+    auto client = this->clients[i];
     try {
       client->close();
     } catch (Exception& ex) {
-      logger_warn(" %s", ex.getMessage().c_str());
+      logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error(" %s", ex.what());
+      logger_error("[%d] - %s", (i + 1), ex.what());
     }
   }
 }

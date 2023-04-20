@@ -42,7 +42,7 @@ void Runway::acceptEvent(epoll_event* evt) {
   if (evt->data.fd == server->fd()) {
     this->acceptSocket(evt);
   } else {
-    IRunway::acceptRecive(evt);
+    IRunway::__acceptEvent(evt);
   }
 }
 

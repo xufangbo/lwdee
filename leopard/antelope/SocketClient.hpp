@@ -41,7 +41,7 @@ class SocketClient {
 };
 
 class SocketClients {
- private:
+ public:
   std::vector<SocketClientPtr> clients;
   std::vector<SocketWaiter> waiters;
 

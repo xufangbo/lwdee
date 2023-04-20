@@ -27,8 +27,9 @@ class IRunway {
  protected:
   virtual void run();
   virtual void acceptEvent(epoll_event* evt) = 0;
-  void acceptRecive(epoll_event* evt);
-  void __acceptRecive(Socket* socket, epoll_event* evt);
+  void __acceptEvent(epoll_event* evt);
+  void acceptRecive(Socket* socket, epoll_event* evt);
+  void acceptSend(Socket* socket, epoll_event* evt);
   void acceptRequest(Socket* socket,BufferStreamPtr inputStream);
   virtual void __acceptRequest(Socket* socket,BufferStreamPtr inputStream) = 0;
   ProtocalHeaderPtr parseRequest(BufferStream* inputStream);

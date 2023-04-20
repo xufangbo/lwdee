@@ -42,7 +42,7 @@ void test_1000_small_short_sync(std::string ip, int port) {
     }
   }
 
-  logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
+  logger_info("elapsed %.3lf", sw.stop());
 }
 
 void test_1000_small_short_async(std::string ip, int port) {
@@ -66,6 +66,8 @@ void test_1000_small_short_async(std::string ip, int port) {
 
       SocketWaiter waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
+      clients.waiters.push_back(waiter);
+
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
@@ -76,13 +78,13 @@ void test_1000_small_short_async(std::string ip, int port) {
   clients.wait();
   clients.close();
 
-  logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
+  logger_info("elapsed %.3lf", sw.stop());
 }
 
 void test_1000_large_short_sync(std::string ip, int port) {
   Stopwatch sw;
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 1000; i++) {
     try {
       auto client = SocketClient::create(ip.c_str(), port, 1);
 
@@ -115,7 +117,7 @@ void test_1000_large_short_sync(std::string ip, int port) {
     }
   }
 
-  logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
+  logger_info("elapsed %.3lf", sw.stop());
 }
 
 void test_1000_large_short_async(std::string ip, int port) {
@@ -142,6 +144,7 @@ void test_1000_large_short_async(std::string ip, int port) {
       };
 
       SocketWaiter waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
+      clients.waiters.push_back(waiter);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -153,7 +156,7 @@ void test_1000_large_short_async(std::string ip, int port) {
   clients.wait();
   clients.close();
 
-  logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
+  logger_info("elapsed %.3lf", sw.stop());
 }
 
 void testLongConnection(SocketClient* client, int i) {

@@ -4,40 +4,47 @@
 #include "SocketClient.hpp"
 
 /**
- * @brief 执行正常，耗时10s
  *
- * @param ip
- * @param port
+ *  LT elapsed 10.440
+ * ( 1681957318289 -> 1 -> 1 -> 1 ) <==> ( 0.001 + 0.000 + 0.000 = 0.001 )
+ *
+ * ET elapsed 10.679
+ *  ( 1681957778783 -> 2 -> 2 -> 3 ) <==> ( 0.002 + 0.000 + 0.001 = 0.003 )
  */
 void test_1000_small_short_sync(std::string ip, int port);
 
 /**
- * 达到800个请求之后，服务端就收不到数据了，没有更新的
- * 单个请求时间越来越长，第800个请求达到42s
- * 800个之后waiter中time out
- * 主要的原因还是客户端的socket没有及时closed
- * 客户端1000个请求都发送完了
  *
- * ET -> LT 3.09s
- * https://blog.csdn.net/CODINGCS/article/details/115046256
- * 
- * --------------------
- * 有时候客户端会有Segmentation fault
- * 2023-04-19 21:24:27,103 [error] [139858379597632] /home/kevin/git/lwdee/leopard/antelope/Lane.cpp:97 close : can't find fd 10
+ * LT elapsed 0.371
+ * ( 1681958075938 -> 95 -> 95 -> 108 ) <==> ( 0.095 + 0.000 + 0.013 = 0.108 )
  *
  *
+ * ET elapsed  43.046
+ *   ( 1681957918673 -> 27 -> 29 -> 30 ) <==> ( 0.027 + 0.002 + 0.001 = 0.030 )
+ * 1. 客户端频繁出现 long time to connect: 1.030000s
+ * 2.  wait : [588] - timeout
  */
 void test_1000_small_short_async(std::string ip, int port);
 
 /**
- * total 300s per 0.3s
- *  ( 1681919147995 -> 302 -> 305 -> 306 ) <==> ( 0.302 + 0.003 + 0.001 = 0.306 )
+ *
+ * LT elapsed 51.310
+ * ( 1681958011470 -> 46 -> 48 -> 49 ) <==> ( 0.046 + 0.002 + 0.001 = 0.049 )
+ *
+ *
+ * ET elapsed  43.046
+ *   ( 1681957918673 -> 27 -> 29 -> 30 ) <==> ( 0.027 + 0.002 + 0.001 = 0.030 )
  */
 void test_1000_large_short_sync(std::string ip, int port);
 
 /**
+ * LT : elapsed 21.117
+ *   ( 1681959366625 -> 7421 -> 7424 -> 7424 ) <==> ( 7.421 + 0.003 + 0.000 = 7.424 )
  * 
- * Segmentation fault (core dumped)  /home/kevin/git/lwdee/leopard/net/SendTaskQueue.cpp:21
+ * ET : 执行失败，客户端能收到第600个回复
+ * 1. 后面的连接： ( 1681959501965 -> 125914 -> 125917 -> 125918 ) <==> ( 125.914 + 0.003 + 0.001 = 125.918 )
+ * 2. 客户端频繁出现 long time to connect: 1.030000s
+ * 2.  wait : [567] - timeout
  */
 void test_1000_large_short_async(std::string ip, int port);
 

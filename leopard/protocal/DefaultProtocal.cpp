@@ -32,11 +32,11 @@ ProtocalHeaderPtr DefaultProtocal::getHeader(BufferStream* inputStream) {
   header->pathLength = inputStream->get<uint32_t>();
   header->path = inputStream->getString(header->pathLength);
 
-  if (header->rec1 > 1000) {
-    leopard_info("recive %s , elapsed %.3fs", header->path.c_str(), header->rec1_sen1());
-  } else {
-    leopard_trace("recive %s , elapsed %.3fs", header->path.c_str(), header->rec1_sen1());
-  }
+  // if (header->rec1 > 1000) {
+  //   leopard_info("recive %s , elapsed %.3fs", header->path.c_str(), header->rec1_sen1());
+  // } else {
+  //   leopard_trace("recive %s , elapsed %.3fs", header->path.c_str(), header->rec1_sen1());
+  // }
 
   return header;
 }

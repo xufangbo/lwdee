@@ -26,7 +26,7 @@ class Sockets {
   void insert(Socket* s);
 
   /**
-   * @brief used by IRunway::acceptRecive(epoll_event* evt)
+   * @brief used by IRunway::__acceptEvent(epoll_event* evt)
    */
   Socket* find(int fd);
 

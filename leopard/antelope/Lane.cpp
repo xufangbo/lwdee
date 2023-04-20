@@ -17,7 +17,7 @@ void Lane::start() {
 }
 
 void Lane::acceptEvent(epoll_event* evt) {
-  IRunway::acceptRecive(evt);
+  IRunway::__acceptEvent(evt);
 }
 
 void Lane::__acceptRequest(Socket* socket, BufferStreamPtr inputStream) {

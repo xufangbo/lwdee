@@ -20,7 +20,7 @@ BufferStream::~BufferStream() {
 }
 
 BufferStreamPtr BufferStream::pick() {
-  leopard_trace("< pick");
+  // leopard_trace("< pick");
 
   size_t pickedLen = this->currentSize();
   auto picked = this->newInstance(pickedLen);
@@ -40,7 +40,7 @@ BufferStreamPtr BufferStream::pick() {
 
   free(left);
 
-  leopard_trace("> pick,(%d)%s - (%d)%s", pickedLen, picked->buffer, _size, buffer);
+  // leopard_trace("> pick,(%d)%s - (%d)%s", pickedLen, picked->buffer, _size, buffer);
 
   return picked;
 }

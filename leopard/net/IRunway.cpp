@@ -18,9 +18,7 @@ IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
 
 void IRunway::run() {
   while (*running) {
-    // leopard_debug("< wait...");
     int waits = epoll->wait(100);
-    // leopard_debug("> wait");
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -36,8 +34,8 @@ void IRunway::run() {
   }
 }
 
-void IRunway::acceptRecive(epoll_event* evt) {
-  // logger_trace("acceptRecive % 4d %x %d", evt->data.fd, evt->events, evt->events);
+void IRunway::__acceptEvent(epoll_event* evt) {
+  // logger_trace("__acceptEvent % 4d %x %d", evt->data.fd, evt->events, evt->events);
   auto socket = sockets.find(evt->data.fd);
   if (socket == nullptr) {
     logger_error("no hint socket %d", evt->data.fd);
@@ -45,8 +43,9 @@ void IRunway::acceptRecive(epoll_event* evt) {
   }
 
   if (evt->events & EPOLLIN) {
-    this->__acceptRecive(socket, evt);
+    this->acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
+    this->acceptSend(socket, evt);
     // logger_trace("EPOLL OUT do nothing %d", socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", socket->fd());
@@ -62,7 +61,7 @@ void IRunway::acceptRecive(epoll_event* evt) {
   }
 }
 
-void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
+void IRunway::acceptRecive(Socket* socket, epoll_event* evt) {
   int rc = 0;
   do {
     char buf[BUFFER_SIZE] = {0};
@@ -90,7 +89,7 @@ void IRunway::__acceptRecive(Socket* socket, epoll_event* evt) {
         // epoll not changed
       }
     } else if (rc == -1) {
-      logger_debug("rc == -1");
+      // logger_debug("rc == -1");
       epoll->mod(evt, socket->fd(), isET ? (EPOLLIN | EPOLLET) : (EPOLLIN));
     } else if (rc == 0) {
       // leopard_warn("recv closed");
@@ -121,6 +120,9 @@ ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
   this->_qps.time(header->rec1_sen1());
 
   return header;
+}
+
+void IRunway::acceptSend(Socket* socket, epoll_event* evt) {
 }
 
 void IRunway::close(Socket* socket) {
