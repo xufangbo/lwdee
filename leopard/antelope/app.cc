@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   // test_long_sync(1000, input_small, 10, ip, port);   // 0.158 blocked
   // test_long_sync(1000, input_small, 100, ip, port);  // blocked always
 
-  test_short_sync(1, input_large, ip, port);         // 68s
+  test_short_sync(1, input_large, ip, port);  // 69.024 fuck
   // test_short_sync(1000, input_large, ip, port);      //
   // test_short_async(1000, input_large, ip, port);     //
   // test_long_sync(1, input_large, 1, ip, port);       //

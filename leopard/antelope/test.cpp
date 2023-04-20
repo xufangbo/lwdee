@@ -54,10 +54,9 @@ void test_short_sync(int testSize, InputType inputType, std::string ip, int port
       auto input = inputType(i);
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
-      auto time = waiter->wait();
-      // logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
-
+      auto time = waiter->wait(100);
       client->close();
+      // logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
