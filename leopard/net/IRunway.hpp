@@ -38,6 +38,7 @@ class IRunway {
 
   void acceptSend(Connection* connection);
   void addSendTask(Connection* connection, BufferStreamPtr outputStream);
+  inline uint32_t gererateEnvents();
 
  public:
   IRunway(int id, bool* running);

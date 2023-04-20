@@ -15,7 +15,7 @@ bool Bullet::send(Socket* socket) {
 
     auto elapsed = Stopwatch::elapsed(this->start);
     Bullet::cout++;
-    // leopard_trace("        sended,[%d]", Bullet::cout.load());
+    leopard_trace("        sended,[%d]", Bullet::cout.load());
   } else if (rc == -1) {
     socket->sendEnabled = false;
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {

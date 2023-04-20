@@ -11,7 +11,7 @@ IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->connections->size(); };
-  this->isET = true;
+  this->isET = false;
   this->isEOUT = false;
 }
 
@@ -80,13 +80,14 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
   // printf("< --------------\n");
+  logger_trace("--------------");
   int rc = 0;
 
   do {
     auto socket = connection->socket;
     try {
       rc = socket->recv(buf, BUFFER_SIZE, MSG_WAITALL);
-      // printf("rc-%d ", rc);
+      printf("rc-%d ", rc);
     } catch (SocketException& ex) {
       ex.trace(ZONE);
       this->close(connection);
@@ -104,25 +105,11 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       } else {
-        uint32_t events = EPOLLIN;
-        if (isEOUT) {
-          events |= EPOLLOUT;
-        }
-        if (isET) {
-          events |= EPOLLET;
-        }
-        epoll->mod(evt, socket->fd(), events);
+        // epoll->mod(evt, socket->fd(), gererateEnvents());
       }
     } else if (rc == -1) {
       // logger_debug("rc == -1");
-      uint32_t events = EPOLLIN;
-      if (isEOUT) {
-        events |= EPOLLOUT;
-      }
-      if (isET) {
-        events |= EPOLLET;
-      }
-      epoll->mod(evt, socket->fd(), events);
+      // epoll->mod(evt, socket->fd(), gererateEnvents());
     } else if (rc == 0) {
       printf("recv closed %d", socket->fd());
       this->close(connection);
@@ -131,7 +118,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  // printf("\n> --------------\n");
+  printf("\n> --------------\n");
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
@@ -175,6 +162,17 @@ void IRunway::close(Connection* connection) {
   connections->remove(connection->socket->fd());
 
   delete connection->socket;
+}
+
+inline uint32_t IRunway::gererateEnvents() {
+  uint32_t events = EPOLLIN;
+  if (isEOUT) {
+    events |= EPOLLOUT;
+  }
+  if (isET) {
+    events |= EPOLLET;
+  }
+  return events;
 }
 
 void IRunway::join() {

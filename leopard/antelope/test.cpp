@@ -26,7 +26,7 @@ std::string input_large(int i) {
   for (int x = 0; x < 50000; x++) {
     input += "green---!";
   }
-  // logger_debug("send [%i]", i + 1);
+  logger_debug("send [%i]", i + 1);
   return input;
 }
 
@@ -86,8 +86,8 @@ void test_short_async(int testSize, InputType inputType, std::string ip, int por
     }
   }
 
-  clients.wait();
-  clients.close();
+  // clients.wait();
+  // clients.close();
 
   logger_info("elapsed %.3lf", sw.stop());
 }
