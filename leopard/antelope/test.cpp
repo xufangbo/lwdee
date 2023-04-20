@@ -48,11 +48,10 @@ void test_1000_small_short_sync(std::string ip, int port) {
 void test_1000_small_short_async(std::string ip, int port) {
   Stopwatch sw;
 
-  std::vector<SocketWaiter> waiters;
-  std::vector<SocketClientPtr> clients;
+  SocketClients clients;
   for (int i = 0; i < 1000; i++) {
     try {
-      auto client = SocketClient::create(ip.c_str(), port, 1);
+      auto client = clients.create(ip.c_str(), port);
 
       std::string input = "green green green " + std::to_string(i);
       logger_debug("send %s", input.c_str());
@@ -67,9 +66,6 @@ void test_1000_small_short_async(std::string ip, int port) {
 
       SocketWaiter waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-      waiters.push_back(waiter);
-      clients.push_back(client);
-
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
@@ -77,22 +73,15 @@ void test_1000_small_short_async(std::string ip, int port) {
     }
   }
 
-  for (int i = 0; i < waiters.size(); i++) {
-    try {
-      waiters[i]->wait();
-      clients[i]->close();
-    } catch (Exception& ex) {
-      logger_warn("[%d] %s", i, ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("[%d] %s", i, ex.what());
-    }
-  }
+  clients.wait();
+  clients.close();
 
   logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
 }
 
 void test_1000_large_short_sync(std::string ip, int port) {
   Stopwatch sw;
+
   for (int i = 0; i < 1000; i++) {
     try {
       auto client = SocketClient::create(ip.c_str(), port, 1);
@@ -132,11 +121,10 @@ void test_1000_large_short_sync(std::string ip, int port) {
 void test_1000_large_short_async(std::string ip, int port) {
   Stopwatch sw;
 
-  std::vector<SocketWaiter> waiters;
-  std::vector<SocketClientPtr> clients;
+  SocketClients clients;
   for (int i = 0; i < 1000; i++) {
     try {
-      auto client = SocketClient::create(ip.c_str(), port, 1);
+      auto client = clients.create(ip.c_str(), port);
 
       std::string input = "green green !";
       for (int i = 0; i < 50000; i++) {
@@ -155,9 +143,6 @@ void test_1000_large_short_async(std::string ip, int port) {
 
       SocketWaiter waiter = client->invoke("com.cs.sales.order.save", (void*)input.c_str(), input.size(), callback);
 
-      waiters.push_back(waiter);
-      clients.push_back(client);
-
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
@@ -165,16 +150,8 @@ void test_1000_large_short_async(std::string ip, int port) {
     }
   }
 
-  for (int i = 0; i < waiters.size(); i++) {
-    try {
-      waiters[i]->wait();
-      clients[i]->close();
-    } catch (Exception& ex) {
-      logger_warn("[%d] %s", i, ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("[%d] %s", i, ex.what());
-    }
-  }
+  clients.wait();
+  clients.close();
 
   logger_info("test_1000_small_short ,elapsed %.3lf", sw.stop());
 }

@@ -13,6 +13,7 @@ IRunway::IRunway(int id, bool* running, SendTaskQueue* sendQueue)
     : _qps(id), running(running), sendQueue(sendQueue) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->sockets.size(); };
+  // this->isET = true;
 }
 
 void IRunway::run() {
@@ -46,7 +47,7 @@ void IRunway::acceptRecive(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     this->__acceptRecive(socket, evt);
   } else if (evt->events & EPOLLOUT) {
-    logger_trace("EPOLL OUT do nothing %d", socket->fd());
+    // logger_trace("EPOLL OUT do nothing %d", socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", socket->fd());
     this->close(socket);

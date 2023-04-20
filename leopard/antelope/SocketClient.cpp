@@ -3,6 +3,7 @@
 #include "Antelope.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
+#include "core/log.hpp"
 #include "net/LeopardProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
@@ -99,3 +100,38 @@ await<BufferStream*> SocketClient::invoke(std::string path, void* buffer, int le
   return waiter;
 }
 #endif
+
+SocketClientPtr SocketClients::create(const char* ip, int port) {
+  auto client = SocketClient::create(ip, port);
+  this->clients.push_back(client);
+  return client;
+}
+
+void SocketClients::wait() {
+  SocketWaiter waiter;
+  for (auto client : this->clients) {
+    try {
+      for (auto socket : client->getSockets()) {
+        while ((waiter = socket->popWaiter()) != nullptr) {
+          waiter->wait();
+        }
+      }
+    } catch (Exception& ex) {
+      logger_warn(" %s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error(" %s", ex.what());
+    }
+  }
+}
+
+void SocketClients::close() {
+  for (auto client : this->clients) {
+    try {
+      client->close();
+    } catch (Exception& ex) {
+      logger_warn(" %s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error(" %s", ex.what());
+    }
+  }
+}

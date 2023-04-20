@@ -34,7 +34,19 @@ class SocketClient {
 #endif
   void close();
   void wait();
+  std::vector<ClientSocket*>& getSockets() { return sockets; }
 
  private:
   ClientSocket* next();
+};
+
+class SocketClients {
+ private:
+  std::vector<SocketClientPtr> clients;
+  std::vector<SocketWaiter> waiters;
+
+ public:
+  SocketClientPtr create(const char* ip, int port);
+  void wait();
+  void close();
 };
