@@ -13,9 +13,8 @@ Connection::Connection(Socket* socket, BufferStream* outputStream)
 }
 
 Connection::~Connection() {
-  
   if (socket != nullptr) {
-    logger_debug("dispose %d",socket->fd());
+    logger_debug("dispose %d", socket->fd());
     delete socket;
     socket = nullptr;
   }
@@ -38,7 +37,8 @@ bool Connection::send() {
       return false;
     }
     auto bullet = this->bullets.front();
-    if (!bullet->send(this->socket)) {
+    bool finished = bullet->send(this->socket);
+    if (!finished) {
       return false;
     }
     this->bullets.pop();

@@ -74,6 +74,7 @@ class BufferStream {
 
  public:
   size_t size() { return _size; }
+  size_t position() { return pos; }
   std::string toHex();
 };
 

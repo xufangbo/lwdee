@@ -9,11 +9,11 @@
 class Bullet {
  private:
   bool _finished = false;
-  uint64_t pos = 0;
+  size_t pos = 0;
   BufferStream* outputStream = nullptr;
 
  private:
-  uint64_t start = 0;
+  size_t start = 0;
 
  private:
   /**
@@ -24,12 +24,12 @@ class Bullet {
   /**
    * @brief 剩余字节数，即未发送完的字节数，待下次继续发送
    */
-  inline uint64_t leftover() { return outputStream->size() - pos; }
+  inline size_t leftover() { return outputStream->size() - pos; }
 
   /**
    * @brief 发送完之后，如果没有发送完，要根据发送成功的记录数设置偏移量
    */
-  inline void moveon(int size) { pos += size; }
+  inline void moveon(size_t len) { pos += len; }
 
  public:
   Bullet(BufferStream* outputStream)
