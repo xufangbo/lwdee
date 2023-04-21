@@ -6,6 +6,7 @@
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "net/LeopardConfig.hpp"
+#include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
 Lane::Lane(int id, bool* running)
@@ -20,30 +21,33 @@ void Lane::acceptEvent(epoll_event* evt) {
   IRunway::__acceptEvent(evt);
 }
 
-void Lane::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
-  ClientSocket* clientSocket = (ClientSocket*)(connection->socket);
+void Lane::__acceptRequest(Connection* connection, BufferStream* inputStream) {
+  ClientSocket* socket = (ClientSocket*)(connection->socket);
 
-  auto header = this->parseRequest(inputStream.get());
+  auto protocal = ProtocalFactory::getProtocal();
+  auto header = protocal->newHeader();
+  this->parseRequest(inputStream, header.get());
   header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
 
   // leopard_trace(header->to_string().c_str());
 
   auto callback = TcpRequest::find(header->path);
-
-  WaitStatus waitStatus = WaitStatus::waiting;
-  if (callback != nullptr) {
-    (*callback)(inputStream.get());
-    waitStatus = WaitStatus::succeed;
-  } else {
-    waitStatus = WaitStatus::nohint;
-    logger_error("can't hint path %s", header->path.c_str());
-  }
-
-  auto waiter = clientSocket->popWaiter();
+  auto waiter = socket->popWaiter();
   if (waiter == nullptr || waiter.use_count() == 0) {
     logger_error("waiter is null");
   } else {
-    waiter->notify(waitStatus);
+    leopard_trace("get waiter [%d]", waiter->getId());
+  }
+
+  if (callback != nullptr) {
+    (*callback)(inputStream);
+    delete inputStream;
+    inputStream = nullptr;
+
+    waiter->notify(WaitStatus::succeed);
+  } else {
+    waiter->notify(WaitStatus::nohint);
+    logger_error("can't hint path %s", header->path.c_str());
   }
 
 #ifdef LEOPARD_SUSPEND

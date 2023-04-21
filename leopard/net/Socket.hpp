@@ -13,7 +13,6 @@ class Socket {
   Qps* qps = nullptr;
 
  public:
-  bool sendEnabled = false;
   Socket(Qps* qps);
   Socket(int fd, Qps* qps);
   ~Socket();

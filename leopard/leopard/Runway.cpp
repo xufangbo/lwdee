@@ -32,7 +32,7 @@ void Runway::run() {
   } catch (SocketException& ex) {
     logger_error("%s", ex.getMessage().c_str());
   } catch (std::exception& ex) {
-    logger_error("%s", ex.what());
+    logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
   }
 
   IRunway::run();
@@ -76,8 +76,11 @@ void Runway::acceptSocket(epoll_event* evt) {
   }
 }
 
-void Runway::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
-  auto header = this->parseRequest(inputStream.get());
+void Runway::__acceptRequest(Connection* connection, BufferStream* inputStream) {
+  auto protocal = ProtocalFactory::getProtocal();
+  auto header = protocal->newHeader();
+
+  this->parseRequest(inputStream, header.get());
 
   auto fun = TcpResponse::find(header->path);
   if (fun == nullptr) {
@@ -89,7 +92,9 @@ void Runway::__acceptRequest(Connection* connection, BufferStreamPtr inputStream
     uint32_t rec1 = Stopwatch::currentMilliSeconds() - header->sen1;
     protocal->setHeader(outputStream, header->path, header->sen1, rec1, 0, 0);
 
-    (*fun)(inputStream.get(), outputStream);
+    (*fun)(inputStream, outputStream);
+    delete inputStream;
+    inputStream = nullptr;
 
     uint32_t sen2 = Stopwatch::currentMilliSeconds() - header->sen1;
     protocal->setsen2(outputStream, sen2);

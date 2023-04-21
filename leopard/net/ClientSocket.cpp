@@ -2,6 +2,10 @@
 
 #include "core/log.hpp"
 
+void SocketWaiter_t::notify(WaitStatus status) {
+  printf("waiter notify [%d] status:%d\n", id, status);
+  this->status = status;
+}
 
 double SocketWaiter_t::wait(int timeout) {
   Stopwatch sw;
@@ -20,22 +24,25 @@ double SocketWaiter_t::wait(int timeout) {
   }
   // throw Exception("timeout", ZONE);
   // logger_error("timeout");
-  logger_error("[%d] timeout in 30s",id);
+  logger_error("[%d] timeout in 30s", id);
   return timeout;
 }
 
-void ClientSocket::pushWaiter(SocketWaiter waiter) {
+SocketWaiter ClientSocket::crateWaiter(int id) {
+  SocketWaiter waiter = std::make_shared<SocketWaiter_t>(id);
   waiters.push(waiter);
-  // printf("< put waiter %d / %d\n", waiter->getId(), _fd);
+  return waiter;
 }
 
 SocketWaiter ClientSocket::popWaiter() {
   if (waiters.empty()) {
-    // printf("pop waiter error %d \n", _fd);
     return nullptr;
   }
   SocketWaiter waiter = waiters.front();
   waiters.pop();
-  // printf("> pop waiter %d / %d\n",waiter->getId(), _fd);
   return waiter;
+}
+
+bool  ClientSocket::hasWaiter(){
+  return !waiters.empty();
 }

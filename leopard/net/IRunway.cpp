@@ -31,12 +31,10 @@ void IRunway::run() {
       try {
         auto evt = epoll->events(i);
         this->acceptEvent(&evt);
-      } catch (EpollException& ex) {
-        logger_error("%s", ex.getMessage().c_str());
-      } catch (SocketException& ex) {
-        logger_error("%s", ex.getMessage().c_str());
+      } catch (Exception& ex) {
+        logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
       } catch (std::exception& ex) {
-        logger_error("%s", ex.what());
+        logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
       }
     }
   }
@@ -97,7 +95,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     // leopard_trace("recv - rc:%d,%s", rc, buf);
 
     if (rc > 0) {
-      auto* inputStream = socket->inputStream();
+      auto inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
       if (inputStream->isEnd()) {
         this->_qps.recvs++;
@@ -121,26 +119,24 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
   // printf("\n> --------------\n");
 }
 
-void IRunway::acceptRequest(Connection* connection, BufferStreamPtr inputStream) {
+void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {
   try {
     this->__acceptRequest(connection, inputStream);
   } catch (Exception& ex) {
     logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {
-    logger_error("%s", ex.what());
+    logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
   }
 }
 
-ProtocalHeaderPtr IRunway::parseRequest(BufferStream* inputStream) {
+void IRunway::parseRequest(BufferStream* inputStream, ProtocalHeader* header) {
   inputStream->moveToHead();
 
   auto protocal = ProtocalFactory::getProtocal();
-  auto header = protocal->getHeader(inputStream);
+  protocal->parseHeader(inputStream, header);
   auto path = header->path;
 
   this->_qps.time(header->rec1_sen1());
-
-  return header;
 }
 
 void IRunway::acceptSend(Connection* connection) {
@@ -154,14 +150,13 @@ void IRunway::addSendTask(Connection* connection, BufferStream* outputStream) {
 void IRunway::close(Connection* connection) {
   // leopard_warn("close socket %d",socket->fd());
 
-  epoll->del(connection->socket->fd());
-  connection->socket->close();
+  auto socket = connection->socket;
 
-  connection->socket->sendEnabled = false;
+  epoll->del(socket->fd());
 
-  connections->remove(connection->socket->fd());
+  socket->close();
 
-  delete connection->socket;
+  connections->remove(socket->fd());
 }
 
 inline uint32_t IRunway::gererateEnvents() {

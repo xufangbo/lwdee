@@ -24,8 +24,7 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
   ClientSocket* socket = (ClientSocket*)connection->socket;
 
   waitId++;
-  SocketWaiter waiter = std::make_shared<SocketWaiter_t>(waitId.load());
-  socket->pushWaiter(waiter);
+  SocketWaiter waiter = socket->crateWaiter(waitId.load());
   this->waiters.push_back(waiter);
 
   TcpRequest::regist(path, callback);
@@ -46,6 +45,13 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
 }
 
 void LaneClient::wait() {
+  for (Connection* connection : this->connections) {
+    ClientSocket* socket = (ClientSocket*)connection->socket;
+    if (socket->hasWaiter()) {
+      logger_error("stil have waiter");
+    }
+  }
+
   for (auto waiter : waiters) {
     waiter->wait();
   }

@@ -9,6 +9,5 @@ class ProtocalFactory {
 
  public:
   static LeopardProtocalPtr getProtocal();
-  static BufferStreamPtr createShareStream();
   static BufferStream* createStream();
 };

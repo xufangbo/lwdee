@@ -17,6 +17,6 @@ bool DefaultStream::isEnd() {
   return _size >= len;
 }
 
-std::shared_ptr<BufferStream> DefaultStream::newInstance(size_t len) {
-  return std::make_shared<DefaultStream>(len);
+BufferStream* DefaultStream::newInstance(size_t len) {
+  return new DefaultStream(len);
 }

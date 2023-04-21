@@ -23,5 +23,5 @@ class DefaultStream : public BufferStream {
       : BufferStream(len) {}
 
  private:
-  std::shared_ptr<BufferStream> newInstance(size_t len);
+  BufferStream* newInstance(size_t len);
 };

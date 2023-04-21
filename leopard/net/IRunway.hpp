@@ -32,9 +32,9 @@ class IRunway {
   virtual void acceptEvent(epoll_event* evt) = 0;
   void __acceptEvent(epoll_event* evt);
   void acceptRecive(Connection* connection, epoll_event* evt);
-  void acceptRequest(Connection* connection, BufferStreamPtr inputStream);
-  virtual void __acceptRequest(Connection* connection, BufferStreamPtr inputStream) = 0;
-  ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
+  void acceptRequest(Connection* connection, BufferStream* inputStream);
+  virtual void __acceptRequest(Connection* connection, BufferStream* inputStream) = 0;
+  void parseRequest(BufferStream* inputStream,ProtocalHeader*header);
 
   void acceptSend(Connection* connection);
   void addSendTask(Connection* connection, BufferStream* outputStream);

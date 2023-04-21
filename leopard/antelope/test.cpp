@@ -61,7 +61,7 @@ void test_short_sync(int testSize, InputType inputType, std::string ip, int port
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
+      logger_error("%s,%s:%d", ex.what(),__FILE__,__LINE__);
     }
   }
 
@@ -81,7 +81,7 @@ void test_short_async(int testSize, InputType inputType, std::string ip, int por
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
+      logger_error("%s,%s:%d", ex.what(),__FILE__,__LINE__);
     }
   }
 
@@ -102,7 +102,7 @@ void test_long_sync(int testSize, InputType inputType, int parallel, std::string
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
+      logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
     }
   }
 

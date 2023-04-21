@@ -3,14 +3,14 @@
 #include <atomic>
 #include "log.hpp"
 
-std::atomic<int> streamsCount = 0;
+// std::atomic<int> streamsCount = 0;
 BufferStream::BufferStream() {
-  streamsCount++;
+  // streamsCount++;
   buffer = new char[capacity];
 }
 
 BufferStream::BufferStream(size_t len) {
-  streamsCount++;
+  // streamsCount++;
   buffer = new char[capacity];
   _size = capacity = len;
   pos = 0;
@@ -20,12 +20,12 @@ BufferStream::~BufferStream() {
   if (buffer != nullptr) {
     delete[] buffer;
     buffer = nullptr;
-    streamsCount--;
-    printf("BufferStream dispose [%d] size:%d\n", streamsCount.load(), _size);
+    // streamsCount--;
+    // printf("BufferStream dispose [%d] size:%d\n", streamsCount.load(), _size);
   }
 }
 
-BufferStreamPtr BufferStream::pick() {
+BufferStream* BufferStream::pick() {
   // leopard_trace("< pick");
 
   size_t pickedLen = this->currentSize();

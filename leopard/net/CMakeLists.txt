@@ -1,11 +1,8 @@
 aux_source_directory(. DIR)
 
-# ls */*.cpp
-add_library(net SHARED
-LeopardConfig.cpp 
-Socket.cpp 
-Epoll.cpp
-LeopardProtocal.cpp
-)
+file(GLOB_RECURSE SRC_net "*.cpp")
 
-target_link_libraries(net core)
+# ls */*.cpp
+add_library(net SHARED ${SRC_net})
+
+target_link_libraries(core)

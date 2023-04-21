@@ -17,6 +17,12 @@ Connection::~Connection() {
     delete socket;
     socket = nullptr;
   }
+
+  while (!this->bullets.empty()) {
+    auto bullet = this->bullets.front();
+    this->bullets.pop();
+    delete bullet;
+  }
 }
 
 void Connection::push(BufferStream* outputStream) {
@@ -26,6 +32,9 @@ void Connection::push(BufferStream* outputStream) {
 
 bool Connection::send() {
   while (!this->bullets.empty()) {
+    if (this->closed) {
+      return false;
+    }
     auto bullet = this->bullets.front();
     if (!bullet->send(this->socket)) {
       return false;

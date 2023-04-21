@@ -21,7 +21,7 @@ class Runway : public IRunway {
   void run() override;
   void acceptSocket(epoll_event* evt);
   void acceptEvent(epoll_event* evt) override;
-  void __acceptRequest(Connection* connection, BufferStreamPtr inputStream) override;
+  void __acceptRequest(Connection* connection, BufferStream* inputStream) override;
 
  public:
   Runway(int id, bool* running, std::string ip, int port);

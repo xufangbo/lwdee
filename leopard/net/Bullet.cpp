@@ -14,6 +14,9 @@ Bullet::~Bullet() {
 }
 
 bool Bullet::send(Socket* socket) {
+  if(socket==nullptr){
+    throw Exception("sockeet is null ,can't send bullet",ZONE);
+  }
   int rc = socket->send(buffer(), leftover());
 
   if (rc == leftover()) {
@@ -24,7 +27,6 @@ bool Bullet::send(Socket* socket) {
     Bullet::cout++;
     leopard_trace("        sended,[%d]", Bullet::cout.load());
   } else if (rc == -1) {
-    socket->sendEnabled = false;
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {
       leopard_trace("EAGAIN");
     } else {

@@ -26,7 +26,7 @@ class BufferStream {
   ~BufferStream();
 
  protected:
-  virtual std::shared_ptr<BufferStream> newInstance(size_t len) = 0;
+  virtual BufferStream* newInstance(size_t len) = 0;
   void realloc(int newSize);
 
  public:
@@ -70,7 +70,7 @@ class BufferStream {
 
   virtual bool isEnd() = 0;
   virtual size_t currentSize() = 0;
-  std::shared_ptr<BufferStream> pick();
+  BufferStream* pick();
 
  public:
   size_t size() { return _size; }

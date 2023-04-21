@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <queue>
+#include "Queue.hpp"
 #include "Socket.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
@@ -22,10 +22,7 @@ class SocketWaiter_t {
   SocketWaiter_t(uint32_t id)
       : id(id) {}
 
-  void notify(WaitStatus status) {
-    this->status = status;
-  }
-
+  void notify(WaitStatus status);
   uint32_t getId() { return id; }
 
   double wait(int timeout = 10);
@@ -36,7 +33,7 @@ typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
 class Lane;
 class ClientSocket : public Socket {
  private:
-  std::queue<SocketWaiter> waiters;
+  Queue<SocketWaiter> waiters;
   Lane* lane = nullptr;
 
  public:
@@ -45,9 +42,7 @@ class ClientSocket : public Socket {
 
   Lane* getLane() { return lane; }
 
-  void pushWaiter(SocketWaiter waiter);
-
+  SocketWaiter crateWaiter(int id = -1);
   SocketWaiter popWaiter();
-
-  // void wait();
+  bool hasWaiter();
 };

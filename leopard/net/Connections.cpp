@@ -11,26 +11,30 @@
 // #define lock_tasks  //
 
 Connection* Connections::insert(Socket* s) {
-  auto task = std::make_shared<Connection>(s);
+  auto connection = new Connection(s);
   lock;
-  sockets[s->fd()] = task;
-  return task.get();
+  items[s->fd()] = connection;
+  return connection;
 }
 
 Connection* Connections::find(int fd) {
   lock;
-  auto it = sockets.find(fd);
-  if (it == sockets.end()) {
+  auto it = items.find(fd);
+  if (it == items.end()) {
     return nullptr;
   } else {
-    return it->second.get();
+    return it->second;
   }
 }
 void Connections::remove(int fd) {
-  auto it = sockets.find(fd);
-  if (it != sockets.end()) {
+  auto it = items.find(fd);
+  if (it != items.end()) {
+    auto connection = it->second;
+    connection->closed = true;
+    // delete socket; 通过Connection析构函数来删除
+    // 是否要判断在task中也删除？
     lock;
-    sockets.erase(fd);
+    items.erase(fd);
   }
 }
 
@@ -39,16 +43,14 @@ void Connections::run() {
     try {
       this->__run();
     } catch (std::exception& ex) {
-      logger_error("%s", ex.what());
+      logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
     }
   }
 }
 
 void Connections::__run() {
   if (tasks.empty()) {
-    usleep(1000 * 10);
-    // printf("-");
-    fflush(stdout);
+    usleep(1000);
     return;
   }
 
@@ -89,8 +91,8 @@ void Connections::start(bool* running) {
 }
 
 size_t Connections::size() {
-  return sockets.size();
+  return items.size();
 }
 void Connections::clear() {
-  sockets.clear();
+  items.clear();
 }

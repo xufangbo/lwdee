@@ -13,5 +13,6 @@ class DefaultProtocal : public LeopardProtocal {
   void setHeader(BufferStream* outputStream, std::string& path, uint64_t sen1,uint32_t rec1, uint32_t sen2, uint32_t rec2) override;
   void setLength(BufferStream* outputStream) override;
   void setsen2(BufferStream* outputStream,uint32_t sen2) override;
-  ProtocalHeaderPtr getHeader(BufferStream* inputStream) override;
+  void parseHeader(BufferStream* inputStream, ProtocalHeader* header) override;
+  ProtocalHeaderPtr newHeader() override;
 };

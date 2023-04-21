@@ -17,7 +17,7 @@ void LaneClients::wait() {
     } catch (Exception& ex) {
       logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error("[%d] - %s", (i + 1), ex.what());
+      logger_error("[%d] - %s,%s:%d",(i + 1), ex.what(),__FILE__,__LINE__);
     }
   }
 }
@@ -30,7 +30,7 @@ void LaneClients::close() {
     } catch (Exception& ex) {
       logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
     } catch (std::exception& ex) {
-      logger_error("[%d] - %s", (i + 1), ex.what());
+      logger_error("[%d] - %s,%s:%d",(i + 1), ex.what(),__FILE__,__LINE__);
     }
   }
 }

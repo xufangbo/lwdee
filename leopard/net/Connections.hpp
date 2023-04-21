@@ -10,12 +10,10 @@
 #include "Connection.hpp"
 #include "Socket.hpp"
 
-typedef std::shared_ptr<Connection> ConnectionPtr;
-
 class Connections {
  private:
   std::mutex mut;
-  std::map<int, ConnectionPtr> sockets;
+  std::map<int, Connection*> items;
   // std::vector<ConnectionPtr> sockets;
 
  private:
