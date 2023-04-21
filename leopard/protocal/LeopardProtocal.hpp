@@ -7,7 +7,8 @@
 
 class LeopardProtocal : public IProtocal {
  public:
-  BufferStream* csend(RequestInvoke request, std::string& path) override;
-  void caccept(IRunway* runway, Connection* connection, BufferStream* inputStream) override;
+  BufferStream* newStream( std::string& path) override;
+  void send(IRunway* runway, Connection* connection, BufferStream* outputStream) override;
+  void caccept(IRunway* runway, Connection* connection, BufferStream* inputStream) override;  
   void saccept(IRunway* runway, Connection* connection, BufferStream* inputStream) override;
 };

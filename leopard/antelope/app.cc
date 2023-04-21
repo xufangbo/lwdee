@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   // test_long_sync(1000, input_small, 10, ip, port);   // 0.158  [148]wait timeout
   // test_long_sync(1000, input_small, 100, ip, port);  // blocked always , add lock not ok
 
-  test_short_sync(1, input_large, ip, port);  // 0.082
+  // test_short_sync(1, input_large, ip, port);  // 0.082
   // test_short_sync(1000, input_large, ip, port);  // 72.791
   // test_short_async(1000, input_large, ip, port);     //
   // test_long_sync(1, input_large, 1, ip, port);       //
@@ -39,16 +39,17 @@ int main(int argc, char** argv) {
   // test_long_sync(1000, input_large, 10, ip, port);   //
   // test_long_sync(1000, input_large, 100, ip, port);  //
 
-  // for (int i = 0; i < 100; i++) {
-  //   // test_short_async(1000, input_small, ip, port);  // 0.259 , offen  server or client segement failed
-  //   test_long_sync(1000, input_small, 10, ip, port);  // 0.020
+  for (int i = 0; i < 100; i++) {
+    test_short_sync(1000, input_small, ip, port);  // 10.282
+    // test_short_async(1000, input_small, ip, port);  // 0.259 , offen  server or client segement failed
+    // test_long_sync(1000, input_small, 10, ip, port);  // 0.020
 
-  //   for (int t = 0; t < 30; t++) {
-  //     printf("\n");
-  //   }
-  //   printf("%d ^^^^^^^^^^^^^^^^", i);
-  //   sleep(1);
-  // }
+    for (int t = 0; t < 30; t++) {
+      printf("\n");
+    }
+    printf("%d ^^^^^^^^^^^^^^^^", i);
+    sleep(1);
+  }
 
   Antelope::instance.join();
   // Antelope::instance.stop();

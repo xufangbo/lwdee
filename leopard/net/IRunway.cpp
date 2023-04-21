@@ -117,7 +117,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  printf("\n> -------------- %d\n", sum);
+  // printf("\n> -------------- %d\n", sum);
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {

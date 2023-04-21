@@ -8,6 +8,18 @@
 #include "net/ClientSocket.hpp"
 #include "net/log.hpp"
 
+BufferStream* LeopardProtocal::newStream(std::string& path) {
+  BufferStream* outputStream = new LeopardStream();  // send task 中释放
+  LeopardHeader().setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
+
+  return outputStream;
+}
+
+void LeopardProtocal::send(IRunway* runway, Connection* connection, BufferStream* outputStream) {
+  LeopardHeader().setLength(outputStream);
+  runway->addSendTask(connection, outputStream);
+}
+
 void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
@@ -44,19 +56,6 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 #endif
 }
 
-BufferStream* LeopardProtocal::csend(RequestInvoke request, std::string& path) {
-  LeopardHeader header;
-
-  BufferStream* outputStream = new LeopardStream();  // send task 中释放
-  header.setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
-
-  request(outputStream);
-
-  header.setLength(outputStream);
-
-  return outputStream;
-}
-
 void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
@@ -81,6 +80,7 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
 
   // sendQueue->push(socket, outputStream);
   runway->addSendTask(connection, outputStream);
+
   runway->qps()->time(header.rec1_sen1());
 
   // leopard_debug("> response %s", header.path.c_str());

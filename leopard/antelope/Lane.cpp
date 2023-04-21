@@ -61,31 +61,3 @@ Connection* Lane::create(const char* ip, int port) {
 
   return connection;
 }
-
-void Lane::send(Connection* connection, BufferStream* outputStream) {
-  // sendQueue->push(socket, outputStream);
-  this->addSendTask(connection, outputStream);
-}
-
-// void Lane::close(int fd) {
-//   auto it = connections.find(fd);
-//   if (it == connections.end()) {
-//     logger_error("can't find fd %d", fd);
-//     return;
-//   }
-
-//   if (it->second->socket == nullptr) {
-//     logger_error("socket is null %d", fd);
-//   }
-
-//   if (it->second->closed) {
-//     logger_error("socket has closed %d", fd);
-//   }
-
-//   IRunway::close(it->second->socket);
-// }
-
-// bool Lane::contains(int fd) {
-//   Connection* connection = connections.find(fd);
-//   return socket != nullptr;
-// }

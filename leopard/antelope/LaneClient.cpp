@@ -30,12 +30,13 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
   TcpRequest::regist(path, callback);
 
   auto protocal = ProtocalFactory::getProtocal();
-  // sender中释放
 
-  auto outputStream = protocal->csend(request, path);
+  auto outputStream = protocal->newStream(path);
+  request(outputStream);
+  
+  auto runway = Antelope::instance.selectRunway();
 
-  // connection->push(outputStream);
-  Antelope::instance.send(connection, outputStream);
+  protocal->send(runway,connection,outputStream);
 
   return waiter;
 }

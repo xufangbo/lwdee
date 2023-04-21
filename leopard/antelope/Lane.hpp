@@ -15,7 +15,6 @@ class Lane : public IRunway {
  public:
   Lane(int id, bool* running);
   Connection* create(const char* ip, int port);
-  void send(Connection* socket, BufferStream* outputStream);
   void start();
   // bool contains(int fd);
   // void close(int fd);

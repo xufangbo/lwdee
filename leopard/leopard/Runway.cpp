@@ -19,8 +19,8 @@ void Runway::run() {
   try {
     this->server = std::make_shared<Socket>(&_qps);
 
-    leopard_debug("server socket sendbufer %d", server->getSendBuf());    // 425984
-    leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
+    // leopard_debug("server socket sendbufer %d", server->getSendBuf());    // 2626560
+    // leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
 
     this->server->reusePort();
     if (this->nonBlocking) {
