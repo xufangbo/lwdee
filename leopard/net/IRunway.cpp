@@ -120,23 +120,13 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {
-  try {
+  try {   
     this->__acceptRequest(connection, inputStream);
   } catch (Exception& ex) {
     logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
   } catch (std::exception& ex) {
     logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
   }
-}
-
-void IRunway::parseRequest(BufferStream* inputStream, ProtocalHeader* header) {
-  inputStream->moveToHead();
-
-  auto protocal = ProtocalFactory::getProtocal();
-  protocal->parseHeader(inputStream, header);
-  auto path = header->path;
-
-  this->_qps.time(header->rec1_sen1());
 }
 
 void IRunway::acceptSend(Connection* connection) {

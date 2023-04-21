@@ -1,7 +1,7 @@
 #pragma once
 
 #include <atomic>
-#include "TcpRequest.hpp"
+#include "protocal/TcpRequest.hpp"
 #include "core/suspend.hpp"
 #include "net/ClientSocket.hpp"
 #include "net/Connection.hpp"

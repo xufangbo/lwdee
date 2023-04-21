@@ -4,7 +4,6 @@
 #include <memory>
 #include <thread>
 #include "LaneClient.hpp"
-#include "TcpRequest.hpp"
 #include "net/IRunway.hpp"
 #include "net/Connection.hpp"
 

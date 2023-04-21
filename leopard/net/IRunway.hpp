@@ -6,7 +6,6 @@
 #include "Connection.hpp"
 #include "Connections.hpp"
 #include "Epoll.hpp"
-#include "LeopardProtocal.hpp"
 #include "Qps.hpp"
 
 #define BUFFER_SIZE 1024
@@ -34,10 +33,9 @@ class IRunway {
   void acceptRecive(Connection* connection, epoll_event* evt);
   void acceptRequest(Connection* connection, BufferStream* inputStream);
   virtual void __acceptRequest(Connection* connection, BufferStream* inputStream) = 0;
-  void parseRequest(BufferStream* inputStream,ProtocalHeader*header);
 
   void acceptSend(Connection* connection);
-  void addSendTask(Connection* connection, BufferStream* outputStream);
+  
   inline uint32_t gererateEnvents();
 
  public:
@@ -47,4 +45,5 @@ class IRunway {
   Qps* qps();
   void join();
   size_t size() { return connections->size(); }
+  void addSendTask(Connection* connection, BufferStream* outputStream);
 };

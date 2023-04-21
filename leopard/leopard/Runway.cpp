@@ -1,6 +1,5 @@
 #include "Runway.hpp"
 
-#include "TcpResponse.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
@@ -78,31 +77,5 @@ void Runway::acceptSocket(epoll_event* evt) {
 
 void Runway::__acceptRequest(Connection* connection, BufferStream* inputStream) {
   auto protocal = ProtocalFactory::getProtocal();
-  auto header = protocal->newHeader();
-
-  this->parseRequest(inputStream, header.get());
-
-  auto fun = TcpResponse::find(header->path);
-  if (fun == nullptr) {
-    logger_error("can't hint path: %s", header->path.c_str());
-  } else {
-    auto outputStream = ProtocalFactory::createStream();
-    auto protocal = ProtocalFactory::getProtocal();
-
-    uint32_t rec1 = Stopwatch::currentMilliSeconds() - header->sen1;
-    protocal->setHeader(outputStream, header->path, header->sen1, rec1, 0, 0);
-
-    (*fun)(inputStream, outputStream);
-    delete inputStream;
-    inputStream = nullptr;
-
-    uint32_t sen2 = Stopwatch::currentMilliSeconds() - header->sen1;
-    protocal->setsen2(outputStream, sen2);
-    protocal->setLength(outputStream);
-
-    // sendQueue->push(socket, outputStream);
-    this->addSendTask(connection, outputStream);
-
-    // leopard_debug("> response %s", header->path.c_str());
-  }
+  protocal->server_accept(this, connection, inputStream);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
 #include "net/BufferStream.hpp"
-#include "TcpResponse.hpp"
+#include "protocal/TcpResponse.hpp"
 
 void registService();

@@ -1,18 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include "DefaultStream.hpp"
+#include "net/BufferStream.hpp"
+#include "net/Connection.hpp"
 #include "net/LeopardProtocal.hpp"
-
-class DefaultProtocalHeader : public ProtocalHeader {
- public:
-};
 
 class DefaultProtocal : public LeopardProtocal {
  public:
-  void setHeader(BufferStream* outputStream, std::string& path, uint64_t sen1,uint32_t rec1, uint32_t sen2, uint32_t rec2) override;
-  void setLength(BufferStream* outputStream) override;
-  void setsen2(BufferStream* outputStream,uint32_t sen2) override;
-  void parseHeader(BufferStream* inputStream, ProtocalHeader* header) override;
-  ProtocalHeaderPtr newHeader() override;
+  BufferStream* client_request(RequestInvoke request, std::string& path) override;
+  void client_accept(IRunway* runway, Connection* connection, BufferStream* inputStream) override;
+  void server_accept(IRunway* runway, Connection* connection, BufferStream* inputStream) override;
 };

@@ -6,9 +6,7 @@
 
 #include "core/suspend.hpp"
 #include "net/BufferStream.hpp"
-
-typedef std::function<void(BufferStream*)> RequestInvoke;
-typedef std::function<void(BufferStream*)> RequestCallback;
+#include "net/LeopardProtocal.hpp"
 
 #ifdef LEOPARD_SUSPEND
 struct SuspendCallback {

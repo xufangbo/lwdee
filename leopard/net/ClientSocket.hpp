@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <atomic>
 #include "Queue.hpp"
 #include "Socket.hpp"
 #include "core/Exception.hpp"
@@ -16,7 +17,7 @@ enum class WaitStatus : uint8_t {
 class SocketWaiter_t {
  private:
   uint32_t id;
-  WaitStatus status = WaitStatus::waiting;
+  std::atomic<WaitStatus> status = WaitStatus::waiting;
 
  public:
   SocketWaiter_t(uint32_t id)

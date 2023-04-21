@@ -22,41 +22,8 @@ void Lane::acceptEvent(epoll_event* evt) {
 }
 
 void Lane::__acceptRequest(Connection* connection, BufferStream* inputStream) {
-  ClientSocket* socket = (ClientSocket*)(connection->socket);
-
   auto protocal = ProtocalFactory::getProtocal();
-  auto header = protocal->newHeader();
-  this->parseRequest(inputStream, header.get());
-  header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
-
-  // leopard_trace(header->to_string().c_str());
-
-  auto callback = TcpRequest::find(header->path);
-  auto waiter = socket->popWaiter();
-  if (waiter == nullptr || waiter.use_count() == 0) {
-    logger_error("waiter is null");
-  } else {
-    leopard_trace("get waiter [%d]", waiter->getId());
-  }
-
-  if (callback != nullptr) {
-    (*callback)(inputStream);
-    delete inputStream;
-    inputStream = nullptr;
-
-    waiter->notify(WaitStatus::succeed);
-  } else {
-    waiter->notify(WaitStatus::nohint);
-    logger_error("can't hint path %s", header->path.c_str());
-  }
-
-#ifdef LEOPARD_SUSPEND
-  auto suspend = TcpRequest::findSuspend(path);
-  if (suspend != nullptr) {
-    suspend->callback(inputStream);
-    return;
-  }
-#endif
+  protocal->client_accept(this, connection, inputStream);
 }
 
 Connection* Lane::create(const char* ip, int port) {
