@@ -16,7 +16,7 @@ std::atomic<int> responseIndex = 0;
 std::string path = "com.cs.sales.order.save";
 
 std::string input_small(int i) {
-  std::string input = std::to_string(i + 1) + " green green green ";
+  std::string input = std::to_string(i + 1) + " green green green!";
   // logger_debug("send [%i]", i + 1);
   return input;
 }

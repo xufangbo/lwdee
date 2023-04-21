@@ -47,18 +47,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
   // logger_debug("__acceptEvent,fd:%d", evt->data.fd);
 
   Connection* connection = (Connection*)evt->data.ptr;
-  // if (connection == nullptr) {
-  //   logger_error("connection is null ,fd: %d", evt->data.fd);
-  //   return;
-  // }
-  // if (connection->socket == nullptr) {
-  //   logger_error("socket is null %d", evt->data.fd);
-  //   return;
-  // }
-  // if (connection->closed) {
-  //   logger_error("socket has closed %d", evt->data.fd);
-  //   return;
-  // }
+
   auto socket = connection->socket;
 
   if (evt->events & EPOLLIN) {
@@ -81,7 +70,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 }
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
-  // printf("< --------------\n");
+  printf("< --------------\n");
   // logger_trace("--------------");
   int rc = 0;
   int sum = 0;
@@ -102,12 +91,19 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       sum += rc;
       auto inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
-      if (inputStream->isEnd()) {
+
+      if (inputStream->size() > 79 && !inputStream->isEnd()) {
+        leopard_debug("stream len > 79 ,but not end");
+      }
+
+      while (inputStream->isEnd()) {
         this->_qps.recvs++;
+        leopard_debug("%d", _qps.recvs.load());
         auto pickedStream = inputStream->pick();
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       }
+
       epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
     } else if (rc == -1) {
       // logger_debug("rc == -1");
@@ -120,7 +116,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  // printf("\n> -------------- %d\n", sum);
+  printf("\n> -------------- %d\n", sum);
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {
