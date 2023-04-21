@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/syscall.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -95,8 +96,17 @@ void logger(LogLevel level, const char* function, const char* file, int line, co
   char time[25];
   date_millsecond(time, 25);
 
+  // 
+  auto tid = syscall(SYS_gettid);  // pthread_self()
+
+  // 
+  const char *fileName = file;
+  if(log_option.hideWorkingPath){
+    fileName = file + log_option.workingPath;
+  }
+
   char message[MAX_DEBUG];
-  int n = snprintf(message, MAX_DEBUG, "%s [%s] [%4lu] %s:%d %s : ", time, levels[level], pthread_self(), file, line, function);
+  int n = snprintf(message, MAX_DEBUG, "%s [%s] [%4lu] %s:%d %s : ", time, levels[level], tid, fileName, line, function);
   int sz = n > 0 ? n : 0;
   char* pos = message;
 
@@ -329,6 +339,15 @@ int logger_initialize(LogOption option) {
   if (option.writeFile) {
     pthread_create(&p, NULL, rm_history_job, NULL);
   }
+
+  errno = 0;
+  char* buf = get_current_dir_name();
+  if (buf == NULL) {
+    perror("get_current_dir_name\n");
+  }
+  printf("working directory: %s\n", buf);
+  log_option.workingPath =strlen(buf);
+  free(buf);
 
   log_option.initalized = true;
   //  printf("option.initalized = true \n");

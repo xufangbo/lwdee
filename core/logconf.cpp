@@ -41,6 +41,7 @@ void read_log_config(const char* name) {
   option.is_color = cJSON_GetObjectItem(root, "color")->valueint;
   option.days = cJSON_GetObjectItem(root, "days")->valueint;
   option.writeFile = cJSON_GetObjectItem(root, "writeFile")->valueint;
+  option.hideWorkingPath = cJSON_GetObjectItem(root, "hideWorkingPath")->valueint;
 
   char* fileMode = cJSON_GetObjectItem(root, "fileMode")->valuestring;
   char* path = cJSON_GetObjectItem(root, "path")->valuestring;
