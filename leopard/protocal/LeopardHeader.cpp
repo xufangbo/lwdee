@@ -1,10 +1,10 @@
-#include "DefaultProtocalHeader.hpp"
+#include "LeopardHeader.hpp"
 
-int DefaultProtocalHeader::headerSize() {
+int LeopardHeader::headerSize() {
   return sizeof(totalLength) + sizeof(sen1) + sizeof(rec1) + sizeof(sen2) + sizeof(rec2) + sizeof(pathLength) + path.size();
 }
 
-std::string DefaultProtocalHeader::to_string() {
+std::string LeopardHeader::to_string() {
   std::stringstream s;
   s << "( " << this->sen1 << " -> " << this->rec1 << " -> " << this->sen2 << " -> " << this->rec2 << " )";
   s << " <==> " << std::setiosflags(std::ios::fixed);
@@ -16,7 +16,7 @@ std::string DefaultProtocalHeader::to_string() {
   return s.str();
 }
 
-void DefaultProtocalHeader::setHeader(BufferStream* outputStream, std::string& path, uint64_t sen1, uint32_t rec1, uint32_t sen2, uint32_t rec2) {
+void LeopardHeader::setHeader(BufferStream* outputStream, std::string& path, uint64_t sen1, uint32_t rec1, uint32_t sen2, uint32_t rec2) {
   outputStream->put<uint64_t>(0);            // len
   outputStream->put<uint64_t>(sen1);         // sen1
   outputStream->put<uint32_t>(rec1);         // rec1
@@ -26,16 +26,16 @@ void DefaultProtocalHeader::setHeader(BufferStream* outputStream, std::string& p
   outputStream->put(path);                   // path
 }
 
-void DefaultProtocalHeader::setLength(BufferStream* outputStream) {
+void LeopardHeader::setLength(BufferStream* outputStream) {
   outputStream->set<uint64_t>(0, outputStream->size());
 }
 
-void DefaultProtocalHeader::setsen2(BufferStream* outputStream, uint32_t sen2) {
+void LeopardHeader::setsen2(BufferStream* outputStream, uint32_t sen2) {
   outputStream->set<uint32_t>(20, sen2);
 }
 
-DefaultProtocalHeader DefaultProtocalHeader::parse(BufferStream* inputStream) {
-  DefaultProtocalHeader header;
+LeopardHeader LeopardHeader::parse(BufferStream* inputStream) {
+  LeopardHeader header;
 
   header.totalLength = inputStream->get<uint64_t>();
   header.sen1 = inputStream->get<uint64_t>();

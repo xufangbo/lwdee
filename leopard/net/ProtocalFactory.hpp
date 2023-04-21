@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BufferStream.hpp"
-#include "LeopardProtocal.hpp"
+#include "IProtocal.hpp"
 
 class ProtocalFactory {
  private:

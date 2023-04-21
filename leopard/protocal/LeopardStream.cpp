@@ -1,12 +1,12 @@
-#include "DefaultStream.hpp"
+#include "LeopardStream.hpp"
 
-size_t DefaultStream::currentSize() {
+size_t LeopardStream::currentSize() {
   uint64_t len;
   this->get<uint64_t>(0, len);
   return len;
 }
 
-bool DefaultStream::isEnd() {
+bool LeopardStream::isEnd() {
   if (pos < sizeof(uint64_t)) {
     return false;
   }
@@ -17,6 +17,6 @@ bool DefaultStream::isEnd() {
   return _size >= len;
 }
 
-BufferStream* DefaultStream::newInstance(size_t len) {
-  return new DefaultStream(len);
+BufferStream* LeopardStream::newInstance(size_t len) {
+  return new LeopardStream(len);
 }

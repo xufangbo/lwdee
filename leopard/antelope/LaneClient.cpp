@@ -4,7 +4,7 @@
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
-#include "net/LeopardProtocal.hpp"
+#include "net/IProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
@@ -32,7 +32,7 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
   auto protocal = ProtocalFactory::getProtocal();
   // sender中释放
 
-  auto outputStream = protocal->client_request(request, path);
+  auto outputStream = protocal->csend(request, path);
 
   // connection->push(outputStream);
   Antelope::instance.send(connection, outputStream);

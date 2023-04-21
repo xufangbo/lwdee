@@ -3,7 +3,7 @@
 #include <thread>
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
-#include "net/LeopardProtocal.hpp"
+#include "net/IProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 

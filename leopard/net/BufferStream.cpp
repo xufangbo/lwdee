@@ -26,28 +26,26 @@ BufferStream::~BufferStream() {
 }
 
 BufferStream* BufferStream::pick() {
-  // leopard_trace("< pick");
+  leopard_trace("< pick");
 
   size_t pickedLen = this->currentSize();
   auto picked = this->newInstance(pickedLen);
-  picked->puts(this->buffer, pickedLen);
+  memcpy(picked->buffer, this->buffer, pickedLen);
 
   size_t leftLen = this->_size - pickedLen;
-  Byte* left = new char[leftLen];
-  memcpy(left, buffer + pickedLen, leftLen);
+  memcpy(this->buffer, this->buffer + pickedLen, leftLen);
 
   size_t newLen = leftLen > BUF_UNIT ? leftLen : BUF_UNIT;
-  // buffer = realloc(buffer, newLen);
-  this->realloc(newLen);
+
+  if (leftLen > BUF_UNIT) {
+    this->realloc(newLen);
+  }
+
   this->pos = 0;
   this->_size = 0;
   this->capacity = newLen;
 
-  this->puts(left, leftLen);
-
-  delete[] left;
-
-  // leopard_trace("> pick,(%d)%s - (%d)%s", pickedLen, picked->buffer, _size, buffer);
+  // leopard_trace("> pick,(%d)%s - (%d)%s", pickedLen, picked->buffer + 8, _size, buffer);
 
   return picked;
 }

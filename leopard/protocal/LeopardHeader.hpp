@@ -2,7 +2,7 @@
 
 #include "net/BufferStream.hpp"
 
-class DefaultProtocalHeader {
+class LeopardHeader {
  public:
   uint64_t totalLength;
   uint64_t sen1;
@@ -16,7 +16,7 @@ class DefaultProtocalHeader {
   void setHeader(BufferStream* outputStream, std::string& path, uint64_t sen1, uint32_t rec1, uint32_t sen2, uint32_t rec2);
   void setLength(BufferStream* outputStream);
   void setsen2(BufferStream* outputStream, uint32_t sen2);
-  static DefaultProtocalHeader parse(BufferStream* inputStream);
+  static LeopardHeader parse(BufferStream* inputStream);
 
  public:
   float rec1_sen1() { return rec1 * 1.0 / 1000; }

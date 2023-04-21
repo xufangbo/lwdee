@@ -23,7 +23,7 @@ void Lane::acceptEvent(epoll_event* evt) {
 
 void Lane::__acceptRequest(Connection* connection, BufferStream* inputStream) {
   auto protocal = ProtocalFactory::getProtocal();
-  protocal->client_accept(this, connection, inputStream);
+  protocal->caccept(this, connection, inputStream);
 }
 
 Connection* Lane::create(const char* ip, int port) {

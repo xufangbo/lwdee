@@ -2,15 +2,15 @@
 
 #include <memory>
 
-#include "protocal/DefaultProtocal.hpp"
-#include "protocal/DefaultStream.hpp"
+#include "protocal/LeopardProtocal.hpp"
+#include "protocal/LeopardStream.hpp"
 
-LeopardProtocalPtr ProtocalFactory::protocal = std::make_shared<DefaultProtocal>();
+LeopardProtocalPtr ProtocalFactory::protocal = std::make_shared<LeopardProtocal>();
 
-std::shared_ptr<LeopardProtocal> ProtocalFactory::getProtocal() {
+std::shared_ptr<IProtocal> ProtocalFactory::getProtocal() {
   return protocal;
 }
 
 BufferStream* ProtocalFactory::createStream() {
-  return new DefaultStream();
+  return new LeopardStream();
 }

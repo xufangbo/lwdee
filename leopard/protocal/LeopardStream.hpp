@@ -11,15 +11,15 @@
 
 typedef void byte;
 
-class DefaultStream : public BufferStream {
+class LeopardStream : public BufferStream {
  public:
   bool isEnd() override;
   size_t currentSize() override;
 
  public:
-  DefaultStream()
+  LeopardStream()
       : BufferStream() {}
-  DefaultStream(size_t len)
+  LeopardStream(size_t len)
       : BufferStream(len) {}
 
  private:

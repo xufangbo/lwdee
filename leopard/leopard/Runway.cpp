@@ -77,5 +77,5 @@ void Runway::acceptSocket(epoll_event* evt) {
 
 void Runway::__acceptRequest(Connection* connection, BufferStream* inputStream) {
   auto protocal = ProtocalFactory::getProtocal();
-  protocal->server_accept(this, connection, inputStream);
+  protocal->saccept(this, connection, inputStream);
 }

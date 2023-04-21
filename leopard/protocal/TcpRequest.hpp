@@ -6,7 +6,7 @@
 
 #include "core/suspend.hpp"
 #include "net/BufferStream.hpp"
-#include "net/LeopardProtocal.hpp"
+#include "net/IProtocal.hpp"
 
 #ifdef LEOPARD_SUSPEND
 struct SuspendCallback {
