@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
   Antelope::instance.start();
 
   // test_short_sync(1, input_small, ip, port);         // ( 1682005236163 -> 10 -> 10 -> 12 ) <==> ( 0.010 + 0.000 + 0.002 = 0.012 )
-  test_short_sync(1000, input_small, ip, port);  // 10.282
-  // test_short_async(1000, input_small, ip, port);  // 0.259 , offen  server or client segement failed
+  // test_short_sync(1000, input_small, ip, port);  // 10.282
+  test_short_async(1000, input_small, ip, port);  // 0.259 , offen  server or client segement failed
   // test_long_sync(1, input_small, 1, ip, port);       // 0.020
   // test_long_sync(1000, input_small, 1, ip, port);    // 2.198
   // test_long_sync(1000, input_small, 10, ip, port);   // 0.158  [148]wait timeout

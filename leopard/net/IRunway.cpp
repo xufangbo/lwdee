@@ -44,26 +44,21 @@ void IRunway::run() {
 }
 
 void IRunway::__acceptEvent(epoll_event* evt) {
-  logger_debug("__acceptEvent,fd:%d", evt->data.fd);
+  // logger_debug("__acceptEvent,fd:%d", evt->data.fd);
 
   Connection* connection = (Connection*)evt->data.ptr;
-  // Connection* connection = static_cast<Connection*>(evt->data.ptr);
   // if (connection == nullptr) {
-  //   connection = connections->find(evt->data.fd);
+  //   logger_error("connection is null ,fd: %d", evt->data.fd);
+  //   return;
   // }
-  // auto connection = connections->find(evt->data.fd);
-  if (connection == nullptr) {
-    logger_error("connection is null ,fd: %d", evt->data.fd);
-    return;
-  }
-  if (connection->socket == nullptr) {
-    logger_error("socket is null %d", evt->data.fd);
-    return;
-  }
-  if (connection->closed) {
-    logger_error("socket has closed %d", evt->data.fd);
-    return;
-  }
+  // if (connection->socket == nullptr) {
+  //   logger_error("socket is null %d", evt->data.fd);
+  //   return;
+  // }
+  // if (connection->closed) {
+  //   logger_error("socket has closed %d", evt->data.fd);
+  //   return;
+  // }
   auto socket = connection->socket;
 
   if (evt->events & EPOLLIN) {

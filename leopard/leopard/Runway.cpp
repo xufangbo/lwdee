@@ -77,7 +77,7 @@ void Runway::acceptSocket(epoll_event* evt) {
 
     epoll->add(client_fd, EVENTS_NEW, connection);
 
-    leopard_trace("socket accept %d", client_fd);
+    // leopard_trace("socket accept %d", client_fd);
 
   } else if (evt->events & EPOLLIN) {
     leopard_info("server socket EPOLLOUT");
