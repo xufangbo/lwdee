@@ -11,7 +11,7 @@ BufferStream::BufferStream() {
 
 BufferStream::BufferStream(size_t len) {
   // streamsCount++;
-  buffer = new char[capacity];
+  buffer = new char[len];
   _size = capacity = len;
   pos = 0;
 }
@@ -26,7 +26,7 @@ BufferStream::~BufferStream() {
 }
 
 BufferStream* BufferStream::pick() {
-  leopard_trace("< pick");
+  // leopard_trace("< pick");
 
   size_t pickedLen = this->currentSize();
   auto picked = this->newInstance(pickedLen);

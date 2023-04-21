@@ -11,7 +11,7 @@ IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->_qps.waitings = [this]() { return this->connections->size(); };
-  this->isET = false;
+  this->isET = true;
   this->isEOUT = false;
 }
 
@@ -80,6 +80,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
   // printf("< --------------\n");
   // logger_trace("--------------");
   int rc = 0;
+  int sum = 0;
 
   do {
     auto socket = connection->socket;
@@ -95,6 +96,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     // leopard_trace("recv - rc:%d,%s", rc, buf);
 
     if (rc > 0) {
+      sum += rc;
       auto inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
       if (inputStream->isEnd()) {
@@ -116,11 +118,11 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  // printf("\n> --------------\n");
+  // printf("\n> -------------- %d\n",sum);
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {
-  try {   
+  try {
     this->__acceptRequest(connection, inputStream);
   } catch (Exception& ex) {
     logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());

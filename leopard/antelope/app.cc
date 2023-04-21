@@ -23,16 +23,16 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start();
 
-  test_short_sync(1, input_small, ip, port);         // ( 1682005236163 -> 10 -> 10 -> 12 ) <==> ( 0.010 + 0.000 + 0.002 = 0.012 )
-  // test_short_sync(1000, input_small, ip, port);      // 16.747
+  // test_short_sync(1, input_small, ip, port);         // ( 1682005236163 -> 10 -> 10 -> 12 ) <==> ( 0.010 + 0.000 + 0.002 = 0.012 )
+  // test_short_sync(1000, input_small, ip, port);  // 10.282
   // test_short_async(1000, input_small, ip, port);  // 0.259 , offen  server or client segement failed
   // test_long_sync(1, input_small, 1, ip, port);       // 0.020
   // test_long_sync(1000, input_small, 1, ip, port);    // 2.198
   // test_long_sync(1000, input_small, 10, ip, port);   // 0.158  [148]wait timeout
   // test_long_sync(1000, input_small, 100, ip, port);  // blocked always , add lock not ok
 
-  // test_short_sync(1, input_large, ip, port);  // 69.024 fuck
-  // test_short_sync(1000, input_large, ip, port);      //
+  test_short_sync(1, input_large, ip, port);  // 0.082
+  // test_short_sync(1000, input_large, ip, port);  // 72.791
   // test_short_async(1000, input_large, ip, port);     //
   // test_long_sync(1, input_large, 1, ip, port);       //
   // test_long_sync(1000, input_large, 1, ip, port);    //

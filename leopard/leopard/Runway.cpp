@@ -19,6 +19,9 @@ void Runway::run() {
   try {
     this->server = std::make_shared<Socket>(&_qps);
 
+    leopard_debug("server socket sendbufer %d", server->getSendBuf());    // 425984
+    leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
+
     this->server->reusePort();
     this->server->setNonBlocking();
     this->server->bind(ip.c_str(), port);
@@ -50,7 +53,9 @@ void Runway::acceptSocket(epoll_event* evt) {
     int client_fd = server->accept();
 
     Socket* client = new Socket(client_fd, &_qps);
-    client->setReciveBuf(BUFFER_SIZE);
+
+    leopard_debug("client socket sendbufer %d", client->getSendBuf());    // 425984
+    leopard_debug("client socket revibufer %d", client->getReciveBuf());  // 131072
 
     connections->insert(client);
 
