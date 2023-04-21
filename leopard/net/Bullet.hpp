@@ -2,6 +2,7 @@
 
 #include <list>
 #include <memory>
+#include "Queue.hpp"
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
 
@@ -34,6 +35,8 @@ class Bullet {
   Bullet(BufferStreamPtr outputStream)
       : outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {}
 
+  ~Bullet();
+
   /**
    * @brief 是否正常发送
    *
@@ -50,5 +53,4 @@ class Bullet {
   static std::atomic<int> cout;
 };
 
-typedef std::shared_ptr<Bullet> BulletPtr;
-typedef std::list<BulletPtr> BulletList;
+typedef Queue<Bullet*> BulletList;

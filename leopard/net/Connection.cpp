@@ -9,24 +9,22 @@ Connection::Connection(Socket* socket)
 }
 Connection::Connection(Socket* socket, BufferStreamPtr outputStream)
     : socket(socket) {
-  auto bullet = std::make_shared<Bullet>(outputStream);
-  bullets.push_back(bullet);
+  this->push(outputStream);
 }
 
 void Connection::push(BufferStreamPtr outputStream) {
-  // leopard_trace("-");
-  auto bullet = std::make_shared<Bullet>(outputStream);
-  bullets.push_back(bullet);
+  auto bullet = new Bullet(outputStream);
+  bullets.push(bullet);
 }
 
 bool Connection::send() {
   while (!this->bullets.empty()) {
-    // leopard_trace("-");
     auto bullet = this->bullets.front();
     if (!bullet->send(this->socket)) {
       return false;
     }
-    this->bullets.pop_front();
+    this->bullets.pop();
+    delete bullet;
   }
 
   _finished = true;

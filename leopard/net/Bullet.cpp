@@ -6,6 +6,9 @@
 
 std::atomic<int> Bullet::cout(0);
 
+Bullet::~Bullet() {
+}
+
 bool Bullet::send(Socket* socket) {
   int rc = socket->send(buffer(), leftover());
 

@@ -2,9 +2,11 @@
 
 #include <list>
 #include <memory>
+#include <mutex>
 #include "Bullet.hpp"
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
+
 
 class Connection {
  private:
