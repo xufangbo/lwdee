@@ -70,7 +70,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
 }
 
 void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
-  printf("< --------------\n");
+  // printf("< --------------\n");
   // logger_trace("--------------");
   int rc = 0;
   int sum = 0;
@@ -94,7 +94,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
-        leopard_debug("%d", _qps.recvs.load());
+        // leopard_debug("%d", _qps.recvs.load());
         auto pickedStream = inputStream->pick();
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
@@ -112,7 +112,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  printf("\n> -------------- %d\n", sum);
+  // printf("\n> -------------- %d\n", sum);
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {

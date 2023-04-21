@@ -44,11 +44,10 @@ BufferStream* BufferStream::pick() {
   _size = pos = _size - picked->size();
   this->capacity = newLen;
 
-  char end_str[8] = {'\0'};
-  memcpy(end_str, picked->buffer + (picked->size() - 7), 7);
-  end_str[7]='\0';
-
-  leopard_trace("> pick,(%d)%s - end with:%s", pickedLen, picked->buffer + 32, end_str);
+  // char end_str[8] = {'\0'};
+  // memcpy(end_str, picked->buffer + (picked->size() - 7), 7);
+  // end_str[7]='\0';
+  // leopard_trace("> pick,(%d)%s - end with:%s", pickedLen, picked->buffer + 32, end_str);
 
   return picked;
 }
