@@ -20,7 +20,7 @@ double SocketWaiter_t::wait(int timeout) {
   }
   // throw Exception("timeout", ZONE);
   // logger_error("timeout");
-  logger_error("timeout in 30s");
+  logger_error("[%d] timeout in 30s",id);
   return timeout;
 }
 

@@ -13,8 +13,7 @@ typedef std::shared_ptr<LaneClient> LaneClientPtr;
 class LaneClient {
  private:
   int parallel = 1;
-  std::atomic<uint32_t> index;
-  std::atomic<uint32_t> waitId = 0;
+  std::atomic<uint32_t> index;  
   std::vector<Connection*> connections;
   std::vector<SocketWaiter> waiters;
 

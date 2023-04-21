@@ -28,7 +28,7 @@ class SocketWaiter_t {
 
   uint32_t getId() { return id; }
 
-  double wait(int timeout = 30);
+  double wait(int timeout = 10);
 };
 
 typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;

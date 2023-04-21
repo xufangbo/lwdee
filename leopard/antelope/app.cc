@@ -40,6 +40,7 @@ int main(int argc, char** argv) {
   // test_long_sync(1000, input_large, 100, ip, port);  //
 
   Antelope::instance.join();
+  // Antelope::instance.stop();
 
   return 0;
 }

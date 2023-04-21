@@ -17,12 +17,14 @@ SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len, Request
   return invoke(path, request, callback);
 }
 
+std::atomic<uint32_t> waitId = 0;
+
 SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
   Connection* connection = this->next();
   ClientSocket* socket = (ClientSocket*)connection->socket;
 
-  this->waitId++;
-  SocketWaiter waiter = std::make_shared<SocketWaiter_t>(this->waitId.load());
+  waitId++;
+  SocketWaiter waiter = std::make_shared<SocketWaiter_t>(waitId.load());
   socket->pushWaiter(waiter);
   this->waiters.push_back(waiter);
 
