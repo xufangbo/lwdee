@@ -26,7 +26,7 @@ void Lane::__acceptRequest(Connection* connection, BufferStreamPtr inputStream) 
   auto header = this->parseRequest(inputStream.get());
   header->rec2 = Stopwatch::currentMilliSeconds() - header->sen1;
 
-  leopard_trace(header->to_string().c_str());
+  // leopard_trace(header->to_string().c_str());
 
   auto callback = TcpRequest::find(header->path);
 
@@ -88,7 +88,7 @@ Connection* Lane::create(const char* ip, int port) {
   return connection;
 }
 
-void Lane::send(Connection* connection, BufferStreamPtr outputStream) {
+void Lane::send(Connection* connection, BufferStream* outputStream) {
   // sendQueue->push(socket, outputStream);
   this->addSendTask(connection, outputStream);
 }

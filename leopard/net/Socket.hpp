@@ -9,13 +9,14 @@
 class Socket {
  protected:
   int _fd;
-  BufferStreamPtr _inputStream;
+  BufferStream* _inputStream;
   Qps* qps = nullptr;
 
  public:
   bool sendEnabled = false;
   Socket(Qps* qps);
   Socket(int fd, Qps* qps);
+  ~Socket();
 
   /**
    * @brief 数据发送完成事件
@@ -24,7 +25,7 @@ class Socket {
   void onSend();
 
   int& fd() { return _fd; }
-  BufferStream* inputStream() { return _inputStream.get(); }
+  BufferStream* inputStream() { return _inputStream; }
   // BufferStream *outputStream() { return _outputStream.get(); }
 
   void bind(const char* ip, int port);

@@ -10,7 +10,7 @@ class Bullet {
  private:
   bool _finished = false;
   uint64_t pos = 0;
-  BufferStreamPtr outputStream;
+  BufferStream* outputStream = nullptr;
 
  private:
   uint64_t start = 0;
@@ -32,7 +32,7 @@ class Bullet {
   inline void moveon(int size) { pos += size; }
 
  public:
-  Bullet(BufferStreamPtr outputStream)
+  Bullet(BufferStream* outputStream)
       : outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {}
 
   ~Bullet();

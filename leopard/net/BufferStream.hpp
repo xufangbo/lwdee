@@ -27,6 +27,7 @@ class BufferStream {
 
  protected:
   virtual std::shared_ptr<BufferStream> newInstance(size_t len) = 0;
+  void realloc(int newSize);
 
  public:
   template <typename T>

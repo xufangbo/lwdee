@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <mutex>
 #include "core/Exception.hpp"
 
 template <class T>
@@ -27,6 +28,7 @@ class Queue {
   QueueNode<T>* header;
   QueueNode<T>* tail;
   size_t _size = 0;
+  std::mutex mut;
 
  public:
   Queue();
@@ -54,6 +56,8 @@ Queue<T>::~Queue() {
 
 template <class T>
 void Queue<T>::push(T value) {
+  std::lock_guard lock(mut);
+
   if (header == nullptr) {
     tail = header = new QueueNode<T>(value);
   } else {
@@ -73,6 +77,7 @@ T Queue<T>::front() {
 
 template <class T>
 void Queue<T>::pop() {
+  std::lock_guard lock(mut);
   if (header == nullptr) {
     throw Exception("Queue is empty", ZONE);
   }

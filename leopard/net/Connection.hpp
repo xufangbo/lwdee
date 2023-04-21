@@ -7,7 +7,6 @@
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
 
-
 class Connection {
  private:
   bool _finished = false;
@@ -20,9 +19,10 @@ class Connection {
   bool closed = false;
 
   Connection(Socket* socket);
-  Connection(Socket* socket, BufferStreamPtr outputStream);
+  Connection(Socket* socket, BufferStream* outputStream);
+  ~Connection();
 
-  void push(BufferStreamPtr outputStream);
+  void push(BufferStream* outputStream);
 
   /**
    * @brief 是否正常发送

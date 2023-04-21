@@ -7,12 +7,19 @@
 Connection::Connection(Socket* socket)
     : socket(socket) {
 }
-Connection::Connection(Socket* socket, BufferStreamPtr outputStream)
+Connection::Connection(Socket* socket, BufferStream* outputStream)
     : socket(socket) {
   this->push(outputStream);
 }
 
-void Connection::push(BufferStreamPtr outputStream) {
+Connection::~Connection() {
+  if (socket != nullptr) {
+    delete socket;
+    socket = nullptr;
+  }
+}
+
+void Connection::push(BufferStream* outputStream) {
   auto bullet = new Bullet(outputStream);
   bullets.push(bullet);
 }

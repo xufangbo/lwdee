@@ -24,6 +24,13 @@ Socket::Socket(int fd, Qps* qps)
   this->qps->opens++;
 }
 
+Socket::~Socket() {
+  if (_inputStream != nullptr) {
+    delete _inputStream;
+    _inputStream = nullptr;
+  }
+}
+
 void Socket::onSend() {
   this->qps->sends++;
 }

@@ -16,5 +16,5 @@ class Antelope : public IRunwayContainer<Lane> {
 
  public:
   Connection* create(const char* ip, int port);
-  void send(Connection* connection, BufferStreamPtr outputStream);
+  void send(Connection* connection, BufferStream* outputStream);
 };

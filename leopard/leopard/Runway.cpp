@@ -87,13 +87,13 @@ void Runway::__acceptRequest(Connection* connection, BufferStreamPtr inputStream
     auto protocal = ProtocalFactory::getProtocal();
 
     uint32_t rec1 = Stopwatch::currentMilliSeconds() - header->sen1;
-    protocal->setHeader(outputStream.get(), header->path, header->sen1, rec1, 0, 0);
+    protocal->setHeader(outputStream, header->path, header->sen1, rec1, 0, 0);
 
-    (*fun)(inputStream.get(), outputStream.get());
+    (*fun)(inputStream.get(), outputStream);
 
     uint32_t sen2 = Stopwatch::currentMilliSeconds() - header->sen1;
-    protocal->setsen2(outputStream.get(), sen2);
-    protocal->setLength(outputStream.get());
+    protocal->setsen2(outputStream, sen2);
+    protocal->setLength(outputStream);
 
     // sendQueue->push(socket, outputStream);
     this->addSendTask(connection, outputStream);

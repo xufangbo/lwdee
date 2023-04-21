@@ -41,7 +41,7 @@ class Connections {
   void start(bool* running);
   Connection* insert(Socket* s);
   Connection* find(int fd);
-  void pushBullet(Connection* socket, BufferStreamPtr outputStream);
+  void pushBullet(Connection* socket, BufferStream* outputStream);
   void remove(int fd);
   void removeTasks();
 

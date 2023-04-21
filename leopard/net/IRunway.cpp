@@ -147,7 +147,7 @@ void IRunway::acceptSend(Connection* connection) {
   // connection->socket->sendEnabled = true;
 }
 
-void IRunway::addSendTask(Connection* connection, BufferStreamPtr outputStream) {
+void IRunway::addSendTask(Connection* connection, BufferStream* outputStream) {
   this->connections->pushBullet(connection, outputStream);
 }
 

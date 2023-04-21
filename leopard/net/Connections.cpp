@@ -8,7 +8,7 @@
 #define lock  //
 
 #define lock_tasks std::lock_guard lock_tasks(mut_task)
-#define lock_tasks  //
+// #define lock_tasks  //
 
 Connection* Connections::insert(Socket* s) {
   auto task = std::make_shared<Connection>(s);
@@ -63,8 +63,9 @@ void Connections::__run() {
   this->removeTasks();
 }
 
-void Connections::pushBullet(Connection* connection, BufferStreamPtr outputStream) {
+void Connections::pushBullet(Connection* connection, BufferStream* outputStream) {
   connection->push(outputStream);
+  lock_tasks;
   auto it = std::find_if(tasks.begin(), tasks.end(), [&connection](Connection* i) { return i == connection; });
   if (it == tasks.end()) {
     tasks.emplace_back(connection);

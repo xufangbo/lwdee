@@ -33,11 +33,11 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
   auto protocal = ProtocalFactory::getProtocal();
   auto outputStream = ProtocalFactory::createStream();
 
-  protocal->setHeader(outputStream.get(), path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
+  protocal->setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
 
-  request(outputStream.get());
+  request(outputStream);
 
-  protocal->setLength(outputStream.get());
+  protocal->setLength(outputStream);
 
   // connection->push(outputStream);
   Antelope::instance.send(connection, outputStream);

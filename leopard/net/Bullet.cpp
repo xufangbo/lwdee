@@ -7,6 +7,10 @@
 std::atomic<int> Bullet::cout(0);
 
 Bullet::~Bullet() {
+  if (outputStream != nullptr) {
+    delete outputStream;
+    outputStream = nullptr;
+  }
 }
 
 bool Bullet::send(Socket* socket) {

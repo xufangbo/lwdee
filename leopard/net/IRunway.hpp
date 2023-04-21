@@ -37,7 +37,7 @@ class IRunway {
   ProtocalHeaderPtr parseRequest(BufferStream* inputStream);
 
   void acceptSend(Connection* connection);
-  void addSendTask(Connection* connection, BufferStreamPtr outputStream);
+  void addSendTask(Connection* connection, BufferStream* outputStream);
   inline uint32_t gererateEnvents();
 
  public:

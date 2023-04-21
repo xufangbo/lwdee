@@ -24,7 +24,7 @@ Connection* Antelope::create(const char* ip, int port) {
   return skt;
 }
 
-void Antelope::send(Connection* connection, BufferStreamPtr outputStream) {
+void Antelope::send(Connection* connection, BufferStream* outputStream) {
   auto runway = std::min_element(runways.begin(), runways.end(), [](Lane* x, Lane* y) { return x->size() - y->size(); });
   if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
