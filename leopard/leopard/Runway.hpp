@@ -4,18 +4,17 @@
 #include <memory>
 #include <thread>
 
+#include "net/Connection.hpp"
+#include "net/Connections.hpp"
 #include "net/Epoll.hpp"
 #include "net/IRunway.hpp"
 #include "net/Qps.hpp"
-#include "net/Connection.hpp"
-#include "net/Connection.hpp"
-#include "net/Connections.hpp"
 
 class Runway : public IRunway {
  private:
   std::string ip;
   int port;
-  std::shared_ptr<Socket> server;
+  Socket* server = nullptr;
 
  private:
   void run() override;
@@ -25,6 +24,6 @@ class Runway : public IRunway {
 
  public:
   Runway(int id, bool* running, std::string ip, int port);
+  ~Runway();
   void start();
-
 };

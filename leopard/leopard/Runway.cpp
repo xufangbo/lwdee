@@ -11,13 +11,20 @@ Runway::Runway(int id, bool* running, std::string ip, int port)
     : IRunway(id, running), ip(ip), port(port) {
 }
 
+Runway::~Runway() {
+  if (server != nullptr) {
+    delete server;
+    server = nullptr;
+  }
+}
+
 void Runway::start() {
   this->thread = std::thread(&Runway::run, this);
 }
 
 void Runway::run() {
   try {
-    this->server = std::make_shared<Socket>(&_qps);
+    this->server = new Socket(&_qps);
 
     // leopard_debug("server socket sendbufer %d", server->getSendBuf());    // 2626560
     // leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
@@ -30,7 +37,7 @@ void Runway::run() {
     this->server->bind(ip.c_str(), port);
     this->server->listen();
 
-    epoll->add(this->server->fd(), isET ? (EPOLLIN | EPOLLET) : EPOLLIN);
+    epoll->add(this->server->fd(), isET ? (EPOLLIN | EPOLLET) : EPOLLIN, server);
 
   } catch (EpollException& ex) {
     logger_error("%s", ex.getMessage().c_str());
@@ -44,7 +51,8 @@ void Runway::run() {
 }
 
 void Runway::acceptEvent(epoll_event* evt) {
-  if (evt->data.fd == server->fd()) {
+  // if (evt->data.fd == server->fd()) {
+  if (evt->data.ptr == server) {
     this->acceptSocket(evt);
   } else {
     IRunway::__acceptEvent(evt);
@@ -57,26 +65,19 @@ void Runway::acceptSocket(epoll_event* evt) {
 
     Socket* client = new Socket(client_fd, &_qps);
 
-    leopard_debug("client socket sendbufer %d", client->getSendBuf());    // 425984
-    leopard_debug("client socket revibufer %d", client->getReciveBuf());  // 131072
+    // leopard_debug("client socket sendbufer %d", client->getSendBuf());    // 425984 2626560
+    // leopard_debug("client socket revibufer %d", client->getReciveBuf());  // 131072 131072
 
-    connections->insert(client);
+    auto connection = connections->insert(client);
+    // evt->data.ptr = connection;
 
     if (nonBlocking) {
       client->setNonBlocking();
     }
 
-    uint32_t events = EPOLLIN;
-    events |= (EPOLLRDHUP | EPOLLHUP);
-    if (isEOUT) {
-      events |= EPOLLOUT;
-    }
-    if (isET) {
-      events |= EPOLLET;
-    }
-    epoll->add(client_fd, events);
+    epoll->add(client_fd, EVENTS_NEW, connection);
 
-    // leopard_trace("socket accept %d", client_fd);
+    leopard_trace("socket accept %d", client_fd);
 
   } else if (evt->events & EPOLLIN) {
     leopard_info("server socket EPOLLOUT");

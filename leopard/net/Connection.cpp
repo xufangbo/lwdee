@@ -13,7 +13,9 @@ Connection::Connection(Socket* socket, BufferStream* outputStream)
 }
 
 Connection::~Connection() {
+  
   if (socket != nullptr) {
+    logger_debug("dispose %d",socket->fd());
     delete socket;
     socket = nullptr;
   }

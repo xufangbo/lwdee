@@ -14,14 +14,16 @@ class IRunway {
  protected:
   int id;
   bool* running = nullptr;
-  char buf[BUFFER_SIZE] = {0};
-
- protected:
-  std::thread thread;
   std::shared_ptr<Epoll> epoll;
   bool isET = true;
   bool isEOUT = false;
   bool nonBlocking = false;
+  char buf[BUFFER_SIZE] = {0};
+  std::thread thread;
+  uint32_t EVENTS_SERVER = 0;
+  uint32_t EVENTS_NEW = 0;
+  uint32_t EVENTS_IN = 0;
+  uint32_t EVENTS_OUT = 0;
 
  protected:
   Connections* connections = new Connections(&_qps);
@@ -36,8 +38,8 @@ class IRunway {
   virtual void __acceptRequest(Connection* connection, BufferStream* inputStream) = 0;
 
   void acceptSend(Connection* connection);
-  
-  inline uint32_t gererateEnvents();
+
+  void gererateEnvents();
 
  public:
   IRunway(int id, bool* running);

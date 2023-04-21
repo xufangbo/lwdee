@@ -1,5 +1,6 @@
 #include "IRunway.hpp"
 
+#include <memory>
 #include <thread>
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
@@ -24,6 +25,7 @@ IRunway::~IRunway() {
 }
 
 void IRunway::run() {
+  this->gererateEnvents();
   this->connections->start(running);
 
   while (*running) {
@@ -42,10 +44,16 @@ void IRunway::run() {
 }
 
 void IRunway::__acceptEvent(epoll_event* evt) {
-  // logger_debug("__acceptEvent");
-  auto connection = connections->find(evt->data.fd);
+  logger_debug("__acceptEvent,fd:%d", evt->data.fd);
+
+  Connection* connection = (Connection*)evt->data.ptr;
+  // Connection* connection = static_cast<Connection*>(evt->data.ptr);
+  // if (connection == nullptr) {
+  //   connection = connections->find(evt->data.fd);
+  // }
+  // auto connection = connections->find(evt->data.fd);
   if (connection == nullptr) {
-    logger_error("can't find socket %d", evt->data.fd);
+    logger_error("connection is null ,fd: %d", evt->data.fd);
     return;
   }
   if (connection->socket == nullptr) {
@@ -105,10 +113,10 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       }
-      epoll->mod(evt, socket->fd(), gererateEnvents());
+      epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
     } else if (rc == -1) {
       // logger_debug("rc == -1");
-      epoll->mod(evt, socket->fd(), gererateEnvents());
+      epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
     } else if (rc == 0) {
       // printf("recv closed %d", socket->fd());
       this->close(connection);
@@ -150,15 +158,21 @@ void IRunway::close(Connection* connection) {
   connections->remove(socket->fd());
 }
 
-inline uint32_t IRunway::gererateEnvents() {
-  uint32_t events = EPOLLIN;
+void IRunway::gererateEnvents() {
+  EVENTS_NEW = EPOLLIN | EPOLLRDHUP | EPOLLHUP;
+  EVENTS_IN = EPOLLIN;
+  EVENTS_OUT = EPOLLIN;
+
   if (isEOUT) {
-    events |= EPOLLOUT;
+    EVENTS_NEW |= EPOLLOUT;
+    EVENTS_IN |= EPOLLOUT;
+    EVENTS_OUT |= EPOLLOUT;
   }
   if (isET) {
-    events |= EPOLLET;
+    EVENTS_NEW |= EPOLLET;
+    EVENTS_IN |= EPOLLET;
+    EVENTS_OUT |= EPOLLET;
   }
-  return events;
 }
 
 void IRunway::join() {

@@ -21,7 +21,7 @@ ET(edge-triggered， 边缘触发模式)，只有一个事件从无到有才会�
     EPOLLOUT  ：表示对应的文件描述符可以写
 
     EPOLLPRI  ：表示对应的文件描述符有紧急的数据可读（表示有带外数据到来）
-    
+
     EPOLLERR  ：表示对应的文件描述符发生错误(默认注册)
 
     EPOLLRDHUP：表示读关闭。可能不是所有的内核版本都支持。1、对端发送 FIN (对端调用close 或者 shutdown(SHUT_WR)).2、本端调用 shutdown(SHUT_RD). 当然，关闭 SHUT_RD 的场景很少
@@ -46,16 +46,9 @@ class Epoll {
 
   epoll_event& events(int i) { return _events[i]; }
 
-  /**
-   * @brief
-   *
-   * @param fd
-   * @param events  EPOLLIN | EPOLLET | EPOLLRDHUP
-   */
-  void add(int fd, uint32_t events);
-
-  void mod(int fd, struct epoll_event* event);
-  void mod(struct epoll_event* event, int fd, uint32_t events);
+  
+  void add(int fd, uint32_t events, void *ptr);
+  void mod(int fd,struct epoll_event* event,  uint32_t events, void *ptr);
   void del(int fd);
 
   int wait(int timeout);

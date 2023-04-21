@@ -48,16 +48,7 @@ Connection* Lane::create(const char* ip, int port) {
     leopard_warn("long time to connect: %lfs", eclapse);
   }
 
-  uint32_t events = EPOLLIN;
-  events |= (EPOLLRDHUP | EPOLLHUP);
-  if (isEOUT) {
-    events |= EPOLLOUT;
-  }
-  if (isET) {
-    events |= EPOLLET;
-  }
-
-  epoll->add(socket->fd(), isET ? (events | EPOLLET) : events);
+  epoll->add(socket->fd(), EVENTS_NEW, connection);
 
   return connection;
 }

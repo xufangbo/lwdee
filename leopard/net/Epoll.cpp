@@ -18,28 +18,16 @@ Epoll::~Epoll() {
   // 如何注销epoll对象？
 }
 
-/**
- * @brief
- *
- * @param fd
- * @param events  EPOLLIN | EPOLLET | EPOLLRDHUP
- */
-void Epoll::add(int fd, uint32_t events) {
+void Epoll::add(int fd, uint32_t events, void* ptr) {
   // 创建节点结构体将监听连接句柄
   epoll_event event;
-  event.data.fd = fd;
-  // 设置该句柄为边缘触发（数据没处理完后续不会再触发事件，水平触发是不管数据有没有触发都返回事件），
   event.events = events;
-  // 添加监听连接句柄作为初始节点进入红黑树结构中，该节点后续处理连接的句柄
+  event.data.ptr = ptr;
   epoll_ctl(fd_epoll, EPOLL_CTL_ADD, fd, &event);
 }
 
-void Epoll::mod(int fd, struct epoll_event* event) {
-  epoll_ctl(fd_epoll, EPOLL_CTL_MOD, fd, event);
-}
-
-void Epoll::mod(struct epoll_event* event,int fd,uint32_t events) {
-  event->data.fd = fd;
+void Epoll::mod(int fd, struct epoll_event* event, uint32_t events, void* ptr) {
+  event->data.ptr = ptr;
   event->events = events;  // 将事件设置为写事件返回数据给客户端
   epoll_ctl(fd_epoll, EPOLL_CTL_MOD, fd, event);
 }
