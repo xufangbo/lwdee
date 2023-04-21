@@ -23,7 +23,10 @@ void Runway::run() {
     leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
 
     this->server->reusePort();
-    this->server->setNonBlocking();
+    if (this->nonBlocking) {
+      this->server->setNonBlocking();
+    }
+
     this->server->bind(ip.c_str(), port);
     this->server->listen();
 
@@ -59,7 +62,9 @@ void Runway::acceptSocket(epoll_event* evt) {
 
     connections->insert(client);
 
-    client->setNonBlocking();
+    if (nonBlocking) {
+      client->setNonBlocking();
+    }
 
     uint32_t events = EPOLLIN;
     events |= (EPOLLRDHUP | EPOLLHUP);

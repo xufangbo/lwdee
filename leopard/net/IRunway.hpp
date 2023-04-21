@@ -21,6 +21,7 @@ class IRunway {
   std::shared_ptr<Epoll> epoll;
   bool isET = false;
   bool isEOUT = false;
+  bool nonBlocking = false;
 
  protected:
   Connections* connections = new Connections(&_qps);

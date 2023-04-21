@@ -13,6 +13,7 @@ IRunway::IRunway(int id, bool* running)
   this->_qps.waitings = [this]() { return this->connections->size(); };
   this->isET = true;
   this->isEOUT = false;
+  this->nonBlocking = true;
 }
 
 IRunway::~IRunway() {
@@ -81,7 +82,6 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
   // logger_trace("--------------");
   int rc = 0;
   int sum = 0;
-
   do {
     auto socket = connection->socket;
     try {
@@ -104,12 +104,11 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
         auto pickedStream = inputStream->pick();
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
-      } else {
-        // epoll->mod(evt, socket->fd(), gererateEnvents());
       }
+      epoll->mod(evt, socket->fd(), gererateEnvents());
     } else if (rc == -1) {
       // logger_debug("rc == -1");
-      // epoll->mod(evt, socket->fd(), gererateEnvents());
+      epoll->mod(evt, socket->fd(), gererateEnvents());
     } else if (rc == 0) {
       // printf("recv closed %d", socket->fd());
       this->close(connection);
@@ -118,7 +117,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     }
   } while (rc > 0);
 
-  // printf("\n> -------------- %d\n",sum);
+  printf("\n> -------------- %d\n", sum);
 }
 
 void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {

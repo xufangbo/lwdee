@@ -33,7 +33,10 @@ Connection* Lane::create(const char* ip, int port) {
   // leopard_warn("new client socket fd : %d", connection->socket->fd());
 
   socket->connect(ip, port);
-  socket->setNonBlocking();
+  if (nonBlocking) {
+    socket->setNonBlocking();
+  }
+
   // socket->reusePort();
   // socket->setSendBuf(1048576);
   // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
