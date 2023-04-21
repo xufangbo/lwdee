@@ -3,7 +3,7 @@
 #include "core/log.hpp"
 
 void SocketWaiter_t::notify(WaitStatus status) {
-  printf("waiter notify [%d] status:%d\n", id, status);
+  logger_trace("waiter notify [%d] status:%d", id, status);
   this->status = status;
 }
 

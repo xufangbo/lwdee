@@ -25,7 +25,8 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 
   header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
 
-  leopard_trace(header.to_string().c_str());
+  // leopard_trace(header.to_string().c_str());
+  printf("%s", header.to_string().c_str());
 
   ClientSocket* socket = (ClientSocket*)(connection->socket);
   auto waiter = socket->popWaiter();

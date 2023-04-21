@@ -40,7 +40,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   s >> index;
 
   // logger_trace("recive [%d]", index);
-  printf("recive [callback:%d/content:%d]\n", responseIndex.load(), index);
+  logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
 typedef std::function<std::string(int i)> InputType;
