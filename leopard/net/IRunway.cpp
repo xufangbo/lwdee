@@ -91,11 +91,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       sum += rc;
       auto inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
-
-      if (inputStream->size() > 79 && !inputStream->isEnd()) {
-        leopard_debug("stream len > 79 ,but not end");
-      }
-
+    
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
         leopard_debug("%d", _qps.recvs.load());
