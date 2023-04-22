@@ -5,7 +5,7 @@
 #include "order.hpp"
 
 int main() {
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 50; i++) {
     printf("\n");
   }
 

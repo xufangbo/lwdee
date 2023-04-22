@@ -10,7 +10,7 @@
 #include "testsuspend.hpp"
 
 int main(int argc, char** argv) {
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 50; i++) {
     printf("\n");
   }
   read_log_config("client");
