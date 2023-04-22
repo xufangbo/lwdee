@@ -17,12 +17,6 @@ class Socket {
   Socket(int fd, Qps* qps);
   ~Socket();
 
-  /**
-   * @brief 数据发送完成事件
-   * 主要是更新qps.outputs
-   */
-  void onSend();
-
   int& fd() { return _fd; }
   BufferStream* inputStream() { return _inputStream; }
   // BufferStream *outputStream() { return _outputStream.get(); }

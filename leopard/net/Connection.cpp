@@ -4,12 +4,8 @@
 #include "core/log.hpp"
 #include "log.hpp"
 
-Connection::Connection(Socket* socket)
-    : socket(socket) {
-}
-Connection::Connection(Socket* socket, BufferStream* outputStream)
-    : socket(socket) {
-  this->push(outputStream);
+Connection::Connection(Socket* socket,Qps *qps)
+    : socket(socket),qps(qps) {
 }
 
 Connection::~Connection() {
@@ -27,7 +23,8 @@ Connection::~Connection() {
 }
 
 void Connection::push(BufferStream* outputStream) {
-  auto bullet = new Bullet(outputStream);
+  
+  auto bullet = new Bullet(outputStream,qps);
   bullets.push(bullet);
 }
 

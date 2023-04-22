@@ -14,16 +14,11 @@ class Connections {
  private:
   std::mutex mut;
   std::map<int, Connection*> items;
-  // std::vector<ConnectionPtr> sockets;
 
  private:
   std::mutex mut_task;
   std::list<Connection*> tasks;
   std::vector<Connection*> removedTasks;
-  // bool isTask(Connection *connection);
-
-  // std::queue<Socket*> adds;
-  // std::queue<int> removes;
 
  private:
   bool* running;
@@ -34,7 +29,6 @@ class Connections {
  public:
   Connections(Qps* qps)
       : qps(qps) {
-    // this->qps->waiting_fun = [this]() { return 0; };
   }
   void start(bool* running);
   Connection* insert(Socket* s);

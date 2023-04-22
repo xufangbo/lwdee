@@ -11,7 +11,7 @@
 // #define lock_tasks  //
 
 Connection* Connections::insert(Socket* s) {
-  auto connection = new Connection(s);
+  auto connection = new Connection(s,qps);
   lock;
   items[s->fd()] = connection;
   return connection;

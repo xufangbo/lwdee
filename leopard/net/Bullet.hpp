@@ -11,6 +11,7 @@ class Bullet {
   bool _finished = false;
   size_t pos = 0;
   BufferStream* outputStream = nullptr;
+  Qps* qps;
 
  private:
   /**
@@ -29,8 +30,7 @@ class Bullet {
   inline void moveon(size_t len) { pos += len; }
 
  public:
-  Bullet(BufferStream* outputStream)
-      : outputStream(outputStream) {}
+  Bullet(BufferStream* outputStream, Qps* qps);
 
   ~Bullet();
 

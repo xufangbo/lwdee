@@ -13,7 +13,10 @@ void Metrix::start(bool* running, std::string fileName,
                    std::vector<Qps*> qpss) {
   this->running = running;
 
-  this->qpses.push_back(&qps);
+  if (qpss.size() > 1) {
+    this->qpses.push_back(&qps);
+  }
+
   for (Qps* i : qpss) {
     this->qpses.push_back(i);
   }
@@ -45,24 +48,33 @@ void Metrix::run() {
 }
 
 void Metrix::write() {
-
-  qps.opens = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->opens; });
-  qps.closes = std::accumulate(qpses.begin() +1, qpses.end(), 0, [](int x, Qps* r) { return x + r->closes; });
-  qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->recvs; });
-  qps.sends = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->sends; });
-  qps.waitings = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->waitings; });
+  if (qpses.size() > 1) {
+    qps.opens = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                [](int x, Qps* r) { return x + r->opens; });
+    qps.closes = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                 [](int x, Qps* r) { return x + r->closes; });
+    qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                [](int x, Qps* r) { return x + r->recvs; });
+    qps.sends = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                [](int x, Qps* r) { return x + r->sends; });
+    qps.bullets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                  [](int x, Qps* r) { return x + r->bullets; });
+    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                  [](int x, Qps* r) { return x + r->sockets; });
+  }
 
   for (auto& writer : this->writers) {
     writer->writeLine(fileName, qpses);
   }
 
-  for (Qps* qps : qpses) {
-    auto tmp = qps->data();
-    qps->reset();
-  }
+  // for (Qps* qps : qpses) {
+  //   auto tmp = qps->data();
+  //   qps->reset();
+  // }
 }
 
-void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeTitle(std::string& fileName,
+                                 std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
@@ -81,7 +93,8 @@ void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses
   f.flush();
   f.close();
 }
-void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeLine(std::string& fileName,
+                                std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
@@ -106,7 +119,8 @@ void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses)
   f.close();
 }
 
-void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeTitle(std::string& fileName,
+                                      std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
 
   FILE* fp = fopen(file.c_str(), "w");
@@ -135,22 +149,11 @@ void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& 
   }
   fprintf(fp, "\n");
 
-  // //-----------------------------
-  // fprintf(fp, "|%23s|", "           -           ");
-
-  // for (int i = 0; i < qpses.size(); i++) {
-  //   Qps* qps = qpses[i];
-  //   auto tmp = qps->header();
-  //   for (std::string& s : tmp) {
-  //     fprintf(fp, "  %02d   |", i + 1);
-  //   }
-  // }
-  // fprintf(fp, "\n");
-
   fflush(fp);
   fclose(fp);
 }
-void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeLine(std::string& fileName,
+                                     std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
   FILE* fp = fopen(file.c_str(), "a");
   if (fp == NULL) {

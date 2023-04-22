@@ -11,6 +11,7 @@ class Connection {
  private:
   bool _finished = false;
   BulletList bullets;
+  Qps* qps;
 
  public:
   Socket* socket;
@@ -18,8 +19,7 @@ class Connection {
  public:
   bool closed = false;
 
-  Connection(Socket* socket);
-  Connection(Socket* socket, BufferStream* outputStream);
+  Connection(Socket* socket,Qps*qps);
   ~Connection();
 
   void push(BufferStream* outputStream);

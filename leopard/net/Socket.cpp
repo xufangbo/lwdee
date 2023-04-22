@@ -31,10 +31,6 @@ Socket::~Socket() {
   }
 }
 
-void Socket::onSend() {
-  this->qps->sends++;
-}
-
 void Socket::bind(const char* ip, int port) {
   sockaddr_in addr;
   addr.sin_family = AF_INET;

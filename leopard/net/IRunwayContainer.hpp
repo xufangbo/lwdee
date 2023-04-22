@@ -2,6 +2,7 @@
 
 #include <signal.h>
 #include <sys/sysinfo.h>
+
 #include "IRunway.hpp"
 #include "Metrix.hpp"
 #include "log.hpp"
@@ -9,6 +10,7 @@
 template <class T>
 class IRunwayContainer {
  protected:
+  int parallel = 1;
   bool server = false;
   bool running = false;
   std::vector<T*> runways;
@@ -21,10 +23,10 @@ class IRunwayContainer {
     }
     runways.clear();
   }
-  void start(int p1 = 1, int p2 = 1) {
-    // if (corenums <= 0) {
-    //   this->corenums = get_nprocs();  // get_nprocs_conf();
-    // }
+  void start(int parallel = 1) {
+    if (parallel <= 0) {
+      this->parallel = get_nprocs();  // get_nprocs_conf();
+    }
     // https://blog.csdn.net/weixin_33196646/article/details/116730365
     signal(SIGPIPE, SIG_IGN);
     if (running) {
@@ -33,11 +35,9 @@ class IRunwayContainer {
 
     this->running = true;
 
-    leopard_info("%d/%d", p1, p2);
+    leopard_info("parallel: %d", parallel);
 
-    for (int i = 0; i < p1; i++) {
-      // auto sendQueue = sends[i % sends.size()];
-      // this->newInstance(i + 1, &running, sendQueue);
+    for (int i = 0; i < parallel; i++) {
       this->newInstance(i + 1, &running);
     }
 
