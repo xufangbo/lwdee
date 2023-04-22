@@ -63,7 +63,7 @@ LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
   for (int i = 0; i < parallel; i++) {
     Connection* connection = Antelope::instance.create(ip, port);
     client->getConnections()->push_back(connection);
-    usleep(1000);
+    usleep(1000*100);
   }
 
   return client;

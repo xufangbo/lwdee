@@ -27,14 +27,13 @@ class Connections {
   Qps* qps;
 
  public:
-  Connections(Qps* qps)
-      : qps(qps) {
-  }
+  Connections(Qps* qps) : qps(qps) {}
   void start(bool* running);
   Connection* insert(Socket* s);
-  Connection* find(int fd);
-  void pushBullet(Connection* socket, BufferStream* outputStream);
   void remove(int fd);
+
+ public:
+  void pushBullet(Connection* socket, BufferStream* outputStream);
   void removeTasks();
 
   size_t size();

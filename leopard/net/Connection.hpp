@@ -3,13 +3,13 @@
 #include <list>
 #include <memory>
 #include <mutex>
+
 #include "Bullet.hpp"
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
 
 class Connection {
  private:
-  bool _finished = false;
   BulletList bullets;
   Qps* qps;
 
@@ -19,7 +19,7 @@ class Connection {
  public:
   bool closed = false;
 
-  Connection(Socket* socket,Qps*qps);
+  Connection(Socket* socket, Qps* qps);
   ~Connection();
 
   void push(BufferStream* outputStream);
@@ -32,7 +32,5 @@ class Connection {
    */
   bool send();
 
-  bool finished() {
-    return this->_finished;
-  }
+  bool finished();
 };

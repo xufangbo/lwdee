@@ -4,36 +4,25 @@
 
 #include "log.hpp"
 
-// #define lock std::lock_guard lock(mut)
-#define lock  //
-
+#define lock_connections std::lock_guard lock(mut)
 #define lock_tasks std::lock_guard lock_tasks(mut_task)
-// #define lock_tasks  //
 
 Connection* Connections::insert(Socket* s) {
   auto connection = new Connection(s,qps);
-  lock;
+  lock_connections;
   items[s->fd()] = connection;
   return connection;
 }
 
-Connection* Connections::find(int fd) {
-  lock;
-  auto it = items.find(fd);
-  if (it == items.end()) {
-    return nullptr;
-  } else {
-    return it->second;
-  }
-}
 void Connections::remove(int fd) {
+  lock_connections;
+
   auto it = items.find(fd);
   if (it != items.end()) {
     auto connection = it->second;
     connection->closed = true;
     // delete socket; 通过Connection析构函数来删除
-    // 是否要判断在task中也删除？
-    lock;
+    // 是否要判断在task中也删除？    
     items.erase(fd);
   }
 }
@@ -65,6 +54,20 @@ void Connections::__run() {
   this->removeTasks();
 }
 
+void Connections::start(bool* running) {
+  this->running = running;
+
+  std::thread t(&Connections::run, this);
+  t.detach();
+}
+
+size_t Connections::size() {
+  return items.size();
+}
+void Connections::clear() {
+  items.clear();
+}
+
 void Connections::pushBullet(Connection* connection, BufferStream* outputStream) {
   connection->push(outputStream);
   lock_tasks;
@@ -81,18 +84,4 @@ void Connections::removeTasks() {
   }
 
   removedTasks.clear();
-}
-
-void Connections::start(bool* running) {
-  this->running = running;
-
-  std::thread t(&Connections::run, this);
-  t.detach();
-}
-
-size_t Connections::size() {
-  return items.size();
-}
-void Connections::clear() {
-  items.clear();
 }

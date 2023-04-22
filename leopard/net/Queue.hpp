@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <mutex>
+
 #include "core/Exception.hpp"
 
 template <class T>
@@ -15,11 +16,8 @@ class QueueNode {
   T value;
   QueueNode* next;
 
-  QueueNode(T value)
-      : value(value), next(nullptr) {}
-  ~QueueNode() {
-    next == nullptr;
-  }
+  QueueNode(T value) : value(value), next(nullptr) {}
+  ~QueueNode() { next == nullptr; }
 };
 
 template <class T>
@@ -36,16 +34,12 @@ class Queue {
   void push(T value);
   T front();
   void pop();
-  bool empty() {
-    return header == nullptr;
-  }
+  bool empty() { return header == nullptr; }
   size_t size() { return _size; }
 };
 
 template <class T>
-Queue<T>::Queue()
-    : header(nullptr), tail(nullptr) {
-}
+Queue<T>::Queue() : header(nullptr), tail(nullptr) {}
 
 template <class T>
 Queue<T>::~Queue() {
@@ -77,11 +71,11 @@ T Queue<T>::front() {
 
 template <class T>
 void Queue<T>::pop() {
-  std::lock_guard lock(mut);
   if (header == nullptr) {
     throw Exception("Queue is empty", ZONE);
   }
 
+  std::lock_guard lock(mut);
   auto cur = header;
   header = header->next;
   if (header == nullptr) {

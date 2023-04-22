@@ -18,10 +18,6 @@ Bullet::~Bullet() {
 }
 
 bool Bullet::send(Socket* socket) {
-  if (socket == nullptr) {
-    throw Exception("sockeet is null ,can't send bullet", ZONE);
-  }
-
   int rc = socket->send(buffer(), leftover());
 
   if (rc == leftover()) {

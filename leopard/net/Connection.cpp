@@ -4,9 +4,7 @@
 #include "core/log.hpp"
 #include "log.hpp"
 
-Connection::Connection(Socket* socket,Qps *qps)
-    : socket(socket),qps(qps) {
-}
+Connection::Connection(Socket* socket, Qps* qps) : socket(socket), qps(qps) {}
 
 Connection::~Connection() {
   if (socket != nullptr) {
@@ -23,8 +21,7 @@ Connection::~Connection() {
 }
 
 void Connection::push(BufferStream* outputStream) {
-  
-  auto bullet = new Bullet(outputStream,qps);
+  auto bullet = new Bullet(outputStream, qps);
   bullets.push(bullet);
 }
 
@@ -41,7 +38,7 @@ bool Connection::send() {
     this->bullets.pop();
     delete bullet;
   }
-
-  _finished = true;
   return true;
 }
+
+bool Connection::finished() { return bullets.empty(); }
