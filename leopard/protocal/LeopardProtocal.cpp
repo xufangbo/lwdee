@@ -10,7 +10,7 @@
 
 BufferStream* LeopardProtocal::newStream(std::string& path) {
   BufferStream* outputStream = new LeopardStream();  // send task 中释放
-  LeopardHeader::setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
+  LeopardHeader::create(outputStream, path);
 
   return outputStream;
 }
@@ -25,8 +25,7 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 
   header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
 
-  // leopard_trace(header.to_string().c_str());
-  printf("%s\n", header.to_string().c_str());
+  leopard_trace(header.to_string().c_str());
 
   ClientSocket* socket = (ClientSocket*)(connection->socket);
   auto waiter = socket->popWaiter();
@@ -58,8 +57,9 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 }
 
 void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
+  // printf("%s\n", LeopardHeader::to_hex(inputStream).c_str());
   LeopardHeader header = LeopardHeader::parse(inputStream);
-
+  
   auto fun = TcpResponse::find(header.path);
   if (fun == nullptr) {
     logger_error("can't hint path: %s", header.path.c_str());
@@ -69,14 +69,13 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   auto outputStream = new LeopardStream();  // send task 中释放
 
   uint32_t rec1 = Stopwatch::currentMilliSeconds() - header.sen1;
-  header.setHeader(outputStream, header.path, header.sen1, rec1, 0, 0);
+  header.copyRequest(outputStream, header);
 
   (*fun)(inputStream, outputStream);
   delete inputStream;
   inputStream = nullptr;
 
-  uint32_t sen2 = Stopwatch::currentMilliSeconds() - header.sen1;
-  header.setsen2(outputStream, sen2);
+  header.setsen2(outputStream);
   header.setLength(outputStream);
 
   // sendQueue->push(socket, outputStream);

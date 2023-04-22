@@ -61,6 +61,13 @@ class BufferStream {
   void get(int position, T& v) {
     memcpy((Byte*)&v, buffer + position, sizeof(v));
   }
+
+  template <typename T>
+  T getPosition(int position) {
+    T v;
+    memcpy((Byte*)&v, buffer + position, sizeof(v));
+    return v;
+  }
   void get(std::string& str, int len);
   std::string getString(int len);
   void get(Byte* ptr, int len);
