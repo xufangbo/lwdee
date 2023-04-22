@@ -13,9 +13,6 @@ class Bullet {
   BufferStream* outputStream = nullptr;
 
  private:
-  size_t start = 0;
-
- private:
   /**
    * @brief 下次发送数据，已经根据outputStream流根据pos做了偏移量
    */
@@ -33,7 +30,7 @@ class Bullet {
 
  public:
   Bullet(BufferStream* outputStream)
-      : outputStream(outputStream), start(Stopwatch::currentMilliSeconds()) {}
+      : outputStream(outputStream) {}
 
   ~Bullet();
 

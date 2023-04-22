@@ -18,11 +18,11 @@ void Qps::time(uint32_t elapsed) {
 
 std::vector<std::string> Qps::header() {
   std::vector<std::string> ss;
-  ss.push_back("opens");
+  ss.push_back("OPENS");
   ss.push_back("recvs");
   ss.push_back("sends");
   ss.push_back("closes");
-  ss.push_back("waitings");
+  ss.push_back("waits");
   return ss;
 }
 

@@ -23,8 +23,6 @@ bool Bullet::send(Socket* socket) {
   if (rc == leftover()) {
     _finished = true;
     socket->onSend();
-
-    auto elapsed = Stopwatch::elapsed(this->start);
     Bullet::cout++;
     leopard_trace("        sended,[%d],rc=%d", Bullet::cout.load(), rc);
     return true;
