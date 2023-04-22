@@ -13,6 +13,7 @@ class Stopwatch {
   }
   void start();
   double stop();
+  double elapsed();
   static uint64_t currentMilliSeconds();
   static float elapsed(uint64_t start);
 };

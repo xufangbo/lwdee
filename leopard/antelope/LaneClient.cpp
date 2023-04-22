@@ -38,12 +38,6 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request,
 }
 
 void LaneClient::wait() {
-  for (Connection* connection : this->connections) {
-    ClientSocket* socket = (ClientSocket*)connection->socket;
-    if (socket->hasWaiter()) {
-      logger_error("stil have waiter");
-    }
-  }
 
   for (auto waiter : waiters) {
     waiter->wait();

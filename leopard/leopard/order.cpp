@@ -14,13 +14,14 @@ void registService() {
 
     // 1. inputStream -> order request parameter
     auto len = inputStream->get<uint32_t>();
-    auto content = inputStream->getString(len);
-    std::istringstream s(content);
-    // std::istringstream s(inputStream->getString(len));
+    // auto content = inputStream->getString(len);
+    // std::istringstream s(content);
+    std::istringstream s(inputStream->getString(len));
     int index;
     s >> index;
 
-    printf("accept [accept:%d/content:%d] %s\n", acceptIndex.load(), index,content.c_str());
+    printf("accept [accept:%d/content:%d]\n", acceptIndex.load());
+    // printf("accept [accept:%d/content:%d] %s\n", acceptIndex.load(), index,content.c_str());
 
     // 2. sale order business
     // sleep(1);

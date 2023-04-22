@@ -7,9 +7,8 @@ void SocketWaiter_t::notify(WaitStatus status) {
   this->status = status;
 }
 
-double SocketWaiter_t::wait(int timeout) {
-  Stopwatch sw;
-  for (int i = 0; i < 100 * timeout; i++) {
+double SocketWaiter_t::wait(double timeout) {
+  while (sw.elapsed() < (timeout * 1.0)) {
     if (status == WaitStatus::succeed) {
       return sw.stop();
     } else if (status == WaitStatus::timeout) {
@@ -24,7 +23,7 @@ double SocketWaiter_t::wait(int timeout) {
   }
   // throw Exception("timeout", ZONE);
   // logger_error("timeout");
-  logger_error("[%d] timeout in 30s", id);
+  logger_error("[%d] timeout in %lfs", id, timeout);
   return timeout;
 }
 
@@ -42,5 +41,3 @@ SocketWaiter ClientSocket::findWaiter(uint64_t id) {
 
   return it->second;
 }
-
-bool ClientSocket::hasWaiter() { return !waiters.empty(); }
