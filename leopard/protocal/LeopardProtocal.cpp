@@ -32,15 +32,15 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 
   header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
 
-  leopard_trace(header.to_string().c_str());
+  // leopard_trace(header.to_string().c_str());
 
   ClientSocket* socket = (ClientSocket*)(connection->socket);
   auto waiter = socket->findWaiter(header.messageId);
-  if (waiter == nullptr || waiter.use_count() == 0) {
-    logger_error("waiter is null");
-  } else {
-    leopard_trace("get waiter [%d]", waiter->getId());
-  }
+  // if (waiter == nullptr || waiter.use_count() == 0) {
+  //   logger_error("waiter is null");
+  // } else {
+  //   leopard_trace("get waiter [%d]", waiter->getId());
+  // }
 
   auto callback = TcpRequest::find(header.path);
   if (callback != nullptr) {

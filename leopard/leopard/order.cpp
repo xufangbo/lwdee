@@ -20,7 +20,7 @@ void registService() {
     int index;
     s >> index;
 
-    printf("accept [accept:%d/content:%d]\n", acceptIndex.load());
+    // printf("accept [accept:%d/content:%d]\n", acceptIndex.load());
     // printf("accept [accept:%d/content:%d] %s\n", acceptIndex.load(), index,content.c_str());
 
     // 2. sale order business

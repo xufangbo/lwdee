@@ -40,7 +40,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   s >> index;
 
   // logger_trace("recive [%d]", index);
-  logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
+  // logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
 typedef std::function<std::string(int i)> InputType;
@@ -109,7 +109,7 @@ void test_long_sync(int testSize, InputType inputType, int parallel, std::string
   client->wait();
   client->close();
 
-  logger_info("elapsed %.3lf", sw.stop());
+  logger_info("elapsed %.3lf,response count : %d,", sw.stop(),responseIndex.load());
 }
 // void test_long_async(int testSize, InputType inputType, int parallel, std::string ip, int port) {
 //   Stopwatch sw;
