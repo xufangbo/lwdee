@@ -10,13 +10,13 @@
 
 BufferStream* LeopardProtocal::newStream(std::string& path) {
   BufferStream* outputStream = new LeopardStream();  // send task 中释放
-  LeopardHeader().setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
+  LeopardHeader::setHeader(outputStream, path, Stopwatch::currentMilliSeconds(), 0, 0, 0);
 
   return outputStream;
 }
 
 void LeopardProtocal::send(IRunway* runway, Connection* connection, BufferStream* outputStream) {
-  LeopardHeader().setLength(outputStream);
+  LeopardHeader::setLength(outputStream);
   runway->addSendTask(connection, outputStream);
 }
 

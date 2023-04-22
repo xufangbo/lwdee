@@ -30,6 +30,12 @@ void LeopardHeader::setLength(BufferStream* outputStream) {
   outputStream->set<uint64_t>(0, outputStream->size());
 }
 
+uint64_t LeopardHeader::getLength(BufferStream* inputStream) {
+  uint64_t len;
+  inputStream->get<uint64_t>(0, len);
+  return len;
+}
+
 void LeopardHeader::setsen2(BufferStream* outputStream, uint32_t sen2) {
   outputStream->set<uint32_t>(20, sen2);
 }
