@@ -17,8 +17,10 @@ class Metrix {
   std::string fileName;
   std::vector<Qps*> qpses;
   std::vector<std::shared_ptr<IMetrixWriter>> writers;
+  Qps qps;
 
  public:
+  Metrix() : qps(0) {}
   void start(bool* running, std::string fileName, std::vector<Qps*> qpses);
   void write();
   void run();

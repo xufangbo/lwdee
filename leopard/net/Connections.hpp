@@ -34,7 +34,7 @@ class Connections {
  public:
   Connections(Qps* qps)
       : qps(qps) {
-    // this->qps->waitings = [this]() { return 0; };
+    // this->qps->waiting_fun = [this]() { return 0; };
   }
   void start(bool* running);
   Connection* insert(Socket* s);

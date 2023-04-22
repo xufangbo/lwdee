@@ -24,7 +24,7 @@ bool Bullet::send(Socket* socket) {
     _finished = true;
     socket->onSend();
     Bullet::cout++;
-    leopard_trace("        sended,[%d],rc=%d", Bullet::cout.load(), rc);
+    leopard_trace("        sended,[%d],size:%d,rc=%d", Bullet::cout.load(),outputStream->size(), rc);
     return true;
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {

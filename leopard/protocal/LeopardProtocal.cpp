@@ -88,7 +88,5 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   // sendQueue->push(socket, outputStream);
   runway->addSendTask(connection, outputStream);
 
-  runway->qps()->time(header.rec1_sen1());
-
   // leopard_debug("> response %s", header.path.c_str());
 }

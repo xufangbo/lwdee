@@ -11,11 +11,8 @@ struct Qps {
   std::atomic<uint32_t> closes;        // 2
   std::atomic<uint32_t> recvs;        // 3
   std::atomic<uint32_t> sends;       // 4
-  std::function<uint32_t()> waitings;  // 5
-
-  std::atomic<uint32_t> trans_min;  // 6
-  std::atomic<uint32_t> trans_max;  // 7
-  std::atomic<uint64_t> trans_sum;  // 8
+  std::atomic<uint32_t> waitings;       // 4
+  std::function<uint32_t()> waiting_fun = nullptr;  // 5
 
   Qps(int id)
       : id(id) {
@@ -23,7 +20,6 @@ struct Qps {
   }
 
   void reset();
-  void time(uint32_t elapsed);
   std::vector<std::string> header();
   std::vector<std::string> data();
 };

@@ -11,7 +11,7 @@
 IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
-  this->_qps.waitings = [this]() { return this->connections->size(); };
+  this->_qps.waiting_fun = [this]() { return this->connections->size(); };
   this->isET = true;
   this->isEOUT = false;
   this->nonBlocking = true;
