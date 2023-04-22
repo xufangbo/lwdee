@@ -28,14 +28,14 @@ class LeopardHeader {
   static int INDEX_PATH;
 
  public:
-  static void create(BufferStream* outputStream, std::string& path);
+  static uint64_t create(BufferStream* outputStream, std::string& path);
   /**
    * @brief copy request header to response header
    */
   static void copyRequest(BufferStream* outputStream, LeopardHeader& src);
   static void setLength(BufferStream* outputStream);
   static uint64_t getLength(BufferStream* inputStream);
-  uint64_t getMessageId(BufferStream* inputStream);
+  static uint64_t getMessageId(BufferStream* inputStream);
   void setsen2(BufferStream* outputStream);
   static LeopardHeader parse(BufferStream* inputStream);
   float rec1_sen1() { return rec1 * 1.0 / 1000; }

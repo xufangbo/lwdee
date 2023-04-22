@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <atomic>
+#include <map>
 #include "Queue.hpp"
 #include "Socket.hpp"
 #include "core/Exception.hpp"
@@ -34,7 +35,7 @@ typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
 class Lane;
 class ClientSocket : public Socket {
  private:
-  Queue<SocketWaiter> waiters;
+  std::map<uint64_t,SocketWaiter> waiters;
   Lane* lane = nullptr;
 
  public:
@@ -43,7 +44,7 @@ class ClientSocket : public Socket {
 
   Lane* getLane() { return lane; }
 
-  SocketWaiter crateWaiter(int id = -1);
-  SocketWaiter popWaiter();
+  SocketWaiter crateWaiter(uint64_t id);
+  SocketWaiter findWaiter(uint64_t id);
   bool hasWaiter();
 };

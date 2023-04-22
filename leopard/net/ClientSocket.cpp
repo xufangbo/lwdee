@@ -28,21 +28,19 @@ double SocketWaiter_t::wait(int timeout) {
   return timeout;
 }
 
-SocketWaiter ClientSocket::crateWaiter(int id) {
+SocketWaiter ClientSocket::crateWaiter(uint64_t id) {
   SocketWaiter waiter = std::make_shared<SocketWaiter_t>(id);
-  waiters.push(waiter);
+  waiters[id] = waiter;
   return waiter;
 }
 
-SocketWaiter ClientSocket::popWaiter() {
-  if (waiters.empty()) {
+SocketWaiter ClientSocket::findWaiter(uint64_t id) {
+  auto it = waiters.find(id);
+  if (it == waiters.end()) {
     return nullptr;
   }
-  SocketWaiter waiter = waiters.front();
-  waiters.pop();
-  return waiter;
+
+  return it->second;
 }
 
-bool  ClientSocket::hasWaiter(){
-  return !waiters.empty();
-}
+bool ClientSocket::hasWaiter() { return !waiters.empty(); }

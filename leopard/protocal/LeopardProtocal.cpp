@@ -15,9 +15,16 @@ BufferStream* LeopardProtocal::newStream(std::string& path) {
   return outputStream;
 }
 
-void LeopardProtocal::send(IRunway* runway, Connection* connection, BufferStream* outputStream) {
+SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection, BufferStream* outputStream) {
   LeopardHeader::setLength(outputStream);
+  auto msgId = LeopardHeader::getMessageId(outputStream);
+
+  ClientSocket *socket = (ClientSocket*)connection->socket;
+  auto waiter = socket->crateWaiter(msgId);
+
   runway->addSendTask(connection, outputStream);
+
+  return waiter;
 }
 
 void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
@@ -28,7 +35,7 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
   leopard_trace(header.to_string().c_str());
 
   ClientSocket* socket = (ClientSocket*)(connection->socket);
-  auto waiter = socket->popWaiter();
+  auto waiter = socket->findWaiter(header.messageId);
   if (waiter == nullptr || waiter.use_count() == 0) {
     logger_error("waiter is null");
   } else {

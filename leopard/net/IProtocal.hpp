@@ -3,6 +3,7 @@
 #include "BufferStream.hpp"
 #include "Connection.hpp"
 #include "IRunway.hpp"
+#include "ClientSocket.hpp"
 
 typedef std::function<void(BufferStream*)> RequestInvoke;
 typedef std::function<void(BufferStream*)> RequestCallback;
@@ -22,7 +23,7 @@ class IProtocal {
    * @brief 发送一个请求
    * 
    */
-  virtual void send(IRunway* runway, Connection* connection, BufferStream* outputStream) = 0;
+  virtual SocketWaiter csend(IRunway* runway, Connection* connection, BufferStream* outputStream) = 0;
 
   /**
    * @brief 客户端接收请求

@@ -8,7 +8,8 @@
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
-SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
+SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len,
+                                RequestCallback callback) {
   RequestInvoke request = [buffer, len](BufferStream* outputStream) {
     outputStream->put<uint32_t>(len);
     outputStream->puts(buffer, len);
@@ -17,15 +18,10 @@ SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len, Request
   return invoke(path, request, callback);
 }
 
-std::atomic<uint32_t> waitId = 0;
-
-SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
+SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request,
+                                RequestCallback callback) {
   Connection* connection = this->next();
   ClientSocket* socket = (ClientSocket*)connection->socket;
-
-  waitId++;
-  SocketWaiter waiter = socket->crateWaiter(waitId.load());
-  this->waiters.push_back(waiter);
 
   TcpRequest::regist(path, callback);
 
@@ -33,10 +29,10 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, Request
 
   auto outputStream = protocal->newStream(path);
   request(outputStream);
-  
   auto runway = Antelope::instance.selectRunway();
 
-  protocal->send(runway,connection,outputStream);
+  SocketWaiter waiter = protocal->csend(runway, connection, outputStream);
+  this->waiters.push_back(waiter);
 
   return waiter;
 }
@@ -81,31 +77,34 @@ LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
 
 #ifdef LEOPARD_SUSPEND
 // error: invalid new-expression of abstract class type ‘BufferStream’
-await<BufferStream*> LaneClient::invoke(std::string path, void* buffer, int len) {
+await<BufferStream*> LaneClient::invoke(std::string path, void* buffer,
+                                        int len) {
   Socket* socket = this->this->socket;
-  auto waiter = await<BufferStream*>([&path, len, buffer, &socket](suspend::SuspendHandler handle, BufferStream** returnValue) {
-    logger_warn(path.c_str());
-    char* str = (char*)buffer;
-    logger_warn(str);
-    SuspendCallback callback;
-    callback.handle = handle;
-    callback.returnValue = returnValue;
-    TcpRequest::registSuspend(path, callback);
+  auto waiter = await<BufferStream*>(
+      [&path, len, buffer, &socket](suspend::SuspendHandler handle,
+                                    BufferStream** returnValue) {
+        logger_warn(path.c_str());
+        char* str = (char*)buffer;
+        logger_warn(str);
+        SuspendCallback callback;
+        callback.handle = handle;
+        callback.returnValue = returnValue;
+        TcpRequest::registSuspend(path, callback);
 
-    //================================================================
-    auto protocal = ProtocalFactory::getProtocal();
-    auto outputStream = ProtocalFactory::createStream();
+        //================================================================
+        auto protocal = ProtocalFactory::getProtocal();
+        auto outputStream = ProtocalFactory::createStream();
 
-    protocal->setHeader(outputStream.get(), path);
+        protocal->setHeader(outputStream.get(), path);
 
-    outputStream->put<uint32_t>(len);
-    outputStream->puts(buffer, len);
+        outputStream->put<uint32_t>(len);
+        outputStream->puts(buffer, len);
 
-    protocal->setLength(outputStream.get());
+        protocal->setLength(outputStream.get());
 
-    task = new Connection(this->socket, outputStream);
-    Antelope::instance.send(task);
-  });
+        task = new Connection(this->socket, outputStream);
+        Antelope::instance.send(task);
+      });
   return waiter;
 }
 #endif

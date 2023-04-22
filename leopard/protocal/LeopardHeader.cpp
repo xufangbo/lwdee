@@ -12,58 +12,12 @@ int LeopardHeader::INDEX_REC2 = 32;
 int LeopardHeader::INDEX_PATH_LENGTH = 36;
 int LeopardHeader::INDEX_PATH = 40;
 
-int LeopardHeader::headerSize() {
-  return sizeof(totalLength) + sizeof(messageId) + sizeof(sen1) + sizeof(rec1) + sizeof(sen2) + sizeof(rec2) + sizeof(pathLength) + path.size();
-}
-
-std::string LeopardHeader::to_string() {
-  std::stringstream s;
-  s << "( " << this->sen1 << " -> " << this->rec1 << " -> " << this->sen2 << " -> " << this->rec2 << " )";
-  s << " <==> " << std::setiosflags(std::ios::fixed);
-  s << "( " << std::setprecision(3) << this->rec1_sen1()
-    << " + " << std::setprecision(3) << this->sen2_rec1()
-    << " + " << std::setprecision(3) << this->rec2_sen2()
-    << " = " << std::setprecision(3) << this->rec2_sen1() << " )";
-
-  return s.str();
-}
-
-std::string LeopardHeader::to_hex(BufferStream* stream) {
-  std::stringstream s;
-
-  uint64_t totalLength = stream->getPosition<uint64_t>(INDEX_TOTAL_LENGTH);
-  uint64_t messageId = stream->getPosition<uint64_t>(INDEX_MESSAGE_ID);
-  uint64_t sen1 = stream->getPosition<uint64_t>(INDEX_SEN1);
-  uint32_t rec1 = stream->getPosition<uint32_t>(INDEX_REC1);
-  uint32_t sen2 = stream->getPosition<uint32_t>(INDEX_SEN2);
-  uint32_t rec2 = stream->getPosition<uint32_t>(INDEX_REC2);
-  uint32_t pathlen = stream->getPosition<uint32_t>(INDEX_PATH_LENGTH);
-
-  char buffer[1024];
-  sprintf(buffer,
-          "% 10s : % 16llu % 16X\n"
-          "% 10s : % 16llu % 16X\n"
-          "% 10s : % 16llu % 16X\n"
-          "% 10s : % 16u % 16X\n"
-          "% 10s : % 16u % 16X\n"
-          "% 10s : % 16u % 16X\n"
-          "% 10s : % 16u % 16X\n",
-          "total len", totalLength, totalLength,
-          "message id", messageId, messageId,
-          "sen1", sen1, sen1,
-          "rec1", rec1, rec1,
-          "sen2", sen2, sen2,
-          "rec2", rec2, rec2,
-          "pathlen", pathlen, pathlen);
-
-  return buffer;
-}
-
-void LeopardHeader::create(BufferStream* outputStream, std::string& path) {
+uint64_t LeopardHeader::create(BufferStream* outputStream, std::string& path) {
   seq++;
+  uint64_t i = seq.load();
 
   outputStream->put<uint64_t>(0);                                 // len
-  outputStream->put<uint64_t>(seq.load());                        // messageId
+  outputStream->put<uint64_t>(i);                                 // messageId
   outputStream->put<uint64_t>(Stopwatch::currentMilliSeconds());  // sen1
   outputStream->put<uint32_t>(0);                                 // rec1
   outputStream->put<uint32_t>(0);                                 // sen2
@@ -77,6 +31,8 @@ void LeopardHeader::create(BufferStream* outputStream, std::string& path) {
   // }
 
   // printf("%s\n",to_hex(outputStream).c_str());
+
+  return i;
 }
 
 void LeopardHeader::setLength(BufferStream* outputStream) {
@@ -115,7 +71,8 @@ LeopardHeader LeopardHeader::parse(BufferStream* inputStream) {
   return header;
 }
 
-void LeopardHeader::copyRequest(BufferStream* outputStream, LeopardHeader& src) {
+void LeopardHeader::copyRequest(BufferStream* outputStream,
+                                LeopardHeader& src) {
   auto rec1 = Stopwatch::currentMilliSeconds() - src.sen1;
   outputStream->put<uint64_t>(0);               // len
   outputStream->put<uint64_t>(src.messageId);   // messageId
@@ -125,4 +82,49 @@ void LeopardHeader::copyRequest(BufferStream* outputStream, LeopardHeader& src) 
   outputStream->put<uint32_t>(0);               // rec2
   outputStream->put<uint32_t>(src.pathLength);  // path length
   outputStream->put(src.path);                  // path
+}
+
+int LeopardHeader::headerSize() {
+  return sizeof(totalLength) + sizeof(messageId) + sizeof(sen1) + sizeof(rec1) +
+         sizeof(sen2) + sizeof(rec2) + sizeof(pathLength) + path.size();
+}
+
+std::string LeopardHeader::to_string() {
+  std::stringstream s;
+  s << "( " << this->sen1 << " -> " << this->rec1 << " -> " << this->sen2
+    << " -> " << this->rec2 << " )";
+  s << " <==> " << std::setiosflags(std::ios::fixed);
+  s << "( " << std::setprecision(3) << this->rec1_sen1() << " + "
+    << std::setprecision(3) << this->sen2_rec1() << " + "
+    << std::setprecision(3) << this->rec2_sen2() << " = "
+    << std::setprecision(3) << this->rec2_sen1() << " )";
+
+  return s.str();
+}
+
+std::string LeopardHeader::to_hex(BufferStream* stream) {
+  std::stringstream s;
+
+  uint64_t totalLength = stream->getPosition<uint64_t>(INDEX_TOTAL_LENGTH);
+  uint64_t messageId = stream->getPosition<uint64_t>(INDEX_MESSAGE_ID);
+  uint64_t sen1 = stream->getPosition<uint64_t>(INDEX_SEN1);
+  uint32_t rec1 = stream->getPosition<uint32_t>(INDEX_REC1);
+  uint32_t sen2 = stream->getPosition<uint32_t>(INDEX_SEN2);
+  uint32_t rec2 = stream->getPosition<uint32_t>(INDEX_REC2);
+  uint32_t pathlen = stream->getPosition<uint32_t>(INDEX_PATH_LENGTH);
+
+  char buffer[1024];
+  sprintf(buffer,
+          "% 10s : % 16llu % 16X\n"
+          "% 10s : % 16llu % 16X\n"
+          "% 10s : % 16llu % 16X\n"
+          "% 10s : % 16u % 16X\n"
+          "% 10s : % 16u % 16X\n"
+          "% 10s : % 16u % 16X\n"
+          "% 10s : % 16u % 16X\n",
+          "total len", totalLength, totalLength, "message id", messageId,
+          messageId, "sen1", sen1, sen1, "rec1", rec1, rec1, "sen2", sen2, sen2,
+          "rec2", rec2, rec2, "pathlen", pathlen, pathlen);
+
+  return buffer;
 }
