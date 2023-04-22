@@ -1,19 +1,18 @@
 #pragma once
 
-#include <iostream>
 #include <sys/time.h>
+
+#include <iostream>
 
 class Stopwatch {
  private:
-  struct timeval startTs;
+  uint64_t startTs = 0;
 
  public:
-  Stopwatch() {
-    this->start();
-  }
+  Stopwatch() { this->start(); }
   void start();
-  double stop();
-  double elapsed();
+  float stop();
+  float elapsed();
   static uint64_t currentMilliSeconds();
   static float elapsed(uint64_t start);
 };

@@ -7,8 +7,8 @@ void SocketWaiter_t::notify(WaitStatus status) {
   this->status = status;
 }
 
-double SocketWaiter_t::wait(double timeout) {
-  while (sw.elapsed() < (timeout * 1.0)) {
+float SocketWaiter_t::wait(float timeout) {
+  while (sw.elapsed() < timeout) {
     if (status == WaitStatus::succeed) {
       return sw.stop();
     } else if (status == WaitStatus::timeout) {
@@ -18,7 +18,7 @@ double SocketWaiter_t::wait(double timeout) {
       return sw.stop();
       throw Exception("nohint", ZONE);
     } else {
-      usleep(1000000 / 100);
+      usleep(1000 * 100);
     }
   }
   // throw Exception("timeout", ZONE);

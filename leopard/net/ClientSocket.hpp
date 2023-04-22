@@ -23,12 +23,12 @@ class SocketWaiter_t {
   Stopwatch sw;
 
  public:
-  SocketWaiter_t(uint32_t id) : id(id), sw(sw) {}
+  SocketWaiter_t(uint32_t id) : id(id) { sw.start(); }
 
   void notify(WaitStatus status);
   uint32_t getId() { return id; }
 
-  double wait(double timeout = 5.0);
+  float wait(float timeout = 5.0);
 };
 
 typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;

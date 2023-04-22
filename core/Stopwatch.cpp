@@ -5,42 +5,28 @@
 #include <chrono>
 #include <iostream>
 
-void Stopwatch::start() {
-  // time(&startTs);
-  gettimeofday(&startTs, NULL);
-}
-
-double Stopwatch::stop() {
-  // time_t t;
-  // time(&t);
-
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  auto eclipse = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - (startTs.tv_sec * 1000 + startTs.tv_usec / 1000);
-
-  startTs = tv;
-
-  return eclipse * 1.0 / 1000;
-}
-
-double Stopwatch::elapsed() {
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-
-  auto eclipse = (tv.tv_sec * 1000 + tv.tv_usec / 1000) - (startTs.tv_sec * 1000 + startTs.tv_usec / 1000);
-
-  return eclipse * 1.0 / 1000;
-}
-
 uint64_t Stopwatch::currentMilliSeconds() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
+void Stopwatch::start() { this->startTs = currentMilliSeconds(); }
+
+float Stopwatch::stop() {
+  auto now = currentMilliSeconds();
+  auto eclapsed = (now - startTs) * 1.0 / 1000;
+  startTs = now;
+
+  return eclapsed;
+}
+
+float Stopwatch::elapsed() {
+  return (currentMilliSeconds() - startTs) * 1.0 / 1000;
+}
+
 float Stopwatch::elapsed(uint64_t start) {
-  uint32_t elapsed = Stopwatch::currentMilliSeconds() - start;
-  return elapsed * 1.0 / 1000;
+  return (currentMilliSeconds() - start) * 1.0 / 1000;
 }
 
 // long Stopwatch::currentTs() {
