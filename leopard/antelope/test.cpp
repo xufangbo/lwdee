@@ -92,9 +92,11 @@ void test_short_async(int testSize, InputType inputType, std::string ip, int por
 }
 
 void test_long_sync(int testSize, InputType inputType, int parallel, std::string ip, int port) {
-  Stopwatch sw;
+  
 
   auto client = LaneClient::create(ip.c_str(), port, parallel);
+
+  Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
       auto input = inputType(i);

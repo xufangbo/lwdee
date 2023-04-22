@@ -49,8 +49,8 @@ void Metrix::run() {
 
 void Metrix::write() {
   if (qpses.size() > 1) {
-    qps.opens = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                [](int x, Qps* r) { return x + r->opens; });
+    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
+                                [](int x, Qps* r) { return x + r->sockets; });
     qps.closes = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
                                  [](int x, Qps* r) { return x + r->closes; });
     qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
@@ -59,8 +59,6 @@ void Metrix::write() {
                                 [](int x, Qps* r) { return x + r->sends; });
     qps.bullets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
                                   [](int x, Qps* r) { return x + r->bullets; });
-    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                  [](int x, Qps* r) { return x + r->sockets; });
   }
 
   for (auto& writer : this->writers) {

@@ -15,19 +15,20 @@ Socket::Socket(Qps* qps)
   }
   this->_inputStream = ProtocalFactory::createStream();
 
-  this->qps->opens++;
+  this->qps->sockets++;
 }
 
 Socket::Socket(int fd, Qps* qps)
     : _fd(fd), qps(qps) {
   this->_inputStream = ProtocalFactory::createStream();
-  this->qps->opens++;
+  this->qps->sockets++;
 }
 
 Socket::~Socket() {
   if (_inputStream != nullptr) {
     delete _inputStream;
     _inputStream = nullptr;
+    // qps->closes++;
   }
 }
 

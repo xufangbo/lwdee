@@ -38,7 +38,6 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request,
 }
 
 void LaneClient::wait() {
-
   for (auto waiter : waiters) {
     waiter->wait();
   }
@@ -51,21 +50,22 @@ void LaneClient::close() {
 }
 
 Connection* LaneClient::next() {
-  int i = this->index % this->parallel;
-  Connection* socket = this->connections[i];
+  int i = this->index % connections.size();
+  Connection* connection = this->connections[i];
   this->index = (i + 1);
 
-  return socket;
+  return connection;
 }
 
 LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
-  std::vector<Connection*> connections;
+  auto client = std::make_shared<LaneClient>();
+
   for (int i = 0; i < parallel; i++) {
     Connection* connection = Antelope::instance.create(ip, port);
-    connections.push_back(connection);
+    client->getConnections()->push_back(connection);
+    usleep(1000);
   }
 
-  auto client = std::make_shared<LaneClient>(connections);
   return client;
 }
 

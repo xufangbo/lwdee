@@ -12,14 +12,12 @@ typedef std::shared_ptr<LaneClient> LaneClientPtr;
 
 class LaneClient {
  private:
-  int parallel = 1;
   std::atomic<uint32_t> index;  
   std::vector<Connection*> connections;
   std::vector<SocketWaiter> waiters;
 
  public:
-  LaneClient(std::vector<Connection*> connections)
-      : connections(connections), parallel(connections.size()) {
+  LaneClient(){
     this->index = 0;
   }
 
@@ -34,7 +32,7 @@ class LaneClient {
 #endif
   void close();
   void wait();
-  std::vector<Connection*>& getSockets() { return connections; }
+  std::vector<Connection*> *getConnections() { return &connections; }
 
  private:
   Connection* next();

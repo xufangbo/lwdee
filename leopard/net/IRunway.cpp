@@ -11,7 +11,6 @@
 IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
-  this->_qps.waiting_fun = [this]() { return this->connections->size(); };
   this->isET = true;
   this->isEOUT = false;
   this->nonBlocking = true;
@@ -94,7 +93,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
     
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
-        // leopard_debug("%d", _qps.recvs.load());
+        leopard_debug("%d", _qps.recvs.load());
         auto pickedStream = inputStream->pick();
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
