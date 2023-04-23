@@ -8,10 +8,18 @@
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
 
+enum class SendSource : uint8_t {
+  none = 0,
+  request = 1,
+  epoll_out = 2
+};
+
 class Connection {
  private:
   BulletList bullets;
   Qps* qps;
+  bool wr = true;
+  std::mutex mut;
 
  public:
   Socket* socket;
@@ -30,7 +38,8 @@ class Connection {
    * @return true 正常发送，即使没有发送完下次还可以接着发送
    * @return false send返回-1且errno不为EAGAIN或EINTR，socket需要被清理
    */
-  bool send();
-
+  bool send(SendSource source);
   bool finished();
+  void writable(bool wr);
+  bool writable();
 };

@@ -1,6 +1,7 @@
 #include "test.hpp"
 
 #include <atomic>
+#include <fstream>
 #include <sstream>
 #include "Antelope.hpp"
 #include "LaneClient.hpp"
@@ -15,92 +16,29 @@
 std::atomic<int> responseIndex = 0;
 std::string path = "com.cs.sales.order.save";
 
-std::string input_small(int i) {
-  std::string input = std::to_string(i + 1) + " green green green!";
-  // logger_debug("send [%i]", i + 1);
-  return input;
-}
-
-std::string input_large(int i) {
-  std::string input = std::to_string(i + 1) + " green green green ";
-  for (int x = 0; x < 50000; x++) {
-    input += "green---!";
-  }
-  logger_debug("send [%i]", i + 1);
-  return input;
-}
-
 RequestCallback callback = [](BufferStream* inputStream) {
   responseIndex++;
   auto len = inputStream->get<uint32_t>();
-  // auto content = inputStream->getString(len);
-
   std::istringstream s(inputStream->getString(len));
   int index;
   s >> index;
-
   // logger_trace("recive [%d]", index);
   // logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
-typedef std::function<std::string(int i)> InputType;
-
-void test_short_sync(int testSize, InputType inputType, std::string ip, int port) {
+void test_sync(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
       auto client = LaneClient::create(ip.c_str(), port);
 
-      auto input = inputType(i);
+      auto input = std::to_string(i + 1) + " " + inputType();
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
-      auto time = waiter->wait(5);
+      auto time = waiter->wait(timeout);
       client->close();
       // logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
 
-    } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("%s,%s:%d", ex.what(),__FILE__,__LINE__);
-    }
-  }
-
-  logger_info("elapsed %.3lf", sw.stop());
-}
-void test_short_async(int testSize, InputType inputType, std::string ip, int port) {
-  Stopwatch sw;
-
-  LaneClients clients;
-  for (int i = 0; i < testSize; i++) {
-    try {
-      auto client = clients.create(ip.c_str(), port);
-
-      auto input = inputType(i);
-      client->invoke(path, (void*)input.c_str(), input.size(), callback);
-
-    } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
-    } catch (std::exception& ex) {
-      logger_error("%s,%s:%d", ex.what(),__FILE__,__LINE__);
-    }
-  }
-
-  clients.wait();
-  clients.close();
-
-  logger_info("elapsed %.3lf", sw.stop());
-}
-
-void test_long_sync(int testSize, InputType inputType, int parallel, std::string ip, int port) {
-  
-
-  auto client = LaneClient::create(ip.c_str(), port, parallel);
-
-  Stopwatch sw;
-  for (int i = 0; i < testSize; i++) {
-    try {
-      auto input = inputType(i);
-      client->invoke(path, (void*)input.c_str(), input.size(), callback);
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
     } catch (std::exception& ex) {
@@ -108,31 +46,93 @@ void test_long_sync(int testSize, InputType inputType, int parallel, std::string
     }
   }
 
-  client->wait();
+  testReport.writeLine("短连接串行", inputType.name, testSize, 1, sw.elapsed());
+  logger_info("elapsed %.3lf", sw.stop());
+}
+void test_async(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
+  Stopwatch sw;
+
+  LaneClients clients;
+  for (int i = 0; i < testSize; i++) {
+    try {
+      auto client = clients.create(ip.c_str(), port);
+
+      auto input = std::to_string(i + 1) + " " + inputType();
+      client->invoke(path, (void*)input.c_str(), input.size(), callback);
+
+    } catch (Exception& ex) {
+      logger_warn("%s", ex.getMessage().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
+    }
+  }
+
+  clients.wait(timeout);
+  clients.close();
+
+  testReport.writeLine("短连接并行", inputType.name, testSize, testSize, sw.elapsed());
+  logger_info("elapsed %.3lf", sw.stop());
+}
+
+void test_long(TestReport &testReport,int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
+  auto client = LaneClient::create(ip.c_str(), port, parallel);
+
+  Stopwatch sw;
+  for (int i = 0; i < testSize; i++) {
+    try {
+      auto input = std::to_string(i + 1) + " " + inputType();
+      client->invoke(path, (void*)input.c_str(), input.size(), callback);
+
+    } catch (Exception& ex) {
+      logger_warn("%s,\n%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+    } catch (std::exception& ex) {
+      logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
+    }
+  }
+  client->wait(timeout);
   client->close();
 
-  logger_info("elapsed %.3lf,response count : %d,", sw.stop(),responseIndex.load());
+  testReport.writeLine("长连接", inputType.name, testSize, parallel, sw.elapsed());
+
+  logger_info("elapsed %.3lf,response count : %d,", sw.stop(), responseIndex.load());
 }
-// void test_long_async(int testSize, InputType inputType, int parallel, std::string ip, int port) {
-//   Stopwatch sw;
 
-//   LaneClients clients;
-//   for (int i = 0; i < testSize; i++) {
-//     try {
-//       auto client = clients.create(ip.c_str(), port);
+void TestReport::writeTitle() {
+  std::ofstream f(fileName, std::ios_base::trunc);
+  if (!f.is_open()) {
+    logger_error("can't open file %s", fileName.c_str());
+  }
 
-//       auto input = inputType(i);
-//       client->invoke(path, (void*)input.c_str(), input.size(), callback);
+  f << "no" << split;
+  f << "连接类型" << split;
+  f << "请求内容" << split;
+  f << "请求次数" << split;
+  f << "并发Socket数" << split;
+  f << "耗时" << split;
 
-//     } catch (Exception& ex) {
-//       logger_warn("%s", ex.getMessage().c_str());
-//     } catch (std::exception& ex) {
-//       logger_error("%s", ex.what());
-//     }
-//   }
+  f << std::endl;
 
-//   clients.wait();
-//   clients.close();
+  f.flush();
+  f.close();
+}
 
-//   logger_info("elapsed %.3lf", sw.stop());
-// }
+void TestReport::writeLine(std::string type, std::string inputType, int testSize, int parallel, float elapsed) {
+  seq++;
+
+  std::ofstream f(fileName, std::ios_base::app);
+  if (!f.is_open()) {
+    logger_error("can't open file %s", fileName.c_str());
+  }
+
+  f << seq << split;
+  f << type << split;
+  f << inputType << split;
+  f << testSize << split;
+  f << parallel << split;
+  f << elapsed << split;
+
+  f << std::endl;
+
+  f.flush();
+  f.close();
+}

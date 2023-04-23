@@ -8,12 +8,12 @@ LaneClientPtr LaneClients::create(const char* ip, int port) {
   return client;
 }
 
-void LaneClients::wait() {
+void LaneClients::wait(float timeout) {
   for (int i = 0; i < clients.size(); i++) {
     auto client = this->clients[i];
     try {
       // printf("\nwait %d\n\n", i);
-      client->wait();
+      client->wait(timeout);
     } catch (Exception& ex) {
       logger_error("[%d] - %s", (i + 1), ex.getMessage().c_str());
     } catch (std::exception& ex) {

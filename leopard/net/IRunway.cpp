@@ -11,24 +11,24 @@
 IRunway::IRunway(int id, bool* running)
     : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
-  this->isET = true;
-  this->isEOUT = false;
+  this->isET = false;
+  this->isEOUT = true;
   this->nonBlocking = true;
 }
 
 IRunway::~IRunway() {
-  if (connections != nullptr) {
-    delete connections;
-    connections = nullptr;
-  }
+  // if (connections != nullptr) {
+  //   delete connections;
+  //   connections = nullptr;
+  // }
 }
 
 void IRunway::run() {
   this->gererateEnvents();
-  this->connections->start(running);
+  // this->connections->start(running);
 
   while (*running) {
-    int waits = epoll->wait(1000);
+    int waits = epoll->wait(100); // ms
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -90,7 +90,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       sum += rc;
       auto inputStream = socket->inputStream();
       inputStream->puts(buf, rc);
-    
+
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
         leopard_debug("%d", _qps.recvs.load());
@@ -125,12 +125,14 @@ void IRunway::acceptRequest(Connection* connection, BufferStream* inputStream) {
 }
 
 void IRunway::acceptSend(Connection* connection) {
-  // connection->socket->sendEnabled = true;
+  connection->writable(true);
+  connection->send(SendSource::epoll_out);
 }
 
-void IRunway::addSendTask(Connection* connection, BufferStream* outputStream) {
-  this->connections->pushBullet(connection, outputStream);
-}
+// void IRunway::send(Connection* connection, BufferStream* outputStream) {
+//   connection->push(outputStream);
+//   connection->send(SendSource::request);
+// }
 
 void IRunway::close(Connection* connection) {
   // leopard_warn("close socket %d",socket->fd());
@@ -141,7 +143,7 @@ void IRunway::close(Connection* connection) {
 
   socket->close();
 
-  connections->remove(socket->fd());
+  // connections->remove(socket->fd());
 }
 
 void IRunway::gererateEnvents() {

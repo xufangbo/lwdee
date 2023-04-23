@@ -4,7 +4,8 @@
 #include "core/log.hpp"
 #include "log.hpp"
 
-Connection::Connection(Socket* socket, Qps* qps) : socket(socket), qps(qps) {}
+Connection::Connection(Socket* socket, Qps* qps)
+    : socket(socket), qps(qps) {}
 
 Connection::~Connection() {
   if (socket != nullptr) {
@@ -25,14 +26,22 @@ void Connection::push(BufferStream* outputStream) {
   bullets.push(bullet);
 }
 
-bool Connection::send() {
+bool Connection::send(SendSource source) {
+  // logger_debug("< send wr: %d,source:%d", wr, source);
+
+  std::lock_guard lock(mut);
+
+  if (!wr) {
+    return false;
+  }
+
   while (!this->bullets.empty()) {
     if (this->closed) {
       return false;
     }
     auto bullet = this->bullets.front();
-    bool finished = bullet->send(this->socket);
-    if (!finished) {
+    wr = bullet->send(this->socket);
+    if (!wr) {
       return false;
     }
     this->bullets.pop();
@@ -41,4 +50,13 @@ bool Connection::send() {
   return true;
 }
 
-bool Connection::finished() { return bullets.empty(); }
+bool Connection::finished() {
+  return bullets.empty();
+}
+
+void Connection::writable(bool wr) {
+  this->wr = wr;
+}
+bool Connection::writable() {
+  return this->wr;
+}

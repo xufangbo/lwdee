@@ -1,7 +1,6 @@
 #include "Metrix.hpp"
 
 #include <unistd.h>
-
 #include <filesystem>
 #include <fstream>
 #include <numeric>
@@ -9,8 +8,7 @@
 
 #include "core/log.hpp"
 
-void Metrix::start(bool* running, std::string fileName,
-                   std::vector<Qps*> qpss) {
+void Metrix::start(bool* running, std::string fileName, std::vector<Qps*> qpss) {
   this->running = running;
 
   if (qpss.size() > 1) {
@@ -49,16 +47,11 @@ void Metrix::run() {
 
 void Metrix::write() {
   if (qpses.size() > 1) {
-    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                [](int x, Qps* r) { return x + r->sockets; });
-    qps.closes = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                 [](int x, Qps* r) { return x + r->closes; });
-    qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                [](int x, Qps* r) { return x + r->recvs; });
-    qps.sends = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                [](int x, Qps* r) { return x + r->sends; });
-    qps.bullets = std::accumulate(qpses.begin() + 1, qpses.end(), 0,
-                                  [](int x, Qps* r) { return x + r->bullets; });
+    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->sockets; });
+    qps.closes = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->closes; });
+    qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->recvs; });
+    qps.sends = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->sends; });
+    qps.bullets = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->bullets; });
   }
 
   for (auto& writer : this->writers) {
@@ -71,8 +64,7 @@ void Metrix::write() {
   // }
 }
 
-void CsvMetrixWriter::writeTitle(std::string& fileName,
-                                 std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
@@ -91,8 +83,7 @@ void CsvMetrixWriter::writeTitle(std::string& fileName,
   f.flush();
   f.close();
 }
-void CsvMetrixWriter::writeLine(std::string& fileName,
-                                std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
@@ -117,8 +108,7 @@ void CsvMetrixWriter::writeLine(std::string& fileName,
   f.close();
 }
 
-void MarkdownMetrixWriter::writeTitle(std::string& fileName,
-                                      std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
 
   FILE* fp = fopen(file.c_str(), "w");
@@ -150,8 +140,7 @@ void MarkdownMetrixWriter::writeTitle(std::string& fileName,
   fflush(fp);
   fclose(fp);
 }
-void MarkdownMetrixWriter::writeLine(std::string& fileName,
-                                     std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
   FILE* fp = fopen(file.c_str(), "a");
   if (fp == NULL) {

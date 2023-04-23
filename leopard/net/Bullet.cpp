@@ -7,7 +7,7 @@
 Bullet::Bullet(BufferStream* outputStream, Qps* qps)
     : outputStream(outputStream), qps(qps) {
   qps->sends++;
-  leopard_trace("sends [%d]", qps->sends.load());
+  leopard_trace("push [%d]", qps->sends.load());
 }
 
 Bullet::~Bullet() {
@@ -23,7 +23,7 @@ bool Bullet::send(Socket* socket) {
   if (rc == leftover()) {
     _finished = true;
     qps->bullets++;
-    leopard_trace("bulleted,[%d],size:%d,rc=%d", qps->bullets.load(),outputStream->size(), rc);
+    leopard_trace("bulleted [%d],size:%d,rc=%d", qps->bullets.load(), outputStream->size(), rc);
     return true;
   } else if (rc == -1) {
     if (errno == EINTR || (errno == EAGAIN) || errno == EWOULDBLOCK) {

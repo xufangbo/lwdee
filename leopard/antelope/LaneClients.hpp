@@ -9,6 +9,6 @@ class LaneClients {
   
  public:
   LaneClientPtr create(const char* ip, int port);
-  void wait();
+  void wait(float timeout = 20);
   void close();
 };

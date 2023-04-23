@@ -37,9 +37,9 @@ SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request,
   return waiter;
 }
 
-void LaneClient::wait() {
+void LaneClient::wait(float timeout) {
   for (auto waiter : waiters) {
-    waiter->wait();
+    waiter->wait(timeout);
   }
 }
 void LaneClient::close() {

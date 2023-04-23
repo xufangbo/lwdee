@@ -64,16 +64,16 @@ void Runway::acceptSocket(epoll_event* evt) {
   if (evt->events & EPOLLIN) {
     int client_fd = server->accept();
 
-    Socket* client = new Socket(client_fd, &_qps);
+    Socket* socket = new Socket(client_fd, &_qps);
 
     // leopard_debug("client socket sendbufer %d", client->getSendBuf());    // 425984 2626560
     // leopard_debug("client socket revibufer %d", client->getReciveBuf());  // 131072 131072
 
-    auto connection = connections->insert(client);
-    // evt->data.ptr = connection;
+    // auto connection = connections->insert(client);
+    auto connection = new Connection(socket, &_qps);
 
     if (nonBlocking) {
-      client->setNonBlocking();
+      socket->setNonBlocking();
     }
 
     epoll->add(client_fd, EVENTS_NEW, connection);

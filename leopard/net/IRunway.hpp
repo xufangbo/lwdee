@@ -4,7 +4,6 @@
 #include <memory>
 #include <thread>
 #include "Connection.hpp"
-#include "Connections.hpp"
 #include "Epoll.hpp"
 #include "Qps.hpp"
 
@@ -26,7 +25,7 @@ class IRunway {
   uint32_t EVENTS_OUT = 0;
 
  protected:
-  Connections* connections = new Connections(&_qps);
+  // Connections* connections = new Connections(&_qps);
   Qps _qps;
 
  protected:
@@ -36,9 +35,7 @@ class IRunway {
   void acceptRecive(Connection* connection, epoll_event* evt);
   void acceptRequest(Connection* connection, BufferStream* inputStream);
   virtual void __acceptRequest(Connection* connection, BufferStream* inputStream) = 0;
-
   void acceptSend(Connection* connection);
-
   void gererateEnvents();
 
  public:
@@ -47,6 +44,6 @@ class IRunway {
   void close(Connection* connection);
   Qps* qps();
   void join();
-  size_t size() { return connections->size(); }
-  void addSendTask(Connection* connection, BufferStream* outputStream);
+  size_t size() { return _qps.sockets; }
+  // void send(Connection* connection, BufferStream* outputStream);
 };

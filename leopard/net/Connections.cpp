@@ -45,7 +45,7 @@ void Connections::__run() {
 
   for (auto it = tasks.begin(); it != tasks.end(); it++) {
     Connection* task = *it;
-    task->send();
+    task->send(SendSource::none);
     if (task->finished()) {
       removedTasks.push_back(task);
     }

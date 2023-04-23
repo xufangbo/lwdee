@@ -19,10 +19,12 @@ SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection, Buf
   LeopardHeader::setLength(outputStream);
   auto msgId = LeopardHeader::getMessageId(outputStream);
 
-  ClientSocket *socket = (ClientSocket*)connection->socket;
+  ClientSocket* socket = (ClientSocket*)connection->socket;
   auto waiter = socket->crateWaiter(msgId);
 
-  runway->addSendTask(connection, outputStream);
+  // runway->send(connection, outputStream);
+  connection->push(outputStream);
+  // connection->send(SendSource::request);
 
   return waiter;
 }
@@ -66,7 +68,7 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
   // printf("%s\n", LeopardHeader::to_hex(inputStream).c_str());
   LeopardHeader header = LeopardHeader::parse(inputStream);
-  
+
   auto fun = TcpResponse::find(header.path);
   if (fun == nullptr) {
     logger_error("can't hint path: %s", header.path.c_str());
@@ -86,7 +88,10 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   header.setLength(outputStream);
 
   // sendQueue->push(socket, outputStream);
-  runway->addSendTask(connection, outputStream);
+  // runway->send(connection, outputStream);
+
+  connection->push(outputStream);
+  // connection->send(SendSource::request);
 
   // leopard_debug("> response %s", header.path.c_str());
 }

@@ -26,7 +26,7 @@ class SocketWaiter_t {
   void notify(WaitStatus status);
   uint32_t getId() { return id; }
 
-  float wait(float timeout = 5.0);
+  float wait(float timeout = 5);
 };
 
 typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
