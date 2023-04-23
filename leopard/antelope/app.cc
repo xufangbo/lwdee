@@ -33,8 +33,8 @@ void test_by_testor(Testor* testor, int testSize, int parallel, std::string ip, 
   (*testor)(testReport, testSize, input_1_K, parallel, ip, port, 20);
   (*testor)(testReport, testSize, input_10_K, parallel, ip, port, 20);
   (*testor)(testReport, testSize, input_100_K, parallel, ip, port, 20);
-  (*testor)(testReport, testSize, input_1_M, parallel, ip, port, 200);
-  (*testor)(testReport, testSize, input_10_M, parallel, ip, port, 200);
+  (*testor)(testReport, testSize, input_1_M, parallel, ip, port, 500);
+  (*testor)(testReport, testSize, input_10_M, parallel, ip, port, 500);
 
   testReport.writeEmptyLine();
 }
@@ -60,12 +60,13 @@ int main(int argc, char** argv) {
 
   Antelope::instance.start(conf->cparallel);
 
-  testReport.writeTitle();
+  Stopwatch sw;
 
-  test_by_testor(&test_sync, 50, 1, ip, port);
-  test_by_testor(&test_async, 50, 100, ip, port);
-  test_by_testor(&test_long, 50, 1, ip, port);
-  test_by_testor(&test_long, 50, 10, ip, port);
+  testReport.writeTitle();
+  test_by_testor(&test_sync, 20, 1, ip, port);
+  test_by_testor(&test_async, 20, 20, ip, port);
+  test_by_testor(&test_long, 20, 1, ip, port);
+  test_by_testor(&test_long, 20, 10, ip, port);
 
   // testReport.writeEmptyLine();
 
@@ -76,7 +77,7 @@ int main(int argc, char** argv) {
   // test_by_input(input_1_M, 100, 10, 30, ip, port);
   // test_by_input(input_10_M, 10, 10, 200, ip, port);
 
-  logger_info("test finished");
+  logger_info("test finished,eclapsed:%.3f",sw.stop());
 
   Antelope::instance.join();
   // Antelope::instance.stop();
