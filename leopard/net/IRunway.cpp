@@ -93,8 +93,8 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
 
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
-        leopard_debug("%d", _qps.recvs.load());
         auto pickedStream = inputStream->pick();
+        leopard_debug("picked,seq: %d,size: %d", _qps.recvs.load(),pickedStream->size());
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       }

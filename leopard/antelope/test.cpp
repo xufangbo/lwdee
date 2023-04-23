@@ -26,7 +26,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   // logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
-void test_sync(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
+void test_sync(TestReport& testReport, int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
@@ -49,7 +49,7 @@ void test_sync(TestReport &testReport,int testSize, TestInput& inputType, std::s
   testReport.writeLine("短连接串行", inputType.name, testSize, 1, sw.elapsed());
   logger_info("elapsed %.3lf", sw.stop());
 }
-void test_async(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
+void test_async(TestReport& testReport, int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
   Stopwatch sw;
 
   LaneClients clients;
@@ -74,7 +74,7 @@ void test_async(TestReport &testReport,int testSize, TestInput& inputType, std::
   logger_info("elapsed %.3lf", sw.stop());
 }
 
-void test_long(TestReport &testReport,int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
+void test_long(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   auto client = LaneClient::create(ip.c_str(), port, parallel);
 
   Stopwatch sw;
@@ -104,8 +104,8 @@ void TestReport::writeTitle() {
   }
 
   f << "no" << split;
+  f << "请求数据" << split;
   f << "连接类型" << split;
-  f << "请求内容" << split;
   f << "请求次数" << split;
   f << "并发Socket数" << split;
   f << "耗时" << split;
@@ -125,8 +125,8 @@ void TestReport::writeLine(std::string type, std::string inputType, int testSize
   }
 
   f << seq << split;
-  f << type << split;
   f << inputType << split;
+  f << type << split;
   f << testSize << split;
   f << parallel << split;
   f << elapsed << split;
