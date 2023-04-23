@@ -121,7 +121,7 @@ void TestReport::writeTitle() {
 }
 
 void TestReport::writeEmptyLine() {
-  std::ofstream f(fileName, std::ios_base::trunc);
+  std::ofstream f(fileName, std::ios_base::app);
   if (!f.is_open()) {
     logger_error("can't open file %s", fileName.c_str());
   }
