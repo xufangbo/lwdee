@@ -3,7 +3,7 @@
 #include "core/log.hpp"
 #include "core/Exception.hpp"
 #include "net/BufferStream.hpp"
-#include "server/TcpResponse.hpp"
+#include "protocal/TcpResponse.hpp"
 
 Maps MapSchedule::maps;
 

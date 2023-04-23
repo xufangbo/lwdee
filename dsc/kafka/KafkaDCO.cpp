@@ -11,7 +11,7 @@
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
 #include "net/BufferStream.hpp"
-#include "server/TcpResponse.hpp"
+#include "protocal/TcpResponse.hpp"
 
 PartitionKafka KafkaDCO::input;
 

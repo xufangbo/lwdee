@@ -4,8 +4,8 @@
 #include <fstream>
 #include <vector>
 
-#include "client/LaneClient.hpp"
-#include "client/TcpRequest.hpp"
+#include "antelope/LaneClient.hpp"
+#include "protocal/TcpRequest.hpp"
 #include "core/Exception.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/Partition.h"

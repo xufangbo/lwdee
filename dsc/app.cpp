@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "client/Antelope.hpp"
+#include "antelope/Antelope.hpp"
 #include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/Stopwatch.hpp"
@@ -14,7 +14,7 @@
 #include "map/MapSchedule.hpp"
 #include "matrix/LinuxMatrix.h"
 #include "reduce/ReduceDCO.h"
-#include "server/Leopard.hpp"
+#include "leopard/Leopard.hpp"
 
 void logger_init(std::string nodeName);
 void init(int argc, char* argv[]);
@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
       sleep(10);
     }
   } else {
-    Leopard leopard(0);
-    leopard.start("0.0.0.0", node->port);
+    Leopard leopard("0.0.0.0", node->port);
+    leopard.start();
     // leopard.start(node->ip.c_str(), node->port);
   }
 }
