@@ -106,9 +106,9 @@ void TestReport::writeTitle() {
     logger_error("can't open file %s", fileName.c_str());
   }
 
-  f << "no" << split;
-  f << "请求数据" << split;
+  f << "no" << split;  
   f << "连接类型" << split;
+  f << "请求数据" << split;
   f << "请求次数" << split;
   f << "并行Socket数" << split;
   f << "耗时" << split;
@@ -140,8 +140,8 @@ void TestReport::writeLine(std::string type, std::string inputType, int testSize
   }
 
   f << seq << split;
-  f << inputType << split;
   f << type << split;
+  f << inputType << split;  
   f << testSize << split;
   f << parallel << split;
   f << std::fixed << std::setprecision(3) << elapsed << split;

@@ -46,14 +46,14 @@ class Testor {
 class TestSync : public Testor {
  public:
   TestSync()
-      : Testor("短链接串行") {}
+      : Testor("短连接串行") {}
   void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) override;
 };
 
 class TestAsync : public Testor {
  public:
   TestAsync()
-      : Testor("短链接并行") {}
+      : Testor("短连接并行") {}
   void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) override;
 };
 

@@ -27,14 +27,15 @@ void test_execute(Testor* testor, TestInput& input, int testSize, int parallel, 
   (*testor)(testReport, testSize, input, parallel, ip, port, timeout);
 }
 
-void test_by_testor(Testor* testor, int testSize, int parallel, float timeout, std::string ip, int port) {
+void test_by_testor(Testor* testor, int testSize, int parallel, std::string ip, int port) {
   // testor->execute(testReport, testSize, input, parallel, ip, port,timeout);
-  (*testor)(testReport, testSize, input_100_byte, parallel, ip, port, 2);
-  (*testor)(testReport, testSize, input_1_K, parallel, ip, port, 2);
-  (*testor)(testReport, testSize, input_10_K, parallel, ip, port, 2);
-  (*testor)(testReport, testSize, input_100_K, parallel, ip, port, 2);
+  (*testor)(testReport, testSize, input_100_byte, parallel, ip, port, 20);
+  (*testor)(testReport, testSize, input_1_K, parallel, ip, port, 20);
+  (*testor)(testReport, testSize, input_10_K, parallel, ip, port, 20);
+  (*testor)(testReport, testSize, input_100_K, parallel, ip, port, 20);
   (*testor)(testReport, testSize, input_1_M, parallel, ip, port, 30);
   (*testor)(testReport, testSize, input_10_M, parallel, ip, port, 200);
+
   testReport.writeEmptyLine();
 }
 
@@ -61,10 +62,11 @@ int main(int argc, char** argv) {
 
   testReport.writeTitle();
 
-  test_by_testor(&test_sync, 100, 1, 2, ip, port);
-  test_by_testor(&test_async, 100, 100, 2, ip, port);
-  test_by_testor(&test_long, 100, 10, 2, ip, port);
-  
+  test_by_testor(&test_sync, 100, 1, ip, port);
+  test_by_testor(&test_async, 100, 100, ip, port);
+  test_by_testor(&test_long, 100, 1, ip, port);
+  test_by_testor(&test_long, 100, 10, ip, port);
+
   // testReport.writeEmptyLine();
 
   // test_by_input(input_100_byte, 100, 10, 2, ip, port);
