@@ -120,6 +120,17 @@ void TestReport::writeTitle() {
   f.close();
 }
 
+void TestReport::writeEmptyLine() {
+  std::ofstream f(fileName, std::ios_base::trunc);
+  if (!f.is_open()) {
+    logger_error("can't open file %s", fileName.c_str());
+  }
+  f << split << std::endl;
+
+  f.flush();
+  f.close();
+}
+
 void TestReport::writeLine(std::string type, std::string inputType, int testSize, int parallel, float elapsed) {
   seq++;
 

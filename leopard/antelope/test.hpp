@@ -28,6 +28,7 @@ class TestReport {
 
  public:
   void writeTitle();
+  void writeEmptyLine();
   void writeLine(std::string type, std::string inputType, int testSize, int parallel, float elapsed);
 };
 
