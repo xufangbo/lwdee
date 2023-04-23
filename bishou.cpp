@@ -15,6 +15,16 @@ std::string containers[] = {"dsc", "dsc", "dsc", "dsc", "dsc", "dsc"};
 void leopard_task() {
   string script = "";
 
+  script = "ssh root@k8s-node05 \"docker stop dsc\"";
+  system(script.c_str());
+  script = "scp /home/kevin/git/lwdee/bin/server root@k8s-node05:/home/kevin/git/lwdee/build/app";
+  system(script.c_str());
+  script = "scp /home/kevin/git/lwdee/config/leopard.json root@k8s-node05:/home/kevin/git/lwdee/config/";
+  system(script.c_str());
+  script = "ssh root@k8s-node05 \"docker start dsc\"";
+  system(script.c_str());  
+
+  // ------------------------------------
   script = "ssh root@k8s-node04 \"docker stop dsc\"";
   system(script.c_str());
   script = "scp /home/kevin/git/lwdee/bin/client root@k8s-node04:/home/kevin/git/lwdee/build/app";
@@ -24,14 +34,6 @@ void leopard_task() {
   script = "ssh root@k8s-node04 \"docker start dsc\"";
   system(script.c_str());
 
-  script = "ssh root@k8s-node05 \"docker stop dsc\"";
-  system(script.c_str());
-  script = "scp /home/kevin/git/lwdee/bin/server root@k8s-node05:/home/kevin/git/lwdee/build/app";
-  system(script.c_str());
-  script = "scp /home/kevin/git/lwdee/config/leopard.json root@k8s-node05:/home/kevin/git/lwdee/config/";
-  system(script.c_str());
-  script = "ssh root@k8s-node05 \"docker start dsc\"";
-  system(script.c_str());
 }
 
 void log_task(std::string nodeName) {

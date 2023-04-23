@@ -18,7 +18,7 @@ file(GLOB_RECURSE SRC_leopard "leopard/*.cpp")
 # target_link_libraries(client pthread core net protocal)
 
 add_executable(server ${SRC_net} ${SRC_protocal} ${SRC_leopard} leopard/app.cc)
-target_link_libraries(server pthread core net protocal)
+target_link_libraries(server pthread core)
 
 add_executable(client  ${SRC_net} ${SRC_protocal} ${SRC_antelope} antelope/app.cc)
-target_link_libraries(client pthread core net protocal)
+target_link_libraries(client pthread core)

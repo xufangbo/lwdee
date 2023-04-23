@@ -5,9 +5,6 @@
 
 class TestInput;
 class TestReport;
-void test_sync(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout);
-void test_async(TestReport &testReport,int testSize, TestInput& inputType, std::string ip, int port, float timeout);
-void test_long(TestReport &testReport,int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout);
 
 class TestInput {
  public:
@@ -32,4 +29,36 @@ class TestReport {
  public:
   void writeTitle();
   void writeLine(std::string type, std::string inputType, int testSize, int parallel, float elapsed);
+};
+
+class Testor {
+ public:
+  std::string name;
+  Testor(std::string name)
+      : name(name) {}
+  void operator()(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
+    this->execute(testReport, testSize, inputType, parallel, ip, port, timeout);
+  }
+  virtual void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) = 0;
+};
+
+class TestSync : public Testor {
+ public:
+  TestSync()
+      : Testor("短链接串行") {}
+  void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) override;
+};
+
+class TestAsync : public Testor {
+ public:
+  TestAsync()
+      : Testor("短链接并行") {}
+  void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) override;
+};
+
+class TestLongConnect : public Testor {
+ public:
+  TestLongConnect()
+      : Testor("长连接并行") {}
+  void execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) override;
 };

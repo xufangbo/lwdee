@@ -1,6 +1,6 @@
 {
     "ip": "10.180.98.135",
     "port": 5005,
-    "sparallel": 2,
-    "cparallel": 2
+    "sparallel": 1,
+    "cparallel": 1
 }

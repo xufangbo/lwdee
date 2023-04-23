@@ -26,7 +26,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   // logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
-void test_sync(TestReport& testReport, int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
+void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
@@ -46,10 +46,11 @@ void test_sync(TestReport& testReport, int testSize, TestInput& inputType, std::
     }
   }
 
-  testReport.writeLine("短连接串行", inputType.name, testSize, 1, sw.elapsed());
-  logger_info("elapsed %.3lf", sw.stop());
+  testReport.writeLine(name, inputType.name, testSize, 1, sw.elapsed());
+  auto eclapsed = sw.stop();
+  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, 1, eclapsed, eclapsed / testSize, responseIndex.load());
 }
-void test_async(TestReport& testReport, int testSize, TestInput& inputType, std::string ip, int port, float timeout) {
+void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   Stopwatch sw;
 
   LaneClients clients;
@@ -70,11 +71,12 @@ void test_async(TestReport& testReport, int testSize, TestInput& inputType, std:
   clients.wait(timeout);
   clients.close();
 
-  testReport.writeLine("短连接并行", inputType.name, testSize, testSize, sw.elapsed());
-  logger_info("elapsed %.3lf", sw.stop());
+  testReport.writeLine(name, inputType.name, testSize, testSize, sw.elapsed());
+  auto eclapsed = sw.stop();
+  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, testSize, eclapsed, eclapsed / testSize, responseIndex.load());
 }
 
-void test_long(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
+void TestLongConnect::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   auto client = LaneClient::create(ip.c_str(), port, parallel);
 
   Stopwatch sw;
@@ -92,9 +94,10 @@ void test_long(TestReport& testReport, int testSize, TestInput& inputType, int p
   client->wait(timeout);
   client->close();
 
-  testReport.writeLine("长连接", inputType.name, testSize, parallel, sw.elapsed());
+  testReport.writeLine(this->name, inputType.name, testSize, parallel, sw.elapsed());
 
-  logger_info("elapsed %.3lf,response count : %d,", sw.stop(), responseIndex.load());
+  auto eclapsed = sw.stop();
+  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, parallel, eclapsed, eclapsed / testSize, responseIndex.load());
 }
 
 void TestReport::writeTitle() {
@@ -130,8 +133,8 @@ void TestReport::writeLine(std::string type, std::string inputType, int testSize
   f << type << split;
   f << testSize << split;
   f << parallel << split;
-  f << elapsed << split;
-  f << elapsed / testSize << split;
+  f << std::fixed << std::setprecision(3) << elapsed << split;
+  f << std::fixed << std::setprecision(3) << elapsed / testSize << split;
 
   f << std::endl;
 
