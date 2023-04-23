@@ -33,7 +33,7 @@ void test_by_testor(Testor* testor, int testSize, int parallel, std::string ip, 
   (*testor)(testReport, testSize, input_1_K, parallel, ip, port, 20);
   (*testor)(testReport, testSize, input_10_K, parallel, ip, port, 20);
   (*testor)(testReport, testSize, input_100_K, parallel, ip, port, 20);
-  (*testor)(testReport, testSize, input_1_M, parallel, ip, port, 30);
+  (*testor)(testReport, testSize, input_1_M, parallel, ip, port, 200);
   (*testor)(testReport, testSize, input_10_M, parallel, ip, port, 200);
 
   testReport.writeEmptyLine();
@@ -62,10 +62,10 @@ int main(int argc, char** argv) {
 
   testReport.writeTitle();
 
-  test_by_testor(&test_sync, 100, 1, ip, port);
-  test_by_testor(&test_async, 100, 100, ip, port);
-  test_by_testor(&test_long, 100, 1, ip, port);
-  test_by_testor(&test_long, 100, 10, ip, port);
+  test_by_testor(&test_sync, 50, 1, ip, port);
+  test_by_testor(&test_async, 50, 100, ip, port);
+  test_by_testor(&test_long, 50, 1, ip, port);
+  test_by_testor(&test_long, 50, 10, ip, port);
 
   // testReport.writeEmptyLine();
 
