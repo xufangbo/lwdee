@@ -10,7 +10,8 @@ class LeopardConfig {
   // terasort
   std::string ip;
   int port = 0;
-  int procnums = 0;
+  int sparallel = 0;
+  int cparallel = 0;
 
  public:
   void readConfig();

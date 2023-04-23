@@ -38,7 +38,8 @@ void LeopardConfig::readConfig() {
   cJSON* node = cJSON_Parse(json.c_str());
   _instance.ip = cJSON_GetObjectItem(node, "ip")->valuestring;
   _instance.port = cJSON_GetObjectItem(node, "port")->valueint;
-  _instance.procnums = cJSON_GetObjectItem(node, "procnums")->valueint;
+  _instance.sparallel = cJSON_GetObjectItem(node, "sparallel")->valueint;
+  _instance.cparallel = cJSON_GetObjectItem(node, "cparallel")->valueint;
 
   cJSON_Delete(node);
 

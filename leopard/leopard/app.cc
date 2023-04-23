@@ -10,13 +10,13 @@ int main() {
   }
 
   read_log_config("server");
-  LeopardConfig::instance()->readConfig();
-  auto ip = LeopardConfig::instance()->ip;
+  auto conf = LeopardConfig::instance();
+  conf->readConfig();
   // auto ip = "0.0.0.0";
 
   registService();
 
-  Leopard leopard(ip, LeopardConfig::instance()->port);
-  leopard.start(1);
+  Leopard leopard(conf->ip, conf->port);
+  leopard.start(conf->sparallel);
   leopard.join();
 }

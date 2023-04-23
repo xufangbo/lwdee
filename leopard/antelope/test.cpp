@@ -107,8 +107,9 @@ void TestReport::writeTitle() {
   f << "请求数据" << split;
   f << "连接类型" << split;
   f << "请求次数" << split;
-  f << "并发Socket数" << split;
+  f << "并行Socket数" << split;
   f << "耗时" << split;
+  f << "平均耗时" << split;
 
   f << std::endl;
 
@@ -130,6 +131,7 @@ void TestReport::writeLine(std::string type, std::string inputType, int testSize
   f << testSize << split;
   f << parallel << split;
   f << elapsed << split;
+  f << elapsed / testSize << split;
 
   f << std::endl;
 
