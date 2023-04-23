@@ -70,6 +70,21 @@ void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses
   if (!f.is_open()) {
     logger_error("can't open file %s", file.c_str());
   }
+  
+  if(qpses.size()>1){
+    f << "" << split;
+    f << (qpses.size() -1) << "线程合计" << split;
+    for (int i = 1; i < qpses[0]->header().size();i++){
+      f << split;
+    }
+    for (int t = 1; t < qpses.size();t++){
+      f << "线程"<< t << split;
+      for (int i = 1; i < qpses[0]->header().size();i++){
+        f << split;
+      }
+    }
+    f << std::endl;
+  }
 
   f << "time" << split;
   for (Qps* qps : qpses) {
