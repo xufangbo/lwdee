@@ -20,6 +20,3 @@ target_link_libraries(app PUBLIC ${EXTRA_LIBS})
 
 # target_compile_options(app PUBLIC -Wall)
 
-##################################
-add_executable(bishou bishou.cpp) 
-target_link_libraries(bishou pthread)

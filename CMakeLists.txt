@@ -28,3 +28,6 @@ add_subdirectory(leopard)
 
 # include(${CMAKE_CURRENT_SOURCE_DIR}/dsc.cmake)
 
+##################################
+add_executable(bishou bishou.cpp) 
+target_link_libraries(bishou pthread)
