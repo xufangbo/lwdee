@@ -43,6 +43,6 @@ class IRunway {
   void close(Connection* connection);
   Qps* qps();
   void join();
-  size_t size() { return _qps.sockets; }
+  size_t size() { return _qps.opens; }
   // void send(Connection* connection, BufferStream* outputStream);
 };

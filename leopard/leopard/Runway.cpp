@@ -25,7 +25,7 @@ void Runway::start() {
 void Runway::run() {
   try {
     this->server = new Socket(&_qps);
-    _qps.sockets--;
+    _qps.opens--;
 
     // leopard_debug("server socket sendbufer %d", server->getSendBuf());    // 2626560
     // leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
