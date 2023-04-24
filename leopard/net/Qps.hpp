@@ -19,12 +19,15 @@ struct Qps {
   uint32_t sends_ = 0;    // 上次发送数
   uint32_t bullets_ = 0;  // 上次发送中的数
 
+  std::vector<uint32_t> values;
+
   Qps(int id)
       : id(id) {
     this->reset();
   }
 
   void reset();
+  void generate();
   std::vector<std::string> header();
   std::vector<std::string> data();
 };

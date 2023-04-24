@@ -47,22 +47,23 @@ void Metrix::run() {
 }
 
 void Metrix::write() {
+  auto begin = qpses.size() > 1 ? qpses.begin() + 1 : qpses.begin();
+  for (auto i = begin; i != qpses.end(); i++) {
+    (*i)->generate();
+  }
+
   if (qpses.size() > 1) {
-    qps.sockets = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->sockets; });
-    qps.closes = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->closes; });
-    qps.recvs = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->recvs; });
-    qps.sends = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->sends; });
-    qps.bullets = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [](int x, Qps* r) { return x + r->bullets; });
+    qps.values.clear();
+    int valueSize = qpses[1]->values.size();
+    for (int i = 0; i < valueSize; i++) {
+      int value = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [&i](uint32_t x, Qps* r) { return x + r->values.at(i); });
+      qps.values.push_back(value);
+    }
   }
 
   for (auto& writer : this->writers) {
     writer->writeLine(fileName, qpses);
   }
-
-  // for (Qps* qps : qpses) {
-  //   auto tmp = qps->data();
-  //   qps->reset();
-  // }
 }
 
 void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
@@ -71,16 +72,16 @@ void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses
   if (!f.is_open()) {
     logger_error("can't open file %s", file.c_str());
   }
-  
-  if(qpses.size()>1){
+
+  if (qpses.size() > 1) {
     f << "" << split;
-    f << (qpses.size() -1) << "线程合计" << split;
-    for (int i = 1; i < qpses[0]->header().size();i++){
+    f << (qpses.size() - 1) << "线程合计" << split;
+    for (int i = 1; i < qpses[0]->header().size(); i++) {
       f << split;
     }
-    for (int t = 1; t < qpses.size();t++){
-      f << "线程"<< t << split;
-      for (int i = 1; i < qpses[0]->header().size();i++){
+    for (int t = 1; t < qpses.size(); t++) {
+      f << "线程" << t << split;
+      for (int i = 1; i < qpses[0]->header().size(); i++) {
         f << split;
       }
     }
@@ -179,7 +180,6 @@ void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& q
   fclose(fp);
 }
 
-
 void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   // std::string file = fileName + ".md";
 
@@ -188,7 +188,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
   //   logger_error("can't open file %s", file.c_str());
   // }
 
-  FILE *fp = stdout;
+  FILE* fp = stdout;
 
   fprintf(fp, "|% 23s|", "time");
   for (Qps* qps : qpses) {
@@ -219,7 +219,7 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qp
   // if (fp == NULL) {
   //   logger_error("can't open file %s", file.c_str());
   // }
-  FILE *fp = stdout;
+  FILE* fp = stdout;
 
   char time[25];
   date_millsecond(time, 25);
