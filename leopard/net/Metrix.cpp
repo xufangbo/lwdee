@@ -196,6 +196,13 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
   FILE* fp = stdout;
 
   fprintf(fp, "|% 23s|", "time");
+
+  fprintf(fp, "%8s|", "cpu sys");
+  fprintf(fp, "%8s|", "cpu proc");
+  fprintf(fp, "%8s|", "ram tol");
+  fprintf(fp, "%8s|", "ram sys");
+  fprintf(fp, "%8s|", "ram proc");
+
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
     for (std::string& i : tmp) {
@@ -207,11 +214,11 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
   //-----------------------------
   fprintf(fp, "|%23s|", "-----------------------");
 
-  fprintf(fp, "%7s-|", "cpu sys");
-  fprintf(fp, "%7s-|", "cpu proc");
-  fprintf(fp, "%7s-|", "ram tol");
-  fprintf(fp, "%7s-|", "ram sys");
-  fprintf(fp, "%7s-|", "ram proc");
+  fprintf(fp, "%8s|", "--------");
+  fprintf(fp, "%8s|", "--------");
+  fprintf(fp, "%8s|", "--------");
+  fprintf(fp, "%8s|", "--------");
+  fprintf(fp, "%8s|", "--------");
 
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
@@ -236,11 +243,11 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qp
   date_millsecond(time, 25);
   fprintf(fp, "|%23s|", time);
 
-  fprintf(fp, "%7d-|", sysres.cpu_sys_used);
-  fprintf(fp, "%7d-|", sysres.cpu_sys_used);
-  fprintf(fp, "%7d-|", sysres.ram_total);
-  fprintf(fp, "%7d-|", sysres.ram_sys_used);
-  fprintf(fp, "%7d-|", sysres.ram_proc_used);
+  fprintf(fp, "%7d |", sysres.cpu_sys_used);
+  fprintf(fp, "%7d |", sysres.cpu_proc_used);
+  fprintf(fp, "%7d |", sysres.ram_total);
+  fprintf(fp, "%7d |", sysres.ram_sys_used);
+  fprintf(fp, "%7d |", sysres.ram_proc_used);
 
   for (Qps* qps : qpses) {
     auto tmp = qps->data();
