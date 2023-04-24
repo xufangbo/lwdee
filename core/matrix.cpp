@@ -164,21 +164,35 @@ int GetProcessMemUsed(void) {
   return ((mem_used < 1024) ? 1 : mem_used / 1024);
 }
 
-int main() {
-  for (int i = 0; i < 10; i++) {
-    auto used = GetCpuUsed();
-    printf("cpu used , sys %ld, proc : %ld\n", used.sys_used, used.proc_used);
+SysResource get_proc_res() {
+  SysResource rc;
 
-    int ram_total;
-    int ram_used = GetSystemMemUsed(ram_total);
-    int ram_proc = GetProcessMemUsed();
+  auto used = GetCpuUsed();
 
-    printf("ram total: %dM, os used: %dM, current proc used: %dM\n", ram_total, ram_used, ram_proc);
+  rc.cpu_sys_used = used.sys_used;
+  rc.cpu_proc_used = used.proc_used;
 
-    printf("------------\n");
+  rc.ram_sys_used = GetSystemMemUsed(rc.ram_total);
+  rc.ram_proc_used = GetProcessMemUsed();
 
-    sleep(1);
-  }
-
-  return 0;
+  return rc;
 }
+
+// int main() {
+//   for (int i = 0; i < 10; i++) {
+//     auto used = GetCpuUsed();
+//     printf("cpu used , sys %ld, proc : %ld\n", used.sys_used, used.proc_used);
+
+//     int ram_total;
+//     int ram_used = GetSystemMemUsed(ram_total);
+//     int ram_proc = GetProcessMemUsed();
+
+//     printf("ram total: %dM, os used: %dM, current proc used: %dM\n", ram_total, ram_used, ram_proc);
+
+//     printf("------------\n");
+
+//     sleep(1);
+//   }
+
+//   return 0;
+// }

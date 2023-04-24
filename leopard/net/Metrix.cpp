@@ -50,6 +50,8 @@ void Metrix::run() {
 }
 
 void Metrix::write() {
+  this->sysres = get_proc_res();
+
   auto begin = qpses.size() > 1 ? qpses.begin() + 1 : qpses.begin();
   for (auto i = begin; i != qpses.end(); i++) {
     (*i)->generate();
@@ -65,7 +67,7 @@ void Metrix::write() {
   }
 
   for (auto& writer : this->writers) {
-    writer->writeLine(fileName, qpses);
+    writer->writeLine(fileName, qpses, sysres);
   }
 }
 
@@ -103,7 +105,7 @@ void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses
   f.flush();
   f.close();
 }
-void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
@@ -160,7 +162,7 @@ void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& 
   fflush(fp);
   fclose(fp);
 }
-void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   std::string file = fileName + ".md";
   FILE* fp = fopen(file.c_str(), "a");
   if (fp == NULL) {
@@ -205,6 +207,12 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
   //-----------------------------
   fprintf(fp, "|%23s|", "-----------------------");
 
+  fprintf(fp, "%7s-|", "cpu sys");
+  fprintf(fp, "%7s-|", "cpu proc");
+  fprintf(fp, "%7s-|", "ram tol");
+  fprintf(fp, "%7s-|", "ram sys");
+  fprintf(fp, "%7s-|", "ram proc");
+
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
     for (std::string& i : tmp) {
@@ -216,7 +224,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
   fflush(fp);
   // fclose(fp);
 }
-void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   // std::string file = fileName + ".md";
   // FILE* fp = fopen(file.c_str(), "a");
   // if (fp == NULL) {
@@ -227,6 +235,12 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qp
   char time[25];
   date_millsecond(time, 25);
   fprintf(fp, "|%23s|", time);
+
+  fprintf(fp, "%7d-|", sysres.cpu_sys_used);
+  fprintf(fp, "%7d-|", sysres.cpu_sys_used);
+  fprintf(fp, "%7d-|", sysres.ram_total);
+  fprintf(fp, "%7d-|", sysres.ram_sys_used);
+  fprintf(fp, "%7d-|", sysres.ram_proc_used);
 
   for (Qps* qps : qpses) {
     auto tmp = qps->data();

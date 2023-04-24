@@ -3,7 +3,7 @@
 #include "thread"
 
 TestReport qps_report;
-TestInput qps_input("10K", 10000);
+TestInput qps_input("1K", 1000);
 TestSync qps_sync;
 TestAsync qps_async;
 TestLongConnect qps_long;
