@@ -16,7 +16,7 @@ class Metrix {
   std::vector<std::shared_ptr<IMetrixWriter>> writers;
   Qps qps;
   SysResource sysres;
-  ApplicationType appType;
+  ApplicationType appType;  
 
  public:
   Metrix()
@@ -52,6 +52,7 @@ class MarkdownMetrixWriter : public IMetrixWriter {
 class ConsoleMetrixWriter : public IMetrixWriter {
  private:
   char split = '|';
+  int groupSize = 3;
 
  public:
   void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) override;

@@ -213,7 +213,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
   fprintf(fp, "%8s|", "ram sys");
   fprintf(fp, "%8s||", "ram proc");
 
-  for (int i = 0; i < 3 && i < qpses.size(); i++) {
+  for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->header();
     for (std::string& s : tmp) {
@@ -232,7 +232,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s||", "--------");
 
- for (int i = 0; i < 3 && i < qpses.size(); i++) {
+ for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->header();
     for (std::string& s : tmp) {
@@ -265,7 +265,7 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName,
   fprintf(fp, "%7d |", sysres.ram_sys_used);
   fprintf(fp, "%6dM ||", sysres.ram_proc_used);
 
- for (int i = 0; i < 3 && i < qpses.size(); i++) {
+ for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->data();
     
