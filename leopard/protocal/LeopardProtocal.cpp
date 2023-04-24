@@ -22,9 +22,8 @@ SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection, Buf
   ClientSocket* socket = (ClientSocket*)connection->socket;
   auto waiter = socket->crateWaiter(msgId);
 
-  // runway->send(connection, outputStream);
   connection->push(outputStream);
-  // connection->send(SendSource::request);
+  connection->send(SendSource::request); // ET 才主动触发
 
   return waiter;
 }
@@ -89,11 +88,8 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   header.setsen2(outputStream);
   header.setLength(outputStream);
 
-  // sendQueue->push(socket, outputStream);
-  // runway->send(connection, outputStream);
-
   connection->push(outputStream);
-  // connection->send(SendSource::request);
+  connection->send(SendSource::request); // ET 才主动触发
 
   // leopard_debug("> response %s", header.path.c_str());
 }
