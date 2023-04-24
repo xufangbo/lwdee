@@ -23,7 +23,7 @@ void Metrix::start(bool* running, ApplicationType appType,
   }
 
   std::string dirPath = "./log";
-  this->fileName = dirPath + "/" + fileName;
+  this->fileName = dirPath + "/" + (appType == ApplicationType::client ? "client" : "server");
 
   std::filesystem::directory_entry dir(dirPath);
   if (!dir.exists()) {
