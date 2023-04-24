@@ -10,11 +10,11 @@ void Qps::reset() {
 
 std::vector<std::string> Qps::header() {
   std::vector<std::string> ss;
-  ss.push_back("sockets");
+  ss.push_back("skts");
   ss.push_back("recvs");
   ss.push_back("sends");
-  ss.push_back("bullets");
-  ss.push_back("closes");
+  ss.push_back("blts");
+  ss.push_back("clses");
   return ss;
 }
 

@@ -73,7 +73,7 @@ static const char levels[LEVEL_COUNT][6] = {"trace", "debug", "info ",
                                             "warn ", "error", "fatal"};
 static LogOption log_option;
 static FILE* fp = NULL;
-static time_t day = 0;  // 天数据，每天一个日志文件
+static time_t this_day = 0;  // 天数据，每天一个日志文件
 static char fileName[FILE_LENGTH];
 
 // pthread_t tid;
@@ -81,9 +81,10 @@ pthread_mutex_t mut;
 
 static void wirte_console(LogLevel& level, char* message);
 static void write_file(LogLevel& level, char* message);
-static void generate_file();
+static void generate_filename();
 static int string_sub(char* dest, char* src, int startIndex, int endIndex);
 static int string_indexOf(char* str, char c);
+static time_t now_day();
 
 void logger(LogLevel level, const char* function, const char* file, int line, const char* msgfmt, ...) {
   if (level < log_option.level) {
@@ -186,7 +187,7 @@ void create_file() {
     printf("log is not initilaized\n");
     return;
   }
-  generate_file();
+  generate_filename();
 
   fp = fopen(fileName, log_option.fileMode);
   if (fp == NULL) {
@@ -194,8 +195,8 @@ void create_file() {
     printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
     return;
   }
-  fclose(fp);
-  fp = NULL;
+  // fclose(fp);
+  // fp = NULL;
 }
 
 void write_file(LogLevel& level, char* message) {
@@ -206,49 +207,48 @@ void write_file(LogLevel& level, char* message) {
     printf("log is not initilaized\n");
     return;
   }
-  generate_file();
 
-  fp = fopen(fileName, "a+");
-  if (fp == NULL) {
-    char* err_msg = strerror(errno);
-    printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
-    return;
+  if (now_day() != this_day) {
+    generate_filename();
+
+    if (fp != NULL) {
+      fclose(fp);
+      fp = NULL;
+    }
+
+    fp = fopen(fileName, "a+");
+    if (fp == NULL) {
+      char* err_msg = strerror(errno);
+      printf("%s(%s:%d) fail to open log file : %s , error code %d , %s \n", __FUNCTION__, __FILE__, __LINE__, fileName, errno, err_msg);
+      return;
+    } else {
+      // printf("write file %s\n", fileName);
+    }
   }
-  // else{
-  //   printf("write file %s\n",fileName);
-  // }
 
   fprintf(fp, "%s\n", message);
   fflush(fp);
-  fclose(fp);
-  fp = NULL;
 }
 
-void generate_file() {
-  time_t t = time(NULL);
-  t += 8 * 60 * 60;
-  t /= 24 * 60 * 60;
+void generate_filename() {
+  this_day = now_day();
 
-  if (day != t) {
-    memset(fileName, 0, FILE_LENGTH);
+  memset(fileName, 0, FILE_LENGTH);
 
-    char day_string[12];
-    date_day(day_string, 12);
+  char day_string[12];
+  date_day(day_string, 12);
 
-    sprintf(fileName, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
+  sprintf(fileName, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
 
-    day = t;
-
-    // 删除x天之前文件
-    date_day(day_string, 12, log_option.days);
-    char del_file[FILE_LENGTH];
-    memset(del_file, 0, FILE_LENGTH);
-    sprintf(del_file, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
-    if (access(del_file, F_OK) == 0) {
-      int ret = unlink(del_file);
-      if (ret != 0) {
-        printf("can't delete %s, errno %d,errmsg : %s", del_file, errno, strerror(errno));
-      }
+  // 删除x天之前文件
+  date_day(day_string, 12, log_option.days);
+  char del_file[FILE_LENGTH];
+  memset(del_file, 0, FILE_LENGTH);
+  sprintf(del_file, "%s%s%s-%s.log", log_option.path, seperator, log_option.name, day_string);
+  if (access(del_file, F_OK) == 0) {
+    int ret = unlink(del_file);
+    if (ret != 0) {
+      printf("can't delete %s, errno %d,errmsg : %s", del_file, errno, strerror(errno));
     }
   }
 }
@@ -432,6 +432,13 @@ int mkdirs(char* path) {
   }
 
   return 0;
+}
+
+time_t now_day() {
+  time_t t = time(NULL);
+  t += 8 * 60 * 60;
+  t /= 24 * 60 * 60;
+  return t;
 }
 
 void date_day(char* date, int len) {

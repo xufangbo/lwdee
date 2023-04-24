@@ -16,3 +16,6 @@ socket异常时的退出处理
 2023-04-17 09:19:59,187 [debug] [140429401310784] /home/kevin/git/lwdee/leopard/client/SocketScheduler.cpp:74 acceptXXX : no hint socket 113
 
 2023-04-18 18:41:03,004 [error] [140199179466496] /home/kevin/git/lwdee/leopard/net/Connection.cpp:21 send : socket send error(88)Socket operation on non-socket
+
+// socket超过最大文件句柄数之后，文件句柄也不能打开了
+write_file(/home/kevin/git/lwdee/core/log.cpp:214) fail to open log file : ./log/client-2023-04-24.log , error code 24 , Too many open files

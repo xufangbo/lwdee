@@ -190,8 +190,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
 
   FILE *fp = stdout;
 
-  fprintf(stdin, "|% 23s|", "time");
-
+  fprintf(fp, "|% 23s|", "time");
   for (Qps* qps : qpses) {
     auto tmp = qps->header();
     for (std::string& i : tmp) {

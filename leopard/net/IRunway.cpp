@@ -28,7 +28,7 @@ void IRunway::run() {
   // this->connections->start(running);
 
   while (*running) {
-    int waits = epoll->wait(10); // ms
+    int waits = epoll->wait(10);  // ms
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -101,8 +101,11 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
 
       epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
     } else if (rc == -1) {
-      // logger_debug("rc == -1");
-      epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
+      if (errno == ECONNRESET) {
+        this->close(connection);  //(104)Connection reset by peer
+      } else {
+        epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
+      }
     } else if (rc == 0) {
       // printf("recv closed %d", socket->fd());
       this->close(connection);

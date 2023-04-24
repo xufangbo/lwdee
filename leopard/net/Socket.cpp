@@ -138,10 +138,8 @@ ssize_t Socket::write(void* buf, size_t len) {
  * MSG_DONTROUTE:
  这个标志告诉IP.目的主机在本地网络上面,没有必要查找表.这个标志一般用网络诊断和路由程序里面.
  * MSG_OOB      : 接受或者发送带外数据
- * MSG_PEEK     :
- 是recv函数的使用标志,表示只是从系统缓冲区中读取内容,而不清除系统缓冲区的内容.这样下次读的时候,仍然是一样的内容.一般在有多个进程读写数据时可以使用这个标志.
- * MSG_WAITALL  :
- recv函数的使用标志,表示等到所有的信息到达时才返回.使用这个标志的时候recv回一直阻塞,直到指定的条件满足,或者是发生了错误.
+ * MSG_PEEK     : 是recv函数的使用标志,表示只是从系统缓冲区中读取内容,而不清除系统缓冲区的内容.这样下次读的时候,仍然是一样的内容.一般在有多个进程读写数据时可以使用这个标志.
+ * MSG_WAITALL  : recv函数的使用标志,表示等到所有的信息到达时才返回.使用这个标志的时候recv回一直阻塞,直到指定的条件满足,或者是发生了错误.
  *                     1)当读到了指定的字节时,函数正常返回.返回值等于len
  *                     2)当读到了文件的结尾时,函数正常返回.返回值小于len
  *                     3)当操作发生错误时,返回-1,且设置错误为相应的错误号(errno)
@@ -165,8 +163,6 @@ ssize_t Socket::write(void* buf, size_t len) {
     ENOMEM：内存不足
     ENOTCONN：与面向连接关联的套接字尚未被连接上
     ENOTSOCK：sock索引的不是套接字 当返回值是0时，为正常关闭连接；
-
-    天那，要程序员自己代码中设置结束符来判断结束！
  */
 ssize_t Socket::recv(void* buf, size_t len, int flags) {
   int rc = ::recv(_fd, buf, sizeof(buf), flags);
@@ -176,9 +172,9 @@ ssize_t Socket::recv(void* buf, size_t len, int flags) {
       return rc;
     } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
       // EAGAIN:表示无数据可读，缓冲区已经为空，Resource temporarily unavailable
-
-      // EAGAIN的意思是：E_again,要再次发送
-      // 在VxWorks和Windows上，EAGAIN的名字叫做EWOULDBLOCK
+      return rc;
+    } else if (errno == ECONNRESET) {
+      // (104)Connection reset by peer
       return rc;
     } else {
       throw SocketException("socket recv error", errno, ZONE);
