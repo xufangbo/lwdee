@@ -214,10 +214,10 @@ ssize_t Socket::recvfrom(void* buf, size_t len, int flags, struct sockaddr* addr
 
 void Socket::close() {
   int rc = ::close(_fd);
+  this->qps->closes++;
   if (rc == -1) {
     throw SocketException("socket close error", errno, ZONE);
   }
-  this->qps->closes++;
 }
 
 void Socket::shutdown(int how) {

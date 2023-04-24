@@ -46,6 +46,7 @@ void IRunway::__acceptEvent(epoll_event* evt) {
   // logger_debug("__acceptEvent,fd:%d", evt->data.fd);
 
   Connection* connection = (Connection*)evt->data.ptr;
+  connection->lastTime = Stopwatch::currentMilliSeconds();
 
   auto socket = connection->socket;
 

@@ -52,6 +52,7 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 
     waiter->notify(WaitStatus::succeed);
   } else {
+    runway->close(connection);
     waiter->notify(WaitStatus::nohint);
     logger_error("can't hint path %s", header.path.c_str());
   }
@@ -72,6 +73,7 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   auto fun = TcpResponse::find(header.path);
   if (fun == nullptr) {
     logger_error("can't hint path: %s", header.path.c_str());
+    runway->close(connection);
     return;
   }
 

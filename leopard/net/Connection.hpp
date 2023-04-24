@@ -15,9 +15,11 @@ class Connection {
   Qps* qps;
   bool wr = true;
   std::mutex mut;
+  
 
  public:
   Socket* socket;
+  uint64_t lastTime = 0;
 
  public:
   bool closed = false;
