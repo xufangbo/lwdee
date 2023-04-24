@@ -6,11 +6,12 @@
 #include "net/Epoll.hpp"
 #include "net/LeopardConfig.hpp"
 #include "net/Socket.hpp"
-#include "test_input.hpp"
 #include "testsuspend.hpp"
+#include "test_input.hpp"
+#include "test_qps.hpp"
 
 void do_test(std::string ip, int port) {
-  test_input(ip, port);
+  test_qps(ip, port);
 }
 
 int main(int argc, char** argv) {

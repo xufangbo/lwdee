@@ -28,7 +28,7 @@ void IRunway::run() {
   // this->connections->start(running);
 
   while (*running) {
-    int waits = epoll->wait(100); // ms
+    int waits = epoll->wait(10); // ms
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
@@ -94,7 +94,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
         auto pickedStream = inputStream->pick();
-        leopard_debug("picked,seq: %d,size: %d", _qps.recvs.load(),pickedStream->size());
+        // leopard_debug("picked,seq: %d,size: %d", _qps.recvs.load(),pickedStream->size());
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       }

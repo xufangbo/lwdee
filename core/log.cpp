@@ -96,12 +96,12 @@ void logger(LogLevel level, const char* function, const char* file, int line, co
   char time[25];
   date_millsecond(time, 25);
 
-  // 
+  //
   auto tid = syscall(SYS_gettid);  // pthread_self()
 
-  // 
-  const char *fileName = file;
-  if(log_option.hideWorkingPath){
+  //
+  const char* fileName = file;
+  if (log_option.hideWorkingPath) {
     fileName = file + log_option.workingPath;
   }
 
@@ -263,6 +263,9 @@ static void rm_history_task() {
   int days = (gmt->tm_year + 1900) * 10000 + (gmt->tm_mon + 1) * 100 + gmt->tm_mday;
 
   DIR* dp = opendir(log_option.path);
+  if (dp == NULL) {
+    return;
+  }
   struct dirent* entry;
   while ((entry = readdir(dp)) != NULL) {
     if (strcmp(entry->d_name, ".") == 0) {
@@ -346,7 +349,7 @@ int logger_initialize(LogOption option) {
     perror("get_current_dir_name\n");
   }
   printf("working directory: %s\n", buf);
-  log_option.workingPath =strlen(buf);
+  log_option.workingPath = strlen(buf);
   free(buf);
 
   log_option.initalized = true;
