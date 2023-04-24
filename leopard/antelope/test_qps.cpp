@@ -21,5 +21,5 @@ void test_qps(std::string ip, int port) {
 }
 
 void task(std::string ip, int port) {
-  qps_async(qps_report, 30, qps_input, 1, ip, port, 10);
+  qps_async(qps_report, 20, qps_input, 1, ip, port, 100);
 }
