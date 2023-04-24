@@ -110,7 +110,7 @@ void TestReport::writeTitle() {
   f << "连接类型" << split;
   f << "请求数据" << split;
   f << "请求次数" << split;
-  f << "并行Socket数" << split;
+  f << "Socket并发" << split;
   f << "耗时" << split;
   f << "平均耗时" << split;
 
