@@ -15,11 +15,11 @@ void test_qps(std::string ip, int port) {
     for (int i = 0; i < 10; i++) {
       std::thread t(task, ip, port);
       t.detach();
-      usleep(1000 * 100);
+      usleep(1000 * 1000);
     }    
   }
 }
 
 void task(std::string ip, int port) {
-  qps_async(qps_report, 30, qps_input, 1, ip, port, 10);
+  qps_async(qps_report, 300, qps_input, 1, ip, port, 10);
 }
