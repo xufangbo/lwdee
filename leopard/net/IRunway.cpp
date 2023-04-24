@@ -2,14 +2,14 @@
 
 #include <memory>
 #include <thread>
+
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "net/IProtocal.hpp"
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
-IRunway::IRunway(int id, bool* running)
-    : _qps(id), running(running) {
+IRunway::IRunway(int id, bool* running) : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->isET = true;
   this->isEOUT = true;
@@ -34,7 +34,8 @@ void IRunway::run() {
         auto evt = epoll->events(i);
         this->acceptEvent(&evt);
       } catch (Exception& ex) {
-        logger_error("%s %s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
+        logger_error("%s %s", ex.getMessage().c_str(),
+                     ex.getStackTrace().c_str());
       } catch (std::exception& ex) {
         logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
       }
@@ -95,7 +96,8 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       while (inputStream->isEnd()) {
         this->_qps.recvs++;
         auto pickedStream = inputStream->pick();
-        // leopard_debug("picked,seq: %d,size: %d", _qps.recvs.load(),pickedStream->size());
+        // leopard_debug("picked,seq: %d,size: %d",
+        // _qps.recvs.load(),pickedStream->size());
         std::thread t(&IRunway::acceptRequest, this, connection, pickedStream);
         t.detach();
       }
@@ -141,6 +143,7 @@ void IRunway::acceptSend(Connection* connection) {
 void IRunway::close(Connection* connection) {
   // leopard_warn("close socket %d",socket->fd());
 
+  connection->closed = true;
   auto socket = connection->socket;
 
   epoll->del(socket->fd());
@@ -167,10 +170,6 @@ void IRunway::gererateEnvents() {
   }
 }
 
-void IRunway::join() {
-  thread.join();
-}
+void IRunway::join() { thread.join(); }
 
-Qps* IRunway::qps() {
-  return &_qps;
-}
+Qps* IRunway::qps() { return &_qps; }

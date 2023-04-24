@@ -15,7 +15,8 @@ BufferStream* LeopardProtocal::newStream(std::string& path) {
   return outputStream;
 }
 
-SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection, BufferStream* outputStream) {
+SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection,
+                                    BufferStream* outputStream) {
   LeopardHeader::setLength(outputStream);
   auto msgId = LeopardHeader::getMessageId(outputStream);
 
@@ -23,12 +24,13 @@ SocketWaiter LeopardProtocal::csend(IRunway* runway, Connection* connection, Buf
   auto waiter = socket->crateWaiter(msgId);
 
   connection->push(outputStream);
-  connection->send(SendSource::request); // ET 才主动触发
+  connection->send(SendSource::request);  // ET 才主动触发
 
   return waiter;
 }
 
-void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
+void LeopardProtocal::caccept(IRunway* runway, Connection* connection,
+                              BufferStream* inputStream) {
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
   header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
@@ -37,11 +39,9 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 
   ClientSocket* socket = (ClientSocket*)(connection->socket);
   auto waiter = socket->findWaiter(header.messageId);
-  // if (waiter == nullptr || waiter.use_count() == 0) {
-  //   logger_error("waiter is null");
-  // } else {
-  //   leopard_trace("get waiter [%d]", waiter->getId());
-  // }
+  if (waiter == nullptr || waiter.use_count() == 0) {
+    logger_error("waiter is null");  // 什么情况下为null?
+  }
 
   auto callback = TcpRequest::find(header.path);
   if (callback != nullptr) {
@@ -49,10 +49,15 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
     delete inputStream;
     inputStream = nullptr;
 
-    waiter->notify(WaitStatus::succeed);
+    if (waiter != nullptr) {
+      waiter->notify(WaitStatus::succeed);
+    }
+
   } else {
     runway->close(connection);
-    waiter->notify(WaitStatus::nohint);
+    if (waiter != nullptr) {
+      waiter->notify(WaitStatus::nohint);
+    }
     logger_error("can't hint path %s", header.path.c_str());
   }
 
@@ -65,7 +70,8 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection, BufferStr
 #endif
 }
 
-void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStream* inputStream) {
+void LeopardProtocal::saccept(IRunway* runway, Connection* connection,
+                              BufferStream* inputStream) {
   // printf("%s\n", LeopardHeader::to_hex(inputStream).c_str());
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
@@ -89,7 +95,7 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection, BufferStr
   header.setLength(outputStream);
 
   connection->push(outputStream);
-  connection->send(SendSource::request); // ET 才主动触发
+  connection->send(SendSource::request);  // ET 才主动触发
 
   // leopard_debug("> response %s", header.path.c_str());
 }
