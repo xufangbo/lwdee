@@ -8,8 +8,15 @@
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
-SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len,
-                                RequestCallback callback) {
+LaneClient::~LaneClient() {
+  for(auto connection : this->connections){
+    if(!connection->closed){
+      leopard_error("connection not closed");
+    }
+  }
+}
+
+SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len, RequestCallback callback) {
   RequestInvoke request = [buffer, len](BufferStream* outputStream) {
     outputStream->put<uint32_t>(len);
     outputStream->puts(buffer, len);
@@ -18,8 +25,7 @@ SocketWaiter LaneClient::invoke(std::string path, void* buffer, int len,
   return invoke(path, request, callback);
 }
 
-SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request,
-                                RequestCallback callback) {
+SocketWaiter LaneClient::invoke(std::string path, RequestInvoke request, RequestCallback callback) {
   Connection* connection = this->next();
   ClientSocket* socket = (ClientSocket*)connection->socket;
 
@@ -63,7 +69,7 @@ LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
   for (int i = 0; i < parallel; i++) {
     Connection* connection = Antelope::instance.create(ip, port);
     client->getConnections()->push_back(connection);
-    usleep(1000*100);
+    usleep(1000 * 100);
   }
 
   return client;
@@ -71,8 +77,7 @@ LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
 
 #ifdef LEOPARD_SUSPEND
 // error: invalid new-expression of abstract class type ‘BufferStream’
-await<BufferStream*> LaneClient::invoke(std::string path, void* buffer,
-                                        int len) {
+await<BufferStream*> LaneClient::invoke(std::string path, void* buffer, int len) {
   Socket* socket = this->this->socket;
   auto waiter = await<BufferStream*>(
       [&path, len, buffer, &socket](suspend::SuspendHandler handle,

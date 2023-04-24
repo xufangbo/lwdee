@@ -21,6 +21,8 @@ class LaneClient {
     this->index = 0;
   }
 
+  ~LaneClient() ;
+
  public:
   static LaneClientPtr create(const char* ip, int port, int parallel = 1);
 
