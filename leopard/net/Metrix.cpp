@@ -28,6 +28,7 @@ void Metrix::start(bool* running, std::string fileName, std::vector<Qps*> qpss) 
   }
 
   this->writers.push_back(std::make_shared<CsvMetrixWriter>());
+  this->writers.push_back(std::make_shared<ConsoleMetrixWriter>());
   // this->writers.push_back(std::make_shared<MarkdownMetrixWriter>());
 
   for (auto& writer : this->writers) {
@@ -176,4 +177,63 @@ void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& q
 
   fflush(fp);
   fclose(fp);
+}
+
+
+void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+  // std::string file = fileName + ".md";
+
+  // FILE* fp = fopen(file.c_str(), "w");
+  // if (fp == NULL) {
+  //   logger_error("can't open file %s", file.c_str());
+  // }
+
+  FILE *fp = stdout;
+
+  fprintf(stdin, "|% 23s|", "time");
+
+  for (Qps* qps : qpses) {
+    auto tmp = qps->header();
+    for (std::string& i : tmp) {
+      fprintf(fp, "% 6s |", i.c_str());
+    }
+  }
+  fprintf(fp, "\n");
+
+  //-----------------------------
+  fprintf(fp, "|%23s|", "-----------------------");
+
+  for (Qps* qps : qpses) {
+    auto tmp = qps->header();
+    for (std::string& i : tmp) {
+      fprintf(fp, "%6s-|", "------");
+    }
+  }
+  fprintf(fp, "\n");
+
+  fflush(fp);
+  // fclose(fp);
+}
+void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses) {
+  // std::string file = fileName + ".md";
+  // FILE* fp = fopen(file.c_str(), "a");
+  // if (fp == NULL) {
+  //   logger_error("can't open file %s", file.c_str());
+  // }
+  FILE *fp = stdout;
+
+  char time[25];
+  date_millsecond(time, 25);
+  fprintf(fp, "|%23s|", time);
+
+  for (Qps* qps : qpses) {
+    auto tmp = qps->data();
+    for (std::string& i : tmp) {
+      fprintf(fp, "%+6s |", i.c_str());
+    }
+  }
+  fprintf(fp, "\n");
+
+  fflush(fp);
+  // fclose(fp);
 }

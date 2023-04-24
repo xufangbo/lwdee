@@ -42,3 +42,12 @@ class MarkdownMetrixWriter : public IMetrixWriter {
   void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) override;
   void writeLine(std::string& fileName, std::vector<Qps*>& qpses) override;
 };
+
+class ConsoleMetrixWriter : public IMetrixWriter {
+ private:
+  char split = '|';
+
+ public:
+  void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) override;
+  void writeLine(std::string& fileName, std::vector<Qps*>& qpses) override;
+};
