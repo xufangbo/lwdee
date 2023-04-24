@@ -205,13 +205,13 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
 
   FILE* fp = stdout;
 
-  fprintf(fp, "|% 23s|", "time");
+  fprintf(fp, "||% 23s|", "time");
 
   fprintf(fp, "%8s|", "cpu sys");
   fprintf(fp, "%8s|", "cpu proc");
   fprintf(fp, "%8s|", "ram tol");
   fprintf(fp, "%8s|", "ram sys");
-  fprintf(fp, "%8s|", "ram proc");
+  fprintf(fp, "%8s||", "ram proc");
 
   for (int i = 0; i < 3 && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
@@ -219,17 +219,18 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
     for (std::string& s : tmp) {
       fprintf(fp, "% 6s |", s.c_str());
     }
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   //-----------------------------
-  fprintf(fp, "|%23s|", "-----------------------");
+  fprintf(fp, "||%23s|", "-----------------------");
 
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
-  fprintf(fp, "%8s+", "--------");
+  fprintf(fp, "%8s||", "--------");
 
  for (int i = 0; i < 3 && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
@@ -237,7 +238,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
     for (std::string& s : tmp) {
       fprintf(fp, "%6s-|", "------");
     }
-    fprintf(fp, "+");
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
@@ -256,22 +257,22 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName,
 
   char time[25];
   date_millsecond(time, 25);
-  fprintf(fp, "|%23s|", time);
+  fprintf(fp, "||%23s|", time);
 
   fprintf(fp, "%7d |", sysres.cpu_sys_used);
   fprintf(fp, "%6d% |", sysres.cpu_proc_used);
   fprintf(fp, "%7d |", sysres.ram_total);
   fprintf(fp, "%7d |", sysres.ram_sys_used);
-  fprintf(fp, "%6dM ", sysres.ram_proc_used);
+  fprintf(fp, "%6dM ||", sysres.ram_proc_used);
 
  for (int i = 0; i < 3 && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->data();
-    fprintf(fp, "+");
+    
     for (std::string& s : tmp) {
       fprintf(fp, "%+6s |", s.c_str());
     }
-    
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 

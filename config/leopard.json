@@ -1,6 +1,6 @@
 {
     "ip": "192.168.2.183",
     "port": 4500,
-    "sparallel": 4,
+    "sparallel": 6,
     "cparallel": 1
 }
