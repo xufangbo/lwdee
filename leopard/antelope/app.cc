@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
   auto port = conf->port;
   logger_trace("%s:%d", conf->ip.c_str(), conf->port);
 
-  Antelope::instance.start(conf->cparallel);
+  Antelope::instance.start(ApplicationType::client,conf->cparallel);
 
   Stopwatch sw;
 

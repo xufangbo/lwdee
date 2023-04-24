@@ -25,7 +25,6 @@ class IRunway {
   uint32_t EVENTS_OUT = 0;
 
  protected:
-  // Connections* connections = new Connections(&_qps);
   Qps _qps;
 
  protected:

@@ -6,6 +6,7 @@
 #include "IRunway.hpp"
 #include "Metrix.hpp"
 #include "log.hpp"
+#include "enums.hpp"
 
 template <class T>
 class IRunwayContainer {
@@ -15,6 +16,7 @@ class IRunwayContainer {
   bool running = false;
   std::vector<T*> runways;
   Metrix matrix;
+  ApplicationType appType = ApplicationType::server;
 
  public:
   ~IRunwayContainer() {
@@ -23,7 +25,9 @@ class IRunwayContainer {
     }
     runways.clear();
   }
-  void start(int parallel = 1) {
+
+  void start(ApplicationType appType, int parallel = 1) {
+    this->appType = appType;
     if (parallel <= 0) {
       this->parallel = get_nprocs();  // get_nprocs_conf();
     }
@@ -49,7 +53,7 @@ class IRunwayContainer {
     for (auto runway : runways) {
       qps.push_back(runway->qps());
     }
-    matrix.start(&running, this->server ? "leopard" : "antelope", qps);
+    matrix.start(&running, this->appType, qps);
   }
 
   void stop() { this->running = false; }

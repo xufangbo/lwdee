@@ -8,8 +8,9 @@
 
 #include "core/log.hpp"
 
-void Metrix::start(bool* running, std::string fileName, std::vector<Qps*> qpss) {
+void Metrix::start(bool* running, ApplicationType appType, std::vector<Qps*> qpss) {
   this->running = running;
+  this->appType = appType;
 
   if (qpss.size() > 1) {
     this->qpses.push_back(&qps);
@@ -28,8 +29,10 @@ void Metrix::start(bool* running, std::string fileName, std::vector<Qps*> qpss) 
   }
 
   this->writers.push_back(std::make_shared<CsvMetrixWriter>());
-  this->writers.push_back(std::make_shared<ConsoleMetrixWriter>());
   // this->writers.push_back(std::make_shared<MarkdownMetrixWriter>());
+  if (appType == ApplicationType::server) {
+    this->writers.push_back(std::make_shared<ConsoleMetrixWriter>());
+  }
 
   for (auto& writer : this->writers) {
     writer->writeTitle(this->fileName, this->qpses);

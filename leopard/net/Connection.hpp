@@ -7,12 +7,7 @@
 #include "Bullet.hpp"
 #include "Socket.hpp"
 #include "Stopwatch.hpp"
-
-enum class SendSource : uint8_t {
-  none = 0,
-  request = 1,
-  epoll_out = 2
-};
+#include "enums.hpp"
 
 class Connection {
  private:

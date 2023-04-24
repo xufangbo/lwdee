@@ -4,13 +4,9 @@
 #include <memory>
 
 #include "Qps.hpp"
+#include "enums.hpp"
 
-class IMetrixWriter {
- public:
-  virtual void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) = 0;
-  virtual void writeLine(std::string& fileName, std::vector<Qps*>& qpses) = 0;
-};
-
+class IMetrixWriter;
 class Metrix {
  private:
   bool* running = nullptr;
@@ -18,12 +14,20 @@ class Metrix {
   std::vector<Qps*> qpses;
   std::vector<std::shared_ptr<IMetrixWriter>> writers;
   Qps qps;
+  ApplicationType appType;
 
  public:
-  Metrix() : qps(0) {}
-  void start(bool* running, std::string fileName, std::vector<Qps*> qpses);
+  Metrix()
+      : qps(0) {}
+  void start(bool* running, ApplicationType appType, std::vector<Qps*> qpses);
   void write();
   void run();
+};
+
+class IMetrixWriter {
+ public:
+  virtual void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) = 0;
+  virtual void writeLine(std::string& fileName, std::vector<Qps*>& qpses) = 0;
 };
 
 class CsvMetrixWriter : public IMetrixWriter {
