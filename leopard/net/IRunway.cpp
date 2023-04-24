@@ -25,10 +25,9 @@ IRunway::~IRunway() {
 
 void IRunway::run() {
   this->gererateEnvents();
-  // this->connections->start(running);
 
   while (*running) {
-    int waits = epoll->wait(10);  // ms
+    int waits = epoll->wait(1000);  // ms
     for (int i = 0; i < waits; i++) {
       try {
         auto evt = epoll->events(i);
