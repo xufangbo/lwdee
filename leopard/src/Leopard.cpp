@@ -87,6 +87,6 @@ ClientConnection* Leopard::create(std::string ip, int port) {
     throw Exception("ERROR", ZONE);
   }
 
-  ClientConnection* skt = (*runway)->create(ip, port);
-  return skt;
+  ClientConnection* connection = (*runway)->create(ip, port);
+  return connection;
 }

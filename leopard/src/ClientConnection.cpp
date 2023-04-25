@@ -5,8 +5,7 @@
 
 ClientConnection::ClientConnection(Runway* runway)
     : Connection(runway) {
-  this->socket = new Socket(runway->qps());
-  this->socket->setNonBlocking();
+  this->socket = new Socket(runway->qps());  
 };
 
 void ClientConnection::connect(std::string ip, int port) {
@@ -15,18 +14,18 @@ void ClientConnection::connect(std::string ip, int port) {
   if (sw.elapsed() > 1) {
     leopard_warn("long time to connect: %lfs", sw.elapsed());
   }
-  socket->setNonBlocking();
+  socket->setNonBlocking();  
 }
 
 ClientWaitor ClientConnection::crateWaiter(uint64_t id) {
-  ClientWaitor waiter = std::make_shared<ClientWaitor_t>(id,this);
-  waiters[id] = waiter;
-  return waiter;
+  ClientWaitor waitor = std::make_shared<ClientWaitor_t>(id,this);
+  waitors[id] = waitor;
+  return waitor;
 }
 
 ClientWaitor ClientConnection::findWaiter(uint64_t id) {
-  auto it = waiters.find(id);
-  if (it == waiters.end()) {
+  auto it = waitors.find(id);
+  if (it == waitors.end()) {
     return nullptr;
   }
 

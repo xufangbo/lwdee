@@ -9,7 +9,7 @@
 
 class ClientConnection : public Connection {
  private:
-  std::map<uint64_t, ClientWaitor> waiters;
+  std::map<uint64_t, ClientWaitor> waitors;
 
  public:
   ClientConnection(Runway* runway);
