@@ -25,5 +25,5 @@ class Leopard {
 
  public:
  static Leopard instance;
-  Connection* create(const char* ip, int port);
+  Connection* create(std::string ip, int port);
 };

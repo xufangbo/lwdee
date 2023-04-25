@@ -23,7 +23,7 @@ void Leopard::start(std::string ip, int port, int parallel) {
   leopard_info("parallel: %d", parallel);
 
   for (int i = 0; i < parallel; i++) {
-    auto runway = new Runway(i + 1, appType, &running);
+    auto runway = new Runway(i + 1, &running, ip, port);
     this->runways.push_back(runway);
   }
 
@@ -54,7 +54,7 @@ void Leopard::start(int parallel) {
   leopard_info("parallel: %d", parallel);
 
   for (int i = 0; i < parallel; i++) {
-    auto runway = new Runway(i + 1, appType, &running);
+    auto runway = new Runway(i + 1, &running);
     this->runways.push_back(runway);
   }
 
@@ -79,10 +79,9 @@ void Leopard::join() {
   }
 }
 
-
 Leopard Leopard::instance;
 
-Connection* Leopard::create(const char* ip, int port) {
+Connection* Leopard::create(std::string ip, int port) {
   auto runway = std::min_element(runways.begin(), runways.end(), [](Runway* x, Runway* y) { return x->size() - y->size(); });
   if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);

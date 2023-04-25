@@ -29,7 +29,6 @@ class Runway {
   std::shared_ptr<Epoll> epoll;
   bool isET = true;
   bool isEOUT = false;
-  bool nonBlocking = false;
   ServerInfo server;
 
   uint32_t EVENTS_SERVER = 0;
@@ -56,7 +55,8 @@ class Runway {
   void gererateEnvents();
 
  public:
-  Runway(int id, ApplicationType appType, bool* running);
+  Runway(int id,  bool* running);
+  Runway(int id, bool* running,std::string ip,int port);
   ~Runway();
   void start();
   void epoll_mod_in(int fd, struct epoll_event* event, void* ptr);

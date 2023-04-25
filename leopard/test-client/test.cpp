@@ -30,7 +30,7 @@ void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputTyp
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {
     try {
-      auto client = LaneClient::create(ip.c_str(), port);
+      auto client = LaneClient::create(ip, port);
 
       auto input = std::to_string(i + 1) + " " + inputType();
       SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
@@ -56,13 +56,13 @@ void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputTy
   LaneClients clients;
   for (int i = 0; i < testSize; i++) {
     try {
-      auto client = clients.create(ip.c_str(), port);
+      auto client = clients.create(ip, port);
 
       auto input = std::to_string(i + 1) + " " + inputType();
       client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
     } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str());
+      logger_warn("%s", ex.getMessage().c_str(),ex.getStackTrace().c_str());
     } catch (std::exception& ex) {
       logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
     }
@@ -77,7 +77,7 @@ void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputTy
 }
 
 void TestLongConnect::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
-  auto client = LaneClient::create(ip.c_str(), port, parallel);
+  auto client = LaneClient::create(ip, port, parallel);
 
   Stopwatch sw;
   for (int i = 0; i < testSize; i++) {

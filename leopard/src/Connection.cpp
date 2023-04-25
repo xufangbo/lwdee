@@ -40,8 +40,6 @@ BufferStream* Connection::inputStream() {
 }
 
 void Connection::acceptRecive(epoll_event* evt) {
-  // printf("< --------------\n");
-  // logger_trace("--------------");
   int rc = 0;
   int sum = 0;
   do {
@@ -108,6 +106,8 @@ void Connection::__acceptRequest(BufferStream* inputStream) {
 }
 
 void Connection::close(CloseType closeType) {
+  // 要有地方去释放Connection对象
+
   if (this->closed) {
     return;
   }

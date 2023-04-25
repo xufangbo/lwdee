@@ -3,25 +3,26 @@
 #include <memory>
 #include <thread>
 
+#include "ClientSocket.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "src/log.hpp"
-#include "ClientSocket.hpp"
 
-Runway::Runway(int id, ApplicationType appType, bool* running)
-    : _qps(id), appType(appType), running(running) {
+Runway::Runway(int id, bool* running)
+    : _qps(id), appType(ApplicationType::client), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->isET = true;
   this->isEOUT = true;
-  this->nonBlocking = true;
 }
 
-Runway::~Runway() {
-  // if (connections != nullptr) {
-  //   delete connections;
-  //   connections = nullptr;
-  // }
+Runway::Runway(int id, bool* running, std::string ip, int port)
+    : Runway(id, running) {
+  appType = ApplicationType::server;
+  this->server.ip = ip;
+  this->server.port = port;
 }
+
+Runway::~Runway() {}
 
 void Runway::start() {
   this->thread = std::thread(&Runway::run, this);
@@ -32,6 +33,7 @@ void Runway::run() {
     this->__run();
     return;
   }
+
   try {
     this->server.socket = new Socket(&_qps);
     _qps.opens--;
@@ -40,11 +42,9 @@ void Runway::run() {
     // leopard_debug("server socket revibufer %d", server->getReciveBuf());  // 131072
 
     this->server.socket->reusePort();
-    if (this->nonBlocking) {
-      this->server.socket->setNonBlocking();
-    }
+    this->server.socket->setNonBlocking();
 
-    this->server.socket->bind(server.ip.c_str(), server.port);
+    this->server.socket->bind(server.ip, server.port);
     this->server.socket->listen();
 
     epoll->add(this->server.socket->fd(), isET ? (EPOLLIN | EPOLLET) : EPOLLIN, server.socket);
@@ -165,30 +165,18 @@ Qps* Runway::qps() {
 }
 
 Connection* Runway::create(std::string ip, int port) {
-  Stopwatch sw;
-
   ClientSocket* socket = new ClientSocket(this, &_qps);
-  // leopard_warn("new client socket fd : %d", connection->socket->fd());
+  socket->setNonBlocking();
 
-  socket->connect(ip, port);
-  if (nonBlocking) {
-    socket->setNonBlocking();
-  }
-
-  // socket->reusePort();
-  // socket->setSendBuf(1048576);
-  // logger_debug("default sendbufer %d", socket->getSendBuf());    // 425984
-  // logger_debug("default revibufer %d", socket->getReciveBuf());  // 131072
-
-  // auto connection = connections->insert(socket);
   auto connection = new Connection(socket, this);
+  epoll->add(connection->fd(), EVENTS_NEW, connection);
 
+  Stopwatch sw;
+  socket->connect(ip, port);
   auto eclapse = sw.stop();
   if (eclapse > 1) {
     leopard_warn("long time to connect: %lfs", eclapse);
   }
-
-  epoll->add(connection->fd(), EVENTS_NEW, connection);
 
   return connection;
 }

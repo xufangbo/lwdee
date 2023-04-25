@@ -24,7 +24,7 @@ class LaneClient {
   ~LaneClient() ;
 
  public:
-  static LaneClientPtr create(const char* ip, int port, int parallel = 1);
+  static LaneClientPtr create(std::string ip, int port, int parallel = 1);
 
  public:
   SocketWaiter invoke(std::string path, RequestInvoke request, RequestCallback callback);

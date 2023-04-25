@@ -61,7 +61,7 @@ Connection* LaneClient::next() {
   return connection;
 }
 
-LaneClientPtr LaneClient::create(const char* ip, int port, int parallel) {
+LaneClientPtr LaneClient::create(std::string ip, int port, int parallel) {
   auto client = std::make_shared<LaneClient>();
 
   for (int i = 0; i < parallel; i++) {
