@@ -166,17 +166,17 @@ Qps* Runway::qps() {
 
 Connection* Runway::create(std::string ip, int port) {
   ClientSocket* socket = new ClientSocket(this, &_qps);
+  
+  Stopwatch sw;
+  socket->connect(ip, port);
+  if (sw.elapsed() > 1) {
+    leopard_warn("long time to connect: %lfs", sw.elapsed());
+  }
+  
   socket->setNonBlocking();
 
   auto connection = new Connection(socket, this);
   epoll->add(connection->fd(), EVENTS_NEW, connection);
-
-  Stopwatch sw;
-  socket->connect(ip, port);
-  auto eclapse = sw.stop();
-  if (eclapse > 1) {
-    leopard_warn("long time to connect: %lfs", eclapse);
-  }
 
   return connection;
 }
