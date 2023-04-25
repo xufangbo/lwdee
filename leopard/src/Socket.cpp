@@ -143,6 +143,7 @@ void Socket::close(CloseType closeType) {
     if (closeType == CloseType::normal) {
       this->qps->closes++;
     } else {
+      printf("close error %d\n",closeType);
       this->qps->errors++;
     }
   } else {
