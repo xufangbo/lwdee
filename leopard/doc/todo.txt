@@ -7,3 +7,4 @@
 
 - 支持长连接
 - 支持UDP
+- ConnectionPool
