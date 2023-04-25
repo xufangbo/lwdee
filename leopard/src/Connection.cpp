@@ -10,18 +10,25 @@
 Connection::Connection(int fd, Runway* runway)
     : socket(new Socket(fd, &runway->_qps)), runway(runway) {
   socket->setNonBlocking();
+  inStream = ProtocalFactory::createStream();
 }
 
-Connection::Connection(ClientSocket *socket, Runway* runway)
+Connection::Connection(ClientSocket* socket, Runway* runway)
     : socket(socket), runway(runway) {
-      socket->qps = &runway->_qps;
+  socket->qps = &runway->_qps;
+  inStream = ProtocalFactory::createStream();
 }
 
 Connection::~Connection() {
   if (socket != nullptr) {
-    logger_debug("dispose %d", socket->fd());
+    // logger_debug("dispose %d", socket->fd());
     delete socket;
     socket = nullptr;
+  }
+
+  if (inStream != nullptr) {
+    delete inStream;
+    inStream = nullptr;
   }
 
   while (!this->bullets.empty()) {
@@ -36,7 +43,7 @@ int Connection::fd() {
 }
 
 BufferStream* Connection::inputStream() {
-  return socket->inputStream();
+  return inStream;
 }
 
 void Connection::acceptRecive(epoll_event* evt) {
@@ -52,11 +59,11 @@ void Connection::acceptRecive(epoll_event* evt) {
       throw ex;
     }
 
-    // leopard_trace("recv - rc:%d,%s", rc, buf);
+    // leopard_trace("recv - rc:%d,%s", rc, runway->buf);
 
     if (rc > 0) {
       sum += rc;
-      auto inputStream = socket->inputStream();
+      auto inputStream = inStream;
       inputStream->puts(runway->buf, rc);
 
       while (inputStream->isEnd()) {
@@ -107,13 +114,14 @@ void Connection::__acceptRequest(BufferStream* inputStream) {
 
 void Connection::close(CloseType closeType) {
   // 要有地方去释放Connection对象
-
-  if (this->closed) {
-    return;
-  }
+  // if (this->closed) {
+  //   return;
+  // }
   this->closed = true;
   runway->epoll_del(socket->fd());
   socket->close(closeType);
+
+  delete this;
 }
 
 void Connection::push(BufferStream* outputStream) {

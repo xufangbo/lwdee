@@ -13,8 +13,8 @@
 
 void do_test(std::string ip, int port) {
   // test_input(ip, port);
-  test_qps(ip, port);
-  // test_dev(ip, port);
+  // test_qps(ip, port);
+  test_dev(ip, port);
 }
 
 int main(int argc, char** argv) {

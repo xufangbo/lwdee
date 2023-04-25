@@ -22,6 +22,7 @@ class Connection {
 
  public:
   Socket* socket;
+  BufferStream* inStream;
   uint64_t lastTime = 0;
 
  public:

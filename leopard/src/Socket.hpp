@@ -16,11 +16,9 @@ class Socket {
 
  protected:
   int _fd;
-  BufferStream* _inputStream;
   Qps* qps = nullptr;
 
  protected:
-  BufferStream* inputStream() { return _inputStream; }
   ssize_t read(void* buf, size_t len);
   ssize_t write(void* buf, size_t len);
   ssize_t recv(void* buf, size_t len, int flags);

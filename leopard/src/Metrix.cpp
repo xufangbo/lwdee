@@ -9,8 +9,7 @@
 
 #include "core/log.hpp"
 
-void Metrix::start(bool* running, ApplicationType appType,
-                   std::vector<Qps*> qpss) {
+void Metrix::start(bool* running, ApplicationType appType, std::vector<Qps*> qpss) {
   this->running = running;
   this->appType = appType;
 
@@ -32,9 +31,9 @@ void Metrix::start(bool* running, ApplicationType appType,
 
   this->writers.push_back(std::make_shared<CsvMetrixWriter>());
   // this->writers.push_back(std::make_shared<MarkdownMetrixWriter>());
-  // if (appType == ApplicationType::server) {
+  if (appType == ApplicationType::server) {
     this->writers.push_back(std::make_shared<ConsoleMetrixWriter>());
-  // }
+  }
 
   for (auto& writer : this->writers) {
     writer->writeTitle(this->fileName, this->qpses);
@@ -110,8 +109,7 @@ void CsvMetrixWriter::writeTitle(std::string& fileName,
   f.flush();
   f.close();
 }
-void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses,
-                                SysResource& sysres) {
+void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
@@ -232,7 +230,7 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName,
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s||", "--------");
 
- for (int i = 0; i < groupSize && i < qpses.size(); i++) {
+  for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->header();
     for (std::string& s : tmp) {
@@ -265,10 +263,10 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName,
   fprintf(fp, "%7d |", sysres.ram_sys_used);
   fprintf(fp, "%6dM ||", sysres.ram_proc_used);
 
- for (int i = 0; i < groupSize && i < qpses.size(); i++) {
+  for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->data();
-    
+
     for (std::string& s : tmp) {
       fprintf(fp, "%+6s |", s.c_str());
     }

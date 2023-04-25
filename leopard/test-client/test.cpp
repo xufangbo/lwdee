@@ -37,7 +37,7 @@ void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputTyp
 
       auto time = waiter->wait(timeout);
       client->close();
-      // logger_info("wait %d eclipse %.3lfs ---------------------------------------", i + 1, time);
+      logger_trace("wait finished %d eclipse %.3lfs ", i + 1, time);
 
     } catch (Exception& ex) {
       logger_warn("%s", ex.getMessage().c_str());
@@ -48,7 +48,7 @@ void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputTyp
 
   testReport.writeLine(name, inputType.name, testSize, 1, sw.elapsed());
   auto eclapsed = sw.stop();
-  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, 1, eclapsed, eclapsed / testSize, responseIndex.load());
+  logger_debug("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, 1, eclapsed, eclapsed / testSize, responseIndex.load());
 }
 void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   Stopwatch sw;
@@ -73,7 +73,7 @@ void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputTy
 
   testReport.writeLine(name, inputType.name, testSize, testSize, sw.elapsed());
   auto eclapsed = sw.stop();
-  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, testSize, eclapsed, eclapsed / testSize, responseIndex.load());
+  logger_debug("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, testSize, eclapsed, eclapsed / testSize, responseIndex.load());
 }
 
 void TestLongConnect::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
@@ -97,7 +97,7 @@ void TestLongConnect::execute(TestReport& testReport, int testSize, TestInput& i
   testReport.writeLine(this->name, inputType.name, testSize, parallel, sw.elapsed());
 
   auto eclapsed = sw.stop();
-  logger_info("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, parallel, eclapsed, eclapsed / testSize, responseIndex.load());
+  logger_debug("%s,input:%s,testSize:%d,parallel:%d,elapsed %.3f,ave eclapsed:%.3f,response count : %d,", name.c_str(), inputType.name.c_str(), testSize, parallel, eclapsed, eclapsed / testSize, responseIndex.load());
 }
 
 void TestReport::writeTitle() {

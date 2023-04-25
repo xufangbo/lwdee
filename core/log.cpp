@@ -37,6 +37,14 @@
 #define gray FOREGROUND_BLUE | FOREGROUND_GREEN
 #define purple FOREGROUND_BLUE | FOREGROUND_RED
 #else
+
+/**
+ * \033[显示方式;前景色;背景色m
+ * 显示方式:0（默认值）、1（高亮）、22（非粗体）、4（下划线）、24（非下划线）、5（闪烁）、25（非闪烁）、7（反显）、27（非反显）
+ * 前景色:30（黑色）、31（红色）、32（绿色）、 33（黄色）、34（蓝色）、35（洋红）、36（青色）、37（白色）
+ * 背景色:40（黑色）、41（红色）、42（绿色）、 43（黄色）、44（蓝色）、45（洋红）、46（青色）、47（白色）
+*/
+
 #define NONE "\033[0m"         // 清除颜色，即之后的打印为正常输出，之前的不受影响
 #define BLACK "\033[0;30m"     // 深黑
 #define L_BLACK "\033[1;30m"   // 亮黑，偏灰褐
@@ -69,8 +77,7 @@ static const char* seperator = "\\";
 static const char* seperator = "/";
 #endif
 
-static const char levels[LEVEL_COUNT][6] = {"trace", "debug", "info ",
-                                            "warn ", "error", "fatal"};
+static const char levels[LEVEL_COUNT][6] = {"trace", "debug", "info ", "warn ", "error", "fatal"};
 static LogOption log_option;
 static FILE* fp = NULL;
 static time_t this_day = 0;  // 天数据，每天一个日志文件
@@ -169,7 +176,7 @@ void wirte_console(LogLevel& level, char* message) {
   }
 
   if (log_option.is_color) {
-    printf("%s%s\n", color, message);
+    printf("%s%s%s\n", color, message, NONE);
   } else {
     printf("%s\n", message);
   }

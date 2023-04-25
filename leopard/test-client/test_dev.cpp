@@ -9,8 +9,5 @@ TestSync dev_sync;
 void task(std::string ip, int port);
 
 void test_dev(std::string ip, int port) {
-  for (int i = 0; i < 1000; i++) {
-    dev_sync(dev_report, 1, dev_input, 1, ip, port, 100);
-    usleep(1000 * 100);
-  }
+  dev_sync(dev_report, 100, dev_input, 2, ip, port, 100);
 }

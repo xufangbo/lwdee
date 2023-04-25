@@ -13,22 +13,15 @@ Socket::Socket(Qps* qps)
   if (-1 == _fd) {
     throw SocketException("socket create error", errno, ZONE);
   }
-  this->_inputStream = ProtocalFactory::createStream();
-
   this->qps->opens++;
 }
 
 Socket::Socket(int fd, Qps* qps)
     : _fd(fd), qps(qps) {
-  this->_inputStream = ProtocalFactory::createStream();
   this->qps->opens++;
 }
 
 Socket::~Socket() {
-  if (_inputStream != nullptr) {
-    delete _inputStream;
-    _inputStream = nullptr;
-  }
 }
 
 void Socket::bind(std::string ip, int port) {
