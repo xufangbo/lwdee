@@ -44,5 +44,4 @@ class IRunway {
   Qps* qps();
   void join();
   size_t size() { return _qps.opens; }
-  // void send(Connection* connection, BufferStream* outputStream);
 };

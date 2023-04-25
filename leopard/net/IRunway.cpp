@@ -134,11 +134,6 @@ void IRunway::acceptSend(Connection* connection) {
   connection->send(SendSource::epoll_out);
 }
 
-// void IRunway::send(Connection* connection, BufferStream* outputStream) {
-//   connection->push(outputStream);
-//   connection->send(SendSource::request);
-// }
-
 void IRunway::close(Connection* connection) {
   // leopard_warn("close socket %d",socket->fd());
 
@@ -154,8 +149,8 @@ void IRunway::close(Connection* connection) {
 
 void IRunway::gererateEnvents() {
   EVENTS_NEW = EPOLLIN | EPOLLRDHUP | EPOLLHUP;
-  EVENTS_IN = EPOLLIN;
-  EVENTS_OUT = EPOLLIN;
+  EVENTS_IN = EPOLLIN | EPOLLRDHUP | EPOLLHUP;
+  EVENTS_OUT = EPOLLIN | EPOLLRDHUP | EPOLLHUP;
 
   if (isEOUT) {
     EVENTS_NEW |= EPOLLOUT;
