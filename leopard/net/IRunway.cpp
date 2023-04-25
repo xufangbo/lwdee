@@ -137,12 +137,8 @@ void IRunway::acceptSend(Connection* connection) {
 void IRunway::close(Connection* connection) {
   // leopard_warn("close socket %d",socket->fd());
 
-  connection->closed = true;
-  auto socket = connection->socket;
-
-  epoll->del(socket->fd());
-
-  socket->close();
+  epoll->del(connection->socket->fd());
+  connection->close();
 
   // connections->remove(socket->fd());
 }

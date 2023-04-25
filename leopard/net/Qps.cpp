@@ -21,7 +21,7 @@ std::vector<std::string> Qps::header() {
   ss.push_back("opens");
   ss.push_back("recvs");
   ss.push_back("sends");
-  ss.push_back("waits");
+  ss.push_back("bults");
   ss.push_back("clses");
   ss.push_back("errs");
   ss.push_back("conns");

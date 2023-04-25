@@ -21,6 +21,14 @@ Connection::~Connection() {
   }
 }
 
+void Connection::close(){
+  if(this->closed){
+    return;
+  }
+  this->closed = true;
+  socket->close();
+}
+
 void Connection::push(BufferStream* outputStream) {
   auto bullet = new Bullet(outputStream, qps);
   bullets.push(bullet);

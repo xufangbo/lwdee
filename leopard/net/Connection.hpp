@@ -28,6 +28,7 @@ class Connection {
   ~Connection();
 
   void push(BufferStream* outputStream);
+  void close();
 
   /**
    * @brief 是否正常发送
