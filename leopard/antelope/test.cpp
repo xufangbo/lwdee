@@ -22,7 +22,7 @@ RequestCallback callback = [](BufferStream* inputStream) {
   std::istringstream s(inputStream->getString(len));
   int index;
   s >> index;
-  logger_trace("recive [%d]", index);
+  // logger_trace("recive [%d]", index);
   // logger_trace("recive [callback:%d/content:%d]", responseIndex.load(), index);
 };
 
