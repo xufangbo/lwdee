@@ -52,7 +52,7 @@ class MarkdownMetrixWriter : public IMetrixWriter {
 class ConsoleMetrixWriter : public IMetrixWriter {
  private:
   char split = '|';
-  int groupSize = 3;
+  int groupSize = 2;
 
  public:
   void writeTitle(std::string& fileName, std::vector<Qps*>& qpses) override;
