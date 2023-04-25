@@ -14,14 +14,22 @@ enum class WaitStatus : uint8_t {
   timeout = 3
 };
 
-class SocketWaiter_t {
+class ClientConnection;
+class LaneClient;
+
+class ClientWaitor_t {
  private:
   uint32_t id;
+  ClientConnection* connection;
   std::atomic<WaitStatus> status = WaitStatus::waiting;
   Stopwatch sw;
 
+  public:
+  LaneClient *client;
+
  public:
-  SocketWaiter_t(uint32_t id) : id(id) { sw.start(); }
+  ClientWaitor_t(uint32_t id, ClientConnection* connection)
+      : id(id), connection(connection) { sw.start(); }
 
   void notify(WaitStatus status);
   uint32_t getId() { return id; }
@@ -29,4 +37,4 @@ class SocketWaiter_t {
   float wait(float timeout = 5);
 };
 
-typedef std::shared_ptr<SocketWaiter_t> SocketWaiter;
+typedef std::shared_ptr<ClientWaitor_t> ClientWaitor;

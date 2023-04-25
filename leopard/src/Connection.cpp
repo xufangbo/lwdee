@@ -7,16 +7,15 @@
 #include "core/log.hpp"
 #include "log.hpp"
 
-Connection::Connection(int fd, Runway* runway)
-    : socket(new Socket(fd, &runway->_qps)), runway(runway) {
-  socket->setNonBlocking();
+Connection::Connection(Runway* runway)
+    : runway(runway) {
   inStream = ProtocalFactory::createStream();
 }
 
-Connection::Connection(ClientSocket* socket, Runway* runway)
-    : socket(socket), runway(runway) {
-  socket->qps = &runway->_qps;
-  inStream = ProtocalFactory::createStream();
+Connection::Connection(int fd, Runway* runway)
+    : Connection(runway) {
+  this->socket = new Socket(fd, runway->qps());
+  socket->setNonBlocking();
 }
 
 Connection::~Connection() {

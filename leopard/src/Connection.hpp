@@ -11,24 +11,26 @@
 #include "enums.hpp"
 
 class Runway;
-class ClientSocket;
+class ClientConnection;
 
 class Connection {
  private:
-  bool closed = false;
   BulletList bullets;
-  Runway* runway;
   bool wr = true;
   std::mutex mut;
 
+ protected:
+  bool closed = false;
+  Runway* runway;
+  BufferStream* inStream;
+
  public:
   Socket* socket;
-  BufferStream* inStream;
   uint64_t lastTime = 0;
 
  public:
+  Connection(Runway* runway);
   Connection(int fd, Runway* runway);
-  Connection(ClientSocket* socket, Runway* runway);
   ~Connection();
 
   int fd();

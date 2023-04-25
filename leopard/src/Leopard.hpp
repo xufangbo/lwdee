@@ -8,6 +8,8 @@
 #include "enums.hpp"
 #include "log.hpp"
 
+class ClientConnection;
+
 class Leopard {
  protected:
   int parallel = 1;
@@ -24,6 +26,6 @@ class Leopard {
   void join();
 
  public:
- static Leopard instance;
-  Connection* create(std::string ip, int port);
+  static Leopard instance;
+  ClientConnection* create(std::string ip, int port);
 };

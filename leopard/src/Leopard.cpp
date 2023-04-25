@@ -81,12 +81,12 @@ void Leopard::join() {
 
 Leopard Leopard::instance;
 
-Connection* Leopard::create(std::string ip, int port) {
+ClientConnection* Leopard::create(std::string ip, int port) {
   auto runway = std::min_element(runways.begin(), runways.end(), [](Runway* x, Runway* y) { return x->size() - y->size(); });
   if (runway == runways.end()) {
     throw Exception("ERROR", ZONE);
   }
 
-  Connection* skt = (*runway)->create(ip, port);
+  ClientConnection* skt = (*runway)->create(ip, port);
   return skt;
 }

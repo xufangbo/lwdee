@@ -33,7 +33,7 @@ void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputTyp
       auto client = LaneClient::create(ip, port);
 
       auto input = std::to_string(i + 1) + " " + inputType();
-      SocketWaiter waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
+      ClientWaitor waiter = client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
       auto time = waiter->wait(timeout);
       client->close();

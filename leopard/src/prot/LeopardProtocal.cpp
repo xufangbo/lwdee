@@ -5,7 +5,7 @@
 #include "TcpRequest.hpp"
 #include "TcpResponse.hpp"
 #include "core/Stopwatch.hpp"
-#include "src/ClientSocket.hpp"
+#include "src/ClientConnection.hpp"
 #include "src/log.hpp"
 
 BufferStream* LeopardProtocal::newStream(std::string& path) {
@@ -15,29 +15,24 @@ BufferStream* LeopardProtocal::newStream(std::string& path) {
   return outputStream;
 }
 
-SocketWaiter LeopardProtocal::csend(Connection* connection,
-                                    BufferStream* outputStream) {
+uint64_t LeopardProtocal::csend(ClientConnection* connection, BufferStream* outputStream) {
   LeopardHeader::setLength(outputStream);
   auto msgId = LeopardHeader::getMessageId(outputStream);
-
-  ClientSocket* socket = (ClientSocket*)connection->socket;
-  auto waiter = socket->crateWaiter(msgId);
 
   connection->push(outputStream);
   connection->send(SendSource::request);  // ET 才主动触发
 
-  return waiter;
+  return msgId;
 }
 
-void LeopardProtocal::caccept(Connection* connection,
-                              BufferStream* inputStream) {
+void LeopardProtocal::caccept(Connection* connection, BufferStream* inputStream) {
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
   header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
 
   // leopard_trace(header.to_string().c_str());
 
-  ClientSocket* socket = (ClientSocket*)(connection->socket);
+  ClientConnection* socket = (ClientConnection*)(connection->socket);
   auto waiter = socket->findWaiter(header.messageId);
   if (waiter == nullptr || waiter.use_count() == 0) {
     logger_error("waiter is null");  // 什么情况下为null?

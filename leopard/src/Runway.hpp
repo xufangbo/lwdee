@@ -22,6 +22,8 @@ struct ServerInfo {
 }
 };
 
+class ClientConnection;
+
 class Runway {
  protected:
   int id;
@@ -67,5 +69,5 @@ class Runway {
   size_t size() { return _qps.opens; }
 
   public:
-  Connection* create(std::string ip, int port);
+  ClientConnection* create(std::string ip, int port);
 };

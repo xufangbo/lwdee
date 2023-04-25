@@ -3,7 +3,7 @@
 #include <memory>
 #include <thread>
 
-#include "ClientSocket.hpp"
+#include "ClientConnection.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 #include "src/log.hpp"
@@ -164,18 +164,10 @@ Qps* Runway::qps() {
   return &_qps;
 }
 
-Connection* Runway::create(std::string ip, int port) {
-  ClientSocket* socket = new ClientSocket(this, &_qps);
-  
-  Stopwatch sw;
-  socket->connect(ip, port);
-  if (sw.elapsed() > 1) {
-    leopard_warn("long time to connect: %lfs", sw.elapsed());
-  }
-  
-  socket->setNonBlocking();
+ClientConnection* Runway::create(std::string ip, int port) {
+  ClientConnection* connection = new ClientConnection(this);
+  connection->connect(ip, port);
 
-  auto connection = new Connection(socket, this);
   epoll->add(connection->fd(), EVENTS_NEW, connection);
 
   return connection;
