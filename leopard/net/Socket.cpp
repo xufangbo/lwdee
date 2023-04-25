@@ -212,10 +212,14 @@ ssize_t Socket::recvfrom(void* buf, size_t len, int flags, struct sockaddr* addr
   return rc;
 }
 
-void Socket::close() {
+void Socket::close(CloseType closeType) {
   int rc = ::close(_fd);
   if (rc != -1) {
-    this->qps->closes++;
+    if (closeType == CloseType::normal) {
+      this->qps->closes++;
+    } else {
+      this->qps->errors++;
+    }
   } else {
     this->qps->errors++;
     throw SocketException("socket close error", errno, ZONE);

@@ -9,7 +9,8 @@
 #include "net/ProtocalFactory.hpp"
 #include "net/log.hpp"
 
-IRunway::IRunway(int id, bool* running) : _qps(id), running(running) {
+IRunway::IRunway(int id, bool* running)
+    : _qps(id), running(running) {
   this->epoll = std::make_shared<Epoll>(1800);
   this->isET = true;
   this->isEOUT = true;
@@ -57,13 +58,13 @@ void IRunway::__acceptEvent(epoll_event* evt) {
     // logger_trace("EPOLL OUT  %d", connection->socket->fd());
   } else if (evt->events & EPOLLHUP) {
     leopard_info("close client: EPOLLHUP %d", connection->socket->fd());
-    this->close(connection);
+    this->close(connection,CloseType::normal);
   } else if (evt->events & EPOLLRDHUP) {
     leopard_info("close client: EPOLLRDHUP %d", connection->socket->fd());
-    this->close(connection);
+    this->close(connection,CloseType::normal);
   } else if (evt->events & EPOLLERR) {
     leopard_info("close client : EPOLLERR %d", connection->socket->fd());
-    this->close(connection);
+    this->close(connection,CloseType::normal);
   } else {
     leopard_warn("unkonw epoll events : %d", evt->events);
   }
@@ -81,7 +82,7 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       // printf("rc-%d ", rc);
     } catch (SocketException& ex) {
       ex.trace(ZONE);
-      this->close(connection);
+      this->close(connection,CloseType::unknown);
       throw ex;
     }
 
@@ -104,13 +105,13 @@ void IRunway::acceptRecive(Connection* connection, epoll_event* evt) {
       epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
     } else if (rc == -1) {
       if (errno == ECONNRESET) {
-        this->close(connection);  //(104)Connection reset by peer
+        this->close(connection, CloseType::err_recv);  //(104)Connection reset by peer
       } else {
         epoll->mod(socket->fd(), evt, EVENTS_IN, connection);
       }
     } else if (rc == 0) {
       // printf("recv closed %d", socket->fd());
-      this->close(connection);
+      this->close(connection, CloseType::normal);
     } else {
       logger_error("rc of recv < -1 ?");
     }
@@ -134,11 +135,11 @@ void IRunway::acceptSend(Connection* connection) {
   connection->send(SendSource::epoll_out);
 }
 
-void IRunway::close(Connection* connection) {
+void IRunway::close(Connection* connection, CloseType closeType) {
   // leopard_warn("close socket %d",socket->fd());
 
   epoll->del(connection->socket->fd());
-  connection->close();
+  connection->close(closeType);
 
   // connections->remove(socket->fd());
 }
@@ -160,6 +161,10 @@ void IRunway::gererateEnvents() {
   }
 }
 
-void IRunway::join() { thread.join(); }
+void IRunway::join() {
+  thread.join();
+}
 
-Qps* IRunway::qps() { return &_qps; }
+Qps* IRunway::qps() {
+  return &_qps;
+}

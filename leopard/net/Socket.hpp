@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "BufferStream.hpp"
 #include "Qps.hpp"
+#include "enums.hpp"
 
 class Socket {
  protected:
@@ -89,7 +90,7 @@ class Socket {
    */
   ssize_t recvfrom(void* buf, size_t len, int flags, struct sockaddr* addr, socklen_t* addr_len);
 
-  void close();
+  void close(CloseType closeType);
   void shutdown(int how = SHUT_RDWR);
 
   int getError();

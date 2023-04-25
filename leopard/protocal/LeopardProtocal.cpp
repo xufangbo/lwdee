@@ -54,7 +54,7 @@ void LeopardProtocal::caccept(IRunway* runway, Connection* connection,
     }
 
   } else {
-    runway->close(connection);
+    runway->close(connection,CloseType::no_router);
     if (waiter != nullptr) {
       waiter->notify(WaitStatus::nohint);
     }
@@ -78,7 +78,7 @@ void LeopardProtocal::saccept(IRunway* runway, Connection* connection,
   auto fun = TcpResponse::find(header.path);
   if (fun == nullptr) {
     logger_error("can't hint path: %s", header.path.c_str());
-    runway->close(connection);
+    runway->close(connection,CloseType::no_router);
     return;
   }
 

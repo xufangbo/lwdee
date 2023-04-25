@@ -51,7 +51,7 @@ void LaneClient::wait(float timeout) {
 void LaneClient::close() {
   for (Connection* connection : this->connections) {
     ClientSocket* socket = (ClientSocket*)connection->socket;
-    socket->getLane()->close(connection);
+    socket->getLane()->close(connection,CloseType::normal);
   }
 }
 

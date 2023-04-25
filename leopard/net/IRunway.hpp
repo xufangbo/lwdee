@@ -40,7 +40,7 @@ class IRunway {
  public:
   IRunway(int id, bool* running);
   ~IRunway();
-  void close(Connection* connection);
+  void close(Connection* connection,CloseType closeType);
   Qps* qps();
   void join();
   size_t size() { return _qps.opens; }

@@ -21,12 +21,12 @@ Connection::~Connection() {
   }
 }
 
-void Connection::close(){
+void Connection::close(CloseType closeType){
   if(this->closed){
     return;
   }
   this->closed = true;
-  socket->close();
+  socket->close(closeType);
 }
 
 void Connection::push(BufferStream* outputStream) {
