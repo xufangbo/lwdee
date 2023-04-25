@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <mutex>
 #include "ClientConnection.hpp"
 #include "Socket.hpp"
 #include "core/suspend.hpp"
@@ -14,9 +15,11 @@ class LaneClient {
   bool autoClose;
   bool closed = false;
   std::atomic<uint32_t> index;
+  std::mutex mut;
   std::vector<ClientConnection*> connections;
   std::vector<ClientWaitor> waiters;
-  
+
+  void addConnection(ClientConnection* connection);
 
  public:
   LaneClient(bool autoClose = false)
@@ -38,7 +41,6 @@ class LaneClient {
 #endif
   void close();
   void wait(float timeout = 5);
-  std::vector<ClientConnection*>* getConnections() { return &connections; }
 
  private:
   ClientConnection* next();

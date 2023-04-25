@@ -1,14 +1,14 @@
 #pragma once
 
 #include <map>
+#include "ClientWaitor.hpp"
 #include "Connection.hpp"
 #include "Socket.hpp"
-#include "ClientWaitor.hpp"
 #include "core/Exception.hpp"
 #include "core/Stopwatch.hpp"
 
 class ClientConnection : public Connection {
- private:
+ private:  
   std::map<uint64_t, ClientWaitor> waitors;
 
  public:

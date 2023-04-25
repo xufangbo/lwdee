@@ -39,6 +39,7 @@ ClientWaitor LaneClient::invoke(std::string path, RequestInvoke request, Request
 
   auto waiter = connection->crateWaiter(msgId);
   waiter->client = this;
+
   this->waiters.push_back(waiter);
 
   return waiter;
@@ -57,6 +58,7 @@ void LaneClient::onInvoked(ClientConnection* connection) {
     return;
   }
 
+  std::lock_guard lock(mut);
   this->connections.erase(it);
 
   if (*it == nullptr) {
@@ -75,6 +77,8 @@ void LaneClient::close() {
   for (ClientConnection* connection : this->connections) {
     connection->close(CloseType::normal);
   }
+
+  std::lock_guard lock(mut);
   this->connections.clear();
 }
 
@@ -86,12 +90,18 @@ ClientConnection* LaneClient::next() {
   return connection;
 }
 
+void LaneClient::addConnection(ClientConnection* connection){
+  std::lock_guard lock(mut);
+  this->connections.push_back(connection);
+}
+
 LaneClientPtr LaneClient::create(std::string ip, int port, int parallel) {
   auto client = std::make_shared<LaneClient>();
 
   for (int i = 0; i < parallel; i++) {
     ClientConnection* connection = Leopard::instance.create(ip, port);
-    client->getConnections()->push_back(connection);
+
+    client->addConnection(connection);
     usleep(1000 * 100);
   }
 
