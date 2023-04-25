@@ -74,8 +74,7 @@ void Metrix::write() {
   }
 }
 
-void CsvMetrixWriter::writeTitle(std::string& fileName,
-                                 std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
@@ -134,8 +133,7 @@ void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses,
   f.close();
 }
 
-void MarkdownMetrixWriter::writeTitle(std::string& fileName,
-                                      std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
 
   FILE* fp = fopen(file.c_str(), "w");
@@ -167,9 +165,7 @@ void MarkdownMetrixWriter::writeTitle(std::string& fileName,
   fflush(fp);
   fclose(fp);
 }
-void MarkdownMetrixWriter::writeLine(std::string& fileName,
-                                     std::vector<Qps*>& qpses,
-                                     SysResource& sysres) {
+void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   std::string file = fileName + ".md";
   FILE* fp = fopen(file.c_str(), "a");
   if (fp == NULL) {
@@ -192,88 +188,83 @@ void MarkdownMetrixWriter::writeLine(std::string& fileName,
   fclose(fp);
 }
 
-void ConsoleMetrixWriter::writeTitle(std::string& fileName,
-                                     std::vector<Qps*>& qpses) {
-  // std::string file = fileName + ".md";
-
-  // FILE* fp = fopen(file.c_str(), "w");
-  // if (fp == NULL) {
-  //   logger_error("can't open file %s", file.c_str());
-  // }
-
+#define COLUMN "\033[1;33m‖\033[0m"
+void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
   FILE* fp = stdout;
 
-  fprintf(fp, "||% 23s|", "time");
+  fprintf(fp, "%s% 23s|", COLUMN, "time");
 
   fprintf(fp, "%8s|", "cpu sys");
   fprintf(fp, "%8s|", "cpu proc");
   fprintf(fp, "%8s|", "ram tol");
   fprintf(fp, "%8s|", "ram sys");
-  fprintf(fp, "%8s||", "ram proc");
+  fprintf(fp, "%8s%s", "ram proc", COLUMN);
 
   for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->header();
-    for (std::string& s : tmp) {
-      fprintf(fp, "% 6s |", s.c_str());
+    for (int c = 0; c < tmp.size(); c++) {
+      std::string& s = tmp[c];
+      if (c < (tmp.size() - 1)) {
+        fprintf(fp, "% 6s |", s.c_str());
+      } else {
+        fprintf(fp, "% 6s %s", s.c_str(), COLUMN);
+      }
     }
-    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   //-----------------------------
-  fprintf(fp, "||%23s|", "-----------------------");
+  fprintf(fp, "%s%23s|", COLUMN, "-----------------------");
 
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
-  fprintf(fp, "%8s||", "--------");
+  fprintf(fp, "%8s%s", "--------", COLUMN);
 
   for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->header();
-    for (std::string& s : tmp) {
-      fprintf(fp, "%6s-|", "------");
+    for (int c = 0; c < tmp.size(); c++) {
+      std::string& s = tmp[c];
+      if (c < (tmp.size() - 1)) {
+        fprintf(fp, "%6s-|", "------");
+      } else {
+        fprintf(fp, "%6s-%s", "------", COLUMN);
+      }
     }
-    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   fflush(fp);
-  // fclose(fp);
 }
-void ConsoleMetrixWriter::writeLine(std::string& fileName,
-                                    std::vector<Qps*>& qpses,
-                                    SysResource& sysres) {
-  // std::string file = fileName + ".md";
-  // FILE* fp = fopen(file.c_str(), "a");
-  // if (fp == NULL) {
-  //   logger_error("can't open file %s", file.c_str());
-  // }
+void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
   FILE* fp = stdout;
 
   char time[25];
   date_millsecond(time, 25);
-  fprintf(fp, "||%23s|", time);
+  fprintf(fp, "%s%23s|", COLUMN, time);
 
   fprintf(fp, "%7d |", sysres.cpu_sys_used);
   fprintf(fp, "%6d% |", sysres.cpu_proc_used);
   fprintf(fp, "%7d |", sysres.ram_total);
   fprintf(fp, "%7d |", sysres.ram_sys_used);
-  fprintf(fp, "%6dM ||", sysres.ram_proc_used);
+  fprintf(fp, "%6dM %s", sysres.ram_proc_used, COLUMN);
 
   for (int i = 0; i < groupSize && i < qpses.size(); i++) {
     Qps* qps = qpses[i];
     auto tmp = qps->data();
-
-    for (std::string& s : tmp) {
-      fprintf(fp, "%+6s |", s.c_str());
+    for (int c = 0; c < tmp.size(); c++) {
+      std::string& s = tmp[c];
+      if (c < (tmp.size() - 1)) {
+        fprintf(fp, "%+6s |", s.c_str());
+      } else {
+        fprintf(fp, "%+6s %s", s.c_str(), COLUMN);
+      }
     }
-    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   fflush(fp);
-  // fclose(fp);
 }
