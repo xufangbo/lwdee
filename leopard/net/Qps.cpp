@@ -33,7 +33,7 @@ void Qps::generate() {
   recvs_ = recvs;
   values.push_back(sends - sends_);
   sends_ = sends;
-  values.push_back(bullets - bullets_);
+  values.push_back(recvs - sends);        //             
   bullets_ = bullets;
   values.push_back(closes - closes_);
   closes_ = closes;

@@ -1,6 +1,7 @@
 #include "Metrix.hpp"
 
 #include <unistd.h>
+
 #include <filesystem>
 #include <fstream>
 #include <numeric>
@@ -8,7 +9,8 @@
 
 #include "core/log.hpp"
 
-void Metrix::start(bool* running, ApplicationType appType, std::vector<Qps*> qpss) {
+void Metrix::start(bool* running, ApplicationType appType,
+                   std::vector<Qps*> qpss) {
   this->running = running;
   this->appType = appType;
 
@@ -21,7 +23,7 @@ void Metrix::start(bool* running, ApplicationType appType, std::vector<Qps*> qps
   }
 
   std::string dirPath = "./log";
-  this->fileName = dirPath + "/" + fileName;
+  this->fileName = dirPath + "/" + (appType == ApplicationType::client ? "client" : "server");
 
   std::filesystem::directory_entry dir(dirPath);
   if (!dir.exists()) {
@@ -61,7 +63,9 @@ void Metrix::write() {
     qps.values.clear();
     int valueSize = qpses[1]->values.size();
     for (int i = 0; i < valueSize; i++) {
-      int value = std::accumulate(qpses.begin() + 1, qpses.end(), 0, [&i](uint32_t x, Qps* r) { return x + r->values.at(i); });
+      int value = std::accumulate(
+          qpses.begin() + 1, qpses.end(), 0,
+          [&i](uint32_t x, Qps* r) { return x + r->values.at(i); });
       qps.values.push_back(value);
     }
   }
@@ -71,7 +75,8 @@ void Metrix::write() {
   }
 }
 
-void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+void CsvMetrixWriter::writeTitle(std::string& fileName,
+                                 std::vector<Qps*>& qpses) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::trunc);
   if (!f.is_open()) {
@@ -105,7 +110,8 @@ void CsvMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses
   f.flush();
   f.close();
 }
-void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
+void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses,
+                                SysResource& sysres) {
   std::string file = fileName + ".csv";
   std::ofstream f(file, std::ios_base::app);
   if (!f.is_open()) {
@@ -130,7 +136,8 @@ void CsvMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses,
   f.close();
 }
 
-void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+void MarkdownMetrixWriter::writeTitle(std::string& fileName,
+                                      std::vector<Qps*>& qpses) {
   std::string file = fileName + ".md";
 
   FILE* fp = fopen(file.c_str(), "w");
@@ -162,7 +169,9 @@ void MarkdownMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& 
   fflush(fp);
   fclose(fp);
 }
-void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
+void MarkdownMetrixWriter::writeLine(std::string& fileName,
+                                     std::vector<Qps*>& qpses,
+                                     SysResource& sysres) {
   std::string file = fileName + ".md";
   FILE* fp = fopen(file.c_str(), "a");
   if (fp == NULL) {
@@ -185,7 +194,8 @@ void MarkdownMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& q
   fclose(fp);
 }
 
-void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& qpses) {
+void ConsoleMetrixWriter::writeTitle(std::string& fileName,
+                                     std::vector<Qps*>& qpses) {
   // std::string file = fileName + ".md";
 
   // FILE* fp = fopen(file.c_str(), "w");
@@ -195,43 +205,49 @@ void ConsoleMetrixWriter::writeTitle(std::string& fileName, std::vector<Qps*>& q
 
   FILE* fp = stdout;
 
-  fprintf(fp, "|% 23s|", "time");
+  fprintf(fp, "||% 23s|", "time");
 
   fprintf(fp, "%8s|", "cpu sys");
   fprintf(fp, "%8s|", "cpu proc");
   fprintf(fp, "%8s|", "ram tol");
   fprintf(fp, "%8s|", "ram sys");
-  fprintf(fp, "%8s|", "ram proc");
+  fprintf(fp, "%8s||", "ram proc");
 
-  for (Qps* qps : qpses) {
+  for (int i = 0; i < groupSize && i < qpses.size(); i++) {
+    Qps* qps = qpses[i];
     auto tmp = qps->header();
-    for (std::string& i : tmp) {
-      fprintf(fp, "% 6s |", i.c_str());
+    for (std::string& s : tmp) {
+      fprintf(fp, "% 6s |", s.c_str());
     }
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   //-----------------------------
-  fprintf(fp, "|%23s|", "-----------------------");
+  fprintf(fp, "||%23s|", "-----------------------");
 
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
   fprintf(fp, "%8s|", "--------");
-  fprintf(fp, "%8s|", "--------");
+  fprintf(fp, "%8s||", "--------");
 
-  for (Qps* qps : qpses) {
+ for (int i = 0; i < groupSize && i < qpses.size(); i++) {
+    Qps* qps = qpses[i];
     auto tmp = qps->header();
-    for (std::string& i : tmp) {
+    for (std::string& s : tmp) {
       fprintf(fp, "%6s-|", "------");
     }
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 
   fflush(fp);
   // fclose(fp);
 }
-void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qpses, SysResource& sysres) {
+void ConsoleMetrixWriter::writeLine(std::string& fileName,
+                                    std::vector<Qps*>& qpses,
+                                    SysResource& sysres) {
   // std::string file = fileName + ".md";
   // FILE* fp = fopen(file.c_str(), "a");
   // if (fp == NULL) {
@@ -241,19 +257,22 @@ void ConsoleMetrixWriter::writeLine(std::string& fileName, std::vector<Qps*>& qp
 
   char time[25];
   date_millsecond(time, 25);
-  fprintf(fp, "|%23s|", time);
+  fprintf(fp, "||%23s|", time);
 
   fprintf(fp, "%7d |", sysres.cpu_sys_used);
-  fprintf(fp, "%7d |", sysres.cpu_proc_used);
+  fprintf(fp, "%6d% |", sysres.cpu_proc_used);
   fprintf(fp, "%7d |", sysres.ram_total);
   fprintf(fp, "%7d |", sysres.ram_sys_used);
-  fprintf(fp, "%7d |", sysres.ram_proc_used);
+  fprintf(fp, "%6dM ||", sysres.ram_proc_used);
 
-  for (Qps* qps : qpses) {
+ for (int i = 0; i < groupSize && i < qpses.size(); i++) {
+    Qps* qps = qpses[i];
     auto tmp = qps->data();
-    for (std::string& i : tmp) {
-      fprintf(fp, "%+6s |", i.c_str());
+    
+    for (std::string& s : tmp) {
+      fprintf(fp, "%+6s |", s.c_str());
     }
+    fprintf(fp, "|");
   }
   fprintf(fp, "\n");
 

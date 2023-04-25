@@ -18,6 +18,7 @@ Bullet::~Bullet() {
 }
 
 bool Bullet::send(Socket* socket) {
+  
   int rc = socket->send(buffer(), leftover());
 
   if (rc == leftover()) {
