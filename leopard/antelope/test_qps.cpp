@@ -11,7 +11,7 @@ TestLongConnect qps_long;
 void task(std::string ip, int port);
 
 void test_qps(std::string ip, int port) {
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 10; i++) {
     for (int i = 0; i < 10; i++) {
       std::thread t(task, ip, port);
       t.detach();

@@ -19,7 +19,7 @@ std::vector<std::string> Qps::header() {
   ss.push_back("opens");
   ss.push_back("recvs");
   ss.push_back("sends");
-  ss.push_back("blts");
+  ss.push_back("waits");
   ss.push_back("clses");
   ss.push_back("conns");
   return ss;
@@ -27,18 +27,30 @@ std::vector<std::string> Qps::header() {
 
 void Qps::generate() {
   values.clear();
-  values.push_back(opens - opens_);
+  values.push_back(opens);
   opens_ = opens;
-  values.push_back(recvs - recvs_);
+  values.push_back(recvs);
   recvs_ = recvs;
-  values.push_back(sends - sends_);
+  values.push_back(sends);
   sends_ = sends;
-  values.push_back(recvs - sends);        //             
+  values.push_back(recvs > sends ? recvs - sends : sends - recvs);  //
   bullets_ = bullets;
-  values.push_back(closes - closes_);
+  values.push_back(closes);
   closes_ = closes;
+  values.push_back(opens >= closes ? opens - closes : 0);
 
-  values.push_back(opens - closes);
+  // values.clear();
+  // values.push_back(opens - opens_);
+  // opens_ = opens;
+  // values.push_back(recvs - recvs_);
+  // recvs_ = recvs;
+  // values.push_back(sends - sends_);
+  // sends_ = sends;
+  // values.push_back(recvs > sends ? recvs - sends : sends - recvs);        //
+  // bullets_ = bullets;
+  // values.push_back(closes - closes_);
+  // closes_ = closes;
+  // values.push_back(opens - closes);
 }
 
 std::vector<std::string> Qps::data() {
