@@ -10,7 +10,7 @@ TestAsync dev_async;
 void task(std::string ip, int port);
 
 void test_dev(std::string ip, int port) {
-  for (int i = 0; i < 1; i++) {
-    dev_async(dev_report, 2, dev_input, 2, ip, port, 100);
+  for (int i = 0; i < 10; i++) {
+    dev_async(dev_report, 200, dev_input, 2, ip, port, 100);
   }
 }

@@ -28,14 +28,12 @@ uint64_t LeopardProtocal::csend(ClientConnection* connection, BufferStream* outp
 void LeopardProtocal::caccept(Connection* connection, BufferStream* inputStream) {
   LeopardHeader header = LeopardHeader::parse(inputStream);
 
-  header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
-
+  // header.rec2 = Stopwatch::currentMilliSeconds() - header.sen1;
   // leopard_trace(header.to_string().c_str());
 
-  ClientConnection* socket = (ClientConnection*)(connection->socket);
-  auto waiter = socket->findWaiter(header.messageId);
+  auto waiter = ((ClientConnection*)connection)->findWaiter(header.messageId);
   if (waiter == nullptr || waiter.use_count() == 0) {
-    logger_error("waiter is null");  // 什么情况下为null?
+    logger_error("waiter %lld is null",header.messageId);  // 什么情况下为null?
   }
 
   auto callback = TcpRequest::find(header.path);

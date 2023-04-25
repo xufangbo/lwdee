@@ -65,6 +65,7 @@ void LaneClient::onInvoked(ClientConnection* connection) {
     return;
   }
 
+   leopard_debug("connection closed");
   connection->close(CloseType::normal);
 }
 
