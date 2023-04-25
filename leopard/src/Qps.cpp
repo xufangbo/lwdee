@@ -29,33 +29,35 @@ std::vector<std::string> Qps::header() {
 }
 
 void Qps::generate() {
-  values.clear();
-  values.push_back(opens);
-  opens_ = opens;
-  values.push_back(recvs);
-  recvs_ = recvs;
-  values.push_back(sends);
-  sends_ = sends;
-  values.push_back(bullets);  //
-  bullets_ = bullets;
-  values.push_back(closes);
-  closes_ = closes;
-  values.push_back(errors);
-  errors_ = errors;
-  values.push_back(opens - closes - errors);
-
   // values.clear();
-  // values.push_back(opens - opens_);
+  // values.push_back(opens);  // accept opens
   // opens_ = opens;
-  // values.push_back(recvs - recvs_);
+  // values.push_back(recvs);  // accept recvs
   // recvs_ = recvs;
-  // values.push_back(sends - sends_);
+  // values.push_back(sends);  // accept sends
   // sends_ = sends;
-  // values.push_back(recvs > sends ? recvs - sends : sends - recvs);        //
+  // values.push_back(bullets);  // finished buleets
   // bullets_ = bullets;
-  // values.push_back(closes - closes_);
+  // values.push_back(closes);  // normal closed connection
   // closes_ = closes;
-  // values.push_back(opens - closes);
+  // values.push_back(errors);  // errs closed connection
+  // errors_ = errors;
+  // values.push_back(opens - closes - errors);  // active connection
+
+  values.clear();
+  values.push_back(opens - opens_);  // accept opens
+  opens_ = opens;
+  values.push_back(recvs - recvs_);  // accept recvs
+  recvs_ = recvs;
+  values.push_back(sends - sends_);  // accept sends
+  sends_ = sends;
+  values.push_back(bullets - bullets_);  // finished buleets
+  bullets_ = bullets;
+  values.push_back(closes - closes_);  // normal closed connection
+  closes_ = closes;
+  values.push_back(errors - errors_);  // errs closed connection
+  errors_ = errors;
+  values.push_back(opens - closes - errors);  // active connection
 }
 
 std::vector<std::string> Qps::data() {

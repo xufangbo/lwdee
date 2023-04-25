@@ -1,6 +1,6 @@
 {
-    "ip": "127.0.0.1",
+    "ip": "152.136.206.214",
     "port": 4500,
-    "sparallel": 4,
-    "cparallel": 1
+    "sparallel": 2,
+    "cparallel": 4
 }
