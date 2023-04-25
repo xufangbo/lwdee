@@ -10,8 +10,8 @@
 #include "core/Stopwatch.hpp"
 #include "core/log.hpp"
 #include "matrix/LinuxMatrix.h"
-#include "net/BufferStream.hpp"
-#include "protocal/TcpResponse.hpp"
+#include "src/BufferStream.hpp"
+#include "prot/TcpResponse.hpp"
 
 PartitionKafka KafkaDCO::input;
 

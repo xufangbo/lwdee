@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "antelope/LaneClient.hpp"
-#include "protocal/TcpRequest.hpp"
+#include "prot/TcpRequest.hpp"
 #include "core/Exception.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/Partition.h"

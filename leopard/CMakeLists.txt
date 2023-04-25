@@ -1,24 +1,24 @@
 include_directories(${PROJECT_SOURCE_DIR}/core)
 
-add_subdirectory(net)
-add_subdirectory(protocal)
+add_subdirectory(src)
+# add_subdirectory(protocal)
 
-file(GLOB_RECURSE SRC_net "net/*.cpp")
-file(GLOB_RECURSE SRC_protocal "protocal/*.cpp")
-file(GLOB_RECURSE SRC_antelope "antelope/*.cpp")
-file(GLOB_RECURSE SRC_leopard "leopard/*.cpp")
+file(GLOB_RECURSE SRC_src "src/*.cpp")
+file(GLOB_RECURSE SRC_prot "src/prot/*.cpp")
+file(GLOB_RECURSE SRC_client "test-client/*.cpp")
+file(GLOB_RECURSE SRC_server "test-server/*.cpp")
 
-# add_library(leopard ${SRC_antelope} ${SRC_leopard})
-# target_link_libraries(leopard pthread core net protocal)
+# add_library(leopard ${SRC_client} ${SRC_server})
+# target_link_libraries(leopard pthread core leopard protocal)
 
-# add_executable(server ${SRC_leopard} leopard/app.cc)
-# target_link_libraries(server pthread core net protocal)
+# add_executable(server ${SRC_server} leopard/app.cc)
+# target_link_libraries(server pthread core leopard protocal)
 
-# add_executable(client ${SRC_antelope} antelope/app.cc)
-# target_link_libraries(client pthread core net protocal)
+# add_executable(client ${SRC_client} antelope/app.cc)
+# target_link_libraries(client pthread core leopard protocal)
 
-add_executable(server ${SRC_net} ${SRC_protocal} ${SRC_leopard} leopard/app.cc)
+add_executable(server ${SRC_src} ${SRC_prot} ${SRC_server})
 target_link_libraries(server pthread core)
 
-add_executable(client  ${SRC_net} ${SRC_protocal} ${SRC_antelope} antelope/app.cc)
+add_executable(client  ${SRC_src} ${SRC_prot} ${SRC_client})
 target_link_libraries(client pthread core)

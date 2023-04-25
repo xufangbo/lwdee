@@ -1,7 +1,7 @@
 #include "ToReduce.hpp"
 
 #include "antelope/LaneClient.hpp"
-#include "protocal/TcpRequest.hpp"
+#include "prot/TcpRequest.hpp"
 #include "core/DscConfig.hpp"
 #include "core/NodeConfig.hpp"
 #include "core/cjson.hpp"

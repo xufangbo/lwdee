@@ -4,7 +4,7 @@
 #include <csignal>
 #include <iostream>
 
-// https://blog.csdn.net/ArtAndLife/article/details/119307135
+// https://blog.csdn.src/ArtAndLife/article/details/119307135
 
 std::string brokers = "10.180.98.131:9092,10.180.98.132:9092,10.180.98.133:9092";
 std::string groupName = "test-group";

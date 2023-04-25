@@ -415,7 +415,7 @@ int mkdirs(char* path) {
 #else
       // int ret = mkdir(newPath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
       int ret = mkdir(newPath, 0777);
-      // https://blog.csdn.net/yinjian1013/article/details/78611009
+      // https://blog.csdn.src/yinjian1013/article/details/78611009
 
       if (ret < 0) {
         printf("cant't mkdir %s \n", newPath);

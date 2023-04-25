@@ -3,7 +3,7 @@
 ## 简介
 ### 代码获取
 ```bash
-git clone -b dev --recursive https://git.haier.net/iot/terminal/uhomeos/uhomeos_connect/demo.git
+git clone -b dev --recursive https://git.haier.src/iot/terminal/uhomeos/uhomeos_connect/demo.git
 ```
 ### 代码编译
 ```bash
