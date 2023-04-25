@@ -5,10 +5,13 @@
 TestReport dev_report;
 TestInput dev_input("1K", 1000);
 TestSync dev_sync;
-TestASync dev_async;
+TestAsync dev_async;
 
 void task(std::string ip, int port);
 
 void test_dev(std::string ip, int port) {
-  dev_sync(dev_report, 1000, dev_input, 2, ip, port, 100);
+  for (int i = 0; i < 10; i++) {
+    dev_async(dev_report, 100, dev_input, 2, ip, port, 100);
+    sleep(3);
+  }
 }

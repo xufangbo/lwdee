@@ -31,9 +31,9 @@ void Metrix::start(bool* running, ApplicationType appType, std::vector<Qps*> qps
 
   this->writers.push_back(std::make_shared<CsvMetrixWriter>());
   // this->writers.push_back(std::make_shared<MarkdownMetrixWriter>());
-  if (appType == ApplicationType::server) {
+  // if (appType == ApplicationType::server) {
     this->writers.push_back(std::make_shared<ConsoleMetrixWriter>());
-  }
+  // }
 
   for (auto& writer : this->writers) {
     writer->writeTitle(this->fileName, this->qpses);

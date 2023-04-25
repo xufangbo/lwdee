@@ -9,9 +9,9 @@
 #include "src/log.hpp"
 
 LaneClient::~LaneClient() {
-  for(auto connection : this->connections){
-    if(!connection->closed){
-      leopard_error("connection not closed");
+  for (auto connection : this->connections) {
+    if (connection != nullptr) {
+      connection->close(CloseType::normal);
     }
   }
 }
@@ -51,6 +51,7 @@ void LaneClient::close() {
   for (Connection* connection : this->connections) {
     connection->close(CloseType::normal);
   }
+  this->connections.clear();
 }
 
 Connection* LaneClient::next() {

@@ -15,6 +15,7 @@ class ClientSocket;
 
 class Connection {
  private:
+  bool closed = false;
   BulletList bullets;
   Runway* runway;
   bool wr = true;
@@ -26,8 +27,6 @@ class Connection {
   uint64_t lastTime = 0;
 
  public:
-  bool closed = false;
-
   Connection(int fd, Runway* runway);
   Connection(ClientSocket* socket, Runway* runway);
   ~Connection();
