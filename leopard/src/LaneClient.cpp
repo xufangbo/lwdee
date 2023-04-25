@@ -46,27 +46,27 @@ ClientWaitor LaneClient::invoke(std::string path, RequestInvoke request, Request
 }
 
 void LaneClient::onInvoked(ClientConnection* connection) {
-  if (connection == nullptr) {
-    return;
-  }
+  // if (connection == nullptr) {
+  //   return;
+  // }
 
-  if (!autoClose) {
-    return;
-  }
-  auto it = find(connections.begin(), connections.end(), connection);
-  if (it == connections.end()) {
-    return;
-  }
+  // if (!_autoClosed) {
+  //   return;
+  // }
+  // auto it = find(connections.begin(), connections.end(), connection);
+  // if (it == connections.end()) {
+  //   return;
+  // }
 
-  std::lock_guard lock(mut);
-  this->connections.erase(it);
+  // std::lock_guard lock(mut);
+  // this->connections.erase(it);
 
-  if (*it == nullptr) {
-    return;
-  }
+  // if (*it == nullptr) {
+  //   return;
+  // }
 
-   leopard_debug("connection closed");
-  connection->close(CloseType::normal);
+  // leopard_trace("connection closed:%d",connection->fd());
+  // connection->close(CloseType::normal);
 }
 
 void LaneClient::wait(float timeout) {
@@ -75,6 +75,7 @@ void LaneClient::wait(float timeout) {
   }
 }
 void LaneClient::close() {
+  leopard_debug("connection closed:%d",this->connections.size());
   for (ClientConnection* connection : this->connections) {
     connection->close(CloseType::normal);
   }
@@ -91,7 +92,7 @@ ClientConnection* LaneClient::next() {
   return connection;
 }
 
-void LaneClient::addConnection(ClientConnection* connection){
+void LaneClient::addConnection(ClientConnection* connection) {
   std::lock_guard lock(mut);
   this->connections.push_back(connection);
 }

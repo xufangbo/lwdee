@@ -12,7 +12,7 @@ typedef std::shared_ptr<LaneClient> LaneClientPtr;
 
 class LaneClient {
  private:
-  bool autoClose;
+  bool _autoClosed;
   bool closed = false;
   std::atomic<uint32_t> index;
   std::mutex mut;
@@ -22,8 +22,7 @@ class LaneClient {
   void addConnection(ClientConnection* connection);
 
  public:
-  LaneClient(bool autoClose = false)
-      : autoClose(autoClose) {
+  LaneClient(){
     this->index = 0;
   }
 
@@ -32,6 +31,8 @@ class LaneClient {
  public:
   static LaneClientPtr create(std::string ip, int port, int parallel = 1);
   void onInvoked(ClientConnection* connection);
+  void autoClosed(bool value){this->_autoClosed = value;}
+  bool autoClosed(){return this->_autoClosed;}
 
  public:
   ClientWaitor invoke(std::string path, RequestInvoke request, RequestCallback callback);

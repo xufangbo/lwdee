@@ -3,13 +3,12 @@
 #include <atomic>
 #include <fstream>
 #include <sstream>
-#include "src/Leopard.hpp"
-#include "src/LaneClient.hpp"
-#include "src/LaneClients.hpp"
 #include "core/Exception.hpp"
 #include "core/log.hpp"
 #include "core/suspend.hpp"
 #include "src/Epoll.hpp"
+#include "src/LaneClient.hpp"
+#include "src/Leopard.hpp"
 #include "src/LeopardConfig.hpp"
 #include "src/Socket.hpp"
 
@@ -53,23 +52,22 @@ void TestSync::execute(TestReport& testReport, int testSize, TestInput& inputTyp
 void TestAsync::execute(TestReport& testReport, int testSize, TestInput& inputType, int parallel, std::string ip, int port, float timeout) {
   Stopwatch sw;
 
-  LaneClients clients;
+  auto client = LaneClient::create(ip, port, parallel);
+  client->autoClosed(true);
   for (int i = 0; i < testSize; i++) {
     try {
-      auto client = clients.create(ip, port);
-
       auto input = std::to_string(i + 1) + " " + inputType();
       client->invoke(path, (void*)input.c_str(), input.size(), callback);
 
     } catch (Exception& ex) {
-      logger_warn("%s", ex.getMessage().c_str(),ex.getStackTrace().c_str());
+      logger_warn("%s", ex.getMessage().c_str(), ex.getStackTrace().c_str());
     } catch (std::exception& ex) {
       logger_error("%s,%s:%d", ex.what(), __FILE__, __LINE__);
     }
   }
 
-  clients.wait(timeout);
-  clients.close();
+  client->wait(timeout);
+  client->close();
 
   testReport.writeLine(name, inputType.name, testSize, testSize, sw.elapsed());
   auto eclapsed = sw.stop();
@@ -106,7 +104,7 @@ void TestReport::writeTitle() {
     logger_error("can't open file %s", fileName.c_str());
   }
 
-  f << "no" << split;  
+  f << "no" << split;
   f << "连接类型" << split;
   f << "请求数据" << split;
   f << "请求次数" << split;
@@ -141,7 +139,7 @@ void TestReport::writeLine(std::string type, std::string inputType, int testSize
 
   f << seq << split;
   f << type << split;
-  f << inputType << split;  
+  f << inputType << split;
   f << testSize << split;
   f << parallel << split;
   f << std::fixed << std::setprecision(3) << elapsed << split;

@@ -11,6 +11,6 @@ void task(std::string ip, int port);
 
 void test_dev(std::string ip, int port) {
   for (int i = 0; i < 10; i++) {
-    dev_async(dev_report, 200, dev_input, 2, ip, port, 100);
+    dev_async(dev_report, 200, dev_input, 200, ip, port, 100);
   }
 }

@@ -1,7 +1,7 @@
 #include "ClientWaitor.hpp"
 
 #include "ClientConnection.hpp"
-#include "LaneClients.hpp"
+#include "LaneClient.hpp"
 #include "log.hpp"
 
 void ClientWaitor_t::notify(WaitStatus status) {
