@@ -1,5 +1,6 @@
 {
     "ip": "152.136.206.214",
     "port": 4500,
-    "procnums": 0
+    "sparallel": 2,
+    "cparallel": 8
 }
