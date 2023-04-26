@@ -42,9 +42,7 @@ class Bullet {
    */
   bool send(Socket* socket);
 
-  bool finished() {
-    return this->_finished;
-  }
+  bool finished() { return this->_finished; }
 
  private:
   static std::atomic<int> cout;
